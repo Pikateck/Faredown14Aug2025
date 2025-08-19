@@ -3268,6 +3268,25 @@ export default function Index() {
         selectedClass={selectedClass}
         onSelectClass={setSelectedClass}
       />
+
+      {/* Mobile City Dropdowns */}
+      <MobileCityDropdown
+        isOpen={showFromCities}
+        onClose={() => setShowFromCities(false)}
+        title="Select departure city"
+        cities={cityData}
+        selectedCity={selectedFromCity}
+        onSelectCity={setSelectedFromCity}
+      />
+
+      <MobileCityDropdown
+        isOpen={showToCities}
+        onClose={() => setShowToCities(false)}
+        title="Select destination city"
+        cities={cityData}
+        selectedCity={selectedToCity}
+        onSelectCity={setSelectedToCity}
+      />
     </div>
   );
 }
