@@ -1031,74 +1031,32 @@ export default function Index() {
               <div className="bg-white rounded-xl p-4 shadow-sm">
                 <div className="flex items-center space-x-3">
                   <div className="flex-1">
-                    <button
-                      onClick={() => setShowFromCities(true)}
-                      className="w-full text-left"
-                    >
-                      <div className="text-xs text-gray-500 mb-1">From</div>
-                      <div className="flex items-center space-x-2">
-                        <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
-                          <Building2 className="w-4 h-4 text-[#003580]" />
-                        </div>
-                        <div>
-                          {selectedFromCity ? (
-                            <>
-                              <div className="font-medium text-gray-900">
-                                {cityData[selectedFromCity]?.code}
-                              </div>
-                              <div className="text-xs text-gray-500">
-                                {cityData[selectedFromCity]?.name}
-                              </div>
-                            </>
-                          ) : (
-                            <div className="text-sm text-gray-500">
-                              Leaving from
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </button>
+                    <CityAutocomplete
+                      label="From"
+                      value={fromAirport}
+                      onChange={setFromAirport}
+                      placeholder="Type a city or code..."
+                    />
                   </div>
 
                   <button
                     onClick={() => {
-                      const temp = selectedFromCity;
-                      setSelectedFromCity(selectedToCity);
-                      setSelectedToCity(temp);
+                      const temp = fromAirport;
+                      setFromAirport(toAirport);
+                      setToAirport(temp);
                     }}
-                    className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
+                    className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors mt-6"
                   >
                     <ArrowRight className="w-4 h-4 text-gray-500" />
                   </button>
 
                   <div className="flex-1">
-                    <button
-                      onClick={() => setShowToCities(true)}
-                      className="w-full text-left"
-                    >
-                      <div className="text-xs text-gray-500 mb-1">To</div>
-                      <div className="flex items-center space-x-2">
-                        <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
-                          <Plane className="w-4 h-4 text-[#003580]" />
-                        </div>
-                        <div>
-                          {selectedToCity ? (
-                            <>
-                              <div className="font-medium text-gray-900">
-                                {cityData[selectedToCity]?.code}
-                              </div>
-                              <div className="text-xs text-gray-500">
-                                {cityData[selectedToCity]?.name}
-                              </div>
-                            </>
-                          ) : (
-                            <div className="text-sm text-gray-500">
-                              Going to
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </button>
+                    <CityAutocomplete
+                      label="To"
+                      value={toAirport}
+                      onChange={setToAirport}
+                      placeholder="Type a city or code..."
+                    />
                   </div>
                 </div>
               </div>
