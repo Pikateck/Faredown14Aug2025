@@ -484,6 +484,32 @@ export default function FlightResults() {
   const [selectedClass, setSelectedClass] = useState("Economy");
   // Trip type states
   const [editTripType, setEditTripType] = useState("round-trip");
+
+  // Initialize edit form states from URL parameters when edit modal opens
+  useEffect(() => {
+    if (showSearchEdit) {
+      // Set trip type from URL
+      const tripTypeParam = searchParams.get("tripType");
+      if (tripTypeParam) {
+        const normalizedTripType = tripTypeParam.replace('_', '-');
+        setEditTripType(normalizedTripType);
+      }
+
+      // Set class from URL
+      const classParam = searchParams.get("cabinClass");
+      if (classParam) {
+        const normalizedClass = classParam.replace('_', ' ').split(' ').map(word =>
+          word.charAt(0).toUpperCase() + word.slice(1)
+        ).join(' ');
+        setSelectedClass(normalizedClass);
+      }
+
+      // Set travelers from URL
+      const adultsParam = parseInt(searchParams.get("adults") || "1");
+      const childrenParam = parseInt(searchParams.get("children") || "0");
+      setTravelers({ adults: adultsParam, children: childrenParam });
+    }
+  }, [showSearchEdit, searchParams]);
   const [showFromCities, setShowFromCities] = useState(false);
   const [showToCities, setShowToCities] = useState(false);
   const [selectedFromCity, setSelectedFromCity] = useState("");
@@ -5181,9 +5207,12 @@ export default function FlightResults() {
                           </div>
                           <div>
                             <div className="font-semibold text-gray-900">
-                              BOM
+                              {selectedFromCity ? cityData[selectedFromCity]?.code || selectedFromCity : searchParams.get("from") || ""}
                             </div>
-                            <div className="text-xs text-gray-500">Mumbai</div>
+                            <div className="text-xs text-gray-500">
+                              {selectedFromCity ? selectedFromCity :
+                               Object.entries(cityData).find(([city, data]) => data.code === searchParams.get("from"))?.[0] || ""}
+                            </div>
                           </div>
                         </div>
                       </button>
@@ -5215,9 +5244,12 @@ export default function FlightResults() {
                           </div>
                           <div>
                             <div className="font-semibold text-gray-900">
-                              DXB
+                              {selectedToCity ? cityData[selectedToCity]?.code || selectedToCity : searchParams.get("to") || ""}
                             </div>
-                            <div className="text-xs text-gray-500">Dubai</div>
+                            <div className="text-xs text-gray-500">
+                              {selectedToCity ? selectedToCity :
+                               Object.entries(cityData).find(([city, data]) => data.code === searchParams.get("to"))?.[0] || ""}
+                            </div>
                           </div>
                         </div>
                       </button>
@@ -5273,8 +5305,11 @@ export default function FlightResults() {
                         {/* Blue users icon - 20x20px */}
                         <Users className="w-5 h-5 text-[#003580]" />
                         <div>
-                          <div className="font-semibold text-gray-900">1</div>
-                          <div className="text-xs text-gray-500">1 adult</div>
+                          <div className="font-semibold text-gray-900">{travelers.adults + travelers.children}</div>
+                          <div className="text-xs text-gray-500">
+                            {travelers.adults} adult{travelers.adults !== 1 ? 's' : ''}
+                            {travelers.children > 0 && `, ${travelers.children} child${travelers.children !== 1 ? 'ren' : ''}`}
+                          </div>
                         </div>
                       </div>
                     </button>
@@ -5292,7 +5327,7 @@ export default function FlightResults() {
                         <Settings className="w-5 h-5 text-[#003580]" />
                         <div>
                           <div className="font-semibold text-gray-900">
-                            Economy
+                            {selectedClass}
                           </div>
                           <div className="text-xs text-gray-500">
                             Travel class
@@ -5306,52 +5341,26 @@ export default function FlightResults() {
                 {/* SEARCH BUTTON - Full width, blue background, 12px border-radius */}
                 <Button
                   className="w-full bg-[#003580] hover:bg-[#0071c2] text-white py-4 text-lg font-semibold rounded-xl shadow-lg mt-4"
-                  onClick={() => setShowSearchEdit(false)}
+                  onClick={() => {
+                    // Build new search URL with updated parameters
+                    const newParams = new URLSearchParams();
+                    newParams.set("from", selectedFromCity ? cityData[selectedFromCity]?.code || selectedFromCity : searchParams.get("from") || "");
+                    newParams.set("to", selectedToCity ? cityData[selectedToCity]?.code || selectedToCity : searchParams.get("to") || "");
+                    if (departureDate) newParams.set("departureDate", departureDate.toISOString().split('T')[0]);
+                    if (returnDate && editTripType === "round-trip") newParams.set("returnDate", returnDate.toISOString().split('T')[0]);
+                    newParams.set("adults", travelers.adults.toString());
+                    newParams.set("children", travelers.children.toString());
+                    newParams.set("tripType", editTripType.replace('-', '_'));
+                    newParams.set("cabinClass", selectedClass.toLowerCase().replace(' ', '_'));
+
+                    // Navigate to new search
+                    navigate(`/flights/results?${newParams.toString()}`);
+                    setShowSearchEdit(false);
+                  }}
                 >
                   <Search className="w-5 h-5 mr-2" />
                   Search Flights
                 </Button>
-              </div>
-
-              {/* SAMPLE PRICES SECTION - Blue background, 24px horizontal padding */}
-              <div className="bg-[#003580] text-white p-6">
-                <h3 className="text-lg font-semibold mb-3 text-center">
-                  Sample Flight Prices in Indian Rupee
-                </h3>
-                <div className="space-y-2">
-                  {/* Price Card 1 */}
-                  <div className="bg-white/10 rounded-xl p-4 flex justify-between items-center">
-                    <div>
-                      <div className="text-sm font-medium">Mumbai → Dubai</div>
-                      <div className="text-xs text-blue-200">
-                        Emirates • Non-stop • 3h 30m
-                      </div>
-                    </div>
-                    <div className="text-lg font-bold">₹15500</div>
-                  </div>
-                  {/* Price Card 2 */}
-                  <div className="bg-white/10 rounded-xl p-4 flex justify-between items-center">
-                    <div>
-                      <div className="text-sm font-medium">
-                        Delhi → Singapore
-                      </div>
-                      <div className="text-xs text-blue-200">
-                        Air India • 1 stop • 8h 45m
-                      </div>
-                    </div>
-                    <div className="text-lg font-bold">₹22800</div>
-                  </div>
-                  {/* Price Card 3 */}
-                  <div className="bg-white/10 rounded-xl p-4 flex justify-between items-center">
-                    <div>
-                      <div className="text-sm font-medium">Mumbai → London</div>
-                      <div className="text-xs text-blue-200">
-                        British Airways • Non-stop • 9h 25m
-                      </div>
-                    </div>
-                    <div className="text-lg font-bold">₹45200</div>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
