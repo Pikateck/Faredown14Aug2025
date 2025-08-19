@@ -217,8 +217,10 @@ export function CityAutocompleteButton({
         {/* Button that looks like original design */}
         <button
           onClick={handleClick}
-          className="w-full text-left relative z-0"
+          onKeyDown={handleKeyDown}
+          className="w-full text-left relative z-20 focus:outline-none"
           type="button"
+          tabIndex={0}
         >
           <div className="text-xs text-gray-500 mb-1">{label}</div>
           <div className="flex items-center space-x-2">
