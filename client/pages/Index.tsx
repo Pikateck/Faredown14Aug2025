@@ -1827,8 +1827,7 @@ export default function Index() {
                         placeholder="City or airport"
                         value={fromAirport}
                         onChange={setFromAirport}
-                        fetchOptions={searchAirportsWithFallback}
-                        icon={<Plane className="w-4 h-4" />}
+                        required
                         className="relative"
                       />
                     </div>
@@ -1839,8 +1838,7 @@ export default function Index() {
                         placeholder="City or airport"
                         value={toAirport}
                         onChange={setToAirport}
-                        fetchOptions={searchAirportsWithFallback}
-                        icon={<Plane className="w-4 h-4" />}
+                        required
                         className="relative"
                       />
 
