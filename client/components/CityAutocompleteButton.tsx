@@ -205,6 +205,10 @@ export function CityAutocompleteButton({
         if (value) {
           setQuery(formatAirportDisplay(value));
         }
+        // Hide input again
+        if (inputRef.current) {
+          inputRef.current.style.pointerEvents = 'none';
+        }
         break;
     }
   }
