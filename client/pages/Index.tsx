@@ -1824,28 +1824,6 @@ export default function Index() {
                         icon={<Plane className="w-4 h-4" />}
                         className="relative"
                       />
-                      <button
-                        onClick={() => setShowToCities(!showToCities)}
-                        className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full hover:border-blue-500 touch-manipulation"
-                      >
-                        <Plane className="w-4 h-4 text-gray-500 mr-2" />
-                        <div className="flex items-center space-x-2">
-                          {selectedToCity ? (
-                            <>
-                              <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
-                                {cityData[selectedToCity]?.code}
-                              </div>
-                              <span className="text-sm text-gray-700 font-medium">
-                                {cityData[selectedToCity]?.airport}
-                              </span>
-                            </>
-                          ) : (
-                            <span className="text-sm text-gray-500 font-medium">
-                              Going to
-                            </span>
-                          )}
-                        </div>
-                      </button>
 
                       {showToCities && (
                         <div className="absolute top-14 left-0 right-0 sm:right-auto bg-white border border-gray-200 rounded-lg shadow-xl p-3 sm:p-4 z-50 w-full sm:w-96 max-h-80 overflow-y-auto">
