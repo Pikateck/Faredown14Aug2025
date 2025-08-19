@@ -621,65 +621,27 @@ export function TransfersSearchForm() {
           <div className="grid grid-cols-12 gap-2">
             {/* Pick-up Location */}
             <div className="col-span-6">
-              <Popover
-                open={isPickupDropdownOpen}
-                onOpenChange={setIsPickupDropdownOpen}
-              >
-                <PopoverTrigger asChild>
-                  <div className="relative cursor-pointer border border-gray-300 rounded-l-lg h-12 hover:border-gray-400 bg-white border-r-0">
-                    <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-                      <Navigation className="w-4 h-4 text-gray-600" />
-                    </div>
-                    <div className="pl-10 pr-3 h-full flex flex-col justify-center">
-                      <div className="text-xs text-gray-500">
-                        From pick-up location
-                      </div>
-                      <div className="text-sm font-medium text-gray-900 truncate">
-                        {pickup
-                          ? pickup.label.split("(")[0].trim()
-                          : "Enter pick-up location"}
-                      </div>
-                    </div>
-                  </div>
-                </PopoverTrigger>
-                <PopoverContent
-                  className="w-80 p-0 border shadow-lg"
-                  align="start"
-                >
-                  <div className="max-h-64 overflow-y-auto">
-                    {transferLocations.map((location) => (
-                      <button
-                        key={location.code}
-                        className="w-full px-4 py-3 hover:bg-gray-50 text-left border-b border-gray-100 last:border-b-0"
-                        onClick={() => {
-                          setPickup(location);
-                          setIsPickupDropdownOpen(false);
-                        }}
-                      >
-                        <div className="flex items-center space-x-3">
-                          <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                            {location.type === "airport" ? (
-                              <Plane className="h-4 w-4 text-blue-600" />
-                            ) : location.type === "hotel" ? (
-                              <Hotel className="h-4 w-4 text-blue-600" />
-                            ) : (
-                              <MapPin className="h-4 w-4 text-blue-600" />
-                            )}
-                          </div>
-                          <div>
-                            <div className="font-medium text-gray-900 text-sm">
-                              {location.label}
-                            </div>
-                            <div className="text-xs text-gray-500 capitalize">
-                              {location.type}
-                            </div>
-                          </div>
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                </PopoverContent>
-              </Popover>
+              <CityAutocomplete
+                label="From pick-up location"
+                placeholder="Enter pick-up location"
+                value={pickupLocation}
+                onChange={(location) => {
+                  setPickupLocation(location);
+                  // Also update legacy pickup state for compatibility
+                  if (location) {
+                    setPickup({
+                      code: location.code,
+                      label: location.name,
+                      type: location.type || 'city'
+                    });
+                  } else {
+                    setPickup(null);
+                  }
+                }}
+                fetchOptions={searchDestinations}
+                icon={<Navigation className="w-4 h-4" />}
+                className="h-12"
+              />
             </div>
 
             {/* Drop-off Location */}
