@@ -189,7 +189,7 @@ export function CityAutocompleteButton({
   return (
     <div className={`relative ${className}`}>
       <div className="relative">
-        {/* Hidden input for typing */}
+        {/* Completely hidden input for typing */}
         <input
           ref={inputRef}
           id={inputId}
@@ -197,7 +197,7 @@ export function CityAutocompleteButton({
           value={query}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
-          placeholder={placeholder}
+          placeholder=""
           autoComplete="off"
           autoFocus={autoFocus}
           role="combobox"
@@ -206,12 +206,11 @@ export function CityAutocompleteButton({
           aria-activedescendant={
             isOpen && activeIndex >= 0 ? `${listboxId}-option-${activeIndex}` : undefined
           }
-          className={`absolute inset-0 w-full h-full bg-transparent border-none outline-none text-transparent caret-gray-900 z-10 ${
-            isTyping ? 'text-gray-900' : ''
-          }`}
-          style={{ 
+          className="absolute inset-0 w-full h-full bg-transparent border-none outline-none text-transparent caret-transparent z-10 pointer-events-none"
+          style={{
             backgroundColor: 'transparent',
-            color: isTyping ? '#111827' : 'transparent'
+            color: 'transparent',
+            caretColor: 'transparent'
           }}
         />
         
