@@ -1,267 +1,215 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { cn } from "@/lib/utils";
+import React, { useEffect, useId, useMemo, useRef, useState } from "react";
+import { searchAirports, type Airport } from "../../shared/airportSearch";
 
-export type CityOption = { 
-  id: string; 
-  code: string; 
-  name: string; 
-  country?: string; 
-  type?: string;
-};
-
-export type CityAutocompleteProps = {
-  label?: string;
+type CityAutocompleteProps = {
+  label: string;
   placeholder?: string;
-  value: CityOption | null;
-  onChange: (opt: CityOption | null) => void;
-  onInputChange?: (text: string) => void;
-  fetchOptions: (query: string) => Promise<CityOption[]>;
-  disabled?: boolean;
-  autoFocus?: boolean;
+  value?: Airport | null;
+  onChange?: (value: Airport | null) => void;
   required?: boolean;
-  name?: string;
-  icon?: React.ReactNode;
+  autoFocus?: boolean;
   className?: string;
 };
 
-const DEBOUNCE = 250;
-
 export default function CityAutocomplete({
   label,
-  placeholder,
+  placeholder = "Type a city or airport…",
   value,
   onChange,
-  onInputChange,
-  fetchOptions,
-  disabled,
-  autoFocus,
   required,
-  name,
-  icon,
+  autoFocus,
   className,
 }: CityAutocompleteProps) {
-  const [text, setText] = useState(value ? `${value.code} · ${value.name}` : "");
-  const [open, setOpen] = useState(false);
-  const [items, setItems] = useState<CityOption[]>([]);
-  const [active, setActive] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const timer = useRef<number | null>(null);
-  const boxRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const listId = useMemo(() => `list-${Math.random().toString(36).slice(2)}`, []);
+  const inputId = useId();
+  const listboxId = useId();
 
-  // Update text when value changes externally
+  const [query, setQuery] = useState(value ? `${value.code} · ${value.city}` : "");
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [items, setItems] = useState<Airport[]>([]);
+  const [activeIndex, setActiveIndex] = useState<number>(-1);
+
+  const abortRef = useRef<AbortController | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const listRef = useRef<HTMLUListElement | null>(null);
+
+  // Keep input text in sync when a value is externally changed
   useEffect(() => {
-    setText(value ? `${value.code} · ${value.name}` : "");
+    if (value) setQuery(`${value.code} · ${value.city}`);
   }, [value]);
 
-  // Close on outside click
+  // Debounced fetch
   useEffect(() => {
-    const onDocClick = (e: MouseEvent) => {
-      if (!boxRef.current?.contains(e.target as Node)) {
+    const q = query.trim();
+    if (!q) {
+      setItems([]);
+      setOpen(false);
+      return;
+    }
+    const h = setTimeout(async () => {
+      abortRef.current?.abort();
+      const ac = new AbortController();
+      abortRef.current = ac;
+      try {
+        setLoading(true);
+        const res = await searchAirports(q, ac.signal);
+        setItems(res);
+        setOpen(true);
+        setActiveIndex(res.length ? 0 : -1);
+      } catch {
+        setItems([]);
+        setOpen(true); // show "no results"
+        setActiveIndex(-1);
+      } finally {
+        setLoading(false);
+      }
+    }, 250);
+    return () => clearTimeout(h);
+  }, [query]);
+
+  const select = (a: Airport) => {
+    onChange?.(a);
+    setQuery(`${a.code} · ${a.city}`);
+    setOpen(false);
+  };
+
+  const clear = () => {
+    onChange?.(null);
+    setQuery("");
+    setItems([]);
+    setActiveIndex(-1);
+    setOpen(false);
+    inputRef.current?.focus();
+  };
+
+  const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!open && (e.key === "ArrowDown" || e.key === "ArrowUp")) {
+      setOpen(true);
+      return;
+    }
+    if (!open) return;
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setActiveIndex((i) => (i + 1) % Math.max(items.length, 1));
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setActiveIndex((i) => (i <= 0 ? items.length - 1 : i - 1));
+    } else if (e.key === "Enter") {
+      if (activeIndex >= 0 && items[activeIndex]) {
+        e.preventDefault();
+        select(items[activeIndex]);
+      }
+    } else if (e.key === "Escape") {
+      e.preventDefault();
+      setOpen(false);
+    }
+  };
+
+  // Close listbox on outside click
+  useEffect(() => {
+    if (!open) return;
+    const onDocClick = (ev: MouseEvent) => {
+      if (
+        !inputRef.current?.contains(ev.target as Node) &&
+        !listRef.current?.contains(ev.target as Node)
+      ) {
         setOpen(false);
       }
     };
     document.addEventListener("mousedown", onDocClick);
     return () => document.removeEventListener("mousedown", onDocClick);
-  }, []);
-
-  // Debounced search
-  useEffect(() => {
-    if (!open) return;
-    if (timer.current) window.clearTimeout(timer.current);
-    
-    timer.current = window.setTimeout(async () => {
-      const q = text.trim();
-      if (!q) { 
-        setItems([]); 
-        setLoading(false);
-        return; 
-      }
-      
-      try {
-        setLoading(true);
-        const data = await fetchOptions(q);
-        setItems(data);
-        setActive(0);
-        if (onInputChange) onInputChange(q);
-      } catch (error) {
-        console.error("Failed to fetch options:", error);
-        setItems([]);
-      } finally {
-        setLoading(false);
-      }
-    }, DEBOUNCE) as unknown as number;
-  }, [text, open, fetchOptions, onInputChange]);
-
-  const select = (opt: CityOption) => {
-    onChange(opt);
-    setText(`${opt.code} · ${opt.name}`);
-    setOpen(false);
-    setItems([]);
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newText = e.target.value;
-    setText(newText);
-    if (!open) setOpen(true);
-    
-    // Clear selection if input doesn't match current value
-    if (value && newText !== `${value.code} · ${value.name}`) {
-      onChange(null);
-    }
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (!open || items.length === 0) {
-      if (e.key === "ArrowDown" || e.key === "Enter") {
-        e.preventDefault();
-        setOpen(true);
-      }
-      return;
-    }
-
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-      setActive((i) => Math.min(i + 1, items.length - 1));
-    } else if (e.key === "ArrowUp") {
-      e.preventDefault();
-      setActive((i) => Math.max(i - 1, 0));
-    } else if (e.key === "Enter") {
-      e.preventDefault();
-      if (items[active]) {
-        select(items[active]);
-      }
-    } else if (e.key === "Escape") {
-      setOpen(false);
-    }
-  };
-
-  const clearSelection = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    onChange(null);
-    setText("");
-    setOpen(false);
-    setItems([]);
-    inputRef.current?.focus();
-  };
+  }, [open]);
 
   return (
-    <div className={cn("relative", className)} ref={boxRef}>
-      {label && (
-        <label className="block mb-1 text-sm font-medium text-gray-700">
-          {label}
-          {required && <span className="text-red-500 ml-1">*</span>}
-        </label>
-      )}
-      
+    <div className={className} style={{ position: "relative" }}>
+      <label htmlFor={inputId} className="block text-sm font-medium mb-1">
+        {label} {required && <span className="text-red-600">*</span>}
+      </label>
+
       <div className="relative">
-        {icon && (
-          <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 z-10">
-            {icon}
-          </div>
-        )}
-        
         <input
+          id={inputId}
           ref={inputRef}
-          role="combobox"
-          aria-expanded={open}
-          aria-controls={listId}
-          aria-activedescendant={open && items[active] ? `opt-${items[active].id}` : undefined}
-          aria-autocomplete="list"
-          aria-label={label || placeholder}
-          className={cn(
-            "w-full rounded-md border border-gray-300 px-3 py-2 text-sm",
-            "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500",
-            "disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed",
-            icon ? "pl-10" : "pl-3",
-            (value || text) ? "pr-8" : "pr-3"
-          )}
+          type="text"
+          value={query}
           placeholder={placeholder}
-          value={text}
-          onChange={handleInputChange}
-          onFocus={() => setOpen(true)}
-          onKeyDown={handleKeyDown}
-          disabled={disabled}
-          autoFocus={autoFocus}
-          name={name}
           autoComplete="off"
+          autoCorrect="off"
+          spellCheck={false}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            onChange?.(null); // reset selection if they edit text
+          }}
+          onFocus={() => query && setOpen(true)}
+          onKeyDown={onKeyDown}
+          aria-autocomplete="list"
+          aria-controls={listboxId}
+          aria-expanded={open}
+          aria-activedescendant={
+            open && activeIndex >= 0 ? `${listboxId}-opt-${activeIndex}` : undefined
+          }
+          className="w-full rounded-md border px-3 py-2 focus:outline-none focus:ring"
+          autoFocus={autoFocus}
         />
-        
-        {(value || text) && !disabled && (
+
+        {!!query && (
           <button
             type="button"
-            onClick={clearSelection}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full p-1 transition-colors"
-            title="Clear selection"
-            tabIndex={-1}
+            aria-label="Clear"
+            onClick={clear}
+            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500"
           >
-            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
+            ×
           </button>
         )}
       </div>
 
       {open && (
-        <div
-          id={listId}
+        <ul
+          ref={listRef}
+          id={listboxId}
           role="listbox"
-          className="absolute z-20 mt-1 w-full max-h-72 overflow-auto rounded-md border border-gray-200 bg-white shadow-lg"
+          className="absolute z-50 mt-1 max-h-64 w-full overflow-auto rounded-md border bg-white shadow"
         >
-          {loading ? (
-            <div className="px-3 py-2 text-sm text-gray-500 flex items-center">
-              <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-blue-600 mr-2"></div>
-              Searching...
-            </div>
-          ) : items.length === 0 ? (
-            <div className="px-3 py-2 text-sm text-gray-500">
-              {text.trim() ? `No results for "${text.trim()}"` : "Start typing to search..."}
-            </div>
-          ) : (
-            items.map((opt, idx) => {
-              const isActive = idx === active;
-              return (
-                <div
-                  id={`opt-${opt.id}`}
-                  role="option"
-                  aria-selected={isActive}
-                  key={opt.id}
-                  onMouseEnter={() => setActive(idx)}
-                  onMouseDown={(e) => {
-                    e.preventDefault();
-                    select(opt);
-                  }}
-                  className={cn(
-                    "cursor-pointer px-3 py-2 text-sm border-b border-gray-100 last:border-b-0",
-                    isActive ? "bg-blue-50 text-blue-900" : "text-gray-900 hover:bg-gray-50"
-                  )}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex-1 min-w-0">
-                      <div className="font-medium truncate">
-                        {opt.code} · {opt.name}
-                      </div>
-                      {opt.country && (
-                        <div className="text-xs text-gray-500 truncate">
-                          {opt.type && `${opt.type} in `}{opt.country}
-                        </div>
-                      )}
-                    </div>
-                    {opt.type && (
-                      <div className="ml-2 flex-shrink-0">
-                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800 capitalize">
-                          {opt.type}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              );
-            })
+          {loading && (
+            <li className="px-3 py-2 text-sm text-gray-500">Searching…</li>
           )}
-        </div>
+
+          {!loading && items.length === 0 && (
+            <li className="px-3 py-2 text-sm text-gray-500">No results</li>
+          )}
+
+          {!loading &&
+            items.map((a, i) => {
+              const active = i === activeIndex;
+              return (
+                <li
+                  id={`${listboxId}-opt-${i}`}
+                  key={`${a.code}-${i}`}
+                  role="option"
+                  aria-selected={active}
+                  onMouseEnter={() => setActiveIndex(i)}
+                  onMouseDown={(e) => {
+                    // prevent input blur before click
+                    e.preventDefault();
+                    select(a);
+                  }}
+                  className={`cursor-pointer px-3 py-2 text-sm ${
+                    active ? "bg-blue-600 text-white" : "hover:bg-gray-100"
+                  }`}
+                >
+                  <div className="font-medium">
+                    {a.code} · {a.city}
+                  </div>
+                  <div className="text-xs opacity-80">
+                    {a.name}
+                    {a.country ? ` — ${a.country}` : ""}
+                  </div>
+                </li>
+              );
+            })}
+        </ul>
       )}
     </div>
   );
