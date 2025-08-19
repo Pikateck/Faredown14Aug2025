@@ -105,10 +105,8 @@ import {
   MobileTravelers,
   MobileClassDropdown,
 } from "@/components/MobileDropdowns";
-import CityAutocomplete, { CityOption } from "@/components/CityAutocomplete";
-import { searchAirportsWithFallback } from "@/lib/airportSearch";
-import { FlightSearchInputs } from "@/components/FlightSearchInputs";
-import { buildFlightSearchUrl, validateFlightSearch } from "@/lib/flightSearch";
+import CityAutocomplete from "@/components/CityAutocomplete";
+import type { Airport } from "@/shared/airportSearch";
 
 export default function Index() {
   useScrollToTop();
@@ -1882,7 +1880,7 @@ export default function Index() {
                           {tripType === "one-way"
                             ? formatDisplayDate(departureDate) || "Select date"
                             : departureDate
-                              ? `${formatDisplayDate(departureDate)}${returnDate ? ` — ${formatDisplayDate(returnDate)}` : " — Return"}`
+                              ? `${formatDisplayDate(departureDate)}${returnDate ? ` �� ${formatDisplayDate(returnDate)}` : " — Return"}`
                               : "Select dates"}
                         </span>
                       </button>
