@@ -2060,36 +2060,38 @@ export default function Index() {
                     <div className="lg:max-w-[100px] w-full lg:w-auto">
                       <Button
                         onClick={() => {
-                          // Validate flight search with new airport selections
-                          const validationError = validateFlightSearch(
-                            fromAirport,
-                            toAirport,
-                            departureDate,
-                            returnDate,
-                            tripType
-                          );
-
-                          if (validationError) {
-                            alert(validationError);
+                          // Validate required fields
+                          if (!fromAirport?.code || !toAirport?.code) {
+                            alert("Please select departure and arrival airports");
                             return;
                           }
 
-                          try {
-                            // Use new flight search URL builder
-                            const searchUrl = buildFlightSearchUrl(
-                              fromAirport,
-                              toAirport,
-                              departureDate,
-                              returnDate,
-                              travelers,
-                              selectedClass,
-                              tripType
-                            );
-                            navigate(searchUrl);
-                          } catch (error) {
-                            console.error("Flight search error:", error);
-                            alert("Please fill in all required fields");
+                          if (!departureDate) {
+                            alert("Please select departure date");
+                            return;
                           }
+
+                          if (tripType === "round-trip" && !returnDate) {
+                            alert("Please select return date for round trip");
+                            return;
+                          }
+
+                          // Build search URL
+                          const params = new URLSearchParams({
+                            from: fromAirport.code,
+                            to: toAirport.code,
+                            departureDate: departureDate.toISOString().split('T')[0],
+                            adults: travelers.adults.toString(),
+                            children: travelers.children.toString(),
+                            tripType: tripType.replace('-', '_'),
+                            cabinClass: selectedClass.toLowerCase().replace(' ', '_'),
+                          });
+
+                          if (returnDate && tripType === "round-trip") {
+                            params.set("returnDate", returnDate.toISOString().split('T')[0]);
+                          }
+
+                          navigate(`/flights/results?${params.toString()}`);
                         }}
                         className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded h-12 font-medium text-sm w-full touch-manipulation"
                       >
@@ -3013,7 +3015,7 @@ export default function Index() {
                 variant="outline"
                 className="w-full py-3 flex items-center justify-center space-x-2"
               >
-                <span>📧</span>
+                <span>���</span>
                 <span>Continue with Apple</span>
               </Button>
 
