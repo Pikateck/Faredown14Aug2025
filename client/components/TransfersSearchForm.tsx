@@ -623,7 +623,7 @@ export function TransfersSearchForm() {
             <div className="col-span-6">
               <CityAutocomplete
                 label="From pick-up location"
-                placeholder="Enter pick-up location"
+                placeholder="Type a city or code…"
                 value={pickupLocation}
                 onChange={(location) => {
                   setPickupLocation(location);
@@ -638,8 +638,6 @@ export function TransfersSearchForm() {
                     setPickup(null);
                   }
                 }}
-                required
-                className="h-12"
               />
             </div>
 
