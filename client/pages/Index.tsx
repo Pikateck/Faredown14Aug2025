@@ -206,10 +206,6 @@ export default function Index() {
   // Return date and trip type now managed by DateContext
   const [showClassDropdown, setShowClassDropdown] = useState(false);
   const [selectedClass, setSelectedClass] = useState("Economy");
-  const [showFromCities, setShowFromCities] = useState(false);
-  const [showToCities, setShowToCities] = useState(false);
-  const [selectedFromCity, setSelectedFromCity] = useState("");
-  const [selectedToCity, setSelectedToCity] = useState("");
   // Airport state for CityAutocomplete
   const [fromAirport, setFromAirport] = useState<Airport | null>(null);
   const [toAirport, setToAirport] = useState<Airport | null>(null);
@@ -1836,7 +1832,7 @@ export default function Index() {
                           {tripType === "one-way"
                             ? formatDisplayDate(departureDate) || "Select date"
                             : departureDate
-                              ? `${formatDisplayDate(departureDate)}${returnDate ? ` �� ${formatDisplayDate(returnDate)}` : " — Return"}`
+                              ? `${formatDisplayDate(departureDate)}${returnDate ? ` ���� ${formatDisplayDate(returnDate)}` : " — Return"}`
                               : "Select dates"}
                         </span>
                       </button>
@@ -3198,24 +3194,6 @@ export default function Index() {
           </Fragment>
         ))}
 
-      {/* Mobile Dropdown Components */}
-      <MobileCityDropdown
-        isOpen={showFromCities}
-        onClose={() => setShowFromCities(false)}
-        title="Select departure city"
-        cities={cityData}
-        selectedCity={selectedFromCity}
-        onSelectCity={setSelectedFromCity}
-      />
-
-      <MobileCityDropdown
-        isOpen={showToCities}
-        onClose={() => setShowToCities(false)}
-        title="Select destination city"
-        cities={cityData}
-        selectedCity={selectedToCity}
-        onSelectCity={setSelectedToCity}
-      />
 
       <MobileDatePicker
         isOpen={showCalendar}
