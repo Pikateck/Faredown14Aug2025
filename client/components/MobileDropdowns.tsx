@@ -308,7 +308,7 @@ export function MobileCityDropdown({
           </h3>
         </div>
         <div className="space-y-2">
-          {Object.entries(cities).map(([city, data]) => (
+          {filteredCities.map(([city, data]) => (
             <button
               key={city}
               onClick={() => {
