@@ -1191,16 +1191,36 @@ export default function Index() {
               {/* Search Button */}
               <Button
                 onClick={() => {
-                  const searchParams = getSearchParams();
-                  searchParams.set("adults", travelers.adults.toString());
-                  searchParams.set("children", travelers.children.toString());
-                  if (tripType === "multi-city") {
-                    searchParams.set(
-                      "segments",
-                      JSON.stringify(flightSegments),
-                    );
+                  // Validate flight search with new airport selections
+                  const validationError = validateFlightSearch(
+                    fromAirport,
+                    toAirport,
+                    departureDate,
+                    returnDate,
+                    tripType
+                  );
+
+                  if (validationError) {
+                    alert(validationError);
+                    return;
                   }
-                  navigate(`/flights/results?${searchParams.toString()}`);
+
+                  try {
+                    // Use new flight search URL builder
+                    const searchUrl = buildFlightSearchUrl(
+                      fromAirport,
+                      toAirport,
+                      departureDate,
+                      returnDate,
+                      travelers,
+                      selectedClass,
+                      tripType
+                    );
+                    navigate(searchUrl);
+                  } catch (error) {
+                    console.error("Flight search error:", error);
+                    alert("Please fill in all required fields");
+                  }
                 }}
                 className="w-full bg-[#febb02] hover:bg-[#d19900] text-[#003580] font-bold py-4 text-lg rounded-xl shadow-lg"
               >
