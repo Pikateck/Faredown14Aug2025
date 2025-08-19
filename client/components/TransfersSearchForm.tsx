@@ -40,6 +40,8 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ErrorBanner } from "@/components/ErrorBanner";
+import CityAutocomplete, { CityOption } from "@/components/CityAutocomplete";
+import { searchDestinations } from "@/lib/airportSearch";
 
 interface PassengerConfig {
   adults: number;
