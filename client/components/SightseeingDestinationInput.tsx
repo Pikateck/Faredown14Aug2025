@@ -1,6 +1,6 @@
 import React from "react";
-import CityAutocomplete from "@/components/CityAutocomplete";
-import type { Airport } from "@/shared/airportSearch";
+import { CityAutocomplete } from "@/components/CityAutocomplete";
+import { Airport } from "@/shared/airportSearch";
 
 interface SightseeingDestinationInputProps {
   value: Airport | null;
@@ -15,10 +15,6 @@ export function SightseeingDestinationInput({
 }: SightseeingDestinationInputProps) {
   return (
     <div className="flex-1 lg:max-w-[320px] relative destination-container">
-      <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
-        Destination
-      </label>
-      
       <CityAutocomplete
         label="Destination"
         placeholder="Where do you want to explore?"
@@ -35,7 +31,6 @@ export function SightseeingDestinationInput({
             onLegacyUpdate("", "");
           }
         }}
-        required
         className="relative"
       />
     </div>
