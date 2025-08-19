@@ -1802,81 +1802,15 @@ export default function Index() {
                   {/* Desktop Search inputs */}
                   <div className="flex flex-col lg:flex-row items-center gap-3 lg:gap-3 mt-2 w-full max-w-5xl overflow-visible">
                     <div className="relative flex-1 lg:max-w-xs w-full lg:w-auto">
-                      <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
-                        Leaving from
-                      </label>
-                      <button
-                        onClick={() => setShowFromCities(!showFromCities)}
-                        className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-12 w-full hover:border-blue-600 touch-manipulation"
-                      >
-                        <Plane className="w-4 h-4 text-gray-500 mr-2" />
-                        <div className="flex items-center space-x-2">
-                          {selectedFromCity ? (
-                            <>
-                              <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
-                                {cityData[selectedFromCity]?.code}
-                              </div>
-                              <span className="text-sm text-gray-700 font-medium">
-                                {cityData[selectedFromCity]?.airport}...
-                              </span>
-                            </>
-                          ) : (
-                            <span className="text-sm text-gray-500 font-medium">
-                              Leaving from
-                            </span>
-                          )}
-                        </div>
-                      </button>
-
-                      {showFromCities && (
-                        <div className="absolute top-14 left-0 right-0 sm:right-auto bg-white border border-gray-200 rounded-lg shadow-xl p-3 sm:p-4 z-50 w-full sm:w-96 max-h-80 overflow-y-auto">
-                          <div className="mb-3">
-                            <h3 className="text-sm font-semibold text-gray-900 mb-2">
-                              Airport, city or country
-                            </h3>
-                            <div className="relative">
-                              <input
-                                type="text"
-                                placeholder="Mumbai"
-                                className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 text-sm"
-                              />
-                            </div>
-                          </div>
-
-                          <div className="space-y-1">
-                            {Object.entries(cityData).map(([city, data]) => (
-                              <button
-                                key={city}
-                                onClick={() => {
-                                  setSelectedFromCity(city);
-                                  setShowFromCities(false);
-                                }}
-                                className="w-full text-left px-3 py-3 hover:bg-gray-100 rounded"
-                              >
-                                <div className="flex items-center space-x-3">
-                                  <div className="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center">
-                                    <Plane className="w-4 h-4 text-blue-600" />
-                                  </div>
-                                  <div>
-                                    <div className="text-sm font-medium text-gray-900">
-                                      <span className="font-semibold">
-                                        {data.code}
-                                      </span>{" "}
-                                      • {city}
-                                    </div>
-                                    <div className="text-xs text-gray-500">
-                                      {data.airport}
-                                    </div>
-                                    <div className="text-xs text-gray-400">
-                                      {data.fullName}
-                                    </div>
-                                  </div>
-                                </div>
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )}
+                      <CityAutocomplete
+                        label="Leaving from"
+                        placeholder="City or airport"
+                        value={fromAirport}
+                        onChange={setFromAirport}
+                        fetchOptions={searchAirportsWithFallback}
+                        icon={<Plane className="w-4 h-4" />}
+                        className="relative"
+                      />
                     </div>
 
                     <div className="relative flex-1 lg:max-w-xs w-full lg:w-auto">
