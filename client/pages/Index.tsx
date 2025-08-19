@@ -1823,26 +1823,37 @@ export default function Index() {
                   {/* Desktop Search inputs */}
                   <div className="flex flex-col lg:flex-row items-center gap-3 lg:gap-3 mt-2 w-full max-w-5xl overflow-visible">
                     <div className="relative flex-1 lg:max-w-xs w-full lg:w-auto">
-                      <CityAutocompleteButton
-                        label="Leaving from"
-                        placeholder="Type a city or code…"
-                        value={fromAirport}
-                        onChange={setFromAirport}
-                        className="relative"
-                        icon="building"
-                      />
+                      <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
+                        Leaving from
+                      </label>
+                      <button
+                        onClick={() => setShowFromCities(true)}
+                        className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full hover:border-blue-500 touch-manipulation"
+                      >
+                        <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
+                          <Building2 className="w-4 h-4 text-blue-600" />
+                        </div>
+                        <span className="text-sm text-gray-900 font-semibold truncate">
+                          {selectedFromCity ? `${cityData[selectedFromCity]?.code} • ${selectedFromCity}` : "Select departure city"}
+                        </span>
+                      </button>
                     </div>
 
                     <div className="relative flex-1 lg:max-w-xs w-full lg:w-auto">
-                      <CityAutocompleteButton
-                        label="Going to"
-                        placeholder="Type a city or code…"
-                        value={toAirport}
-                        onChange={setToAirport}
-                        className="relative"
-                        icon="plane"
-                      />
-
+                      <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
+                        Going to
+                      </label>
+                      <button
+                        onClick={() => setShowToCities(true)}
+                        className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full hover:border-blue-500 touch-manipulation"
+                      >
+                        <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
+                          <Plane className="w-4 h-4 text-blue-600" />
+                        </div>
+                        <span className="text-sm text-gray-900 font-semibold truncate">
+                          {selectedToCity ? `${cityData[selectedToCity]?.code} • ${selectedToCity}` : "Select destination city"}
+                        </span>
+                      </button>
                     </div>
 
                     <div className="relative overflow-visible lg:max-w-[250px] w-full lg:w-auto">
@@ -2060,8 +2071,8 @@ export default function Index() {
                       <Button
                         onClick={() => {
                           // Validate required fields
-                          if (!fromAirport?.code || !toAirport?.code) {
-                            alert("Please select departure and arrival airports");
+                          if (!selectedFromCity || !selectedToCity) {
+                            alert("Please select departure and arrival cities");
                             return;
                           }
 
@@ -2077,8 +2088,8 @@ export default function Index() {
 
                           // Build search URL
                           const params = new URLSearchParams({
-                            from: fromAirport.code,
-                            to: toAirport.code,
+                            from: cityData[selectedFromCity]?.code || selectedFromCity,
+                            to: cityData[selectedToCity]?.code || selectedToCity,
                             departureDate: departureDate.toISOString().split('T')[0],
                             adults: travelers.adults.toString(),
                             children: travelers.children.toString(),
