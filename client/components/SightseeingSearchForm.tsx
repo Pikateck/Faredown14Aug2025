@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 import { ErrorBanner } from "@/components/ErrorBanner";
 import { CityAutocomplete } from "@/components/CityAutocomplete";
 import { Airport } from "@/shared/airportSearch";
+import { SightseeingDestinationInput } from "@/components/SightseeingDestinationInput";
 
 interface DestinationOption {
   id: string;
