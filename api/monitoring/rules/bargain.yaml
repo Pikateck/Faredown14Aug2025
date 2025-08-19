@@ -1,0 +1,171 @@
+groups:
+  - name: bargain-slo
+    rules:
+      - alert: BargainLatencyP95High
+        expr: histogram_quantile(0.95, sum by (le,route) (rate(bargain_response_seconds_bucket{route=~"/session/.+"}[5m]))) > 0.3
+        for: 5m
+        labels:
+          severity: page
+          team: ai-bargain
+          runbook: "/docs/Runbooks.md#latency-spike"
+        annotations:
+          summary: "Bargain API p95 latency > 300ms on {{ $labels.route }}"
+          description: "The 95th percentile latency for {{ $labels.route }} is {{ $value }}s, exceeding the 300ms SLA threshold."
+          runbook_url: "https://docs.company.com/runbooks/bargain-latency"
+
+      - alert: RedisMissRateHigh
+        expr: (1 - bargain_redis_hit_rate) > 0.10
+        for: 10m
+        labels:
+          severity: warn
+          team: ai-bargain
+        annotations:
+          summary: "Redis cache miss rate > 10%"
+          description: "Current Redis miss rate is {{ $value | humanizePercentage }}, exceeding 10% threshold. Cache performance degraded."
+
+      - alert: InventoryFlipSpike
+        expr: bargain_inventory_flip_rate > 0.02
+        for: 15m
+        labels:
+          severity: warn
+          team: ai-bargain
+        annotations:
+          summary: "Inventory flip rate > 2%"
+          description: "Current inventory flip rate is {{ $value | humanizePercentage }}, indicating high inventory volatility affecting user sessions."
+
+      - alert: ProfitGuardBreach
+        expr: avg_over_time(bargain_contribution_margin_pct{variant="ai"}[6h]) < (avg_over_time(bargain_contribution_margin_pct{variant="control"}[6h]) - 0.03)
+        for: 10m
+        labels:
+          severity: page
+          team: ai-bargain
+          action: auto-rollback
+        annotations:
+          summary: "AI contribution margin dropped >3% vs control (6h avg)"
+          description: "AI variant margin ({{ $value | humanizePercentage }}) is >3% below control group over 6h window. Auto-rollback triggered."
+          action: "Auto-rollback to control variant initiated"
+
+      - alert: BargainAPIDown
+        expr: up{job="bargain-api"} == 0
+        for: 1m
+        labels:
+          severity: page
+          team: ai-bargain
+        annotations:
+          summary: "Bargain API instance down"
+          description: "Bargain API instance {{ $labels.instance }} has been down for more than 1 minute."
+
+      - alert: BargainErrorRateHigh
+        expr: sum(rate(bargain_requests_total{code=~"5.."}[5m])) / sum(rate(bargain_requests_total[5m])) > 0.005
+        for: 5m
+        labels:
+          severity: warn
+          team: ai-bargain
+        annotations:
+          summary: "Bargain API error rate > 0.5%"
+          description: "Current error rate is {{ $value | humanizePercentage }}, exceeding 0.5% threshold."
+
+      - alert: NeverLossViolation
+        expr: increase(bargain_requests_total{route="/session/accept",code="409"}[5m]) > 0
+        for: 0s
+        labels:
+          severity: page
+          team: ai-bargain
+          urgency: critical
+        annotations:
+          summary: "Never-loss violation detected"
+          description: "{{ $value }} never-loss violations detected in the last 5 minutes. Immediate investigation required."
+
+      - alert: ModelInferenceTimeHigh
+        expr: histogram_quantile(0.95, sum by (le) (rate(bargain_model_infer_ms_bucket[5m]))) > 200
+        for: 10m
+        labels:
+          severity: warn
+          team: ai-bargain
+        annotations:
+          summary: "Model inference p95 time > 200ms"
+          description: "Model inference p95 latency is {{ $value }}ms, affecting overall API performance."
+
+      - alert: OfferabilityEngineSlowdown
+        expr: histogram_quantile(0.95, sum by (le) (rate(bargain_offerability_ms_bucket[5m]))) > 100
+        for: 10m
+        labels:
+          severity: warn
+          team: ai-bargain
+        annotations:
+          summary: "Offerability engine p95 time > 100ms"
+          description: "Offerability engine p95 latency is {{ $value }}ms, potentially affecting session start performance."
+
+      - alert: AsyncQueueLagHigh
+        expr: bargain_async_queue_lag > 60
+        for: 10m
+        labels:
+          severity: warn
+          team: ai-bargain
+        annotations:
+          summary: "Async queue processing lag > 60s"
+          description: "Background job queue lag is {{ $value }}s, indicating processing bottleneck."
+
+      - alert: SupplierFallbackSpike
+        expr: sum(rate(bargain_fallback_total[5m])) > 0.1
+        for: 10m
+        labels:
+          severity: warn
+          team: ai-bargain
+        annotations:
+          summary: "High supplier fallback rate"
+          description: "Fallback rate is {{ $value }}/sec, indicating supplier API issues."
+
+      - alert: AcceptanceRateDrop
+        expr: rate(bargain_requests_total{route="/session/accept",code="200"}[15m]) / rate(bargain_requests_total{route="/session/offer",code="200"}[15m]) < 0.15
+        for: 15m
+        labels:
+          severity: warn
+          team: ai-bargain
+        annotations:
+          summary: "Bargain acceptance rate < 15%"
+          description: "Current acceptance rate is {{ $value | humanizePercentage }}, below expected 15% threshold."
+
+  - name: bargain-capacity
+    rules:
+      - alert: SessionVolumeSpike
+        expr: rate(bargain_requests_total{route="/session/start"}[5m]) > 50
+        for: 5m
+        labels:
+          severity: warn
+          team: ai-bargain
+        annotations:
+          summary: "High session start volume"
+          description: "Session start rate is {{ $value }}/sec, monitor for capacity issues."
+
+      - alert: DatabaseConnectionsHigh
+        expr: sum(pg_stat_activity_count) > 80
+        for: 10m
+        labels:
+          severity: warn
+          team: ai-bargain
+        annotations:
+          summary: "High database connection count"
+          description: "Active database connections: {{ $value }}, approaching limit."
+
+  - name: bargain-business
+    rules:
+      - alert: LowTrafficVolume
+        expr: rate(bargain_requests_total{route="/session/start"}[1h]) < 1
+        for: 30m
+        labels:
+          severity: info
+          team: ai-bargain
+        annotations:
+          summary: "Unusually low bargain traffic"
+          description: "Session start rate is {{ $value }}/sec over the last hour, below normal baseline."
+
+      - alert: HighFallbackToControl
+        expr: sum(rate(bargain_requests_total{variant="control"}[10m])) / sum(rate(bargain_requests_total[10m])) > 0.5
+        for: 15m
+        labels:
+          severity: info
+          team: ai-bargain
+        annotations:
+          summary: "High traffic ratio to control variant"
+          description: "{{ $value | humanizePercentage }} of traffic going to control, check feature flag settings."

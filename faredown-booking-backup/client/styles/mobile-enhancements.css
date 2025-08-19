@@ -1,0 +1,171 @@
+/* MOBILE RESPONSIVE ENHANCEMENTS FOR FAREDOWN */
+
+/* Touch-friendly interactions */
+@media (max-width: 768px) {
+  /* Minimum touch targets */
+  button,
+  input,
+  select,
+  a {
+    min-height: 44px;
+    min-width: 44px;
+    touch-action: manipulation;
+  }
+
+  /* Better text sizes for mobile */
+  .text-xs {
+    font-size: 0.75rem;
+  }
+  .text-sm {
+    font-size: 0.875rem;
+  }
+  .text-base {
+    font-size: 1rem;
+  }
+  .text-lg {
+    font-size: 1.125rem;
+  }
+  .text-xl {
+    font-size: 1.25rem;
+  }
+
+  /* Enhanced spacing for mobile */
+  .mobile-padding {
+    padding: 12px;
+  }
+  .mobile-margin {
+    margin: 8px;
+  }
+
+  /* Better form controls */
+  input,
+  select,
+  textarea {
+    padding: 12px 16px;
+    font-size: 16px; /* Prevents zoom on iOS */
+    border-radius: 8px;
+  }
+
+  /* Mobile-specific card spacing */
+  .card-mobile {
+    margin: 8px;
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  /* Improved dropdowns */
+  .dropdown-mobile {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    border-radius: 16px 16px 0 0;
+    padding: 20px;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+    z-index: 9999;
+  }
+
+  /* Better scrolling */
+  .scroll-mobile {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+
+  /* Mobile-optimized seat map */
+  .seat-map-mobile {
+    overflow-x: auto;
+    padding: 16px 8px;
+    scroll-snap-type: x mandatory;
+  }
+
+  /* Mobile navigation */
+  .mobile-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    border-top: 1px solid #e5e7eb;
+    padding: 12px;
+    z-index: 1000;
+  }
+
+  /* Improved modals for mobile */
+  .modal-mobile {
+    position: fixed;
+    inset: 0;
+    margin: 0;
+    border-radius: 0;
+    max-width: 100%;
+    max-height: 100%;
+  }
+}
+
+/* Extra small devices (phones in portrait) */
+@media (max-width: 480px) {
+  /* Even larger touch targets */
+  button,
+  input,
+  select,
+  a {
+    min-height: 48px;
+    padding: 12px 16px;
+  }
+
+  /* More generous spacing */
+  .container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  /* Stack everything on tiny screens */
+  .flex-mobile-stack {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+}
+
+/* Landscape phones */
+@media (max-width: 768px) and (orientation: landscape) {
+  /* Adjust heights for landscape */
+  .mobile-nav {
+    padding: 8px 12px;
+  }
+
+  /* Smaller modals in landscape */
+  .modal-mobile {
+    margin: 20px;
+    border-radius: 12px;
+    max-height: calc(100vh - 40px);
+  }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  /* Crisp borders and shadows */
+  .border {
+    border-width: 0.5px;
+  }
+
+  .shadow {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Dark mode support for mobile */
+@media (prefers-color-scheme: dark) {
+  .mobile-dark {
+    background-color: #1a1a1a;
+    color: #ffffff;
+  }
+}
+
+/* Reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
