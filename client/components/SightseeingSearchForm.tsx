@@ -422,8 +422,18 @@ export function SightseeingSearchForm() {
       <div className="bg-white rounded-lg p-3 sm:p-4 shadow-lg max-w-6xl mx-auto border border-gray-200">
         {/* Main Search Form */}
         <div className="flex flex-col lg:flex-row gap-2 mb-4">
-          {/* Destination - EXACT HOTELS PATTERN */}
-          <div className="flex-1 lg:max-w-[320px] relative destination-container">
+          {/* New Destination Input with CityAutocomplete */}
+          <SightseeingDestinationInput
+            value={selectedDestination}
+            onChange={setSelectedDestination}
+            onLegacyUpdate={(dest, code) => {
+              setDestination(dest);
+              setDestinationCode(code);
+            }}
+          />
+
+          {/* OLD Destination - EXACT HOTELS PATTERN (TO BE REMOVED) */}
+          <div className="flex-1 lg:max-w-[320px] relative destination-container" style={{display: 'none'}}>
             <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
               Destination
             </label>
