@@ -107,6 +107,7 @@ import {
 } from "@/components/MobileDropdowns";
 import CityAutocomplete, { CityOption } from "@/components/CityAutocomplete";
 import { searchAirportsWithFallback } from "@/lib/airportSearch";
+import { FlightSearchInputs } from "@/components/FlightSearchInputs";
 
 export default function Index() {
   useScrollToTop();
