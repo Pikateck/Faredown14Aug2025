@@ -1189,8 +1189,8 @@ export default function Index() {
               <Button
                 onClick={() => {
                   // Validate required fields
-                  if (!fromAirport?.code || !toAirport?.code) {
-                    alert("Please select departure and arrival airports");
+                  if (!selectedFromCity || !selectedToCity) {
+                    alert("Please select departure and arrival cities");
                     return;
                   }
 
@@ -1206,8 +1206,8 @@ export default function Index() {
 
                   // Build search URL
                   const params = new URLSearchParams({
-                    from: fromAirport.code,
-                    to: toAirport.code,
+                    from: cityData[selectedFromCity]?.code || selectedFromCity,
+                    to: cityData[selectedToCity]?.code || selectedToCity,
                     departureDate: departureDate.toISOString().split('T')[0],
                     adults: travelers.adults.toString(),
                     children: travelers.children.toString(),
