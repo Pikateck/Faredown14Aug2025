@@ -105,7 +105,7 @@ import {
   MobileTravelers,
   MobileClassDropdown,
 } from "@/components/MobileDropdowns";
-import { CityAutocomplete } from "@/components/CityAutocomplete";
+import { CityAutocompleteButton } from "@/components/CityAutocompleteButton";
 import { Airport } from "@/shared/airportSearch";
 
 export default function Index() {
@@ -1027,11 +1027,12 @@ export default function Index() {
               <div className="bg-white rounded-xl p-4 shadow-sm">
                 <div className="flex items-center space-x-3">
                   <div className="flex-1">
-                    <CityAutocomplete
+                    <CityAutocompleteButton
                       label="From"
                       value={fromAirport}
                       onChange={setFromAirport}
                       placeholder="Type a city or code..."
+                      icon="building"
                     />
                   </div>
 
@@ -1047,11 +1048,12 @@ export default function Index() {
                   </button>
 
                   <div className="flex-1">
-                    <CityAutocomplete
+                    <CityAutocompleteButton
                       label="To"
                       value={toAirport}
                       onChange={setToAirport}
                       placeholder="Type a city or code..."
+                      icon="plane"
                     />
                   </div>
                 </div>
@@ -1778,22 +1780,24 @@ export default function Index() {
                   {/* Desktop Search inputs */}
                   <div className="flex flex-col lg:flex-row items-center gap-3 lg:gap-3 mt-2 w-full max-w-5xl overflow-visible">
                     <div className="relative flex-1 lg:max-w-xs w-full lg:w-auto">
-                      <CityAutocomplete
+                      <CityAutocompleteButton
                         label="Leaving from"
                         placeholder="Type a city or code…"
                         value={fromAirport}
                         onChange={setFromAirport}
                         className="relative"
+                        icon="building"
                       />
                     </div>
 
                     <div className="relative flex-1 lg:max-w-xs w-full lg:w-auto">
-                      <CityAutocomplete
+                      <CityAutocompleteButton
                         label="Going to"
                         placeholder="Type a city or code…"
                         value={toAirport}
                         onChange={setToAirport}
                         className="relative"
+                        icon="plane"
                       />
 
                     </div>
@@ -1832,7 +1836,7 @@ export default function Index() {
                           {tripType === "one-way"
                             ? formatDisplayDate(departureDate) || "Select date"
                             : departureDate
-                              ? `${formatDisplayDate(departureDate)}${returnDate ? ` ���� ${formatDisplayDate(returnDate)}` : " — Return"}`
+                              ? `${formatDisplayDate(departureDate)}${returnDate ? ` �� ${formatDisplayDate(returnDate)}` : " — Return"}`
                               : "Select dates"}
                         </span>
                       </button>
