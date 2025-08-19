@@ -646,65 +646,27 @@ export function TransfersSearchForm() {
 
             {/* Drop-off Location */}
             <div className="col-span-6">
-              <Popover
-                open={isDropoffDropdownOpen}
-                onOpenChange={setIsDropoffDropdownOpen}
-              >
-                <PopoverTrigger asChild>
-                  <div className="relative cursor-pointer border border-gray-300 rounded-r-lg h-12 hover:border-gray-400 bg-white border-l-0">
-                    <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-                      <MapPin className="w-4 h-4 text-gray-600" />
-                    </div>
-                    <div className="pl-10 pr-3 h-full flex flex-col justify-center">
-                      <div className="text-xs text-gray-500">
-                        Enter destination
-                      </div>
-                      <div className="text-sm font-medium text-gray-900 truncate">
-                        {dropoff
-                          ? dropoff.label.split("(")[0].trim()
-                          : "Enter destination"}
-                      </div>
-                    </div>
-                  </div>
-                </PopoverTrigger>
-                <PopoverContent
-                  className="w-80 p-0 border shadow-lg"
-                  align="start"
-                >
-                  <div className="max-h-64 overflow-y-auto">
-                    {transferLocations.map((location) => (
-                      <button
-                        key={location.code}
-                        className="w-full px-4 py-3 hover:bg-gray-50 text-left border-b border-gray-100 last:border-b-0"
-                        onClick={() => {
-                          setDropoff(location);
-                          setIsDropoffDropdownOpen(false);
-                        }}
-                      >
-                        <div className="flex items-center space-x-3">
-                          <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                            {location.type === "airport" ? (
-                              <Plane className="h-4 w-4 text-blue-600" />
-                            ) : location.type === "hotel" ? (
-                              <Hotel className="h-4 w-4 text-blue-600" />
-                            ) : (
-                              <MapPin className="h-4 w-4 text-blue-600" />
-                            )}
-                          </div>
-                          <div>
-                            <div className="font-medium text-gray-900 text-sm">
-                              {location.label}
-                            </div>
-                            <div className="text-xs text-gray-500 capitalize">
-                              {location.type}
-                            </div>
-                          </div>
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                </PopoverContent>
-              </Popover>
+              <CityAutocomplete
+                label="Enter destination"
+                placeholder="Enter destination"
+                value={dropoffLocation}
+                onChange={(location) => {
+                  setDropoffLocation(location);
+                  // Also update legacy dropoff state for compatibility
+                  if (location) {
+                    setDropoff({
+                      code: location.code,
+                      label: location.name,
+                      type: location.type || 'city'
+                    });
+                  } else {
+                    setDropoff(null);
+                  }
+                }}
+                fetchOptions={searchDestinations}
+                icon={<MapPin className="w-4 h-4" />}
+                className="h-12"
+              />
             </div>
           </div>
 
