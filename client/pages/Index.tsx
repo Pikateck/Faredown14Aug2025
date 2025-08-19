@@ -1825,55 +1825,6 @@ export default function Index() {
                         className="relative"
                       />
 
-                      {showToCities && (
-                        <div className="absolute top-14 left-0 right-0 sm:right-auto bg-white border border-gray-200 rounded-lg shadow-xl p-3 sm:p-4 z-50 w-full sm:w-96 max-h-80 overflow-y-auto">
-                          <div className="mb-3">
-                            <h3 className="text-sm font-semibold text-gray-900 mb-2">
-                              Airport, city or country
-                            </h3>
-                            <div className="relative">
-                              <input
-                                type="text"
-                                placeholder="Dubai"
-                                className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 text-sm"
-                              />
-                            </div>
-                          </div>
-
-                          <div className="space-y-1">
-                            {Object.entries(cityData).map(([city, data]) => (
-                              <button
-                                key={city}
-                                onClick={() => {
-                                  setSelectedToCity(city);
-                                  setShowToCities(false);
-                                }}
-                                className="w-full text-left px-3 py-3 hover:bg-gray-100 rounded"
-                              >
-                                <div className="flex items-center space-x-3">
-                                  <div className="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center">
-                                    <Plane className="w-4 h-4 text-blue-600" />
-                                  </div>
-                                  <div>
-                                    <div className="text-sm font-medium text-gray-900">
-                                      <span className="font-semibold">
-                                        {data.code}
-                                      </span>{" "}
-                                      ��� {city}
-                                    </div>
-                                    <div className="text-xs text-gray-500">
-                                      {data.airport}
-                                    </div>
-                                    <div className="text-xs text-gray-400">
-                                      {data.fullName}
-                                    </div>
-                                  </div>
-                                </div>
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )}
                     </div>
 
                     <div className="relative overflow-visible lg:max-w-[250px] w-full lg:w-auto">
