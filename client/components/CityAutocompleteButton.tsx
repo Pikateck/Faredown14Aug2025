@@ -98,10 +98,6 @@ export function CityAutocompleteButton({
         if (value) {
           setQuery(formatAirportDisplay(value));
         }
-        // Hide input again
-        if (inputRef.current) {
-          inputRef.current.style.pointerEvents = 'none';
-        }
       }
     }
 
@@ -127,10 +123,6 @@ export function CityAutocompleteButton({
     setIsOpen(false);
     setActiveIndex(-1);
     setIsTyping(false);
-    // Hide input again
-    if (inputRef.current) {
-      inputRef.current.style.pointerEvents = 'none';
-    }
   }
 
   function handleClick() {
@@ -139,41 +131,14 @@ export function CityAutocompleteButton({
     if (value) {
       setQuery(""); // Clear the query to allow fresh typing
     }
-    // Focus the hidden input to capture typing
-    setTimeout(() => {
-      if (inputRef.current) {
-        inputRef.current.style.pointerEvents = 'auto';
-        inputRef.current.focus();
-      }
-    }, 0);
+    inputRef.current?.focus();
   }
 
   function handleKeyDown(e: React.KeyboardEvent) {
-    // If typing regular characters, open and focus input
-    if (!isOpen && e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
-      e.preventDefault();
-      setIsOpen(true);
-      setIsTyping(true);
-      setQuery(e.key);
-      setTimeout(() => {
-        if (inputRef.current) {
-          inputRef.current.style.pointerEvents = 'auto';
-          inputRef.current.focus();
-        }
-      }, 0);
-      return;
-    }
-
     if (!isOpen && (e.key === "ArrowDown" || e.key === "ArrowUp")) {
       e.preventDefault();
       setIsOpen(true);
       setIsTyping(true);
-      setTimeout(() => {
-        if (inputRef.current) {
-          inputRef.current.style.pointerEvents = 'auto';
-          inputRef.current.focus();
-        }
-      }, 0);
       return;
     }
 
@@ -205,10 +170,6 @@ export function CityAutocompleteButton({
         if (value) {
           setQuery(formatAirportDisplay(value));
         }
-        // Hide input again
-        if (inputRef.current) {
-          inputRef.current.style.pointerEvents = 'none';
-        }
         break;
     }
   }
@@ -228,7 +189,7 @@ export function CityAutocompleteButton({
   return (
     <div className={`relative ${className}`}>
       <div className="relative">
-        {/* Completely hidden input for typing */}
+        {/* Hidden input for typing */}
         <input
           ref={inputRef}
           id={inputId}
@@ -236,7 +197,7 @@ export function CityAutocompleteButton({
           value={query}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
-          placeholder=""
+          placeholder={placeholder}
           autoComplete="off"
           autoFocus={autoFocus}
           role="combobox"
@@ -245,21 +206,20 @@ export function CityAutocompleteButton({
           aria-activedescendant={
             isOpen && activeIndex >= 0 ? `${listboxId}-option-${activeIndex}` : undefined
           }
-          className="absolute inset-0 w-full h-full bg-transparent border-none outline-none text-transparent caret-transparent z-10 pointer-events-none"
-          style={{
+          className={`absolute inset-0 w-full h-full bg-transparent border-none outline-none text-transparent caret-gray-900 z-10 ${
+            isTyping ? 'text-gray-900' : ''
+          }`}
+          style={{ 
             backgroundColor: 'transparent',
-            color: 'transparent',
-            caretColor: 'transparent'
+            color: isTyping ? '#111827' : 'transparent'
           }}
         />
         
         {/* Button that looks like original design */}
         <button
           onClick={handleClick}
-          onKeyDown={handleKeyDown}
-          className="w-full text-left relative z-20 focus:outline-none"
+          className="w-full text-left relative z-0"
           type="button"
-          tabIndex={0}
         >
           <div className="text-xs text-gray-500 mb-1">{label}</div>
           <div className="flex items-center space-x-2">
