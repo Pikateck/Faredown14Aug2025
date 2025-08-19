@@ -35,7 +35,7 @@ export function CityAutocompleteButton({
   const listRef = useRef<HTMLUListElement>(null);
   const debounceRef = useRef<NodeJS.Timeout>();
 
-  // Format airport display as "BOM �� Mumbai, India"
+  // Format airport display as "BOM · Mumbai, India"
   function formatAirportDisplay(airport: Airport): string {
     const cityCountry = [airport.city, airport.country].filter(Boolean).join(", ");
     return `${airport.code} · ${cityCountry || airport.name}`;
@@ -141,10 +141,31 @@ export function CityAutocompleteButton({
   }
 
   function handleKeyDown(e: React.KeyboardEvent) {
+    // If typing regular characters, open and focus input
+    if (!isOpen && e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      e.preventDefault();
+      setIsOpen(true);
+      setIsTyping(true);
+      setQuery(e.key);
+      setTimeout(() => {
+        if (inputRef.current) {
+          inputRef.current.style.pointerEvents = 'auto';
+          inputRef.current.focus();
+        }
+      }, 0);
+      return;
+    }
+
     if (!isOpen && (e.key === "ArrowDown" || e.key === "ArrowUp")) {
       e.preventDefault();
       setIsOpen(true);
       setIsTyping(true);
+      setTimeout(() => {
+        if (inputRef.current) {
+          inputRef.current.style.pointerEvents = 'auto';
+          inputRef.current.focus();
+        }
+      }, 0);
       return;
     }
 
