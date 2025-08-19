@@ -43,7 +43,173 @@ export function MobileCityDropdown({
   onSelectCity,
   context = "flights", // Default to flights for backward compatibility
 }: MobileCityDropdownProps) {
+  const [searchQuery, setSearchQuery] = useState("");
+
   if (!isOpen) return null;
+
+  // Filter cities based on search query
+  const filteredCities = Object.entries(cities).filter(([city, data]) => {
+    const query = searchQuery.toLowerCase();
+    return (
+      city.toLowerCase().includes(query) ||
+      data.code.toLowerCase().includes(query) ||
+      data.name.toLowerCase().includes(query) ||
+      data.airport.toLowerCase().includes(query) ||
+      data.fullName.toLowerCase().includes(query)
+    );
+  });
+
+  // Filter popular destinations based on search query
+  const popularDestinations = context === "hotels"
+    ? [
+        {
+          id: "Dubai",
+          code: "DXB",
+          name: "Dubai",
+          country: "United Arab Emirates",
+          airport: "Downtown Dubai, Marina, Business Bay",
+          description: "Luxury hotels, beaches, shopping malls",
+        },
+        {
+          id: "Mumbai",
+          code: "BOM",
+          name: "Mumbai",
+          country: "India",
+          airport: "Bandra, Andheri, South Mumbai",
+          description: "Business hotels, city center locations",
+        },
+        {
+          id: "Delhi",
+          code: "DEL",
+          name: "Delhi",
+          country: "India",
+          airport: "Connaught Place, Gurgaon, Airport area",
+          description: "Heritage hotels, business districts",
+        },
+        {
+          id: "Singapore",
+          code: "SIN",
+          name: "Singapore",
+          country: "Singapore",
+          airport: "Marina Bay, Orchard Road, Sentosa",
+          description: "Luxury resorts, city center hotels",
+        },
+        {
+          id: "Bangkok",
+          code: "BKK",
+          name: "Bangkok",
+          country: "Thailand",
+          airport: "Sukhumvit, Silom, Chatuchak",
+          description: "Budget to luxury hotels, city center",
+        },
+        {
+          id: "London",
+          code: "LON",
+          name: "London",
+          country: "United Kingdom",
+          airport: "Westminster, Kensington, Canary Wharf",
+          description: "Historic hotels, business districts",
+        },
+        {
+          id: "Paris",
+          code: "PAR",
+          name: "Paris",
+          country: "France",
+          airport: "Champs-Élysées, Le Marais, Montmartre",
+          description: "Boutique hotels, romantic locations",
+        },
+        {
+          id: "New York",
+          code: "NYC",
+          name: "New York",
+          country: "United States",
+          airport: "Manhattan, Times Square, Central Park",
+          description: "Luxury hotels, iconic locations",
+        },
+      ]
+    : [
+        {
+          id: "DXB",
+          code: "DXB",
+          name: "Dubai",
+          country: "United Arab Emirates",
+          airport: "Dubai International Airport",
+        },
+        {
+          id: "BCN",
+          code: "BCN",
+          name: "Barcelona",
+          country: "Spain",
+          airport: "Barcelona-El Prat Airport",
+        },
+        {
+          id: "LON",
+          code: "LON",
+          name: "London",
+          country: "United Kingdom",
+          airport: "Heathrow Airport",
+        },
+        {
+          id: "PAR",
+          code: "PAR",
+          name: "Paris",
+          country: "France",
+          airport: "Charles de Gaulle Airport",
+        },
+        {
+          id: "ROM",
+          code: "ROM",
+          name: "Rome",
+          country: "Italy",
+          airport: "Fiumicino Airport",
+        },
+        {
+          id: "NYC",
+          code: "NYC",
+          name: "New York",
+          country: "United States",
+          airport: "John F. Kennedy Airport",
+        },
+        {
+          id: "BKK",
+          code: "BKK",
+          name: "Bangkok",
+          country: "Thailand",
+          airport: "Suvarnabhumi Airport",
+        },
+        {
+          id: "SIN",
+          code: "SIN",
+          name: "Singapore",
+          country: "Singapore",
+          airport: "Changi Airport",
+        },
+        {
+          id: "TKO",
+          code: "TKO",
+          name: "Tokyo",
+          country: "Japan",
+          airport: "Haneda Airport",
+        },
+        {
+          id: "SYD",
+          code: "SYD",
+          name: "Sydney",
+          country: "Australia",
+          airport: "Kingsford Smith Airport",
+        },
+      ];
+
+  const filteredPopularDestinations = popularDestinations.filter((dest) => {
+    const query = searchQuery.toLowerCase();
+    return (
+      dest.name.toLowerCase().includes(query) ||
+      dest.code.toLowerCase().includes(query) ||
+      dest.country.toLowerCase().includes(query) ||
+      dest.airport.toLowerCase().includes(query) ||
+      (dest.description && dest.description.toLowerCase().includes(query))
+    );
+  });
 
   return (
     <div className="sm:hidden fixed inset-0 bg-white z-[60] overflow-y-auto">
