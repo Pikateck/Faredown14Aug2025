@@ -491,16 +491,18 @@ export default function FlightResults() {
       // Set trip type from URL
       const tripTypeParam = searchParams.get("tripType");
       if (tripTypeParam) {
-        const normalizedTripType = tripTypeParam.replace('_', '-');
+        const normalizedTripType = tripTypeParam.replace("_", "-");
         setEditTripType(normalizedTripType);
       }
 
       // Set class from URL
       const classParam = searchParams.get("cabinClass");
       if (classParam) {
-        const normalizedClass = classParam.replace('_', ' ').split(' ').map(word =>
-          word.charAt(0).toUpperCase() + word.slice(1)
-        ).join(' ');
+        const normalizedClass = classParam
+          .replace("_", " ")
+          .split(" ")
+          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(" ");
         setSelectedClass(normalizedClass);
       }
 
@@ -5207,11 +5209,18 @@ export default function FlightResults() {
                           </div>
                           <div>
                             <div className="font-semibold text-gray-900">
-                              {selectedFromCity ? cityData[selectedFromCity]?.code || selectedFromCity : searchParams.get("from") || ""}
+                              {selectedFromCity
+                                ? cityData[selectedFromCity]?.code ||
+                                  selectedFromCity
+                                : searchParams.get("from") || ""}
                             </div>
                             <div className="text-xs text-gray-500">
-                              {selectedFromCity ? selectedFromCity :
-                               Object.entries(cityData).find(([city, data]) => data.code === searchParams.get("from"))?.[0] || ""}
+                              {selectedFromCity
+                                ? selectedFromCity
+                                : Object.entries(cityData).find(
+                                    ([city, data]) =>
+                                      data.code === searchParams.get("from"),
+                                  )?.[0] || ""}
                             </div>
                           </div>
                         </div>
@@ -5244,11 +5253,18 @@ export default function FlightResults() {
                           </div>
                           <div>
                             <div className="font-semibold text-gray-900">
-                              {selectedToCity ? cityData[selectedToCity]?.code || selectedToCity : searchParams.get("to") || ""}
+                              {selectedToCity
+                                ? cityData[selectedToCity]?.code ||
+                                  selectedToCity
+                                : searchParams.get("to") || ""}
                             </div>
                             <div className="text-xs text-gray-500">
-                              {selectedToCity ? selectedToCity :
-                               Object.entries(cityData).find(([city, data]) => data.code === searchParams.get("to"))?.[0] || ""}
+                              {selectedToCity
+                                ? selectedToCity
+                                : Object.entries(cityData).find(
+                                    ([city, data]) =>
+                                      data.code === searchParams.get("to"),
+                                  )?.[0] || ""}
                             </div>
                           </div>
                         </div>
@@ -5305,10 +5321,14 @@ export default function FlightResults() {
                         {/* Blue users icon - 20x20px */}
                         <Users className="w-5 h-5 text-[#003580]" />
                         <div>
-                          <div className="font-semibold text-gray-900">{travelers.adults + travelers.children}</div>
+                          <div className="font-semibold text-gray-900">
+                            {travelers.adults + travelers.children}
+                          </div>
                           <div className="text-xs text-gray-500">
-                            {travelers.adults} adult{travelers.adults !== 1 ? 's' : ''}
-                            {travelers.children > 0 && `, ${travelers.children} child${travelers.children !== 1 ? 'ren' : ''}`}
+                            {travelers.adults} adult
+                            {travelers.adults !== 1 ? "s" : ""}
+                            {travelers.children > 0 &&
+                              `, ${travelers.children} child${travelers.children !== 1 ? "ren" : ""}`}
                           </div>
                         </div>
                       </div>
@@ -5344,14 +5364,35 @@ export default function FlightResults() {
                   onClick={() => {
                     // Build new search URL with updated parameters
                     const newParams = new URLSearchParams();
-                    newParams.set("from", selectedFromCity ? cityData[selectedFromCity]?.code || selectedFromCity : searchParams.get("from") || "");
-                    newParams.set("to", selectedToCity ? cityData[selectedToCity]?.code || selectedToCity : searchParams.get("to") || "");
-                    if (departureDate) newParams.set("departureDate", departureDate.toISOString().split('T')[0]);
-                    if (returnDate && editTripType === "round-trip") newParams.set("returnDate", returnDate.toISOString().split('T')[0]);
+                    newParams.set(
+                      "from",
+                      selectedFromCity
+                        ? cityData[selectedFromCity]?.code || selectedFromCity
+                        : searchParams.get("from") || "",
+                    );
+                    newParams.set(
+                      "to",
+                      selectedToCity
+                        ? cityData[selectedToCity]?.code || selectedToCity
+                        : searchParams.get("to") || "",
+                    );
+                    if (departureDate)
+                      newParams.set(
+                        "departureDate",
+                        departureDate.toISOString().split("T")[0],
+                      );
+                    if (returnDate && editTripType === "round-trip")
+                      newParams.set(
+                        "returnDate",
+                        returnDate.toISOString().split("T")[0],
+                      );
                     newParams.set("adults", travelers.adults.toString());
                     newParams.set("children", travelers.children.toString());
-                    newParams.set("tripType", editTripType.replace('-', '_'));
-                    newParams.set("cabinClass", selectedClass.toLowerCase().replace(' ', '_'));
+                    newParams.set("tripType", editTripType.replace("-", "_"));
+                    newParams.set(
+                      "cabinClass",
+                      selectedClass.toLowerCase().replace(" ", "_"),
+                    );
 
                     // Navigate to new search
                     navigate(`/flights/results?${newParams.toString()}`);
