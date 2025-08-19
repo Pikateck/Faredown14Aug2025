@@ -645,7 +645,7 @@ export function TransfersSearchForm() {
             <div className="col-span-6">
               <CityAutocomplete
                 label="Enter destination"
-                placeholder="Enter destination"
+                placeholder="Type a city or code…"
                 value={dropoffLocation}
                 onChange={(location) => {
                   setDropoffLocation(location);
@@ -660,8 +660,6 @@ export function TransfersSearchForm() {
                     setDropoff(null);
                   }
                 }}
-                required
-                className="h-12"
               />
             </div>
           </div>
