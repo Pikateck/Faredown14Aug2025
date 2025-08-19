@@ -127,6 +127,10 @@ export function CityAutocompleteButton({
     setIsOpen(false);
     setActiveIndex(-1);
     setIsTyping(false);
+    // Hide input again
+    if (inputRef.current) {
+      inputRef.current.style.pointerEvents = 'none';
+    }
   }
 
   function handleClick() {
