@@ -105,8 +105,8 @@ import {
   MobileTravelers,
   MobileClassDropdown,
 } from "@/components/MobileDropdowns";
-import CityAutocomplete from "@/components/CityAutocomplete";
-import type { Airport } from "@/shared/airportSearch";
+import { CityAutocomplete } from "@/components/CityAutocomplete";
+import { Airport } from "@/shared/airportSearch";
 
 export default function Index() {
   useScrollToTop();
