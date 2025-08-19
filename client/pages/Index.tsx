@@ -108,6 +108,7 @@ import {
 import CityAutocomplete, { CityOption } from "@/components/CityAutocomplete";
 import { searchAirportsWithFallback } from "@/lib/airportSearch";
 import { FlightSearchInputs } from "@/components/FlightSearchInputs";
+import { buildFlightSearchUrl, validateFlightSearch } from "@/lib/flightSearch";
 
 export default function Index() {
   useScrollToTop();
@@ -2507,7 +2508,7 @@ export default function Index() {
                   },
                   {
                     name: "Anjali Patel",
-                    location: "Bangalore • Verified Traveler",
+                    location: "Bangalore ��� Verified Traveler",
                     review:
                       "Easy booking process and instant confirmations. Saved on both flights and hotels. Will use again!",
                     rating: 5,
