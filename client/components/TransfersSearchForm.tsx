@@ -631,15 +631,14 @@ export function TransfersSearchForm() {
                   if (location) {
                     setPickup({
                       code: location.code,
-                      label: location.name,
-                      type: location.type || 'city'
+                      label: `${location.city}, ${location.country}`,
+                      type: 'city'
                     });
                   } else {
                     setPickup(null);
                   }
                 }}
-                fetchOptions={searchDestinations}
-                icon={<Navigation className="w-4 h-4" />}
+                required
                 className="h-12"
               />
             </div>
