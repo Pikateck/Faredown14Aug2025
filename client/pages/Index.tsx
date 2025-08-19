@@ -1826,10 +1826,9 @@ export default function Index() {
                     <div className="relative flex-1 lg:max-w-xs w-full lg:w-auto">
                       <CityAutocomplete
                         label="Leaving from"
-                        placeholder="City or airport"
+                        placeholder="Type a city or code…"
                         value={fromAirport}
                         onChange={setFromAirport}
-                        required
                         className="relative"
                       />
                     </div>
@@ -1837,10 +1836,9 @@ export default function Index() {
                     <div className="relative flex-1 lg:max-w-xs w-full lg:w-auto">
                       <CityAutocomplete
                         label="Going to"
-                        placeholder="City or airport"
+                        placeholder="Type a city or code…"
                         value={toAirport}
                         onChange={setToAirport}
-                        required
                         className="relative"
                       />
 
