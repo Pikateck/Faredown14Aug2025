@@ -211,8 +211,8 @@ export default function Index() {
   const [selectedFromCity, setSelectedFromCity] = useState("");
   const [selectedToCity, setSelectedToCity] = useState("");
   // New state for CityAutocomplete
-  const [fromAirport, setFromAirport] = useState<CityOption | null>(null);
-  const [toAirport, setToAirport] = useState<CityOption | null>(null);
+  const [fromAirport, setFromAirport] = useState<Airport | null>(null);
+  const [toAirport, setToAirport] = useState<Airport | null>(null);
   const [showCalendar, setShowCalendar] = useState(false);
   const [showTravelers, setShowTravelers] = useState(false);
   const [travelers, setTravelers] = useState({ adults: 1, children: 0 });
