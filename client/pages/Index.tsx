@@ -105,6 +105,8 @@ import {
   MobileTravelers,
   MobileClassDropdown,
 } from "@/components/MobileDropdowns";
+import CityAutocomplete, { CityOption } from "@/components/CityAutocomplete";
+import { searchAirportsWithFallback } from "@/lib/airportSearch";
 
 export default function Index() {
   useScrollToTop();
@@ -208,6 +210,9 @@ export default function Index() {
   const [showToCities, setShowToCities] = useState(false);
   const [selectedFromCity, setSelectedFromCity] = useState("");
   const [selectedToCity, setSelectedToCity] = useState("");
+  // New state for CityAutocomplete
+  const [fromAirport, setFromAirport] = useState<CityOption | null>(null);
+  const [toAirport, setToAirport] = useState<CityOption | null>(null);
   const [showCalendar, setShowCalendar] = useState(false);
   const [showTravelers, setShowTravelers] = useState(false);
   const [travelers, setTravelers] = useState({ adults: 1, children: 0 });
