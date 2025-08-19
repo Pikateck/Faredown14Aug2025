@@ -2062,24 +2062,36 @@ export default function Index() {
                     <div className="lg:max-w-[100px] w-full lg:w-auto">
                       <Button
                         onClick={() => {
-                          const searchParams = getSearchParams();
-                          searchParams.set(
-                            "adults",
-                            travelers.adults.toString(),
+                          // Validate flight search with new airport selections
+                          const validationError = validateFlightSearch(
+                            fromAirport,
+                            toAirport,
+                            departureDate,
+                            returnDate,
+                            tripType
                           );
-                          searchParams.set(
-                            "children",
-                            travelers.children.toString(),
-                          );
-                          if (tripType === "multi-city") {
-                            searchParams.set(
-                              "segments",
-                              JSON.stringify(flightSegments),
-                            );
+
+                          if (validationError) {
+                            alert(validationError);
+                            return;
                           }
-                          navigate(
-                            `/flights/results?${searchParams.toString()}`,
-                          );
+
+                          try {
+                            // Use new flight search URL builder
+                            const searchUrl = buildFlightSearchUrl(
+                              fromAirport,
+                              toAirport,
+                              departureDate,
+                              returnDate,
+                              travelers,
+                              selectedClass,
+                              tripType
+                            );
+                            navigate(searchUrl);
+                          } catch (error) {
+                            console.error("Flight search error:", error);
+                            alert("Please fill in all required fields");
+                          }
                         }}
                         className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded h-12 font-medium text-sm w-full touch-manipulation"
                       >
