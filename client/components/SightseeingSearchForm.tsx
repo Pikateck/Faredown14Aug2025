@@ -42,6 +42,9 @@ export function SightseeingSearchForm() {
   >([]);
   const [loadingDestinations, setLoadingDestinations] = useState(false);
 
+  // New CityAutocomplete state
+  const [selectedDestination, setSelectedDestination] = useState<CityOption | null>(null);
+
   // Set default dates to future dates
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
