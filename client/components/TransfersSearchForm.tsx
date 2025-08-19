@@ -75,8 +75,8 @@ export function TransfersSearchForm() {
   } | null>(null);
 
   // New CityAutocomplete states
-  const [pickupLocation, setPickupLocation] = useState<CityOption | null>(null);
-  const [dropoffLocation, setDropoffLocation] = useState<CityOption | null>(null);
+  const [pickupLocation, setPickupLocation] = useState<Airport | null>(null);
+  const [dropoffLocation, setDropoffLocation] = useState<Airport | null>(null);
 
   // Date states
   const [pickupDate, setPickupDate] = useState<Date | null>(null);
