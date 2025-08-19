@@ -632,7 +632,7 @@ export function TransfersSearchForm() {
                     setPickup({
                       code: location.code,
                       label: `${location.city}, ${location.country}`,
-                      type: 'city'
+                      type: "city",
                     });
                   } else {
                     setPickup(null);
@@ -654,7 +654,7 @@ export function TransfersSearchForm() {
                     setDropoff({
                       code: location.code,
                       label: `${location.city}, ${location.country}`,
-                      type: 'city'
+                      type: "city",
                     });
                   } else {
                     setDropoff(null);

@@ -25,7 +25,7 @@ export function SightseeingDestinationInput({
           if (destination && onLegacyUpdate) {
             onLegacyUpdate(
               `${destination.city}, ${destination.country}`,
-              destination.code
+              destination.code,
             );
           } else if (!destination && onLegacyUpdate) {
             onLegacyUpdate("", "");

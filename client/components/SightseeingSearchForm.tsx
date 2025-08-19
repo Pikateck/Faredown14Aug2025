@@ -44,7 +44,8 @@ export function SightseeingSearchForm() {
   const [loadingDestinations, setLoadingDestinations] = useState(false);
 
   // New CityAutocomplete state
-  const [selectedDestination, setSelectedDestination] = useState<Airport | null>(null);
+  const [selectedDestination, setSelectedDestination] =
+    useState<Airport | null>(null);
 
   // Set default dates to future dates
   const tomorrow = new Date();
@@ -433,7 +434,10 @@ export function SightseeingSearchForm() {
           />
 
           {/* OLD Destination - EXACT HOTELS PATTERN (TO BE REMOVED) */}
-          <div className="flex-1 lg:max-w-[320px] relative destination-container" style={{display: 'none'}}>
+          <div
+            className="flex-1 lg:max-w-[320px] relative destination-container"
+            style={{ display: "none" }}
+          >
             <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
               Destination
             </label>

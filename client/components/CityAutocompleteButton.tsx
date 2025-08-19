@@ -23,21 +23,23 @@ export function CityAutocompleteButton({
 }: Props) {
   const inputId = useId();
   const listboxId = useId();
-  
+
   const [query, setQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [airports, setAirports] = useState<Airport[]>([]);
   const [activeIndex, setActiveIndex] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
-  
+
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
   const debounceRef = useRef<NodeJS.Timeout>();
 
   // Format airport display as "BOM · Mumbai, India"
   function formatAirportDisplay(airport: Airport): string {
-    const cityCountry = [airport.city, airport.country].filter(Boolean).join(", ");
+    const cityCountry = [airport.city, airport.country]
+      .filter(Boolean)
+      .join(", ");
     return `${airport.code} · ${cityCountry || airport.name}`;
   }
 
@@ -87,9 +89,9 @@ export function CityAutocompleteButton({
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
-        inputRef.current && 
+        inputRef.current &&
         !inputRef.current.contains(event.target as Node) &&
-        listRef.current && 
+        listRef.current &&
         !listRef.current.contains(event.target as Node)
       ) {
         setIsOpen(false);
@@ -110,7 +112,7 @@ export function CityAutocompleteButton({
     setQuery(newQuery);
     setIsOpen(true);
     setIsTyping(true);
-    
+
     // Clear selection if user types something different
     if (value && newQuery !== formatAirportDisplay(value)) {
       onChange(null);
@@ -147,13 +149,13 @@ export function CityAutocompleteButton({
     switch (e.key) {
       case "ArrowDown":
         e.preventDefault();
-        setActiveIndex(prev => 
-          prev < airports.length - 1 ? prev + 1 : prev
+        setActiveIndex((prev) =>
+          prev < airports.length - 1 ? prev + 1 : prev,
         );
         break;
       case "ArrowUp":
         e.preventDefault();
-        setActiveIndex(prev => prev > 0 ? prev - 1 : prev);
+        setActiveIndex((prev) => (prev > 0 ? prev - 1 : prev));
         break;
       case "Enter":
         e.preventDefault();
@@ -177,7 +179,9 @@ export function CityAutocompleteButton({
   // Scroll active option into view
   useEffect(() => {
     if (activeIndex >= 0 && listRef.current) {
-      const activeElement = listRef.current.children[activeIndex] as HTMLElement;
+      const activeElement = listRef.current.children[
+        activeIndex
+      ] as HTMLElement;
       if (activeElement) {
         activeElement.scrollIntoView({ block: "nearest" });
       }
@@ -204,17 +208,19 @@ export function CityAutocompleteButton({
           aria-expanded={isOpen}
           aria-controls={listboxId}
           aria-activedescendant={
-            isOpen && activeIndex >= 0 ? `${listboxId}-option-${activeIndex}` : undefined
+            isOpen && activeIndex >= 0
+              ? `${listboxId}-option-${activeIndex}`
+              : undefined
           }
           className={`absolute inset-0 w-full h-full bg-transparent border-none outline-none text-transparent caret-gray-900 z-10 ${
-            isTyping ? 'text-gray-900' : ''
+            isTyping ? "text-gray-900" : ""
           }`}
-          style={{ 
-            backgroundColor: 'transparent',
-            color: isTyping ? '#111827' : 'transparent'
+          style={{
+            backgroundColor: "transparent",
+            color: isTyping ? "#111827" : "transparent",
           }}
         />
-        
+
         {/* Button that looks like original design */}
         <button
           onClick={handleClick}
@@ -229,16 +235,19 @@ export function CityAutocompleteButton({
             <div>
               {value ? (
                 <>
-                  <div className="font-medium text-gray-900">
-                    {value.code}
-                  </div>
+                  <div className="font-medium text-gray-900">{value.code}</div>
                   <div className="text-xs text-gray-500">
-                    {[value.city, value.country].filter(Boolean).join(", ") || value.name}
+                    {[value.city, value.country].filter(Boolean).join(", ") ||
+                      value.name}
                   </div>
                 </>
               ) : (
                 <div className="text-sm text-gray-500">
-                  {label === "From" ? "Leaving from" : label === "To" ? "Going to" : placeholder}
+                  {label === "From"
+                    ? "Leaving from"
+                    : label === "To"
+                      ? "Going to"
+                      : placeholder}
                 </div>
               )}
             </div>
@@ -258,43 +267,47 @@ export function CityAutocompleteButton({
               Type at least 2 characters to search...
             </li>
           )}
-          
+
           {query.length >= 2 && isLoading && (
-            <li className="px-3 py-2 text-sm text-gray-500">
-              Searching...
-            </li>
+            <li className="px-3 py-2 text-sm text-gray-500">Searching...</li>
           )}
-          
+
           {query.length >= 2 && !isLoading && airports.length === 0 && (
             <li className="px-3 py-2 text-sm text-gray-500">
               No airports found
             </li>
           )}
-          
-          {query.length >= 2 && !isLoading && airports.map((airport, index) => (
-            <li
-              key={airport.code}
-              id={`${listboxId}-option-${index}`}
-              role="option"
-              aria-selected={index === activeIndex}
-              onClick={() => selectAirport(airport)}
-              onMouseEnter={() => setActiveIndex(index)}
-              className={`px-3 py-2 cursor-pointer text-sm ${
-                index === activeIndex 
-                  ? "bg-blue-600 text-white" 
-                  : "text-gray-900 hover:bg-gray-100"
-              }`}
-            >
-              <div className="font-medium">
-                {airport.code} · {[airport.city, airport.country].filter(Boolean).join(", ") || airport.name}
-              </div>
-              {airport.name && airport.city && (
-                <div className={`text-xs ${index === activeIndex ? "text-blue-100" : "text-gray-500"}`}>
-                  {airport.name}
+
+          {query.length >= 2 &&
+            !isLoading &&
+            airports.map((airport, index) => (
+              <li
+                key={airport.code}
+                id={`${listboxId}-option-${index}`}
+                role="option"
+                aria-selected={index === activeIndex}
+                onClick={() => selectAirport(airport)}
+                onMouseEnter={() => setActiveIndex(index)}
+                className={`px-3 py-2 cursor-pointer text-sm ${
+                  index === activeIndex
+                    ? "bg-blue-600 text-white"
+                    : "text-gray-900 hover:bg-gray-100"
+                }`}
+              >
+                <div className="font-medium">
+                  {airport.code} ·{" "}
+                  {[airport.city, airport.country].filter(Boolean).join(", ") ||
+                    airport.name}
                 </div>
-              )}
-            </li>
-          ))}
+                {airport.name && airport.city && (
+                  <div
+                    className={`text-xs ${index === activeIndex ? "text-blue-100" : "text-gray-500"}`}
+                  >
+                    {airport.name}
+                  </div>
+                )}
+              </li>
+            ))}
         </ul>
       )}
     </div>

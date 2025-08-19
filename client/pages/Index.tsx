@@ -1208,15 +1208,18 @@ export default function Index() {
                   const params = new URLSearchParams({
                     from: cityData[selectedFromCity]?.code || selectedFromCity,
                     to: cityData[selectedToCity]?.code || selectedToCity,
-                    departureDate: departureDate.toISOString().split('T')[0],
+                    departureDate: departureDate.toISOString().split("T")[0],
                     adults: travelers.adults.toString(),
                     children: travelers.children.toString(),
-                    tripType: tripType.replace('-', '_'),
-                    cabinClass: selectedClass.toLowerCase().replace(' ', '_'),
+                    tripType: tripType.replace("-", "_"),
+                    cabinClass: selectedClass.toLowerCase().replace(" ", "_"),
                   });
 
                   if (returnDate && tripType === "round-trip") {
-                    params.set("returnDate", returnDate.toISOString().split('T')[0]);
+                    params.set(
+                      "returnDate",
+                      returnDate.toISOString().split("T")[0],
+                    );
                   }
 
                   navigate(`/flights/results?${params.toString()}`);
@@ -1834,7 +1837,9 @@ export default function Index() {
                           <Building2 className="w-4 h-4 text-blue-600" />
                         </div>
                         <span className="text-sm text-gray-900 font-semibold truncate">
-                          {selectedFromCity ? `${cityData[selectedFromCity]?.code} • ${selectedFromCity}` : "Select departure city"}
+                          {selectedFromCity
+                            ? `${cityData[selectedFromCity]?.code} • ${selectedFromCity}`
+                            : "Select departure city"}
                         </span>
                       </button>
                     </div>
@@ -1851,7 +1856,9 @@ export default function Index() {
                           <Plane className="w-4 h-4 text-blue-600" />
                         </div>
                         <span className="text-sm text-gray-900 font-semibold truncate">
-                          {selectedToCity ? `${cityData[selectedToCity]?.code} • ${selectedToCity}` : "Select destination city"}
+                          {selectedToCity
+                            ? `${cityData[selectedToCity]?.code} • ${selectedToCity}`
+                            : "Select destination city"}
                         </span>
                       </button>
                     </div>
@@ -2088,17 +2095,27 @@ export default function Index() {
 
                           // Build search URL
                           const params = new URLSearchParams({
-                            from: cityData[selectedFromCity]?.code || selectedFromCity,
-                            to: cityData[selectedToCity]?.code || selectedToCity,
-                            departureDate: departureDate.toISOString().split('T')[0],
+                            from:
+                              cityData[selectedFromCity]?.code ||
+                              selectedFromCity,
+                            to:
+                              cityData[selectedToCity]?.code || selectedToCity,
+                            departureDate: departureDate
+                              .toISOString()
+                              .split("T")[0],
                             adults: travelers.adults.toString(),
                             children: travelers.children.toString(),
-                            tripType: tripType.replace('-', '_'),
-                            cabinClass: selectedClass.toLowerCase().replace(' ', '_'),
+                            tripType: tripType.replace("-", "_"),
+                            cabinClass: selectedClass
+                              .toLowerCase()
+                              .replace(" ", "_"),
                           });
 
                           if (returnDate && tripType === "round-trip") {
-                            params.set("returnDate", returnDate.toISOString().split('T')[0]);
+                            params.set(
+                              "returnDate",
+                              returnDate.toISOString().split("T")[0],
+                            );
                           }
 
                           navigate(`/flights/results?${params.toString()}`);
@@ -3251,7 +3268,6 @@ export default function Index() {
             />
           </Fragment>
         ))}
-
 
       <MobileDatePicker
         isOpen={showCalendar}
