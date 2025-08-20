@@ -523,11 +523,16 @@ export function FlightBargainModal({
         return (
           <div className="text-center space-y-6">
             <div className="text-center">
-              <h3 className="text-2xl font-bold text-[#003580] mb-2">
-                Perfect Match!
-              </h3>
+              <div className="flex items-center justify-center gap-3 mb-3">
+                <h3 className="text-2xl font-bold text-[#003580]">
+                  Perfect Match!
+                </h3>
+                <div className="px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-full">
+                  Negotiated in 8.2s
+                </div>
+              </div>
               <p className="text-gray-600 mb-1 text-lg">
-                {bargainState.currentCounterOffer 
+                {bargainState.currentCounterOffer
                   ? "You accepted the airline's counter offer!"
                   : "The airline accepted your exact price!"}
               </p>
