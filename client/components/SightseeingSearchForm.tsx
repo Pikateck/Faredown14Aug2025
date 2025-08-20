@@ -197,7 +197,7 @@ export function SightseeingSearchForm() {
             name: "Paris",
             country: "France",
             type: "city",
-            flag: "🇫��",
+            flag: "����🇷",
           },
           {
             id: "BOM",
