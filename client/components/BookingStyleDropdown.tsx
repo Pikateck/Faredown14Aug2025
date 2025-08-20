@@ -38,10 +38,9 @@ export function BookingStyleDropdown({
   triggerRef,
 }: BookingStyleDropdownProps) {
   const [searchQuery, setSearchQuery] = useState("");
+  const debouncedSearchQuery = useDebounce(searchQuery, 250); // 250ms debounce for search
   const [position, setPosition] = useState({ top: 0, left: 0, width: 0 });
   const dropdownRef = useRef<HTMLDivElement>(null);
-
-  console.log('BookingStyleDropdown render:', { isOpen, title });
 
   // Calculate position based on trigger element
   useEffect(() => {
