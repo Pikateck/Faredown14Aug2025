@@ -693,7 +693,12 @@ export default function HotelDetails() {
     : null;
 
   const tabs = [
-    { id: "overview", label: "View Details" },
+    { id: "overview", label: "Overview" },
+    { id: "gallery", label: "Gallery" },
+    { id: "amenities", label: "Amenities" },
+    { id: "reviews", label: "Reviews" },
+    { id: "street-view", label: "Street View" },
+    { id: "location", label: "Location" },
   ];
 
   // Calculate the lowest price from available room types
@@ -1090,20 +1095,50 @@ export default function HotelDetails() {
                             ))}
                           </div>
 
-                          {/* Action Button */}
-                          <div className="mt-4">
+                          {/* Action Buttons */}
+                          <div className="space-y-2">
                             <Button
                               onClick={() => {
                                 setSelectedRoomType(room);
-                                // Navigate to booking flow or room details
-                                console.log('View Details clicked for room:', room.id);
                                 if (navigator.vibrate) {
                                   navigator.vibrate(50);
                                 }
                               }}
-                              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 text-sm"
+                              className={`w-full font-medium py-3 text-sm ${
+                                selectedRoomType?.id === room.id
+                                  ? "bg-blue-600 text-white"
+                                  : "bg-white border border-blue-600 text-blue-600 hover:bg-blue-50"
+                              }`}
                             >
-                              View Details
+                              {selectedRoomType?.id === room.id ? (
+                                <span className="flex items-center justify-center">
+                                  <CheckCircle className="w-4 h-4 mr-2" />
+                                  Selected
+                                </span>
+                              ) : (
+                                "Select This Room"
+                              )}
+                            </Button>
+
+                            <Button
+                              onClick={() => {
+                                handleBargainClick(room);
+                                if (navigator.vibrate) {
+                                  navigator.vibrate(50);
+                                }
+                              }}
+                              className="w-full bg-[#febb02] hover:bg-[#e6a602] text-black font-medium py-2 text-sm flex items-center justify-center gap-2"
+                            >
+                              <TrendingDown className="w-4 h-4" />
+                              Bargain Now
+                            </Button>
+
+                            <Button
+                              onClick={handleStarClick}
+                              variant="outline"
+                              className="w-full font-medium py-2 text-sm border-gray-300 text-gray-700 hover:bg-gray-50"
+                            >
+                              View Reviews
                             </Button>
                           </div>
                         </div>
@@ -1838,19 +1873,37 @@ export default function HotelDetails() {
                                   </div>
                                 </div>
 
-                                <div>
+                                <div className="space-y-3">
                                   <Button
-                                    onClick={() => {
-                                      setSelectedRoomType(room);
-                                      // Navigate to booking flow or room details
-                                      console.log('View Details clicked for room:', room.id);
-                                      if (navigator.vibrate) {
-                                        navigator.vibrate(50);
-                                      }
-                                    }}
-                                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 text-sm transition-all duration-200"
+                                    onClick={() => handleBooking(room)}
+                                    variant="outline"
+                                    className="w-full font-semibold py-3 text-sm transition-all duration-200 border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white hover:shadow-md"
                                   >
-                                    View Details
+                                    Reserve Room
+                                  </Button>
+                                  <Button
+                                    onClick={() => handleBargainClick(room)}
+                                    className={`w-full font-medium py-2 text-sm transition-all duration-200 flex items-center justify-center gap-2 ${
+                                      bargainedRooms.has(room.id)
+                                        ? "bg-green-600 text-white"
+                                        : bargainingRoomId === room.id
+                                          ? "bg-blue-600 text-white animate-pulse"
+                                          : "bg-[#febb02] hover:bg-[#e6a602] text-black"
+                                    }`}
+                                  >
+                                    {bargainedRooms.has(room.id) ? (
+                                      <span className="flex items-center justify-center">
+                                        Bargained
+                                        <CheckCircle className="w-4 h-4 ml-2" />
+                                      </span>
+                                    ) : bargainingRoomId === room.id ? (
+                                      "Bargaining..."
+                                    ) : (
+                                      <>
+                                        <TrendingDown className="w-4 h-4" />
+                                        Bargain Now
+                                      </>
+                                    )}
                                   </Button>
                                 </div>
 
