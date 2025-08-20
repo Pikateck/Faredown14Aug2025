@@ -559,14 +559,38 @@ export default function FlightDetails({
       </div>
 
       {/* Flight Bargain Modal */}
-      <FlightBargainModal
-        flight={displayFlight}
+      <ClassyBargainModal
         isOpen={showBargainModal}
+        flight={displayFlight ? {
+          id: displayFlight.id,
+          airline: displayFlight.airline,
+          flightNumber: displayFlight.flightNumber || displayFlight.id,
+          departureCode: displayFlight.origin || "BOM",
+          arrivalCode: displayFlight.destination || "DXB",
+          departureTime: displayFlight.departureTime,
+          arrivalTime: displayFlight.arrivalTime,
+          duration: displayFlight.duration,
+          aircraft: displayFlight.aircraft,
+          price: displayFlight.price?.amount || 0
+        } : null}
+        fareType={displayFlight ? {
+          type: displayFlight.fareClass || "Economy",
+          price: displayFlight.price?.amount || 0,
+          currency: "INR",
+          features: ["Seat Selection", "Meal", "Baggage"]
+        } : null}
         onClose={() => setShowBargainModal(false)}
-        onBookingSuccess={(finalPrice) => {
-          console.log("Bargain booking success with price:", finalPrice);
+        onAccept={(finalPrice, orderRef) => {
+          console.log("Bargain accepted with price:", finalPrice, "Order:", orderRef);
           setShowBargainModal(false);
+          // Navigate to booking or show success
         }}
+        onBookOriginal={() => {
+          console.log("Booking original price:", displayFlight?.price?.amount);
+          setShowBargainModal(false);
+          // Handle original booking
+        }}
+        attempt={1}
       />
     </div>
   );
