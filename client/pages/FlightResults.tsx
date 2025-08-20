@@ -11,10 +11,6 @@ import { Progress } from "@/components/ui/progress";
 import { MobileNavigation } from "@/components/mobile/MobileNavigation";
 import { ClassyBargainModal } from "@/components/ClassyBargainModal";
 import {
-  useBargainPhase1,
-  createFlightBargainItem,
-} from "@/hooks/useBargainPhase1";
-import {
   Dialog,
   DialogContent,
   DialogHeader,
@@ -1685,7 +1681,7 @@ export default function FlightResults() {
                       { code: "es", name: "Español", flag: "🇪🇸" },
                       { code: "fr", name: "Français", flag: "🇫������" },
                       { code: "de", name: "Deutsch", flag: "🇩🇪" },
-                      { code: "it", name: "Italiano", flag: "🇮����" },
+                      { code: "it", name: "Italiano", flag: "🇮🇹" },
                       { code: "pt", name: "Portugu��s", flag: "🇵🇹" },
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
                       { code: "hi", name: "हिन्दी", flag: "🇮����" },
