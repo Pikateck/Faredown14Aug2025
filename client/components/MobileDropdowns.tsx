@@ -45,11 +45,7 @@ export function MobileCityDropdown({
 }: MobileCityDropdownProps) {
   const [searchQuery, setSearchQuery] = useState("");
 
-  console.log('MobileCityDropdown render:', { isOpen, title, context, citiesCount: Object.keys(cities).length });
-
-  if (!isOpen) return null;
-
-  // Filter cities based on search query
+  // Filter cities based on search query - MUST be called before any conditional returns
   const filteredCities = React.useMemo(() => {
     if (!searchQuery) return Object.entries(cities);
 
