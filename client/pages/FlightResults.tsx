@@ -1406,12 +1406,8 @@ export default function FlightResults() {
     const currentPriceInINR = bargainFareType.price;
     const priceKey = `${bargainFlight.id}-${bargainFareType.name}-${targetPriceInSelectedCurrency}`;
 
-    // Check if this exact price has been tried before
-    if (usedPrices.has(priceKey)) {
-      setDuplicatePriceError(true);
-      setTimeout(() => setDuplicatePriceError(false), 5000); // Hide after 5 seconds
-      return;
-    }
+    // Allow same price to be entered multiple times for different AI responses
+    // Remove duplicate price restriction as requested by user
 
     if (targetPriceInINR >= currentPriceInINR) {
       setDuplicatePriceError(true);
