@@ -640,7 +640,7 @@ export default function TransferBooking() {
                 ) : (
                   <>
                     <CreditCard className="w-4 h-4 mr-2" />
-                    Book Now - ��{totalPrice}
+                    Book Now - ₹{totalPrice}
                   </>
                 )}
               </Button>
