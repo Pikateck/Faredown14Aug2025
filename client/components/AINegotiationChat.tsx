@@ -288,8 +288,15 @@ export function AINegotiationChat({
 
       // Wait 2 seconds then show decision
       await new Promise(resolve => setTimeout(resolve, 2000));
-      
+
       setCurrentStep('decision');
+
+      // Start 10-second minimum display timer for decision panel
+      setCanProceedFromDecision(false);
+      const timer = setTimeout(() => {
+        setCanProceedFromDecision(true);
+      }, 10000); // 10 seconds minimum
+      setMinDisplayTimer(timer);
       
     } catch (error) {
       console.error('Negotiation error:', error);
