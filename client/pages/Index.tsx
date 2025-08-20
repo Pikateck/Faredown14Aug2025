@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { MobileNavigation } from "@/components/mobile/MobileNavigation";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
 import { useToast } from "@/hooks/use-toast";
+import { Toaster } from "@/components/ui/toaster";
 import {
   formatDateToDDMMMYYYY,
   formatDateToDisplayString,
