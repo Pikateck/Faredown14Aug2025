@@ -1716,7 +1716,7 @@ export default function FlightResults() {
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
                       { code: "hi", name: "हिन्दी", flag: "🇮����" },
                       { code: "ja", name: "日本語", flag: "🇯🇵" },
-                      { code: "ko", name: "한국어", flag: "🇰🇷" },
+                      { code: "ko", name: "한국어", flag: "🇰����" },
                       { code: "zh", name: "中文", flag: "🇨🇳" },
                     ].map((language) => (
                       <DropdownMenuItem
@@ -6515,17 +6515,6 @@ export default function FlightResults() {
 
       <MobileNavigation />
 
-      {/* AI Negotiation Modal (All devices) */}
-      <AINegotiationModal
-        isOpen={showAINegotiationModal}
-        session={bargainSession}
-        onClose={handleCloseBargain}
-        onAccept={handleBargainAccept}
-        onRetry={handleBargainRetry}
-      />
-
-      {/* Phase 1 Bargain Modal */}
-      <BargainModalPhase1 {...bargainHook.getBargainModalProps()} />
     </div>
   );
 }
