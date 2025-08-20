@@ -73,7 +73,8 @@ function getFallbackText(beat: string): string {
     'agent_offer': 'We have your offer. Can you approve?',
     'supplier_check': 'Checking availability...',
     'supplier_counter': 'Here\'s our best offer.',
-    'agent_user_confirm': 'Let me check with you if you want it.'
+    'agent_user_confirm': 'Good news—approved. Shall I hold it for 30s?',
+    'latency_slow': 'Thanks for waiting—confirming the final number…'
   };
   return fallbacks[beat] || 'Processing your request...';
 }
