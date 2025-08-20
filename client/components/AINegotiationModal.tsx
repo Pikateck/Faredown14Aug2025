@@ -179,14 +179,14 @@ export function AINegotiationModal({
     try {
       const attemptNo = session.attemptCount || 1;
       
-      // Beat 1: Agent offer with varied copy
-      const agentOfferVariant = getCopyVariant(
+      // Beat 1: Agent offer with varied copy and currency formatting
+      const agentOfferVariant = getCopyVariantWithCurrency(
         session.module,
         'agent_offer',
         attemptNo,
         'counter',
         {
-          offer: formatPriceNoDecimals(session.userOffer, selectedCurrency),
+          offer: session.userOffer,
           airline: session.productDetails.airline || 'Airline',
           flight_no: session.productDetails.flightNo || '',
           hotel_name: session.productDetails.hotelName || 'Hotel',
@@ -194,7 +194,9 @@ export function AINegotiationModal({
           pickup: session.productDetails.pickup || 'Pickup',
           dropoff: session.productDetails.dropoff || 'Dropoff'
         },
-        sessionUsedKeys
+        sessionUsedKeys,
+        [],
+        (amount: number) => formatPriceNoDecimals(amount, selectedCurrency)
       );
 
       addChatBeat({
@@ -206,15 +208,17 @@ export function AINegotiationModal({
 
       // Beat 2: Supplier checks (after 3s)
       setTimeout(() => {
-        const supplierCheckVariant = getCopyVariant(
+        const supplierCheckVariant = getCopyVariantWithCurrency(
           session.module,
           'supplier_check',
           attemptNo,
           'counter',
           {
-            base: formatPriceNoDecimals(session.productDetails.basePrice, selectedCurrency)
+            base: session.productDetails.basePrice
           },
-          sessionUsedKeys
+          sessionUsedKeys,
+          [],
+          (amount: number) => formatPriceNoDecimals(amount, selectedCurrency)
         );
 
         addChatBeat({
@@ -271,16 +275,18 @@ export function AINegotiationModal({
             setBargainResult(result);
           }
 
-          // Beat 3: Supplier responds with varied copy
-          const supplierCounterVariant = getCopyVariant(
+          // Beat 3: Supplier responds with varied copy and currency formatting
+          const supplierCounterVariant = getCopyVariantWithCurrency(
             session.module,
             'supplier_counter',
             attemptNo,
             result.status === 'accepted' ? 'accepted' : 'counter',
             {
-              counter: formatPriceNoDecimals(result.finalPrice || session.productDetails.basePrice, selectedCurrency)
+              counter: result.finalPrice || session.productDetails.basePrice
             },
-            sessionUsedKeys
+            sessionUsedKeys,
+            [],
+            (amount: number) => formatPriceNoDecimals(amount, selectedCurrency)
           );
 
           addChatBeat({
@@ -294,13 +300,15 @@ export function AINegotiationModal({
 
           // Beat 4: Agent confirms (after 2s)
           setTimeout(() => {
-            const agentConfirmVariant = getCopyVariant(
+            const agentConfirmVariant = getCopyVariantWithCurrency(
               session.module,
               'agent_user_confirm',
               attemptNo,
               'counter',
               {},
-              sessionUsedKeys
+              sessionUsedKeys,
+              [],
+              (amount: number) => formatPriceNoDecimals(amount, selectedCurrency)
             );
 
             addChatBeat({
