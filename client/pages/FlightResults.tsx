@@ -2343,7 +2343,7 @@ export default function FlightResults() {
       </div>
 
       {/* Main Content Container */}
-      <div className="flex flex-col md:flex-row max-w-7xl mx-auto">
+      <div className="flex flex-col md:flex-row max-w-none mx-auto">
         {/* Mobile CSS Override for appropriately sized checkboxes */}
         <style>
           {`
@@ -4036,7 +4036,7 @@ export default function FlightResults() {
                                               });
 
                                             console.log(
-                                              "📱 Starting live API bargain (mobile):",
+                                              "�� Starting live API bargain (mobile):",
                                               bargainItem,
                                             );
 
