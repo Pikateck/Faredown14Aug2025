@@ -184,7 +184,10 @@ export function ClassyBargainModal({
     setStep('chat');
     setIsProcessing(true);
 
-    // Create placeholders for copy variants
+    // Create placeholders for copy variants with personalization
+    const firstName = user?.name?.split(' ')[0] || 'there';
+    const title = user?.name ? (firstName.toLowerCase() === 'mr' ? firstName : `Mr. ${firstName}`) : '';
+
     const placeholders = {
       offer: formatCurrency(offer, selectedCurrency.symbol),
       base: formatCurrency(fareType.price, selectedCurrency.symbol),
@@ -195,7 +198,9 @@ export function ClassyBargainModal({
       city: '',
       tour_name: '',
       pickup: '',
-      dropoff: ''
+      dropoff: '',
+      user_name: firstName,
+      user_title: title
     };
 
     try {
