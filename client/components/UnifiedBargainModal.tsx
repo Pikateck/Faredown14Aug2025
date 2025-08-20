@@ -272,6 +272,8 @@ export function UnifiedBargainModal({
       return;
     }
 
+    console.log('✅ Price validation passed, starting negotiation flow...');
+
     setDuplicatePriceError(false);
     setCurrentStep('negotiating');
     setIsProcessing(true);
