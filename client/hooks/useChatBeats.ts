@@ -21,19 +21,22 @@ export function useChatBeats(beatsTemplate: Omit<Beat,'text'>[]) {
   const [running, setRunning] = useState(false);
   const timerRef = useRef<number | null>(null);
 
-  const clearTimer = () => {
+  const clearTimer = useCallback(() => {
     if (timerRef.current) window.clearTimeout(timerRef.current);
     timerRef.current = null;
-  };
+  }, []);
 
-  const stop = () => { clearTimer(); setRunning(false); };
+  const stop = useCallback(() => {
+    clearTimer();
+    setRunning(false);
+  }, [clearTimer]);
 
-  const start = (filledBeats: Beat[]) => {
+  const start = useCallback((filledBeats: Beat[]) => {
     clearTimer();
     setBeats(filledBeats);
     setCursor(0);
     setRunning(true);
-  };
+  }, [clearTimer]);
 
   // moves to next beat with natural delays (typing → reveal)
   useEffect(() => {
