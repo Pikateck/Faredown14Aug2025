@@ -37,53 +37,11 @@ export function BookingStyleDropdown({
   context = "flights",
   triggerRef,
 }: BookingStyleDropdownProps) {
+  // ALL HOOKS MUST BE CALLED BEFORE ANY CONDITIONAL RETURNS
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearchQuery = useDebounce(searchQuery, 250); // 250ms debounce for search
   const [position, setPosition] = useState({ top: 0, left: 0, width: 0 });
   const dropdownRef = useRef<HTMLDivElement>(null);
-
-  // Calculate position based on trigger element
-  useEffect(() => {
-    if (isOpen && triggerRef?.current) {
-      const rect = triggerRef.current.getBoundingClientRect();
-      setPosition({
-        top: rect.bottom + window.scrollY + 4, // 4px gap
-        left: rect.left + window.scrollX,
-        width: rect.width,
-      });
-    }
-  }, [isOpen, triggerRef]);
-
-  // Handle click outside to close
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        onClose();
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => document.removeEventListener('mousedown', handleClickOutside);
-    }
-  }, [isOpen, onClose]);
-
-  if (!isOpen) {
-    return null;
-  }
-
-  // Memoized city filtering with debounced search
-  const filteredCities = useMemo(() => {
-    if (!debouncedSearchQuery) return Object.entries(cities);
-    const query = debouncedSearchQuery.toLowerCase();
-    return Object.entries(cities).filter(([city, data]) => (
-      city.toLowerCase().includes(query) ||
-      data.code.toLowerCase().includes(query) ||
-      data.name.toLowerCase().includes(query) ||
-      data.airport.toLowerCase().includes(query) ||
-      data.fullName.toLowerCase().includes(query)
-    ));
-  }, [debouncedSearchQuery, cities]);
 
   // Memoized popular destinations (static data)
   const popularDestinations = useMemo(() => [
@@ -131,6 +89,19 @@ export function BookingStyleDropdown({
     },
   ], []);
 
+  // Memoized city filtering with debounced search
+  const filteredCities = useMemo(() => {
+    if (!debouncedSearchQuery) return Object.entries(cities);
+    const query = debouncedSearchQuery.toLowerCase();
+    return Object.entries(cities).filter(([city, data]) => (
+      city.toLowerCase().includes(query) ||
+      data.code.toLowerCase().includes(query) ||
+      data.name.toLowerCase().includes(query) ||
+      data.airport.toLowerCase().includes(query) ||
+      data.fullName.toLowerCase().includes(query)
+    ));
+  }, [debouncedSearchQuery, cities]);
+
   // Memoized filtered popular destinations
   const filteredPopularDestinations = useMemo(() => {
     if (!debouncedSearchQuery) return popularDestinations;
@@ -142,6 +113,37 @@ export function BookingStyleDropdown({
       dest.airport.toLowerCase().includes(query)
     ));
   }, [debouncedSearchQuery, popularDestinations]);
+
+  // Calculate position based on trigger element
+  useEffect(() => {
+    if (isOpen && triggerRef?.current) {
+      const rect = triggerRef.current.getBoundingClientRect();
+      setPosition({
+        top: rect.bottom + window.scrollY + 4, // 4px gap
+        left: rect.left + window.scrollX,
+        width: rect.width,
+      });
+    }
+  }, [isOpen, triggerRef]);
+
+  // Handle click outside to close
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [isOpen, onClose]);
+
+  // CONDITIONAL RETURN AFTER ALL HOOKS
+  if (!isOpen) {
+    return null;
+  }
 
   return (
     <>
