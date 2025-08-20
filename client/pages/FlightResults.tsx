@@ -1353,6 +1353,15 @@ export default function FlightResults() {
   // Bargain functions
   const handleBargain = (flight: (typeof flightData)[0], fareType: any) => {
     console.log('🎯 handleBargain called with:', { flight, fareType });
+    console.log('🎯 Flight data structure:', flight);
+    console.log('🎯 FareType data structure:', fareType);
+
+    // Ensure we have valid data before opening modal
+    if (!flight || !fareType) {
+      console.error('❌ Invalid flight or fareType data:', { flight, fareType });
+      return;
+    }
+
     setBargainFlight(flight);
     setBargainFareType(fareType);
     setShowBargainModal(true);
@@ -1363,7 +1372,10 @@ export default function FlightResults() {
     setFinalPrice(0);
     setFaredownBonus(0);
     setDuplicatePriceError(false);
-    console.log('🎯 Modal should open now, showBargainModal set to true');
+
+    console.log('🎯 Modal state updated - showBargainModal:', true);
+    console.log('🎯 BargainFlight set to:', flight);
+    console.log('🎯 BargainFareType set to:', fareType);
   };
 
   const generateAICounterOffer = (userPrice: number, originalPrice: number) => {
@@ -3277,7 +3289,7 @@ export default function FlightResults() {
                         </div>
 
                         {/* Action Buttons Row - Full Width Below Pricing */}
-                        <div className="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-gray-100">
+        <div className="w-full grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-gray-100">
                           <Button
                             onClick={(e) => {
                               e.preventDefault();
@@ -5786,24 +5798,28 @@ export default function FlightResults() {
         flight={bargainFlight ? {
           id: bargainFlight.id.toString(),
           airline: bargainFlight.airline,
-          flightNumber: bargainFlight.flightNumber || bargainFlight.id.toString(),
+          flightNumber: bargainFlight.flightNumber || `FL${bargainFlight.id}`,
           departureCode: bargainFlight.departureCode || "BOM",
           arrivalCode: bargainFlight.arrivalCode || "DXB",
           departureTime: bargainFlight.departureTime,
           arrivalTime: bargainFlight.arrivalTime,
           duration: bargainFlight.duration,
-          aircraft: bargainFlight.aircraft,
+          aircraft: bargainFlight.aircraft || "Boeing 777",
           price: bargainFareType?.price || bargainFlight.fareTypes?.[0]?.price || 0
         } : null}
         fareType={bargainFareType ? {
-          type: bargainFareType.name || "Economy",
+          type: bargainFareType.name || bargainFareType.type || "Economy",
           price: bargainFareType.price || 0,
           currency: "INR",
-          features: bargainFareType.features || ["Seat Selection", "Meal"]
+          features: bargainFareType.features || ["Seat Selection", "Meal", "Personal Entertainment"]
         } : null}
-        onClose={() => setShowBargainModal(false)}
+        onClose={() => {
+          console.log('🎯 Closing bargain modal');
+          setShowBargainModal(false);
+        }}
         onAccept={handleBargainAccept}
         onBookOriginal={() => {
+          console.log('🎯 Booking original price');
           setShowBargainModal(false);
           if (bargainFlight && bargainFareType) {
             handleBooking(bargainFlight, bargainFareType);
