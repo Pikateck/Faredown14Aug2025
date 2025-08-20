@@ -2145,18 +2145,7 @@ export default function Index() {
                       <Button
                         onClick={() => {
                           // Validate required fields
-                          if (!selectedFromCity || !selectedToCity) {
-                            alert("Please select departure and arrival cities");
-                            return;
-                          }
-
-                          if (!departureDate) {
-                            alert("Please select departure date");
-                            return;
-                          }
-
-                          if (tripType === "round-trip" && !returnDate) {
-                            alert("Please select return date for round trip");
+                          if (!validateSearchForm()) {
                             return;
                           }
 
