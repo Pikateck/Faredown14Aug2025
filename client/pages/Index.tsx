@@ -1031,7 +1031,10 @@ export default function Index() {
                 <div className="flex items-center space-x-3">
                   <div className="flex-1">
                     <button
-                      onClick={() => setShowFromCities(true)}
+                      onClick={() => {
+                        console.log('From button clicked');
+                        setShowFromCities(true);
+                      }}
                       className="w-full text-left"
                     >
                       <div className="text-xs text-gray-500 mb-1">From</div>
