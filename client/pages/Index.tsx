@@ -1106,6 +1106,7 @@ export default function Index() {
 
                   <div className="flex-1">
                     <button
+                      ref={toCityButtonRef}
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
