@@ -581,6 +581,24 @@ export default function FlightResults() {
   const [offerExpiryTime, setOfferExpiryTime] = useState(0);
   const [duplicatePriceError, setDuplicatePriceError] = useState(false);
 
+  // Bargain Dock states
+  const [showBargainDock, setShowBargainDock] = useState(false);
+  const [showBargainBottomSheet, setShowBargainBottomSheet] = useState(false);
+  const [bargainSession, setBargainSession] = useState<{
+    sessionId: string;
+    module: 'flights' | 'hotels' | 'sightseeing' | 'transfers';
+    productRef: string;
+    userOffer: number;
+    productDetails: {
+      title: string;
+      subtitle?: string;
+      basePrice: number;
+      airline?: string;
+      flightNo?: string;
+      route?: { from: string; to: string };
+    };
+  } | null>(null);
+
   // Load flights from Amadeus API
   useEffect(() => {
     const loadFlights = async () => {
