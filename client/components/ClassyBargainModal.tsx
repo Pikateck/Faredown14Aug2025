@@ -438,9 +438,9 @@ export function ClassyBargainModal({
             </button>
             
             {attempt < 3 && (
-              <button 
+              <button
                 className="fd-btn fd-btn--outline"
-                onClick={onRetry}
+                onClick={handleRetry}
               >
                 Bargain Again ({attempt}/3)
               </button>
@@ -457,7 +457,7 @@ export function ClassyBargainModal({
       {step === 'hold' && counter && (
         <section className="fd-hold">
           <div className="fd-lock">
-            Price locked — completing your booking...
+            Price locked �� completing your booking...
           </div>
           <div className="fd-bar" />
           <div style={{marginTop: '16px', color: '#6b7280', fontSize: '0.9rem'}}>
