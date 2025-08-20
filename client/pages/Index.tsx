@@ -1897,7 +1897,7 @@ export default function Index() {
                           {tripType === "one-way"
                             ? formatDisplayDate(departureDate) || "Select date"
                             : departureDate
-                              ? `${formatDisplayDate(departureDate)}${returnDate ? ` �� ${formatDisplayDate(returnDate)}` : " — Return"}`
+                              ? `${formatDisplayDate(departureDate)}${returnDate ? ` — ${formatDisplayDate(returnDate)}` : " — Return"}`
                               : "Select dates"}
                         </span>
                       </button>
