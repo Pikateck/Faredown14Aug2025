@@ -125,6 +125,39 @@ export default function Index() {
   } = useDateContext();
   const userName = user?.name || "";
   const navigate = useNavigate();
+  const { toast } = useToast();
+
+  // Validation function to replace alert popups
+  const validateSearchForm = () => {
+    if (!selectedFromCity || !selectedToCity) {
+      toast({
+        title: "Missing cities",
+        description: "Please select departure and arrival cities",
+        variant: "destructive",
+      });
+      return false;
+    }
+
+    if (!departureDate) {
+      toast({
+        title: "Missing departure date",
+        description: "Please select departure date",
+        variant: "destructive",
+      });
+      return false;
+    }
+
+    if (tripType === "round-trip" && !returnDate) {
+      toast({
+        title: "Missing return date",
+        description: "Please select return date for round trip",
+        variant: "destructive",
+      });
+      return false;
+    }
+
+    return true;
+  };
 
   // Date state now managed by DateContext
   const [showSignIn, setShowSignIn] = useState(false);
