@@ -27,7 +27,7 @@ export const PriceChip: React.FC<PriceChipProps> = ({
 };
 
 // Utility function to wrap price amounts in text with PriceChip
-export const formatChatTextWithPrices = (text: string, variant: 'emerald' | 'slate' = 'emerald') => {
+export const formatChatTextWithPrices = (text: string, variant: 'emerald' | 'slate' | 'white' = 'emerald') => {
   // Regex to find ₹ followed by numbers (with optional commas)
   const priceRegex = /₹([\d,]+)/g;
   
