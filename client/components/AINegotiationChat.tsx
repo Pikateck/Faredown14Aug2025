@@ -310,7 +310,12 @@ export function AINegotiationChat({
   // Accept the offer
   const acceptOffer = async () => {
     if (!bargainResult?.finalPrice || !sessionId) return;
-    
+
+    // Check if minimum display time has passed
+    if (!canProceedFromDecision) {
+      return; // Don't proceed until minimum time has passed
+    }
+
     setIsProcessing(true);
     
     try {
@@ -476,7 +481,7 @@ export function AINegotiationChat({
             </div>
 
             <p className="text-xs text-gray-500 text-center mt-3">
-              Most customers get the best deal early — demand is rising fast.
+              Most customers get the best deal early ��� demand is rising fast.
             </p>
           </div>
         )}
