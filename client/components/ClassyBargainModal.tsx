@@ -258,26 +258,52 @@ export function ClassyBargainModal({
         placeholders
       }).text;
 
-      // Wait for beats to finish, then show decision - with proper monitoring
+      // Enhanced completion monitoring with multiple triggers
+      let transitioned = false;
+
+      const transitionToDecision = () => {
+        if (!transitioned) {
+          transitioned = true;
+          console.log('🎭 Transitioning to decision step');
+          setStep('decision');
+          setCountdown(30);
+        }
+      };
+
+      // Primary completion check
       const checkCompletion = setInterval(() => {
         console.log('🎭 Checking completion - running:', running, 'cursor:', cursor, 'beats length:', filledBeats.length);
         if (!running && cursor >= filledBeats.length) {
-          console.log('🎭 Chat completed! Transitioning to decision step');
+          console.log('🎭 Chat completed naturally!');
           clearInterval(checkCompletion);
-          setStep('decision');
-          setCountdown(30);
+          // Small delay for last bubble to settle
+          setTimeout(transitionToDecision, 200);
         }
       }, 100);
 
-      // Safety fallback after 8 seconds
-      const fallbackTimer = setTimeout(() => {
-        console.log('🎭 Safety fallback triggered - forcing transition to decision');
-        clearInterval(checkCompletion);
-        if (step === 'chat') { // Only transition if still in chat
-          setStep('decision');
-          setCountdown(30);
+      // Multiple fallback triggers for reliability
+      const fallbackTimer1 = setTimeout(() => {
+        console.log('🎭 Fallback 1: 6s elapsed');
+        if (step === 'chat' && !transitioned) {
+          clearInterval(checkCompletion);
+          transitionToDecision();
+        }
+      }, 6000);
+
+      const fallbackTimer2 = setTimeout(() => {
+        console.log('🎭 Fallback 2: 8s elapsed - forcing transition');
+        if (step === 'chat' && !transitioned) {
+          clearInterval(checkCompletion);
+          transitionToDecision();
         }
       }, 8000);
+
+      // Cleanup function
+      return () => {
+        clearInterval(checkCompletion);
+        clearTimeout(fallbackTimer1);
+        clearTimeout(fallbackTimer2);
+      };
 
     } catch (err) {
       console.error('Negotiation error:', err);
