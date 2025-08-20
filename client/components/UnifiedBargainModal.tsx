@@ -277,7 +277,7 @@ export function UnifiedBargainModal({
         },
         sessionUsedKeys,
         [],
-        (amount: number) => formatPriceNoDecimals(amount, selectedCurrency)
+        (amount: number) => formatPriceNoDecimals(amount, selectedCurrency.symbol)
       );
 
       await addTypingIndicator('agent');
@@ -300,7 +300,7 @@ export function UnifiedBargainModal({
         templateVars,
         sessionUsedKeys,
         [],
-        (amount: number) => formatPriceNoDecimals(amount, selectedCurrency)
+        (amount: number) => formatPriceNoDecimals(amount, selectedCurrency.symbol)
       );
 
       await addTypingIndicator('supplier');
@@ -372,7 +372,7 @@ export function UnifiedBargainModal({
         },
         sessionUsedKeys,
         [],
-        (amount: number) => formatPriceNoDecimals(amount, selectedCurrency)
+        (amount: number) => formatPriceNoDecimals(amount, selectedCurrency.symbol)
       );
 
       await addTypingIndicator('supplier');
@@ -397,7 +397,7 @@ export function UnifiedBargainModal({
         templateVars,
         sessionUsedKeys,
         [],
-        (amount: number) => formatPriceNoDecimals(amount, selectedCurrency)
+        (amount: number) => formatPriceNoDecimals(amount, selectedCurrency.symbol)
       );
 
       await addTypingIndicator('agent');
