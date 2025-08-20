@@ -3380,7 +3380,7 @@ export default function Index() {
           console.log('Selected to city:', city);
           setSelectedToCity(city);
         }}
-        triggerRef={window.innerWidth >= 640 ? desktopToButtonRef : toCityButtonRef}
+        triggerRef={desktopToButtonRef.current ? desktopToButtonRef : toCityButtonRef}
       />
     </div>
   );
