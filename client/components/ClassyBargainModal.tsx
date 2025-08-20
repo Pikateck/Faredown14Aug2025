@@ -105,12 +105,13 @@ export function ClassyBargainModal({
     if (step === 'decision' || step === 'hold') {
       const interval = setInterval(() => {
         setCountdown(prev => {
-          if (prev <= 1) {
+          if (prev <= 0) {
             clearInterval(interval);
             if (step === 'decision') {
-              setStep('input'); // Offer expired
-            } else {
-              // Use counterRef to avoid stale closure
+              console.log('🕐 Decision timer expired - closing modal');
+              onClose(); // Close modal when decision timer expires
+            } else if (step === 'hold') {
+              // Auto-accept in hold phase
               if (counterRef.current) {
                 onAccept(counterRef.current, `ORDER-${Date.now()}`);
               }
