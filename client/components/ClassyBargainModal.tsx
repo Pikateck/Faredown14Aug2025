@@ -147,7 +147,7 @@ export function ClassyBargainModal({
   }
 
   // Start AI negotiation
-  async function onStartNegotiation() {
+  const onStartNegotiation = useCallback(async () => {
     if (!offer || !flight || !fareType) return;
 
     // Price validation
@@ -247,23 +247,23 @@ export function ClassyBargainModal({
     } finally {
       setIsProcessing(false);
     }
-  }
+  }, [offer, flight, fareType, selectedCurrency.symbol, attempt, sessionUsed, beatsTemplate, start, running, cursor]);
 
   // Accept offer
-  function onAcceptOffer() {
+  const onAcceptOffer = useCallback(() => {
     if (!counter) return;
     setStep('hold');
     setCountdown(30);
-  }
+  }, [counter]);
 
   // Retry bargain
-  function onRetry() {
+  const onRetry = useCallback(() => {
     reset();
     setStep('input');
     setOffer(null);
     setCounter(null);
     setError(null);
-  }
+  }, [reset]);
 
   if (!isOpen || !flight || !fareType) return null;
 
