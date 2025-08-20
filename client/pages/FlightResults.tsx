@@ -1384,28 +1384,12 @@ export default function FlightResults() {
   };
 
   const startBargaining = () => {
-    if (!bargainFlight || !bargainFareType || !bargainPrice) return;
-
-    const targetPriceInSelectedCurrency = parseInt(bargainPrice);
-    const targetPriceInINR = Math.round(
-      targetPriceInSelectedCurrency /
-        (exchangeRates[selectedCurrency.code as keyof typeof exchangeRates] ||
-          1),
-    );
-    const currentPriceInINR = bargainFareType.price;
-
-    if (targetPriceInINR >= currentPriceInINR) {
-      setDuplicatePriceError(true);
-      setTimeout(() => setDuplicatePriceError(false), 5000);
-      return;
+    // This function is legacy and should be removed when old UI is cleaned up
+    // For now, redirect to the new ClassyBargainModal
+    if (bargainCtx?.product) {
+      console.log('Legacy startBargaining called - redirecting to ClassyBargainModal');
+      // The ClassyBargainModal handles all the negotiation logic now
     }
-
-    // Clear any existing error and close the modal
-    setDuplicatePriceError(false);
-    setBargainCtx(null);
-
-    // Start the new dock-based bargain system
-    handleStartBargain(bargainFlight, bargainFareType, targetPriceInINR);
   };
 
   // AI Negotiation Modal Functions
