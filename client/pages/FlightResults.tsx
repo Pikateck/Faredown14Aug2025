@@ -1415,9 +1415,8 @@ export default function FlightResults() {
       return;
     }
 
-    // Clear any existing error and add price to used prices
+    // Clear any existing error - don't track used prices anymore to allow repeats
     setDuplicatePriceError(false);
-    setUsedPrices((prev) => new Set([...prev, priceKey]));
     setBargainStep("progress");
     setBargainProgress(0);
 
