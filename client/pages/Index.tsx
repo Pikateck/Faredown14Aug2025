@@ -401,8 +401,8 @@ export default function Index() {
     }
   };
 
-  // City data mapping
-  const cityData = {
+  // City data mapping - memoized to prevent recreation on every render
+  const cityData = useMemo(() => ({
     Mumbai: {
       code: "BOM",
       name: "Mumbai",
@@ -433,7 +433,7 @@ export default function Index() {
       airport: "Changi Airport",
       fullName: "Singapore, Singapore",
     },
-  };
+  }), []);
 
   return (
     <div className="min-h-screen bg-white">
