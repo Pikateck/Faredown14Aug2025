@@ -272,7 +272,7 @@ const SeatMap = ({
               {flightTitle}
             </h3>
             <p className="text-sm text-[#666]">
-              {flightData?.duration || "3h 15m"} ��{" "}
+              {flightData?.duration || "3h 15m"} •{" "}
               {flightData?.airline || "Airlines"} •{" "}
               {fareData?.name || "Economy"}
             </p>
