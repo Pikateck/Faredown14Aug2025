@@ -537,6 +537,7 @@ export default function FlightResults() {
     product: (typeof flightData)[0];
   }>(null);
   // Temporary variables for legacy UI compatibility (should be removed when old UI is cleaned up)
+  const [bargainStep, setBargainStep] = useState<"input" | "progress" | "result">("input");
   const [bargainPrice, setBargainPrice] = useState("");
   const [bargainProgress, setBargainProgress] = useState(0);
   const [bargainResult, setBargainResult] = useState<"accepted" | "rejected" | "counter" | null>(null);
