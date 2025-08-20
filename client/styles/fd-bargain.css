@@ -1,0 +1,399 @@
+/* styles/fd-bargain.css - Classy Bargain Modal Styles */
+
+.fd-modal { 
+  width: min(720px, 92vw); 
+  border: 0; 
+  border-radius: 16px; 
+  padding: 0; 
+  box-shadow: 0 24px 64px rgba(0,0,0,.18);
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.fd-modal__hdr { 
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between; 
+  padding: 16px 20px; 
+  border-bottom: 1px solid rgba(0,0,0,.06);
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  flex-shrink: 0;
+}
+
+.fd-hdr__left {
+  flex: 1;
+}
+
+.fd-title { 
+  font-weight: 600; 
+  color: #1e293b;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.fd-sub { 
+  display: block; 
+  font-size: 0.9rem; 
+  color: #64748b; 
+  margin-top: 2px;
+}
+
+.fd-hdr__right {
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: #059669;
+}
+
+.fd-close { 
+  background: none; 
+  border: 0; 
+  font-size: 20px; 
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  color: #64748b;
+  transition: all 200ms ease;
+}
+
+.fd-close:hover {
+  background: rgba(0,0,0,0.05);
+  color: #374151;
+}
+
+.fd-body { 
+  padding: 24px; 
+  flex: 1;
+  overflow-y: auto;
+}
+
+.fd-label { 
+  display: block; 
+  margin-bottom: 12px; 
+  font-weight: 600;
+  color: #1e293b;
+  text-align: center;
+  font-size: 1.25rem;
+}
+
+.fd-sublabel {
+  text-align: center;
+  color: #64748b;
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+}
+
+.fd-input { 
+  display: flex; 
+  align-items: center; 
+  gap: 8px; 
+  border: 2px solid #e2e8f0; 
+  border-radius: 12px; 
+  padding: 16px 16px; 
+  margin-bottom: 20px;
+  transition: border-color 200ms ease;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.fd-input:focus-within {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.fd-input input { 
+  flex: 1; 
+  border: 0; 
+  outline: 0; 
+  font-size: 1.25rem;
+  font-weight: 600;
+  text-align: center;
+  background: transparent;
+}
+
+.fd-input input::placeholder {
+  color: #9ca3af;
+  font-weight: 400;
+}
+
+.fd-currency { 
+  opacity: 0.7;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.fd-chat { 
+  padding: 18px 20px; 
+  max-height: 360px; 
+  overflow-y: auto; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 12px;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  flex: 1;
+}
+
+.fd-bubble { 
+  max-width: 78%; 
+  padding: 12px 16px; 
+  border-radius: 16px; 
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08); 
+  opacity: 0; 
+  transform: translateY(8px); 
+  animation: fd-reveal 300ms cubic-bezier(.2,.7,.2,1) forwards;
+  position: relative;
+}
+
+.fd-bubble--agent { 
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); 
+  color: #fff; 
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+
+.fd-bubble--supplier { 
+  background: #fff; 
+  color: #1f2937; 
+  align-self: flex-end;
+  border: 1px solid #e5e7eb;
+  border-bottom-right-radius: 4px;
+}
+
+.fd-bubble--system { 
+  background: #eef2ff; 
+  color: #374151; 
+  align-self: center;
+  font-size: 0.9rem;
+}
+
+.fd-typing { 
+  display: inline-block; 
+  letter-spacing: 0.25em; 
+  animation: fd-pulse 1.4s infinite ease-in-out;
+  font-size: 1.2rem;
+}
+
+@keyframes fd-pulse { 
+  0%, 100% { opacity: 0.3; } 
+  50% { opacity: 1; } 
+}
+
+@keyframes fd-reveal { 
+  to { 
+    opacity: 1; 
+    transform: none; 
+  } 
+}
+
+.fd-meta { 
+  margin-top: 8px; 
+  text-align: center;
+}
+
+.fd-chip { 
+  font-size: 0.8rem; 
+  padding: 6px 12px; 
+  border-radius: 999px; 
+  background: #eef2ff; 
+  color: #3b82f6;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.fd-decision { 
+  padding: 20px 24px; 
+  background: #fff;
+  flex-shrink: 0;
+}
+
+.fd-offerCard { 
+  border: 2px solid #e5e7eb; 
+  border-radius: 16px; 
+  padding: 20px; 
+  margin-bottom: 16px; 
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  background: linear-gradient(135deg, #fff 0%, #f8fafc 100%);
+  text-align: center;
+}
+
+.fd-offerPrice { 
+  font-size: 2rem; 
+  font-weight: 700;
+  color: #059669;
+  margin-bottom: 8px;
+}
+
+.fd-savings {
+  font-size: 0.9rem;
+  color: #059669;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.fd-exp { 
+  margin-top: 8px; 
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.fd-exp strong {
+  color: #dc2626;
+}
+
+.fd-bar { 
+  height: 4px; 
+  border-radius: 999px; 
+  background: #e5e7eb;
+  margin-top: 12px;
+  overflow: hidden;
+  position: relative;
+}
+
+.fd-bar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: linear-gradient(90deg, #059669 0%, #10b981 100%);
+  width: 100%;
+  animation: fd-countdown 30s linear forwards;
+}
+
+@keyframes fd-countdown { 
+  from { width: 100%; } 
+  to { width: 0%; } 
+}
+
+.fd-actions { 
+  display: flex; 
+  gap: 12px; 
+  margin-top: 16px;
+}
+
+.fd-btn { 
+  padding: 14px 20px; 
+  border-radius: 12px; 
+  font-weight: 600; 
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 200ms ease;
+  font-size: 1rem;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.fd-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.fd-btn--primary { 
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); 
+  color: #fff;
+  border-color: #3b82f6;
+}
+
+.fd-btn--primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.fd-btn--success { 
+  background: linear-gradient(135deg, #059669 0%, #047857 100%); 
+  color: #fff;
+  border-color: #059669;
+}
+
+.fd-btn--success:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+}
+
+.fd-btn--outline { 
+  background: #fff; 
+  color: #3b82f6; 
+  border-color: #c7d2fe;
+}
+
+.fd-btn--outline:hover:not(:disabled) {
+  background: #f1f5f9;
+  border-color: #3b82f6;
+}
+
+.fd-fomo { 
+  margin-top: 12px; 
+  font-size: 0.85rem; 
+  color: #6b7280;
+  text-align: center;
+  font-style: italic;
+}
+
+.fd-hold { 
+  padding: 24px; 
+  text-align: center;
+  background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%);
+}
+
+.fd-lock { 
+  font-weight: 600; 
+  margin-bottom: 16px;
+  font-size: 1.1rem;
+  color: #059669;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.fd-lock::before {
+  content: '🔒';
+  font-size: 1.2rem;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .fd-modal {
+    width: 100%;
+    height: 100vh;
+    border-radius: 0;
+    max-height: none;
+  }
+  
+  .fd-chat {
+    max-height: 50vh;
+  }
+  
+  .fd-bubble {
+    max-width: 85%;
+  }
+  
+  .fd-actions {
+    flex-direction: column;
+  }
+  
+  .fd-offerPrice {
+    font-size: 1.75rem;
+  }
+}
+
+/* Smooth state transitions */
+.fd-body, .fd-chat, .fd-decision, .fd-hold {
+  transition: all 300ms ease-in-out;
+}
+
+/* Focus styles for accessibility */
+.fd-btn:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+.fd-input:focus-within {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
