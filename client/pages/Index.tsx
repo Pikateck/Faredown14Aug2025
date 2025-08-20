@@ -3042,7 +3042,7 @@ export default function Index() {
                 variant="outline"
                 className="w-full py-3 flex items-center justify-center space-x-2"
               >
-                <span>���</span>
+                <span>🍎</span>
                 <span>Continue with Apple</span>
               </Button>
 
