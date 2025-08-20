@@ -429,8 +429,9 @@ export function ClassyBargainModal({
         <section className="fd-chat">
           {beats.slice(0, Math.min(cursor + 1, beats.length)).map((beat, i) => {
             const roleConfig = moduleConfig.roles[beat.speaker];
+            const bubbleClasses = `fd-bubble fd-bubble--${beat.speaker}${beat.speaker === 'supplier' ? ` fd-bubble--${moduleType}` : ''}`;
             return (
-              <div key={beat.id} className={`fd-bubble fd-bubble--${beat.speaker}`}>
+              <div key={beat.id} className={bubbleClasses}>
                 {/* Speaker label */}
                 <div className="text-xs opacity-75 mb-1 font-medium">
                   {roleConfig.label}
