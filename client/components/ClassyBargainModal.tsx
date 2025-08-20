@@ -144,7 +144,7 @@ export function ClassyBargainModal({
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          module: 'flights',
+          module: moduleType,
           productRef: flight?.id,
           userOffer: offerAmount,
           sessionId: `session_${Date.now()}`,
