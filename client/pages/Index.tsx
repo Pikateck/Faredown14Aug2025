@@ -1069,13 +1069,7 @@ export default function Index() {
                   <div className="flex-1">
                     <button
                       ref={fromCityButtonRef}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        console.log('From button clicked, current state:', showFromCities);
-                        setShowFromCities(true);
-                        console.log('State should now be true');
-                      }}
+                      onClick={handleFromCityClick}
                       className="w-full text-left touch-manipulation"
                       style={{ WebkitTapHighlightColor: 'transparent' }}
                     >
