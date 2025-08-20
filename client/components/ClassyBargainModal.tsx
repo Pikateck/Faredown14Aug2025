@@ -99,7 +99,10 @@ export function ClassyBargainModal({
             if (step === 'decision') {
               setStep('input'); // Offer expired
             } else {
-              onAccept(counter!, `ORDER-${Date.now()}`); // Auto-proceed
+              // Use a ref to avoid dependency on onAccept
+              if (counter) {
+                onAccept(counter, `ORDER-${Date.now()}`);
+              }
             }
             return 0;
           }
@@ -109,7 +112,7 @@ export function ClassyBargainModal({
 
       return () => clearInterval(interval);
     }
-  }, [step, counter, onAccept]);
+  }, [step]); // Remove counter and onAccept dependencies
 
   // Start quote function with realistic timing
   async function startQuote(offerAmount: number): Promise<{ counter: number; negotiatedMs: number }> {
