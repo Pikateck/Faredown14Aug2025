@@ -462,6 +462,11 @@ export function ClassyBargainModal({
       {/* Decision Step */}
       {step === 'decision' && counter && (
         <section className="fd-decision">
+          {negotiatedMs > 0 && (
+            <div className="fd-negotiated-badge">
+              Negotiated in {(negotiatedMs / 1000).toFixed(1)}s
+            </div>
+          )}
           <div className="fd-offerCard">
             <div className="fd-offerPrice">
               {formatCurrency(counter, selectedCurrency.symbol)}
