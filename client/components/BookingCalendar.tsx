@@ -118,7 +118,7 @@ export function BookingCalendar({
   }, [initialRange?.startDate?.getTime(), initialRange?.endDate?.getTime()]);
 
   const handleSelect = (ranges: RangeKeyDict) => {
-    console.log("🗓�� Calendar selection changed:", ranges);
+    console.log("🗓️ Calendar selection changed:", ranges);
     console.log("🗓️ Current selection state:", selection);
     const range = ranges.selection;
 
