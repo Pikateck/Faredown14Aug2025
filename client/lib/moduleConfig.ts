@@ -1,3 +1,4 @@
+import React from 'react';
 import { Plane, Building, MapPin, Car } from 'lucide-react';
 
 export type ModuleType = 'flights' | 'hotels' | 'sightseeing' | 'transfers';
@@ -9,7 +10,7 @@ export interface RoleConfig {
 }
 
 export interface ModuleConfig {
-  icon: React.ReactNode;
+  icon: React.ReactElement;
   supplierName: string;
   roles: {
     agent: RoleConfig;
@@ -19,7 +20,7 @@ export interface ModuleConfig {
 
 export const MODULE_CONFIGS: Record<ModuleType, ModuleConfig> = {
   flights: {
-    icon: <Plane className="w-4 h-4" />,
+    icon: React.createElement(Plane, { className: "w-4 h-4" }),
     supplierName: 'Airline',
     roles: {
       agent: {
@@ -35,7 +36,7 @@ export const MODULE_CONFIGS: Record<ModuleType, ModuleConfig> = {
     }
   },
   hotels: {
-    icon: <Building className="w-4 h-4" />,
+    icon: React.createElement(Building, { className: "w-4 h-4" }),
     supplierName: 'Hotel',
     roles: {
       agent: {
@@ -51,7 +52,7 @@ export const MODULE_CONFIGS: Record<ModuleType, ModuleConfig> = {
     }
   },
   sightseeing: {
-    icon: <MapPin className="w-4 h-4" />,
+    icon: React.createElement(MapPin, { className: "w-4 h-4" }),
     supplierName: 'Tour Provider',
     roles: {
       agent: {
@@ -67,7 +68,7 @@ export const MODULE_CONFIGS: Record<ModuleType, ModuleConfig> = {
     }
   },
   transfers: {
-    icon: <Car className="w-4 h-4" />,
+    icon: React.createElement(Car, { className: "w-4 h-4" }),
     supplierName: 'Transport Provider',
     roles: {
       agent: {
