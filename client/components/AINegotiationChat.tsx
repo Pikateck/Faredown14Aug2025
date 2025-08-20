@@ -21,6 +21,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { formatPriceNoDecimals } from "@/lib/formatPrice";
+import { useBargainStatus, useCountdown, useChatBeats } from "@/hooks/useBargainStatus";
 
 interface ChatBeat {
   id: string;
