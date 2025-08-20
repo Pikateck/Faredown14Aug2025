@@ -257,7 +257,16 @@ export function UnifiedBargainModal({
     );
     const currentPriceInINR = fareType.price;
 
+    console.log('💰 Price validation:', {
+      targetPriceInSelectedCurrency,
+      targetPriceInINR,
+      currentPriceInINR,
+      exchangeRate: exchangeRates[selectedCurrency.code as keyof typeof exchangeRates],
+      isValid: targetPriceInINR < currentPriceInINR
+    });
+
     if (targetPriceInINR >= currentPriceInINR) {
+      console.error('❌ Price validation failed - target price must be lower');
       setDuplicatePriceError(true);
       setTimeout(() => setDuplicatePriceError(false), 5000);
       return;
