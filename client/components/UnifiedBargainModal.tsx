@@ -545,7 +545,7 @@ export function UnifiedBargainModal({
                 </div>
                 <div className="text-right">
                   <p className="text-lg font-bold text-[#003580]">
-                    {formatPriceNoDecimals(fareType.price, selectedCurrency)}
+                    {formatPriceNoDecimals(fareType.price, selectedCurrency.symbol)}
                   </p>
                   <p className="text-sm text-gray-600">{fareType.type}</p>
                 </div>
@@ -703,7 +703,7 @@ export function UnifiedBargainModal({
                 {minDisplayTime ? (
                   <>Reading offer details...</>
                 ) : (
-                  <>Accept {formatPriceNoDecimals(bargainResult.finalPrice || 0, selectedCurrency)} — 30s to book</>
+                  <>Accept {formatPriceNoDecimals(bargainResult.finalPrice || 0, selectedCurrency)} ��� 30s to book</>
                 )}
               </Button>
 
