@@ -3336,39 +3336,40 @@ export default function FlightResults() {
                             {flight.fareTypes[0].refundability}
                           </div>
 
-                          {/* Side-by-side buttons - Hotel Section Style */}
-                          <div className="grid grid-cols-2 gap-2 mt-3 relative z-50 pointer-events-auto">
-                            <Button
-                              onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                console.log(
-                                  "Desktop View Details clicked for flight:",
-                                  flight.id,
-                                );
-                                navigate(`/flight-details/${flight.id}`, {
-                                  state: { flight },
-                                });
-                              }}
-                              variant="outline"
-                              className="min-h-[44px] px-6 py-3 font-semibold text-sm touch-manipulation flex items-center justify-center relative z-50"
-                              onTouchStart={(e) => {
-                                e.stopPropagation();
-                              }}
-                            >
-                              View Details
-                            </Button>
-                            <Button
-                              onClick={() => {
-                                console.log("🎯 Desktop Bargain Now clicked!", flight.id);
-                                handleBargain(flight, flight.fareTypes[0]);
-                              }}
-                              className="min-h-[44px] px-6 py-3 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold text-sm touch-manipulation flex items-center justify-center gap-2"
-                            >
-                              <TrendingDown className="w-4 h-4" />
-                              Bargain Now
-                            </Button>
-                          </div>
+                        </div>
+
+                        {/* Action Buttons Row - Full Width Below Pricing */}
+                        <div className="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-gray-100">
+                          <Button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              console.log(
+                                "Desktop View Details clicked for flight:",
+                                flight.id,
+                              );
+                              navigate(`/flight-details/${flight.id}`, {
+                                state: { flight },
+                              });
+                            }}
+                            variant="outline"
+                            className="min-h-[48px] px-6 py-3 font-semibold text-sm touch-manipulation flex items-center justify-center relative z-50 border-2 border-gray-300 hover:border-[#003580] hover:text-[#003580]"
+                            onTouchStart={(e) => {
+                              e.stopPropagation();
+                            }}
+                          >
+                            View Details
+                          </Button>
+                          <Button
+                            onClick={() => {
+                              console.log("🎯 Desktop Bargain Now clicked!", flight.id);
+                              handleBargain(flight, flight.fareTypes[0]);
+                            }}
+                            className="min-h-[48px] px-6 py-3 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold text-sm touch-manipulation flex items-center justify-center gap-2 border-2 border-[#febb02] hover:border-[#e6a602]"
+                          >
+                            <TrendingDown className="w-4 h-4" />
+                            Bargain Now
+                          </Button>
                         </div>
                       </div>
                     </div>
