@@ -1452,7 +1452,7 @@ export default function FlightResults() {
     handleStartBargain(bargainFlight, bargainFareType, targetPriceInINR);
   };
 
-  // Bargain Dock Functions
+  // AI Negotiation Modal Functions
   const handleStartBargain = (flight: (typeof flightData)[0], fareType: any, userOffer: number) => {
     // Check if there's already an active session for a different product
     if (bargainSession && bargainSession.productRef !== flight.id.toString()) {
@@ -1463,12 +1463,13 @@ export default function FlightResults() {
       if (!confirmed) return;
     }
 
-    // Create session
+    // Create session with attempt tracking
     const session = {
       sessionId: `session_${Date.now()}_${flight.id}`,
       module: 'flights' as const,
       productRef: flight.id.toString(),
       userOffer,
+      attemptCount: (bargainSession?.attemptCount || 0) + 1,
       productDetails: {
         title: `${flight.airline} ${flight.flightNumber}`,
         subtitle: `${flight.departureCode} → ${flight.arrivalCode}`,
@@ -1483,13 +1484,7 @@ export default function FlightResults() {
     };
 
     setBargainSession(session);
-
-    // Show appropriate UI
-    if (isMobile) {
-      setShowBargainBottomSheet(true);
-    } else {
-      setShowBargainDock(true);
-    }
+    setShowAINegotiationModal(true);
   };
 
   const handleBargainAccept = (finalPrice: number, orderRef: string) => {
