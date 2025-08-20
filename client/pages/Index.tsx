@@ -3363,17 +3363,11 @@ export default function Index() {
 
       <BookingStyleDropdown
         isOpen={showToCities}
-        onClose={() => {
-          console.log('Closing To cities dropdown');
-          setShowToCities(false);
-        }}
+        onClose={handleCloseToCities}
         title="Select destination city"
         cities={cityData}
         selectedCity={selectedToCity}
-        onSelectCity={(city) => {
-          console.log('Selected to city:', city);
-          setSelectedToCity(city);
-        }}
+        onSelectCity={handleSelectToCity}
         triggerRef={desktopToButtonRef.current ? desktopToButtonRef : toCityButtonRef}
       />
     </div>
