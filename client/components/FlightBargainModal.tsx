@@ -544,10 +544,10 @@ export function FlightBargainModal({
               </div>
             </div>
 
-            <div className="bg-white border-2 border-[#febb02] rounded-xl p-4 shadow-lg">
-              <div className="flex items-center justify-center space-x-3">
-                <Clock className="w-5 h-5 text-[#febb02]" />
-                <span className="font-bold text-[#003580] text-xl">
+            <div className="bg-orange-50 border-2 border-orange-200 rounded-xl p-4 shadow-lg">
+              <div className="flex items-center justify-center space-x-2">
+                <Clock className="w-5 h-5 text-orange-600" />
+                <span className="font-bold text-orange-600 text-lg">
                   Offer expires in: {bargainState.timeRemaining}s
                 </span>
               </div>
@@ -555,9 +555,9 @@ export function FlightBargainModal({
 
             <Button
               onClick={handleBookDeal}
-              className="w-full bg-gradient-to-r from-[#003580] to-[#0071c2] hover:from-[#002d6b] hover:to-[#005a9f] active:from-[#002447] active:to-[#004687] text-white py-5 text-xl font-bold rounded-xl shadow-lg active:shadow-md transition-all touch-manipulation min-h-[52px]"
+              className="w-full bg-green-600 hover:bg-green-700 text-white py-5 text-lg font-bold rounded-xl shadow-lg transition-all touch-manipulation min-h-[52px]"
             >
-              Book This Deal - {formatPrice(finalPrice)}
+              Accept {formatPrice(finalPrice)} — 30s to book
             </Button>
 
             <Button
