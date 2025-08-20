@@ -102,7 +102,8 @@ function App() {
           <DateProvider>
             <LoyaltyProvider>
               <Router>
-                <Routes>
+                <Suspense fallback={<PageLoadingSpinner />}>
+                  <Routes>
                   {/* Original Web Routes */}
                   <Route path="/" element={<Index />} />
                   <Route
@@ -276,7 +277,8 @@ function App() {
 
                   {/* Fallback */}
                   <Route path="*" element={<NotFound />} />
-                </Routes>
+                  </Routes>
+                </Suspense>
               </Router>
             </LoyaltyProvider>
           </DateProvider>
