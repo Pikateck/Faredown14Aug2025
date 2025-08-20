@@ -248,12 +248,16 @@ class ApiClient {
 
     try {
       console.log(`🌐 API POST: ${this.baseURL}${endpoint}`);
-      const response = await fetch(`${this.baseURL}${endpoint}`, {
-        method: "POST",
-        headers: this.getHeaders(customHeaders),
-        body: data ? JSON.stringify(data) : undefined,
-        signal: controller.signal,
-      });
+      const response = await tracedFetch(
+        `${this.baseURL}${endpoint}`,
+        {
+          method: "POST",
+          headers: this.getHeaders(customHeaders),
+          body: data ? JSON.stringify(data) : undefined,
+          signal: controller.signal,
+        }
+        // No caching for POST requests
+      );
 
       clearTimeout(timeoutId);
       console.log(`✅ API POST Response: ${response.status}`);
