@@ -4010,13 +4010,12 @@ export default function FlightResults() {
                                               });
 
                                             console.log(
-                                              "📱 Starting live API bargain (mobile):",
-                                              bargainItem,
+                                              "📱 Opening unified bargain modal (mobile):",
+                                              flight,
+                                              fareType
                                             );
 
-                                            bargainHook.startBargain(
-                                              bargainItem,
-                                            );
+                                            handleBargain(flight, fareType);
                                           }}
                                           className="w-full bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black py-3 text-base font-semibold rounded-lg shadow-md transition-all duration-200 flex items-center justify-center gap-2"
                                         >
