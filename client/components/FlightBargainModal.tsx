@@ -126,8 +126,7 @@ export function FlightBargainModal({
       return;
     }
 
-    // Add to used prices
-    setUsedPrices((prev) => new Set([...prev, priceKey]));
+    // Don't track used prices anymore to allow repeats
 
     setBargainState((prev) => ({
       ...prev,
