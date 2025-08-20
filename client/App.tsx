@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, Suspense, lazy } from "react";
 import { initializeBargainPlatform } from "./services/bargainAppInit";
 import {
   BrowserRouter as Router,
@@ -11,41 +11,55 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { DateProvider } from "./contexts/DateContext";
 import { LoyaltyProvider } from "./contexts/LoyaltyContext";
 
-// Original pages
+// Core pages - loaded immediately for better initial experience
 import Index from "./pages/Index";
-import FlightResults from "./pages/FlightResults";
-import FlightDetails from "./pages/FlightDetails";
-import BookingFlow from "./pages/BookingFlow";
-import BookingConfirmation from "./pages/BookingConfirmation";
-import Account from "./pages/Account";
-import Booking from "./pages/Booking";
-import Hotels from "./pages/Hotels";
-import HotelResults from "./pages/HotelResults";
-import HotelDetails from "./pages/HotelDetails";
-import HotelBooking from "./pages/HotelBooking";
-import ReservationPage from "./pages/ReservationPage";
-import HotelBookingConfirmation from "./pages/HotelBookingConfirmation";
-import BookingVoucher from "./pages/BookingVoucher";
-import BookingInvoice from "./pages/BookingInvoice";
-import Bookings from "./pages/Bookings";
-import SightseeingResults from "./pages/SightseeingResults";
-import SightseeingDetails from "./pages/SightseeingDetails";
-import SightseeingBooking from "./pages/SightseeingBooking";
-import SightseeingBookingConfirmation from "./pages/SightseeingBookingConfirmation";
-import SportsEvents from "./pages/SportsEvents";
-import Transfers from "./pages/Transfers";
-import TransferResults from "./pages/TransferResults";
-import TransferDetails from "./pages/TransferDetails";
-import TransferBooking from "./pages/TransferBooking";
-import TransferConfirmation from "./pages/TransferConfirmation";
-import HelpCenter from "./pages/HelpCenter";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
-import TermsConditions from "./pages/TermsConditions";
-import RefundPolicy from "./pages/RefundPolicy";
-import CookiePolicy from "./pages/CookiePolicy";
-import Saved from "./pages/Saved";
-import NotFound from "./pages/NotFound";
-import MembershipCard from "./pages/MembershipCard";
+
+// Loading component for Suspense fallback
+const PageLoadingSpinner = () => (
+  <div className="min-h-screen flex items-center justify-center bg-white">
+    <div className="flex items-center space-x-2">
+      <div className="w-8 h-8 bg-[#003580] rounded-lg flex items-center justify-center">
+        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+      </div>
+      <span className="text-[#003580] font-medium">Loading...</span>
+    </div>
+  </div>
+);
+
+// Lazy-loaded pages - code-split for better performance
+const FlightResults = lazy(() => import("./pages/FlightResults"));
+const FlightDetails = lazy(() => import("./pages/FlightDetails"));
+const BookingFlow = lazy(() => import("./pages/BookingFlow"));
+const BookingConfirmation = lazy(() => import("./pages/BookingConfirmation"));
+const Account = lazy(() => import("./pages/Account"));
+const Booking = lazy(() => import("./pages/Booking"));
+const Hotels = lazy(() => import("./pages/Hotels"));
+const HotelResults = lazy(() => import("./pages/HotelResults"));
+const HotelDetails = lazy(() => import("./pages/HotelDetails"));
+const HotelBooking = lazy(() => import("./pages/HotelBooking"));
+const ReservationPage = lazy(() => import("./pages/ReservationPage"));
+const HotelBookingConfirmation = lazy(() => import("./pages/HotelBookingConfirmation"));
+const BookingVoucher = lazy(() => import("./pages/BookingVoucher"));
+const BookingInvoice = lazy(() => import("./pages/BookingInvoice"));
+const Bookings = lazy(() => import("./pages/Bookings"));
+const SightseeingResults = lazy(() => import("./pages/SightseeingResults"));
+const SightseeingDetails = lazy(() => import("./pages/SightseeingDetails"));
+const SightseeingBooking = lazy(() => import("./pages/SightseeingBooking"));
+const SightseeingBookingConfirmation = lazy(() => import("./pages/SightseeingBookingConfirmation"));
+const SportsEvents = lazy(() => import("./pages/SportsEvents"));
+const Transfers = lazy(() => import("./pages/Transfers"));
+const TransferResults = lazy(() => import("./pages/TransferResults"));
+const TransferDetails = lazy(() => import("./pages/TransferDetails"));
+const TransferBooking = lazy(() => import("./pages/TransferBooking"));
+const TransferConfirmation = lazy(() => import("./pages/TransferConfirmation"));
+const HelpCenter = lazy(() => import("./pages/HelpCenter"));
+const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+const TermsConditions = lazy(() => import("./pages/TermsConditions"));
+const RefundPolicy = lazy(() => import("./pages/RefundPolicy"));
+const CookiePolicy = lazy(() => import("./pages/CookiePolicy"));
+const Saved = lazy(() => import("./pages/Saved"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const MembershipCard = lazy(() => import("./pages/MembershipCard"));
 
 // Mobile pages
 import MobileSplash from "./pages/mobile/MobileSplash";
