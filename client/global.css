@@ -3,7 +3,7 @@
 @import "./styles/admin-mobile.css";
 @import "./styles/mobile-optimizations.css";
 
-/* Import classy bargain modal styles */
+/* Import classy bargain modal styles - updated */
 @import './styles/fd-bargain.css';
 
 @tailwind base;
