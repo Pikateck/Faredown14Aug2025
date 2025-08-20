@@ -10,8 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { MobileNavigation } from "@/components/mobile/MobileNavigation";
 import BargainModalPhase1 from "@/components/BargainModalPhase1";
-import { BargainDock } from "@/components/BargainDock";
-import { BargainBottomSheet } from "@/components/BargainBottomSheet";
+import { AINegotiationModal } from "@/components/AINegotiationModal";
 import {
   useBargainPhase1,
   createFlightBargainItem,
@@ -3983,7 +3982,7 @@ export default function FlightResults() {
                                               </p>
                                               <div className="bg-gray-50 rounded-lg p-3 text-xs text-gray-600 space-y-2 leading-relaxed">
                                                 <p>
-                                                  • Direct flights are usually
+                                                  �� Direct flights are usually
                                                   cheaper than refundable
                                                   flights. However, you may have
                                                   to pay a large fee to cancel
