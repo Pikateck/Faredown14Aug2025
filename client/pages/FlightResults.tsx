@@ -1717,7 +1717,7 @@ export default function FlightResults() {
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
                       { code: "hi", name: "हिन्दी", flag: "🇮����" },
                       { code: "ja", name: "日本語", flag: "🇯🇵" },
-                      { code: "ko", name: "한국어", flag: "🇰����" },
+                      { code: "ko", name: "한국어", flag: "🇰🇷" },
                       { code: "zh", name: "中文", flag: "🇨🇳" },
                     ].map((language) => (
                       <DropdownMenuItem
@@ -6386,7 +6386,7 @@ export default function FlightResults() {
                         �� Passenger names cannot be changed after booking
                       </li>
                       <li>
-                        ��� Check-in must be completed 2 hours before departure
+                        �� Check-in must be completed 2 hours before departure
                       </li>
                       <li>• Valid government-issued photo ID required</li>
                       <li>
@@ -6526,9 +6526,9 @@ export default function FlightResults() {
 
       <MobileNavigation />
 
-      {/* Bargain Bottom Sheet (Mobile only) */}
-      <BargainBottomSheet
-        isOpen={showBargainBottomSheet && isMobile}
+      {/* AI Negotiation Modal (All devices) */}
+      <AINegotiationModal
+        isOpen={showAINegotiationModal}
         session={bargainSession}
         onClose={handleCloseBargain}
         onAccept={handleBargainAccept}
