@@ -102,109 +102,68 @@ export default function BargainModalPhase1({
     });
   }, [onBookingConfirmed]);
 
-  const handleUserOffer = async () => {
-    if (!session || !userOfferPrice) return;
+  const handleUserOffer = () => {
+    const offerPrice = parseFloat(userOfferPrice);
 
-    try {
-      setError(null);
-
-      const offerPrice = parseFloat(userOfferPrice);
-
-      if (isNaN(offerPrice) || offerPrice <= 0) {
-        setError("Please enter a valid price");
-        return;
-      }
-
-      // Zubin's Requirement: Prevent repeat price entries
-      if (usedPrices.has(offerPrice)) {
-        setError(
-          "You cannot re-enter the same price. Please try a different amount.",
-        );
-        return;
-      }
-
-      // Add to used prices
-      setUsedPrices((prev) => new Set(prev).add(offerPrice));
-
-      const response = await submitOffer(offerPrice);
-      setAttemptCount((prev) => prev + 1);
-
-      if (response.decision === "accept") {
-        setStep("success");
-      } else if (response.decision === "counter") {
-        setStep("negotiating");
-        // Start 30-second timer for counter-offer (Zubin's requirement)
-        setCounterOfferTimer(30);
-        setIsCounterOfferExpired(false);
-        // Clear the input for next attempt
-        setUserOfferPrice("");
-      } else {
-        setStep("rejected");
-      }
-    } catch (err: any) {
-      setError(getErrorMessage(err));
+    if (isNaN(offerPrice) || offerPrice <= 0) {
+      return;
     }
+
+    if (offerPrice >= itemDetails.basePrice) {
+      return;
+    }
+
+    // Create appropriate product details based on item type
+    let productDetails;
+
+    switch (itemDetails.type) {
+      case 'flight':
+        productDetails = createFlightBargainDetails({
+          id: itemDetails.itemId,
+          totalPrice: itemDetails.basePrice,
+          airline: itemDetails.airline,
+          flightNumber: itemDetails.flightNo || '',
+          departure: { iataCode: itemDetails.route?.from || '' },
+          arrival: { iataCode: itemDetails.route?.to || '' }
+        });
+        break;
+      case 'hotel':
+        productDetails = createHotelBargainDetails({
+          id: itemDetails.itemId,
+          name: itemDetails.hotelName || itemDetails.title,
+          totalPrice: itemDetails.basePrice,
+          city: itemDetails.city || ''
+        });
+        break;
+      case 'sightseeing':
+        productDetails = createSightseeingBargainDetails({
+          id: itemDetails.itemId,
+          name: itemDetails.activityName || itemDetails.title,
+          price: itemDetails.basePrice,
+          location: itemDetails.location || itemDetails.city || ''
+        });
+        break;
+      default:
+        productDetails = {
+          productRef: itemDetails.itemId,
+          basePrice: itemDetails.basePrice,
+        };
+    }
+
+    // Start AI bargain
+    bargainHook.startBargain({
+      module: itemDetails.type as 'flights' | 'hotels' | 'sightseeing',
+      title: `${itemDetails.title} - AI Bargain`,
+      productDetails,
+      userOffer: offerPrice,
+    });
+
+    setShowAIChat(true);
   };
 
-  const handleAcceptCounterOffer = async () => {
-    if (lastOffer?.counter_offer) {
-      try {
-        setError(null);
-        const result = await acceptCurrentOffer();
-        setStep("success");
-        // Use the final accepted price
-        onBookingConfirmed(lastOffer.counter_offer);
-      } catch (err: any) {
-        setError(getErrorMessage(err));
-        if (err.code === "INVENTORY_CHANGED") {
-          // Show reprice modal
-          setRepriceData({
-            oldPrice: lastOffer.counter_offer,
-            newPrice: err.new_price, // If provided by API
-          });
-          setShowRepriceModal(true);
-        }
-      }
-    }
-  };
-
-  const handleRejectCounterOffer = () => {
-    if (attemptCount >= 3) {
-      setStep("rejected");
-    } else {
-      // Allow user to make another offer
-      setCounterOfferResponse(null);
-    }
-  };
-
-  const handleBookNow = async () => {
-    try {
-      setError(null);
-      if (step === "success" && lastOffer?.counter_offer) {
-        const result = await acceptCurrentOffer();
-        onBookingConfirmed(lastOffer.counter_offer);
-      } else if (session?.initial_offer?.price) {
-        const result = await acceptCurrentOffer();
-        onBookingConfirmed(session.initial_offer.price);
-      }
-    } catch (err: any) {
-      setError(getErrorMessage(err));
-    }
-  };
-
-  const getSavingsInfo = () => {
-    if (!session) return null;
-
-    const initialPrice = session.initial_offer.price;
-    const finalPrice =
-      lastOffer?.counter_offer || parseFloat(userOfferPrice) || initialPrice;
-    const savings = initialPrice - finalPrice;
-    const savingsPercentage = (savings / initialPrice) * 100;
-
-    return {
-      savings: Math.max(0, savings),
-      savingsPercentage: Math.max(0, savingsPercentage),
-    };
+  const handleBookAtBasePrice = () => {
+    onBookingConfirmed(itemDetails.basePrice);
+    onClose();
   };
 
   const renderLoadingStep = () => <RotatingBargainSkeleton />;
