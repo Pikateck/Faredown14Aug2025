@@ -46,6 +46,7 @@ export function ClassyBargainModal({
   onClose,
   onAccept,
   onBookOriginal,
+  onRetry,
   attempt = 1
 }: ClassyBargainModalProps) {
   const [step, setStep] = useState<ModalStep>('input');
