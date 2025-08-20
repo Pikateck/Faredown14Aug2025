@@ -2621,7 +2621,7 @@ export default function Index() {
                   },
                   {
                     name: "Anjali Patel",
-                    location: "Bangalore ��� Verified Traveler",
+                    location: "Bangalore • Verified Traveler",
                     review:
                       "Easy booking process and instant confirmations. Saved on both flights and hotels. Will use again!",
                     rating: 5,
