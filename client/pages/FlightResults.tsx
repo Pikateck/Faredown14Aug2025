@@ -4036,7 +4036,7 @@ export default function FlightResults() {
                                               });
 
                                             console.log(
-                                              "�� Starting live API bargain (mobile):",
+                                              "📱 Starting live API bargain (mobile):",
                                               bargainItem,
                                             );
 
@@ -4589,6 +4589,15 @@ export default function FlightResults() {
             </div>
           </div>
         </div>
+
+        {/* Bargain Dock (Desktop only) */}
+        <BargainDock
+          isOpen={showBargainDock && !isMobile}
+          session={bargainSession}
+          onClose={handleCloseBargain}
+          onAccept={handleBargainAccept}
+          onRetry={handleBargainRetry}
+        />
       </div>
 
       {/* Mobile Bottom Padding */}
