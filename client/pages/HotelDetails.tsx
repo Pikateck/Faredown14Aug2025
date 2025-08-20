@@ -1838,37 +1838,19 @@ export default function HotelDetails() {
                                   </div>
                                 </div>
 
-                                <div className="space-y-3">
+                                <div>
                                   <Button
-                                    onClick={() => handleBooking(room)}
-                                    variant="outline"
-                                    className="w-full font-semibold py-3 text-sm transition-all duration-200 border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white hover:shadow-md"
+                                    onClick={() => {
+                                      setSelectedRoomType(room);
+                                      // Navigate to booking flow or room details
+                                      console.log('View Details clicked for room:', room.id);
+                                      if (navigator.vibrate) {
+                                        navigator.vibrate(50);
+                                      }
+                                    }}
+                                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 text-sm transition-all duration-200"
                                   >
-                                    Reserve Room
-                                  </Button>
-                                  <Button
-                                    onClick={() => handleBargainClick(room)}
-                                    className={`w-full font-medium py-2 text-sm transition-all duration-200 flex items-center justify-center gap-2 ${
-                                      bargainedRooms.has(room.id)
-                                        ? "bg-green-600 text-white"
-                                        : bargainingRoomId === room.id
-                                          ? "bg-blue-600 text-white animate-pulse"
-                                          : "bg-[#febb02] hover:bg-[#e6a602] text-black"
-                                    }`}
-                                  >
-                                    {bargainedRooms.has(room.id) ? (
-                                      <span className="flex items-center justify-center">
-                                        Bargained
-                                        <CheckCircle className="w-4 h-4 ml-2" />
-                                      </span>
-                                    ) : bargainingRoomId === room.id ? (
-                                      "Bargaining..."
-                                    ) : (
-                                      <>
-                                        <TrendingDown className="w-4 h-4" />
-                                        Bargain Now
-                                      </>
-                                    )}
+                                    View Details
                                   </Button>
                                 </div>
 
