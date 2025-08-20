@@ -548,11 +548,7 @@ export default function FlightResults() {
     symbol: "₹",
     name: "Indian Rupee",
   });
-  const [usedPrices, setUsedPrices] = useState<Set<string>>(new Set());
-  const [aiOfferPrice, setAiOfferPrice] = useState<number | null>(null);
-  const [isOfferValid, setIsOfferValid] = useState(false);
-  const [offerExpiryTime, setOfferExpiryTime] = useState(0);
-  const [duplicatePriceError, setDuplicatePriceError] = useState(false);
+  // Old AI bargain state variables removed - ClassyBargainModal handles this internally
 
 
   // Load flights from Amadeus API
@@ -5799,7 +5795,7 @@ export default function FlightResults() {
           setBargainCtx(null);
         }}
         onAccept={(finalPrice: number, orderRef: string) => {
-          console.log('���� Bargain accepted:', finalPrice, orderRef);
+          console.log('🎯 Bargain accepted:', finalPrice, orderRef);
           if (bargainCtx?.product) {
             const updatedFareType = { ...bargainCtx.product.fareTypes[0], price: finalPrice };
             navigate('/booking', {
