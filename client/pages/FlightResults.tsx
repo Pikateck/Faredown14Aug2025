@@ -1360,7 +1360,6 @@ export default function FlightResults() {
   // Single bargain handler - simplified
   function handleBargain(flight: (typeof flightData)[0]) {
     console.log('🎯 handleBargain called with flight:', flight.id);
-    alert(`🎯 BUTTON CLICKED! Flight ID: ${flight.id} - Modal should open now!`);
 
     if (!flight) {
       console.error('❌ Invalid flight data:', flight);
@@ -1375,7 +1374,6 @@ export default function FlightResults() {
         product: flight
       });
       console.log('🎯 Modal context set for flight:', flight.id);
-      console.log('🎯 bargainCtx after setting:', { open: true, module: 'flights', product: flight });
     });
   }
 
@@ -4426,7 +4424,7 @@ export default function FlightResults() {
                                       </p>
                                       <div className="text-xs text-gray-700 space-y-1">
                                         <p>
-                                          �� Direct flights are usually cheaper
+                                          ���� Direct flights are usually cheaper
                                           than refundable flights. However, you
                                           may have to pay a large fee to cancel
                                           or change your flight.
