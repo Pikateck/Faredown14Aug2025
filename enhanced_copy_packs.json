@@ -1,0 +1,1121 @@
+{
+  "version": "2.0.0",
+  "locale_default": "en-IN",
+  "brand": {
+    "aiName": "Faredown AI",
+    "negotiatorTitle": "AI Price Negotiator",
+    "negotiatedBadge": "Negotiated in {seconds}s",
+    "acceptButton": "Accept ₹{final_price} — {seconds_left}s to book",
+    "bargainAgain": "Bargain Again",
+    "expiredTitle": "Bargain Window Expired",
+    "expiredBody": "This offer is no longer negotiable. Please re‑search to try again.",
+    "reSearchCta": "Re‑search Now"
+  },
+  "modules": {
+    "flights": {
+      "supplierIcon": "plane",
+      "agent_offer": {
+        "1": [
+          {
+            "text": "We have ₹{offer} for {airline} {flight_no}. Can you approve?",
+            "w": 4
+          },
+          {
+            "text": "Customer is ready at ₹{offer} for {airline} {flight_no}. Please review.",
+            "w": 3
+          },
+          {
+            "text": "Requesting approval at ₹{offer} for {airline} {flight_no}.",
+            "w": 2
+          },
+          {
+            "text": "Submitting ₹{offer} on {airline} {flight_no}. Can we lock it?",
+            "w": 2
+          },
+          {
+            "text": "₹{offer} for {airline} {flight_no} — seeking a quick confirmation.",
+            "w": 2
+          },
+          {
+            "text": "Checking if ₹{offer} works for {airline} {flight_no}.",
+            "w": 2
+          },
+          {
+            "text": "Can we approve ₹{offer} for {airline} {flight_no} right away?",
+            "w": 1
+          },
+          {
+            "text": "Putting forward ₹{offer} for {airline} {flight_no}.",
+            "w": 1
+          },
+          {
+            "text": "Opening a request at ₹{offer} for {airline} {flight_no}.",
+            "w": 1
+          },
+          {
+            "text": "Trying ₹{offer} for {airline} {flight_no} — quick look?",
+            "w": 1
+          }
+        ],
+        "2": [
+          {
+            "text": "Following up at ₹{offer} for {airline} {flight_no}. Any flex?",
+            "w": 3
+          },
+          {
+            "text": "Re‑checking ₹{offer} for {airline} {flight_no}.",
+            "w": 2
+          },
+          {
+            "text": "Second pass: ₹{offer} on {airline} {flight_no}.",
+            "w": 2
+          },
+          {
+            "text": "Circling back — can we approve ₹{offer} for {airline} {flight_no}?",
+            "w": 2
+          },
+          {
+            "text": "Requesting another look at ₹{offer} for {airline} {flight_no}.",
+            "w": 1
+          },
+          {
+            "text": "Bumping the request: ₹{offer} for {airline} {flight_no}.",
+            "w": 1
+          },
+          {
+            "text": "Checking once more — ₹{offer}, {airline} {flight_no}.",
+            "w": 1
+          },
+          {
+            "text": "Quick follow‑up on ₹{offer} for {airline} {flight_no}.",
+            "w": 1
+          },
+          {
+            "text": "Any chance ₹{offer} works for {airline} {flight_no} now?",
+            "w": 1
+          },
+          {
+            "text": "Revisiting the request at ₹{offer} for {airline} {flight_no}.",
+            "w": 1
+          }
+        ],
+        "3": [
+          {
+            "text": "Final try — can we approve ₹{offer} for {airline} {flight_no}?",
+            "w": 3
+          },
+          {
+            "text": "Last pass at ₹{offer} for {airline} {flight_no}.",
+            "w": 2
+          },
+          {
+            "text": "One last request: ₹{offer} on {airline} {flight_no}.",
+            "w": 2
+          },
+          {
+            "text": "Before we close, any room for ₹{offer} on {airline} {flight_no}?",
+            "w": 2
+          },
+          {
+            "text": "Closing round — checking ₹{offer} for {airline} {flight_no}.",
+            "w": 1
+          },
+          {
+            "text": "Last call at ₹{offer} — {airline} {flight_no}.",
+            "w": 1
+          },
+          {
+            "text": "Appreciate a final review at ₹{offer} for {airline} {flight_no}.",
+            "w": 1
+          },
+          {
+            "text": "End of window — ₹{offer} for {airline} {flight_no}, possible?",
+            "w": 1
+          },
+          {
+            "text": "Final check on ₹{offer} for {airline} {flight_no}.",
+            "w": 1
+          },
+          {
+            "text": "Wrapping up — can ₹{offer} work for {airline} {flight_no}?",
+            "w": 1
+          }
+        ]
+      },
+      "supplier_check": {
+        "any": [
+          {
+            "text": "Published is ₹{base}. Checking inventory…",
+            "w": 4
+          },
+          {
+            "text": "Current listed fare ₹{base}. Verifying now…",
+            "w": 3
+          },
+          {
+            "text": "₹{base} is the current fare. Reviewing…",
+            "w": 2
+          },
+          {
+            "text": "Seeing ₹{base} on my side — checking seats…",
+            "w": 2
+          },
+          {
+            "text": "Reference fare is ₹{base}. One moment…",
+            "w": 2
+          },
+          {
+            "text": "I see ₹{base}. Confirming availability…",
+            "w": 2
+          },
+          {
+            "text": "Marked at ₹{base}. Running checks…",
+            "w": 1
+          },
+          {
+            "text": "Noted ₹{base}. Validating now…",
+            "w": 1
+          },
+          {
+            "text": "₹{base} listed — reviewing constraints…",
+            "w": 1
+          },
+          {
+            "text": "Published fare ₹{base}. Looking into options…",
+            "w": 1
+          }
+        ]
+      },
+      "supplier_counter": {
+        "any": [
+          {
+            "text": "I can do ₹{counter}.",
+            "w": 4
+          },
+          {
+            "text": "Best I can return now is ₹{counter}.",
+            "w": 3
+          },
+          {
+            "text": "Approved at ₹{counter}.",
+            "w": 2
+          },
+          {
+            "text": "Cleared for ₹{counter}.",
+            "w": 2
+          },
+          {
+            "text": "Returning with ₹{counter}.",
+            "w": 2
+          },
+          {
+            "text": "The workable price is ₹{counter}.",
+            "w": 1
+          },
+          {
+            "text": "₹{counter} is achievable right now.",
+            "w": 1
+          },
+          {
+            "text": "Green light at ₹{counter}.",
+            "w": 1
+          },
+          {
+            "text": "Counter at ₹{counter} from my side.",
+            "w": 1
+          },
+          {
+            "text": "Approved counter: ₹{counter}.",
+            "w": 1
+          }
+        ]
+      },
+      "agent_user_confirm": {
+        "any": [
+          {
+            "text": "Let me check with you if you want it.",
+            "w": 4
+          },
+          {
+            "text": "I can lock this in now if you’d like.",
+            "w": 3
+          },
+          {
+            "text": "Shall I secure this price for you?",
+            "w": 2
+          },
+          {
+            "text": "Happy to hold it right away — should I?",
+            "w": 2
+          },
+          {
+            "text": "Want me to secure this now?",
+            "w": 2
+          },
+          {
+            "text": "I can place a 30‑second hold for you.",
+            "w": 2
+          },
+          {
+            "text": "Shall I book this at ₹{counter}?",
+            "w": 1
+          },
+          {
+            "text": "Ready to lock ₹{counter} — proceed?",
+            "w": 1
+          },
+          {
+            "text": "Confirm and I’ll hold this price.",
+            "w": 1
+          },
+          {
+            "text": "Say the word and I’ll secure it.",
+            "w": 1
+          }
+        ]
+      }
+    },
+    "hotels": {
+      "supplierIcon": "hotel",
+      "agent_offer": {
+        "1": [
+          {
+            "text": "We have ₹{offer} for {hotel_name} in {city}. Can you approve?",
+            "w": 4
+          },
+          {
+            "text": "Requesting ₹{offer} for {hotel_name} ({city}). Please review.",
+            "w": 3
+          },
+          {
+            "text": "Submitting ₹{offer} for {hotel_name} — any flexibility?",
+            "w": 2
+          },
+          {
+            "text": "₹{offer} at {hotel_name} — looking for a quick nod.",
+            "w": 2
+          },
+          {
+            "text": "Trying ₹{offer} on {hotel_name} in {city}.",
+            "w": 2
+          },
+          {
+            "text": "Customer ready at ₹{offer} for {hotel_name}.",
+            "w": 1
+          },
+          {
+            "text": "Can we confirm ₹{offer} at {hotel_name}?",
+            "w": 1
+          },
+          {
+            "text": "Putting forward ₹{offer} for {hotel_name}.",
+            "w": 1
+          },
+          {
+            "text": "Opening request at ₹{offer} for {hotel_name}.",
+            "w": 1
+          },
+          {
+            "text": "Seeking quick approval at ₹{offer} — {hotel_name}.",
+            "w": 1
+          }
+        ],
+        "2": [
+          {
+            "text": "Following up at ₹{offer} for {hotel_name}.",
+            "w": 3
+          },
+          {
+            "text": "Re‑checking ₹{offer} at {hotel_name} — any room?",
+            "w": 2
+          },
+          {
+            "text": "Second pass: ₹{offer} for {hotel_name}.",
+            "w": 2
+          },
+          {
+            "text": "Circling back on ₹{offer} — {hotel_name}.",
+            "w": 2
+          },
+          {
+            "text": "Another look at ₹{offer} for {hotel_name}?",
+            "w": 1
+          },
+          {
+            "text": "Bumping the request at ₹{offer} — {hotel_name}.",
+            "w": 1
+          },
+          {
+            "text": "Revisiting ₹{offer} for {hotel_name}.",
+            "w": 1
+          },
+          {
+            "text": "Quick follow‑up — ₹{offer} at {hotel_name}.",
+            "w": 1
+          },
+          {
+            "text": "Any flex around ₹{offer} for {hotel_name}?",
+            "w": 1
+          },
+          {
+            "text": "Checking once more on ₹{offer} for {hotel_name}.",
+            "w": 1
+          }
+        ],
+        "3": [
+          {
+            "text": "Final try — ₹{offer} for {hotel_name} in {city}.",
+            "w": 3
+          },
+          {
+            "text": "Last pass at ₹{offer} — {hotel_name}.",
+            "w": 2
+          },
+          {
+            "text": "One last request: ₹{offer} for {hotel_name}.",
+            "w": 2
+          },
+          {
+            "text": "Closing round — any chance at ₹{offer} for {hotel_name}?",
+            "w": 2
+          },
+          {
+            "text": "End of window — checking ₹{offer} for {hotel_name}.",
+            "w": 1
+          },
+          {
+            "text": "Final check on ₹{offer} — {hotel_name}.",
+            "w": 1
+          },
+          {
+            "text": "Appreciate a final review at ₹{offer} for {hotel_name}.",
+            "w": 1
+          },
+          {
+            "text": "Before we close — ₹{offer} for {hotel_name}?",
+            "w": 1
+          },
+          {
+            "text": "Last call at ₹{offer} for {hotel_name}.",
+            "w": 1
+          },
+          {
+            "text": "Wrapping up — can ₹{offer} work at {hotel_name}?",
+            "w": 1
+          }
+        ]
+      },
+      "supplier_check": {
+        "any": [
+          {
+            "text": "Published rate is ₹{base}. Checking rooms…",
+            "w": 4
+          },
+          {
+            "text": "Current listed is ₹{base}. Verifying availability…",
+            "w": 3
+          },
+          {
+            "text": "Seeing ₹{base}. Reviewing room inventory…",
+            "w": 2
+          },
+          {
+            "text": "Reference price ₹{base}. Confirming status…",
+            "w": 2
+          },
+          {
+            "text": "Noted ₹{base}. Checking with allocation…",
+            "w": 2
+          },
+          {
+            "text": "Marked at ₹{base}. Running a quick check…",
+            "w": 1
+          },
+          {
+            "text": "₹{base} shown — validating now…",
+            "w": 1
+          },
+          {
+            "text": "Listed at ₹{base}. Looking into options…",
+            "w": 1
+          },
+          {
+            "text": "₹{base} currently. Reviewing constraints…",
+            "w": 1
+          },
+          {
+            "text": "I see ₹{base}. One moment…",
+            "w": 1
+          }
+        ]
+      },
+      "supplier_counter": {
+        "any": [
+          {
+            "text": "I can do ₹{counter}.",
+            "w": 4
+          },
+          {
+            "text": "Approved at ₹{counter}.",
+            "w": 3
+          },
+          {
+            "text": "Best return is ₹{counter}.",
+            "w": 2
+          },
+          {
+            "text": "Cleared for ₹{counter}.",
+            "w": 2
+          },
+          {
+            "text": "Countering at ₹{counter}.",
+            "w": 2
+          },
+          {
+            "text": "Workable price is ₹{counter}.",
+            "w": 1
+          },
+          {
+            "text": "₹{counter} is possible right now.",
+            "w": 1
+          },
+          {
+            "text": "Counter approved: ₹{counter}.",
+            "w": 1
+          },
+          {
+            "text": "I can release at ₹{counter}.",
+            "w": 1
+          },
+          {
+            "text": "Returning with ₹{counter}.",
+            "w": 1
+          }
+        ]
+      },
+      "agent_user_confirm": {
+        "any": [
+          {
+            "text": "Want me to lock this now?",
+            "w": 4
+          },
+          {
+            "text": "I can secure this rate immediately.",
+            "w": 3
+          },
+          {
+            "text": "Shall I hold this room at ₹{counter}?",
+            "w": 2
+          },
+          {
+            "text": "Happy to place a 30‑second hold for you.",
+            "w": 2
+          },
+          {
+            "text": "Ready to secure it — should I proceed?",
+            "w": 2
+          },
+          {
+            "text": "Confirm and I’ll lock this in.",
+            "w": 1
+          },
+          {
+            "text": "Say the word and I’ll secure it.",
+            "w": 1
+          },
+          {
+            "text": "I can keep this price for a short window — go ahead?",
+            "w": 1
+          },
+          {
+            "text": "Proceed to hold at ₹{counter}?",
+            "w": 1
+          },
+          {
+            "text": "I can reserve this for you now.",
+            "w": 1
+          }
+        ]
+      }
+    },
+    "sightseeing": {
+      "supplierIcon": "landmark",
+      "agent_offer": {
+        "1": [
+          {
+            "text": "We have ₹{offer} for {tour_name} in {city}. Can you approve?",
+            "w": 4
+          },
+          {
+            "text": "Requesting approval at ₹{offer} for {tour_name} ({city}).",
+            "w": 3
+          },
+          {
+            "text": "Submitting ₹{offer} for {tour_name}.",
+            "w": 2
+          },
+          {
+            "text": "₹{offer} for {tour_name} — quick confirmation?",
+            "w": 2
+          },
+          {
+            "text": "Trying ₹{offer} on {tour_name} in {city}.",
+            "w": 2
+          },
+          {
+            "text": "Customer ready at ₹{offer} for {tour_name}.",
+            "w": 1
+          },
+          {
+            "text": "Opening a request at ₹{offer} — {tour_name}.",
+            "w": 1
+          },
+          {
+            "text": "Checking if ₹{offer} can be approved for {tour_name}.",
+            "w": 1
+          },
+          {
+            "text": "Looking to confirm ₹{offer} for {tour_name}.",
+            "w": 1
+          },
+          {
+            "text": "Placing ₹{offer} for {tour_name}.",
+            "w": 1
+          }
+        ],
+        "2": [
+          {
+            "text": "Following up at ₹{offer} for {tour_name}. Any room?",
+            "w": 3
+          },
+          {
+            "text": "Re‑checking ₹{offer} for {tour_name}.",
+            "w": 2
+          },
+          {
+            "text": "Second pass: ₹{offer} on {tour_name}.",
+            "w": 2
+          },
+          {
+            "text": "Another look at ₹{offer} for {tour_name}?",
+            "w": 2
+          },
+          {
+            "text": "Circling back — ₹{offer} for {tour_name}.",
+            "w": 1
+          },
+          {
+            "text": "Bumping the request at ₹{offer} — {tour_name}.",
+            "w": 1
+          },
+          {
+            "text": "Quick follow‑up — ₹{offer} for {tour_name}.",
+            "w": 1
+          },
+          {
+            "text": "Checking again on ₹{offer} — {tour_name}.",
+            "w": 1
+          },
+          {
+            "text": "Any flexibility for ₹{offer} on {tour_name}?",
+            "w": 1
+          },
+          {
+            "text": "Revisiting at ₹{offer} — {tour_name}.",
+            "w": 1
+          }
+        ],
+        "3": [
+          {
+            "text": "Final try — ₹{offer} for {tour_name}.",
+            "w": 3
+          },
+          {
+            "text": "Last pass at ₹{offer} — {tour_name}.",
+            "w": 2
+          },
+          {
+            "text": "Before we close — any chance at ₹{offer} for {tour_name}?",
+            "w": 2
+          },
+          {
+            "text": "End of window — checking ₹{offer} for {tour_name}.",
+            "w": 2
+          },
+          {
+            "text": "Final check on ₹{offer} — {tour_name}.",
+            "w": 1
+          },
+          {
+            "text": "Wrapping up — can ₹{offer} work for {tour_name}?",
+            "w": 1
+          },
+          {
+            "text": "Last call at ₹{offer} on {tour_name}.",
+            "w": 1
+          },
+          {
+            "text": "Appreciate a final review at ₹{offer}.",
+            "w": 1
+          },
+          {
+            "text": "One last request — ₹{offer} for {tour_name}.",
+            "w": 1
+          },
+          {
+            "text": "Closing round at ₹{offer} for {tour_name}.",
+            "w": 1
+          }
+        ]
+      },
+      "supplier_check": {
+        "any": [
+          {
+            "text": "Published is ₹{base}. Checking seats…",
+            "w": 4
+          },
+          {
+            "text": "Current listed rate ₹{base}. Verifying availability…",
+            "w": 3
+          },
+          {
+            "text": "Seeing ₹{base}. Reviewing allotment…",
+            "w": 2
+          },
+          {
+            "text": "Reference price ₹{base}. One moment…",
+            "w": 2
+          },
+          {
+            "text": "Noted ₹{base}. Validating now…",
+            "w": 2
+          },
+          {
+            "text": "Marked at ₹{base}. Running checks…",
+            "w": 1
+          },
+          {
+            "text": "₹{base} currently. Looking into options…",
+            "w": 1
+          },
+          {
+            "text": "Listed rate ₹{base}. Confirming status…",
+            "w": 1
+          },
+          {
+            "text": "I see ₹{base}. Reviewing constraints…",
+            "w": 1
+          },
+          {
+            "text": "₹{base} shown here. Checking quickly…",
+            "w": 1
+          }
+        ]
+      },
+      "supplier_counter": {
+        "any": [
+          {
+            "text": "I can do ₹{counter}.",
+            "w": 4
+          },
+          {
+            "text": "Countering at ₹{counter}.",
+            "w": 3
+          },
+          {
+            "text": "Approved at ₹{counter}.",
+            "w": 2
+          },
+          {
+            "text": "We can release at ₹{counter}.",
+            "w": 2
+          },
+          {
+            "text": "Best I can do now is ₹{counter}.",
+            "w": 2
+          },
+          {
+            "text": "Returning with ₹{counter}.",
+            "w": 1
+          },
+          {
+            "text": "The workable price is ₹{counter}.",
+            "w": 1
+          },
+          {
+            "text": "₹{counter} is achievable currently.",
+            "w": 1
+          },
+          {
+            "text": "Green light at ₹{counter}.",
+            "w": 1
+          },
+          {
+            "text": "Approved counter: ₹{counter}.",
+            "w": 1
+          }
+        ]
+      },
+      "agent_user_confirm": {
+        "any": [
+          {
+            "text": "Shall I lock this for you now?",
+            "w": 4
+          },
+          {
+            "text": "I can secure this spot immediately.",
+            "w": 3
+          },
+          {
+            "text": "Want me to hold it at ₹{counter}?",
+            "w": 2
+          },
+          {
+            "text": "Ready to place a 30‑second hold — proceed?",
+            "w": 2
+          },
+          {
+            "text": "I can reserve this right away.",
+            "w": 2
+          },
+          {
+            "text": "Confirm and I’ll secure it.",
+            "w": 1
+          },
+          {
+            "text": "Say the word and I’ll hold it.",
+            "w": 1
+          },
+          {
+            "text": "Proceed to secure at ₹{counter}?",
+            "w": 1
+          },
+          {
+            "text": "Happy to lock this in now.",
+            "w": 1
+          },
+          {
+            "text": "Shall I secure this price for you?",
+            "w": 1
+          }
+        ]
+      }
+    },
+    "transfers": {
+      "supplierIcon": "car",
+      "agent_offer": {
+        "1": [
+          {
+            "text": "We have ₹{offer} for a transfer {pickup} → {dropoff}. Can you approve?",
+            "w": 4
+          },
+          {
+            "text": "Requesting ₹{offer} for {pickup} to {dropoff}.",
+            "w": 3
+          },
+          {
+            "text": "Submitting ₹{offer} for the ride {pickup} → {dropoff}.",
+            "w": 2
+          },
+          {
+            "text": "₹{offer} for {pickup} to {dropoff} — quick confirmation?",
+            "w": 2
+          },
+          {
+            "text": "Trying ₹{offer} on {pickup} → {dropoff}.",
+            "w": 2
+          },
+          {
+            "text": "Customer ready at ₹{offer} for the transfer.",
+            "w": 1
+          },
+          {
+            "text": "Opening a request at ₹{offer} for this route.",
+            "w": 1
+          },
+          {
+            "text": "Can we approve ₹{offer} for this ride?",
+            "w": 1
+          },
+          {
+            "text": "Looking to confirm ₹{offer} for this transfer.",
+            "w": 1
+          },
+          {
+            "text": "Placing ₹{offer} for the transfer.",
+            "w": 1
+          }
+        ],
+        "2": [
+          {
+            "text": "Following up at ₹{offer} for {pickup} → {dropoff}.",
+            "w": 3
+          },
+          {
+            "text": "Re‑checking ₹{offer} for the transfer.",
+            "w": 2
+          },
+          {
+            "text": "Second pass: ₹{offer} on this route.",
+            "w": 2
+          },
+          {
+            "text": "Another look at ₹{offer} for the ride?",
+            "w": 2
+          },
+          {
+            "text": "Circling back — ₹{offer} for this transfer.",
+            "w": 1
+          },
+          {
+            "text": "Bumping the request at ₹{offer}.",
+            "w": 1
+          },
+          {
+            "text": "Quick follow‑up — ₹{offer} for this route.",
+            "w": 1
+          },
+          {
+            "text": "Checking again on ₹{offer}.",
+            "w": 1
+          },
+          {
+            "text": "Any flexibility for ₹{offer} on this ride?",
+            "w": 1
+          },
+          {
+            "text": "Revisiting at ₹{offer} for the transfer.",
+            "w": 1
+          }
+        ],
+        "3": [
+          {
+            "text": "Final try — ₹{offer} for {pickup} → {dropoff}.",
+            "w": 3
+          },
+          {
+            "text": "Last pass at ₹{offer} for the transfer.",
+            "w": 2
+          },
+          {
+            "text": "One last request: ₹{offer} for this ride.",
+            "w": 2
+          },
+          {
+            "text": "Before we close — any chance at ₹{offer}?",
+            "w": 2
+          },
+          {
+            "text": "End of window — checking ₹{offer}.",
+            "w": 1
+          },
+          {
+            "text": "Final check on ₹{offer} for the transfer.",
+            "w": 1
+          },
+          {
+            "text": "Wrapping up — can ₹{offer} work for this ride?",
+            "w": 1
+          },
+          {
+            "text": "Last call at ₹{offer} for the route.",
+            "w": 1
+          },
+          {
+            "text": "Appreciate a final review at ₹{offer}.",
+            "w": 1
+          },
+          {
+            "text": "Closing round at ₹{offer}.",
+            "w": 1
+          }
+        ]
+      },
+      "supplier_check": {
+        "any": [
+          {
+            "text": "Published is ₹{base}. Checking vehicles…",
+            "w": 4
+          },
+          {
+            "text": "Current listed rate ₹{base}. Verifying availability…",
+            "w": 3
+          },
+          {
+            "text": "Seeing ₹{base}. Reviewing fleet status…",
+            "w": 2
+          },
+          {
+            "text": "Reference price ₹{base}. One moment…",
+            "w": 2
+          },
+          {
+            "text": "Noted ₹{base}. Validating now…",
+            "w": 2
+          },
+          {
+            "text": "Marked at ₹{base}. Running checks…",
+            "w": 1
+          },
+          {
+            "text": "₹{base} currently. Looking into options…",
+            "w": 1
+          },
+          {
+            "text": "Listed rate ₹{base}. Confirming status…",
+            "w": 1
+          },
+          {
+            "text": "I see ₹{base}. Reviewing constraints…",
+            "w": 1
+          },
+          {
+            "text": "₹{base} shown here. Checking quickly…",
+            "w": 1
+          }
+        ]
+      },
+      "supplier_counter": {
+        "any": [
+          {
+            "text": "I can do ₹{counter}.",
+            "w": 4
+          },
+          {
+            "text": "Countering at ₹{counter}.",
+            "w": 3
+          },
+          {
+            "text": "Approved at ₹{counter}.",
+            "w": 2
+          },
+          {
+            "text": "We can release at ₹{counter}.",
+            "w": 2
+          },
+          {
+            "text": "Best I can do now is ₹{counter}.",
+            "w": 2
+          },
+          {
+            "text": "Returning with ₹{counter}.",
+            "w": 1
+          },
+          {
+            "text": "The workable price is ₹{counter}.",
+            "w": 1
+          },
+          {
+            "text": "₹{counter} is achievable currently.",
+            "w": 1
+          },
+          {
+            "text": "Green light at ₹{counter}.",
+            "w": 1
+          },
+          {
+            "text": "Approved counter: ₹{counter}.",
+            "w": 1
+          }
+        ]
+      },
+      "agent_user_confirm": {
+        "any": [
+          {
+            "text": "Do you want me to secure this ride now?",
+            "w": 4
+          },
+          {
+            "text": "I can hold this fare for 30 seconds — proceed?",
+            "w": 3
+          },
+          {
+            "text": "Shall I lock the transfer at ₹{counter}?",
+            "w": 2
+          },
+          {
+            "text": "Ready to secure it immediately — go ahead?",
+            "w": 2
+          },
+          {
+            "text": "I can reserve the vehicle right away.",
+            "w": 2
+          },
+          {
+            "text": "Confirm and I’ll lock it in.",
+            "w": 1
+          },
+          {
+            "text": "Say the word and I’ll secure it.",
+            "w": 1
+          },
+          {
+            "text": "Proceed to hold at ₹{counter}?",
+            "w": 1
+          },
+          {
+            "text": "Happy to lock this in now.",
+            "w": 1
+          },
+          {
+            "text": "Want me to secure this fare?",
+            "w": 1
+          }
+        ]
+      }
+    }
+  },
+  "fallbacks": {
+    "network_retry": [
+      {
+        "text": "Network is a bit busy — retrying now…",
+        "w": 2
+      },
+      {
+        "text": "One moment — reconnecting to the supplier…",
+        "w": 2
+      },
+      {
+        "text": "Small hiccup — checking again…",
+        "w": 1
+      },
+      {
+        "text": "Re‑establishing connection…",
+        "w": 1
+      }
+    ],
+    "price_refresh": [
+      {
+        "text": "Price refreshed on supplier side — re‑checking.",
+        "w": 2
+      },
+      {
+        "text": "Fare changed recently — validating again.",
+        "w": 2
+      },
+      {
+        "text": "Supplier updated price — reviewing now.",
+        "w": 1
+      }
+    ],
+    "expired": [
+      {
+        "text": "This bargain window has ended. Please re‑search to try again.",
+        "w": 3
+      },
+      {
+        "text": "The offer expired. Start a new search to bargain again.",
+        "w": 2
+      },
+      {
+        "text": "Window closed — re‑search to continue bargaining.",
+        "w": 1
+      }
+    ]
+  },
+  "tones": {
+    "1": "info",
+    "2": "firm",
+    "3": "urgent"
+  }
+}
