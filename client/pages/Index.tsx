@@ -2096,7 +2096,7 @@ export default function Index() {
                                   disabled={travelers.children <= 0}
                                   className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-blue-600 font-bold"
                                 >
-                                  ���
+                                  −
                                 </button>
                                 <span className="w-8 text-center font-medium text-gray-900">
                                   {travelers.children}
