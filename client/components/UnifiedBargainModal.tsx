@@ -612,7 +612,7 @@ export function UnifiedBargainModal({
                 variant="outline"
                 className="w-full py-4 md:py-6 text-base md:text-lg font-semibold rounded-xl border-2 border-[#003580]/20 text-[#003580] hover:bg-[#003580]/5"
               >
-                Book Original Price {formatPriceNoDecimals(fareType.price, selectedCurrency)}
+                Book Original Price {formatPriceNoDecimals(fareType.price, selectedCurrency.symbol)}
               </Button>
             </div>
           </div>
@@ -703,7 +703,7 @@ export function UnifiedBargainModal({
                 {minDisplayTime ? (
                   <>Reading offer details...</>
                 ) : (
-                  <>Accept {formatPriceNoDecimals(bargainResult.finalPrice || 0, selectedCurrency)} ��� 30s to book</>
+                  <>Accept {formatPriceNoDecimals(bargainResult.finalPrice || 0, selectedCurrency.symbol)} — 30s to book</>
                 )}
               </Button>
 
