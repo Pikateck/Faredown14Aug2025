@@ -1218,16 +1218,6 @@ export default function Index() {
                 </div>
               </div>
 
-              {/* Debug Test Button */}
-              <Button
-                onClick={() => {
-                  console.log('TEST: Setting showFromCities to true');
-                  setShowFromCities(true);
-                }}
-                className="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 text-sm rounded-xl mb-2"
-              >
-                TEST: Open From Dropdown
-              </Button>
 
               {/* Search Button */}
               <Button
@@ -2621,7 +2611,7 @@ export default function Index() {
                   },
                   {
                     name: "Anjali Patel",
-                    location: "Bangalore ��� Verified Traveler",
+                    location: "Bangalore ����� Verified Traveler",
                     review:
                       "Easy booking process and instant confirmations. Saved on both flights and hotels. Will use again!",
                     rating: 5,
