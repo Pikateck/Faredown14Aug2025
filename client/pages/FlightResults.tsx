@@ -6542,6 +6542,15 @@ export default function FlightResults() {
 
       <MobileNavigation />
 
+      {/* Bargain Bottom Sheet (Mobile only) */}
+      <BargainBottomSheet
+        isOpen={showBargainBottomSheet && isMobile}
+        session={bargainSession}
+        onClose={handleCloseBargain}
+        onAccept={handleBargainAccept}
+        onRetry={handleBargainRetry}
+      />
+
       {/* Phase 1 Bargain Modal */}
       <BargainModalPhase1 {...bargainHook.getBargainModalProps()} />
     </div>
