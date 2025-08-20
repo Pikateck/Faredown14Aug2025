@@ -3305,7 +3305,10 @@ export default function Index() {
       {/* Mobile City Dropdowns */}
       <MobileCityDropdown
         isOpen={showFromCities}
-        onClose={() => setShowFromCities(false)}
+        onClose={() => {
+          console.log('Closing From cities dropdown');
+          setShowFromCities(false);
+        }}
         title="Select departure city"
         cities={cityData}
         selectedCity={selectedFromCity}
