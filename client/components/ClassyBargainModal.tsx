@@ -4,6 +4,7 @@ import { chooseVariant, formatCurrency } from '@/lib/copySelector';
 import { useCurrency } from '@/contexts/CurrencyContext';
 import { Sparkles, Plane, Building, MapPin, Car, Clock, Shield } from 'lucide-react';
 import copyPack from '../../api/data/copy_packs.json';
+import DecisionCard from './DecisionCard';
 import '@/styles/fd-bargain.css';
 
 interface FlightDetails {
