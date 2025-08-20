@@ -217,8 +217,8 @@ export function AINegotiationChat({
         icon: <Sparkles className="w-4 h-4 text-blue-500" />,
       });
 
-      // Wait 2 seconds
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Wait 4 seconds for users to read
+      await new Promise(resolve => setTimeout(resolve, 4000));
 
       // Beat 2: Supplier checks
       addChatBeat({
@@ -229,8 +229,8 @@ export function AINegotiationChat({
         </div>,
       });
 
-      // Wait 2 seconds
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Wait 3 seconds for processing simulation
+      await new Promise(resolve => setTimeout(resolve, 3000));
 
       // Call API
       const response = await fetch('/api/bargains/quote', {
