@@ -591,6 +591,7 @@ export default function FlightDetails({
           // Handle original booking
         }}
         attempt={1}
+        moduleType="flights"
       />
     </div>
   );
