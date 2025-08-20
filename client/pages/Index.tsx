@@ -3322,7 +3322,10 @@ export default function Index() {
         title="Select departure city"
         cities={cityData}
         selectedCity={selectedFromCity}
-        onSelectCity={setSelectedFromCity}
+        onSelectCity={(city) => {
+          console.log('Selected from city:', city);
+          setSelectedFromCity(city);
+        }}
       />
 
       <MobileCityDropdown
@@ -3334,7 +3337,10 @@ export default function Index() {
         title="Select destination city"
         cities={cityData}
         selectedCity={selectedToCity}
-        onSelectCity={setSelectedToCity}
+        onSelectCity={(city) => {
+          console.log('Selected to city:', city);
+          setSelectedToCity(city);
+        }}
       />
     </div>
   );
