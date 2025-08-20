@@ -536,7 +536,14 @@ export default function FlightResults() {
     module: 'flights';
     product: (typeof flightData)[0];
   }>(null);
-  // Old bargain state variables removed - using simplified bargainCtx only
+  // Temporary variables for legacy UI compatibility (should be removed when old UI is cleaned up)
+  const [bargainPrice, setBargainPrice] = useState("");
+  const [bargainProgress, setBargainProgress] = useState(0);
+  const [bargainResult, setBargainResult] = useState<"accepted" | "rejected" | "counter" | null>(null);
+
+  // Legacy variables that reference bargainCtx data when available
+  const bargainFlight = bargainCtx?.product || null;
+  const bargainFareType = bargainCtx?.product?.fareTypes?.[0] || null;
 
   const [sortBy, setSortBy] = useState<"cheapest" | "fastest">("cheapest");
   const [expandedTicketOptions, setExpandedTicketOptions] = useState<
