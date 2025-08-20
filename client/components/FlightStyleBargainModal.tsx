@@ -956,7 +956,7 @@ export function FlightStyleBargainModal({
                 variant="outline"
                 className="w-full border-2 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white py-4 text-lg font-semibold rounded-xl"
               >
-                Try Different Price
+                Bargain Again
               </Button>
             </div>
           </>
