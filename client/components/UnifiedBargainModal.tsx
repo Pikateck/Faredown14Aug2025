@@ -243,12 +243,7 @@ export function UnifiedBargainModal({
 
   // Start AI negotiation
   const startNegotiation = async () => {
-    console.log('🔥 startNegotiation called!', { flight, fareType, bargainPrice, currentStep });
-
-    if (!flight || !fareType || !bargainPrice) {
-      console.error('❌ Missing required data:', { flight: !!flight, fareType: !!fareType, bargainPrice: !!bargainPrice });
-      return;
-    }
+    if (!flight || !fareType || !bargainPrice) return;
 
     const targetPriceInSelectedCurrency = parseInt(bargainPrice);
     // Convert from selected currency back to INR (base currency)
