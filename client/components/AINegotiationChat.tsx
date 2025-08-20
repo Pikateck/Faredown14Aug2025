@@ -709,15 +709,15 @@ export function AINegotiationChat({
             <div className="text-center">
               <div className="flex items-center justify-center space-x-2 text-red-600 mb-3">
                 <AlertCircle className="w-5 h-5" />
-                <span className="font-medium">Bargain Window Expired</span>
+                <span className="font-medium">{getBrandString('expiredTitle')}</span>
               </div>
               
               <p className="text-sm text-gray-600 mb-4">
-                {error || "This fare can no longer be negotiated right now. Please re-search to try again."}
+                {error || getBrandString('expiredBody')}
               </p>
               
               <Button onClick={onBargainFailed} className="w-full">
-                Re-search Now
+                {getBrandString('reSearchCta')}
               </Button>
             </div>
           </div>
