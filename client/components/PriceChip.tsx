@@ -15,7 +15,8 @@ export const PriceChip: React.FC<PriceChipProps> = ({
   
   const variantClasses = {
     emerald: "bg-emerald-50 ring-emerald-200 text-emerald-700",
-    slate: "bg-slate-50 ring-slate-200 text-slate-700"
+    slate: "bg-slate-50 ring-slate-200 text-slate-700",
+    white: "bg-white ring-white text-emerald-700 shadow-sm"
   };
 
   return (
