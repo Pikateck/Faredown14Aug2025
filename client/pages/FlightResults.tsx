@@ -569,6 +569,7 @@ export default function FlightResults() {
   const [usedPrices, setUsedPrices] = useState<Set<string>>(new Set());
   const [aiOfferPrice, setAiOfferPrice] = useState<number | null>(null);
   const [isOfferValid, setIsOfferValid] = useState(false);
+  const [offerExpiryTime, setOfferExpiryTime] = useState(0);
 
 
   // Load flights from Amadeus API
@@ -2736,7 +2737,7 @@ export default function FlightResults() {
                         <div className="text-right relative">
                           <div className="flex items-center justify-end space-x-1">
                             <div className="text-lg font-bold text-gray-900">
-                              ₹{flight.price.amount.toLocaleString("en-IN")}
+                              ��{flight.price.amount.toLocaleString("en-IN")}
                             </div>
                             <div className="relative group">
                               <button className="text-gray-400 hover:text-gray-600 transition-colors cursor-help">
