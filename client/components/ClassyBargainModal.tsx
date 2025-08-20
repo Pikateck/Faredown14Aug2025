@@ -105,9 +105,9 @@ export function ClassyBargainModal({
             if (step === 'decision') {
               setStep('input'); // Offer expired
             } else {
-              // Use a ref to avoid dependency on onAccept
-              if (counter) {
-                onAccept(counter, `ORDER-${Date.now()}`);
+              // Use counterRef to avoid stale closure
+              if (counterRef.current) {
+                onAccept(counterRef.current, `ORDER-${Date.now()}`);
               }
             }
             return 0;
