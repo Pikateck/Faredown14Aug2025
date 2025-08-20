@@ -1075,7 +1075,10 @@ export default function Index() {
 
                   <div className="flex-1">
                     <button
-                      onClick={() => setShowToCities(true)}
+                      onClick={() => {
+                        console.log('To button clicked');
+                        setShowToCities(true);
+                      }}
                       className="w-full text-left"
                     >
                       <div className="text-xs text-gray-500 mb-1">To</div>
