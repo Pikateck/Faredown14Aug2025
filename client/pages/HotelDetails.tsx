@@ -3240,7 +3240,7 @@ export default function HotelDetails() {
                   Total Price (All Inclusive)
                 </div>
                 <div className="text-xs text-gray-500">
-                  ��{lowestPrice.toLocaleString()} per room per night
+                  ₹{lowestPrice.toLocaleString()} per room per night
                 </div>
               </div>
               <div>
