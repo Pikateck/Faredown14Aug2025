@@ -4114,7 +4114,7 @@ export default function FlightResults() {
                                           Faredown Fee:
                                         </span>
                                         <span className="text-gray-900 font-medium">
-                                          ₹500
+                                          ���500
                                         </span>
                                       </div>
                                     </div>
@@ -5686,9 +5686,14 @@ export default function FlightResults() {
                   ) : bargainResult === "counter" ? (
                     <>
                       <div className="text-center">
-                        <h3 className="text-2xl font-bold text-[#003580] mb-2">
-                          AI Counter Offer!
-                        </h3>
+                        <div className="flex items-center justify-center gap-3 mb-3">
+                          <h3 className="text-2xl font-bold text-[#003580]">
+                            AI Counter Offer!
+                          </h3>
+                          <div className="px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-full">
+                            Negotiated in 8.2s
+                          </div>
+                        </div>
                         <p className="text-gray-600 mb-1 text-lg">
                           The airline couldn't match your price, but here's
                           their best offer!
