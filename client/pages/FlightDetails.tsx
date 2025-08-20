@@ -27,7 +27,7 @@ import {
 } from "lucide-react";
 import { flightsService, Flight } from "@/services/flightsService";
 import { useCurrency } from "@/contexts/CurrencyContext";
-import { FlightBargainModal } from "@/components/FlightBargainModal";
+import { ClassyBargainModal } from "@/components/ClassyBargainModal";
 
 import { useScrollToTop } from "@/hooks/useScrollToTop";
 
