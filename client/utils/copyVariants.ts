@@ -174,7 +174,7 @@ class CopyVariantSelectorImpl implements CopyVariantSelector {
   private copyData: any;
 
   constructor() {
-    this.copyData = copyPacks;
+    this.copyData = copyPacksData;
   }
 
   chooseVariant(
