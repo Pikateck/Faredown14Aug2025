@@ -100,13 +100,37 @@ export function AINegotiationChat({
   const [currentStep, setCurrentStep] = useState<'negotiating' | 'decision' | 'holding' | 'success' | 'failed'>('negotiating');
   const [bargainResult, setBargainResult] = useState<BargainResponse | null>(null);
   const [holdData, setHoldData] = useState<HoldResponse | null>(null);
-  const [countdown, setCountdown] = useState(30);
   const [isProcessing, setIsProcessing] = useState(false);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [retryOffer, setRetryOffer] = useState(userOffer);
   const [error, setError] = useState<string | null>(null);
-  
+
   const chatEndRef = useRef<HTMLDivElement>(null);
+
+  // Real-time status polling
+  const bargainStatus = useBargainStatus({
+    sessionId,
+    enabled: currentStep === 'holding',
+    onStateChange: (status) => {
+      console.log('Bargain status changed:', status);
+    },
+    onExpired: () => {
+      setCurrentStep('failed');
+      setError('Hold expired');
+    },
+    onBooked: (orderRef, finalPrice) => {
+      setCurrentStep('success');
+      onBargainSuccess(finalPrice, orderRef);
+    }
+  });
+
+  // Countdown timer for holds
+  const countdown = useCountdown(30, () => {
+    setCurrentStep('success');
+    if (holdData) {
+      onBargainSuccess(holdData.finalPrice, holdData.orderRef);
+    }
+  });
   const { selectedCurrency } = useCurrency();
 
   // Module-specific icons and colors
