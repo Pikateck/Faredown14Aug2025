@@ -212,12 +212,14 @@ export default function Index() {
 
   // Debug: Monitor dropdown state changes
   useEffect(() => {
+    console.log('=== DROPDOWN STATE DEBUG ===');
     console.log('showFromCities changed:', showFromCities);
-  }, [showFromCities]);
-
-  useEffect(() => {
     console.log('showToCities changed:', showToCities);
-  }, [showToCities]);
+    console.log('selectedFromCity:', selectedFromCity);
+    console.log('selectedToCity:', selectedToCity);
+    console.log('cityData:', cityData);
+    console.log('============================');
+  }, [showFromCities, showToCities, selectedFromCity, selectedToCity]);
   // Airport state for CityAutocomplete
   const [fromAirport, setFromAirport] = useState<Airport | null>(null);
   const [toAirport, setToAirport] = useState<Airport | null>(null);
