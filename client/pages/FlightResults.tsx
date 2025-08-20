@@ -1490,6 +1490,78 @@ export default function FlightResults() {
     }, 150);
   };
 
+  // Bargain Dock Functions
+  const handleStartBargain = (flight: (typeof flightData)[0], fareType: any, userOffer: number) => {
+    // Check if there's already an active session for a different product
+    if (bargainSession && bargainSession.productRef !== flight.id.toString()) {
+      // Show switch prompt
+      const confirmed = window.confirm(
+        `You have an active bargain session for another flight. Switch bargain to this offer?`
+      );
+      if (!confirmed) return;
+    }
+
+    // Create session
+    const session = {
+      sessionId: `session_${Date.now()}_${flight.id}`,
+      module: 'flights' as const,
+      productRef: flight.id.toString(),
+      userOffer,
+      productDetails: {
+        title: `${flight.airline} ${flight.flightNumber}`,
+        subtitle: `${flight.departureCode} → ${flight.arrivalCode}`,
+        basePrice: fareType.price,
+        airline: flight.airline,
+        flightNo: flight.flightNumber,
+        route: {
+          from: flight.departureCode,
+          to: flight.arrivalCode
+        }
+      }
+    };
+
+    setBargainSession(session);
+
+    // Show appropriate UI
+    if (isMobile) {
+      setShowBargainBottomSheet(true);
+    } else {
+      setShowBargainDock(true);
+    }
+  };
+
+  const handleBargainAccept = (finalPrice: number, orderRef: string) => {
+    console.log('Bargain accepted:', finalPrice, orderRef);
+
+    // Navigate to booking with accepted price
+    if (bargainSession && bargainFlight && bargainFareType) {
+      const updatedFareType = { ...bargainFareType, price: finalPrice };
+      navigate("/booking-flow", {
+        state: {
+          selectedFlight: bargainFlight,
+          selectedFareType: updatedFareType,
+          negotiatedPrice: finalPrice,
+          orderRef,
+          passengers: { adults, children },
+        },
+      });
+    }
+
+    // Close bargain UI
+    handleCloseBargain();
+  };
+
+  const handleBargainRetry = () => {
+    // Keep the same session but restart negotiation
+    console.log('Retrying bargain for session:', bargainSession?.sessionId);
+  };
+
+  const handleCloseBargain = () => {
+    setBargainSession(null);
+    setShowBargainDock(false);
+    setShowBargainBottomSheet(false);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 pb-16 md:pb-0">
       {/* MOBILE-FIRST DESIGN: App-style header for mobile, standard for desktop */}
