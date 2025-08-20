@@ -24,7 +24,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { formatPriceNoDecimals } from "@/lib/formatPrice";
-import { getCopyVariant } from "@/utils/copyVariants";
+import { getCopyVariantWithCurrency, getBrandString } from "@/utils/copyVariants";
 
 interface ChatBeat {
   id: string;
