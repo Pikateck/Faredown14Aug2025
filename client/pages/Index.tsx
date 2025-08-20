@@ -1042,13 +1042,15 @@ export default function Index() {
                 <div className="flex items-center space-x-3">
                   <div className="flex-1">
                     <button
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
                         console.log('From button clicked, current state:', showFromCities);
-                        alert('From button clicked!');
                         setShowFromCities(true);
                         console.log('State should now be true');
                       }}
-                      className="w-full text-left"
+                      className="w-full text-left touch-manipulation"
+                      style={{ WebkitTapHighlightColor: 'transparent' }}
                     >
                       <div className="text-xs text-gray-500 mb-1">From</div>
                       <div className="flex items-center space-x-2">
