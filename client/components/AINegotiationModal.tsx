@@ -481,7 +481,7 @@ export function AINegotiationModal({
                   <p className="text-sm">{beat.message}</p>
                 </div>
                 <p className="text-xs text-gray-500 mt-1">
-                  {beat.type === 'agent' ? 'Faredown AI' : moduleConfig.supplierName}
+                  {beat.type === 'agent' ? getBrandString('aiName') : moduleConfig.supplierName}
                 </p>
               </div>
             </div>
