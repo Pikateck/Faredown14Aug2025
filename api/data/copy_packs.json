@@ -347,19 +347,19 @@
         ],
         "3": [
           {
-            "text": "Last slot approved at ₹{counter}. Hold for 30s?",
+            "text": "Final opportunity, {user_title}! Last slot approved at ₹{counter}. Hold for 30s?",
             "w": 4
           },
           {
-            "text": "Final call—₹{counter} approved. Lock it for 30s now?",
+            "text": "Last call, {user_name}—₹{counter} approved. Lock it for 30s now?",
             "w": 3
           },
           {
-            "text": "This is it—₹{counter} secured. 30s hold to finalize?",
+            "text": "This is it, {user_title}—₹{counter} secured. 30s hold to finalize?",
             "w": 2
           },
           {
-            "text": "Time-sensitive: ₹{counter} approved. Hold now for 30s?",
+            "text": "Time-sensitive, {user_name}: ₹{counter} approved. Hold now for 30s?",
             "w": 1
           }
         ],
@@ -1254,7 +1254,7 @@
             "w": 1
           },
           {
-            "text": "Regular rate ₹{base}. Looking at overrides…",
+            "text": "Regular rate ₹{base}. Looking at overrides��",
             "w": 1
           },
           {
