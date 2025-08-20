@@ -271,7 +271,8 @@ export function FlightBargainModal({
                     AI Assistant
                   </p>
                   <p className="text-sm text-gray-600">
-                    Tell me your target price and I'll negotiate with the airline!
+                    Tell me your target price and I'll negotiate with the
+                    airline!
                   </p>
                 </div>
               </div>
@@ -293,7 +294,9 @@ export function FlightBargainModal({
                           Invalid Price!
                         </h4>
                         <p className="text-red-700 text-sm font-medium">
-                          {usedPrices.has(`${flight.id}-${parseInt(bargainPrice)}`)
+                          {usedPrices.has(
+                            `${flight.id}-${parseInt(bargainPrice)}`,
+                          )
                             ? "You've already tried this exact price! Please enter a different amount."
                             : "Please enter a price lower than the current price to start negotiation!"}
                         </p>
@@ -315,7 +318,10 @@ export function FlightBargainModal({
                       bargainPrice ? formatNumberWithCommas(bargainPrice) : ""
                     }
                     onChange={(e) => {
-                      const numericValue = e.target.value.replace(/[^0-9]/g, "");
+                      const numericValue = e.target.value.replace(
+                        /[^0-9]/g,
+                        "",
+                      );
                       setBargainPrice(numericValue);
                       if (duplicatePriceError) {
                         setDuplicatePriceError(false);
@@ -367,7 +373,9 @@ export function FlightBargainModal({
                   AI Price Negotiator
                 </h3>
                 <div className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded">
-                  {bargainState.negotiationProgress < 100 ? "Negotiating..." : "Negotiated in 8.2s"}
+                  {bargainState.negotiationProgress < 100
+                    ? "Negotiating..."
+                    : "Negotiated in 8.2s"}
                 </div>
               </div>
 
@@ -386,7 +394,8 @@ export function FlightBargainModal({
                 <div className="flex-1">
                   <div className="bg-blue-500 text-white p-3 rounded-lg max-w-[280px]">
                     <p className="text-sm">
-                      We have {formatPrice(parseInt(bargainPrice || "0"))} for {flight?.airline} {flight?.flightNumber}. Can you approve?
+                      We have {formatPrice(parseInt(bargainPrice || "0"))} for{" "}
+                      {flight?.airline} {flight?.flightNumber}. Can you approve?
                     </p>
                   </div>
                   <p className="text-xs text-gray-500 mt-1">Faredown AI</p>
@@ -402,10 +411,13 @@ export function FlightBargainModal({
                   <div className="flex-1">
                     <div className="bg-white border shadow-sm p-3 rounded-lg max-w-[280px]">
                       <p className="text-sm">
-                        Listed at {formatPrice(flight?.price?.amount || 0)}. Checking now…
+                        Listed at {formatPrice(flight?.price?.amount || 0)}.
+                        Checking now…
                       </p>
                     </div>
-                    <p className="text-xs text-gray-500 mt-1">{flight?.airline}</p>
+                    <p className="text-xs text-gray-500 mt-1">
+                      {flight?.airline}
+                    </p>
                   </div>
                 </div>
               )}
@@ -419,10 +431,16 @@ export function FlightBargainModal({
                   <div className="flex-1">
                     <div className="bg-white border shadow-sm p-3 rounded-lg max-w-[280px]">
                       <p className="text-sm">
-                        I can do {formatPrice(Math.round((flight?.price?.amount || 0) * 0.85))}.
+                        I can do{" "}
+                        {formatPrice(
+                          Math.round((flight?.price?.amount || 0) * 0.85),
+                        )}
+                        .
                       </p>
                     </div>
-                    <p className="text-xs text-gray-500 mt-1">{flight?.airline}</p>
+                    <p className="text-xs text-gray-500 mt-1">
+                      {flight?.airline}
+                    </p>
                   </div>
                 </div>
               )}
@@ -435,7 +453,9 @@ export function FlightBargainModal({
                   </div>
                   <div className="flex-1">
                     <div className="bg-blue-500 text-white p-3 rounded-lg max-w-[280px]">
-                      <p className="text-sm">Let me check with you if you want it.</p>
+                      <p className="text-sm">
+                        Let me check with you if you want it.
+                      </p>
                     </div>
                     <p className="text-xs text-gray-500 mt-1">Faredown AI</p>
                   </div>
@@ -447,17 +467,25 @@ export function FlightBargainModal({
             {bargainState.negotiationProgress < 100 && (
               <div className="bg-white rounded-lg p-3 border">
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm font-medium text-gray-700">Negotiation Progress</span>
-                  <span className="text-sm font-medium text-gray-700">{bargainState.negotiationProgress}%</span>
+                  <span className="text-sm font-medium text-gray-700">
+                    Negotiation Progress
+                  </span>
+                  <span className="text-sm font-medium text-gray-700">
+                    {bargainState.negotiationProgress}%
+                  </span>
                 </div>
-                <Progress value={bargainState.negotiationProgress} className="h-2" />
+                <Progress
+                  value={bargainState.negotiationProgress}
+                  className="h-2"
+                />
               </div>
             )}
           </div>
         );
 
       case "counter_offer":
-        const savings = flight.price.amount - (bargainState.currentCounterOffer || 0);
+        const savings =
+          flight.price.amount - (bargainState.currentCounterOffer || 0);
         return (
           <>
             <div className="text-center">
@@ -465,7 +493,8 @@ export function FlightBargainModal({
                 AI Counter Offer!
               </h3>
               <p className="text-gray-600 mb-1 text-lg">
-                The airline couldn't match your price, but here's their best offer!
+                The airline couldn't match your price, but here's their best
+                offer!
               </p>
             </div>
 
@@ -495,7 +524,8 @@ export function FlightBargainModal({
                 disabled={bargainState.timeRemaining === 0}
                 className="w-full bg-gradient-to-r from-[#003580] to-[#0071c2] hover:from-[#002d6b] hover:to-[#005a9f] active:from-[#002447] active:to-[#004687] text-white py-5 text-xl font-bold rounded-xl shadow-lg active:shadow-md transition-all touch-manipulation min-h-[52px]"
               >
-                Accept Offer - {formatPrice(bargainState.currentCounterOffer || 0)}
+                Accept Offer -{" "}
+                {formatPrice(bargainState.currentCounterOffer || 0)}
               </Button>
 
               <Button

@@ -2,14 +2,14 @@ import React, { useEffect, useRef, useState } from "react";
 import { Shield } from "lucide-react";
 
 type DecisionCardProps = {
-  price: number;                 // e.g., 21581
-  negotiatedMs: number;          // e.g., 1250 -> "Negotiated in 1.2s"
-  attempt: 1 | 2 | 3;            // to vary copy
+  price: number; // e.g., 21581
+  negotiatedMs: number; // e.g., 1250 -> "Negotiated in 1.2s"
+  attempt: 1 | 2 | 3; // to vary copy
   onAccept: () => void;
   onBargainAgain: () => void;
-  onExpire: () => void;          // called when countdown hits 0
-  holdSeconds?: number;          // default 30
-  userName?: string;             // for personalization
+  onExpire: () => void; // called when countdown hits 0
+  holdSeconds?: number; // default 30
+  userName?: string; // for personalization
 };
 
 export default function DecisionCard({
@@ -47,7 +47,11 @@ export default function DecisionCard({
 
         // Announce countdown every 5 seconds for accessibility
         const newValue = s - 1;
-        if (newValue % 5 === 0 && newValue !== lastAnnounced && newValue <= 15) {
+        if (
+          newValue % 5 === 0 &&
+          newValue !== lastAnnounced &&
+          newValue <= 15
+        ) {
           setLastAnnounced(newValue);
         }
 
@@ -60,21 +64,29 @@ export default function DecisionCard({
     };
   }, [onExpire]);
 
-  const negotiatedSecs = Math.max(0.1, Math.round((negotiatedMs / 1000) * 10) / 10).toFixed(1);
+  const negotiatedSecs = Math.max(
+    0.1,
+    Math.round((negotiatedMs / 1000) * 10) / 10,
+  ).toFixed(1);
 
-  const userGreeting = userName ? `${userName}, ` : '';
+  const userGreeting = userName ? `${userName}, ` : "";
   const ctasByAttempt: Record<1 | 2 | 3, { headline: string; sub?: string }> = {
-    1: { headline: `Good news, ${userGreeting}approved at ₹${price.toLocaleString("en-IN")}. Shall I hold it for 30s?` },
-    2: { headline: `Great news, ${userGreeting}approved at ₹${price.toLocaleString("en-IN")}. Secure it now?` },
-    3: { headline: `Final opportunity, ${userGreeting}last slot at ₹${price.toLocaleString("en-IN")}. Hold for 30s?`, sub: `Demand is rising quickly.` },
+    1: {
+      headline: `Good news, ${userGreeting}approved at ₹${price.toLocaleString("en-IN")}. Shall I hold it for 30s?`,
+    },
+    2: {
+      headline: `Great news, ${userGreeting}approved at ₹${price.toLocaleString("en-IN")}. Secure it now?`,
+    },
+    3: {
+      headline: `Final opportunity, ${userGreeting}last slot at ₹${price.toLocaleString("en-IN")}. Hold for 30s?`,
+      sub: `Demand is rising quickly.`,
+    },
   };
 
   return (
     <div
-      className={
-        `rounded-xl border border-slate-200 bg-white shadow-lg p-5 transition-all duration-150 ease-out
-         ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-1"}`
-      }
+      className={`rounded-xl border border-slate-200 bg-white shadow-lg p-5 transition-all duration-150 ease-out
+         ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-1"}`}
       role="dialog"
       aria-labelledby="decision-title"
     >
@@ -82,12 +94,19 @@ export default function DecisionCard({
         Negotiated in {negotiatedSecs}s
       </div>
 
-      <h3 id="decision-title" className="text-2xl font-semibold tracking-tight text-gray-900">
+      <h3
+        id="decision-title"
+        className="text-2xl font-semibold tracking-tight text-gray-900"
+      >
         ₹{price.toLocaleString("en-IN")}
       </h3>
-      <p className="mt-1 text-sm text-slate-600">{ctasByAttempt[attempt].headline}</p>
+      <p className="mt-1 text-sm text-slate-600">
+        {ctasByAttempt[attempt].headline}
+      </p>
       {ctasByAttempt[attempt].sub && (
-        <p className="text-xs text-slate-500 mt-0.5">{ctasByAttempt[attempt].sub}</p>
+        <p className="text-xs text-slate-500 mt-0.5">
+          {ctasByAttempt[attempt].sub}
+        </p>
       )}
 
       {/* progress bar */}
@@ -100,20 +119,19 @@ export default function DecisionCard({
 
       <div className="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg">
         <div className="flex items-center justify-between">
-          <span className="text-red-700 font-medium text-sm">⏰ Offer expires in:</span>
+          <span className="text-red-700 font-medium text-sm">
+            ⏰ Offer expires in:
+          </span>
           <span className="font-bold text-xl text-red-600">{secondsLeft}s</span>
         </div>
       </div>
 
       {/* Accessibility - Screen reader announcements */}
-      <div
-        aria-live="polite"
-        aria-atomic="true"
-        className="sr-only"
-      >
-        {lastAnnounced === secondsLeft && secondsLeft <= 15 && secondsLeft > 0 && (
-          `Offer expires in ${secondsLeft} seconds`
-        )}
+      <div aria-live="polite" aria-atomic="true" className="sr-only">
+        {lastAnnounced === secondsLeft &&
+          secondsLeft <= 15 &&
+          secondsLeft > 0 &&
+          `Offer expires in ${secondsLeft} seconds`}
       </div>
 
       <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">

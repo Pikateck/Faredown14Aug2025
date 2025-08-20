@@ -42,9 +42,9 @@ class APITracer {
     };
 
     this.traces.set(id, trace);
-    
+
     // Log in development
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === "development") {
       console.log(`🚀 API Request: ${method} ${url} [${id}]`);
     }
 
@@ -59,7 +59,7 @@ class APITracer {
     status: number,
     error?: Error,
     responseSize?: number,
-    cacheHit: boolean = false
+    cacheHit: boolean = false,
   ): void {
     const trace = this.traces.get(id);
     if (!trace) return;
@@ -86,21 +86,23 @@ class APITracer {
     }
 
     // Log performance in development
-    if (process.env.NODE_ENV === 'development') {
-      const statusEmoji = status >= 200 && status < 300 ? '✅' : '❌';
-      const cacheEmoji = cacheHit ? '💾' : '';
+    if (process.env.NODE_ENV === "development") {
+      const statusEmoji = status >= 200 && status < 300 ? "✅" : "❌";
+      const cacheEmoji = cacheHit ? "💾" : "";
       console.log(
-        `${statusEmoji} API Response: ${trace.method} ${trace.url} [${id}] - ${duration.toFixed(1)}ms ${cacheEmoji}`
+        `${statusEmoji} API Response: ${trace.method} ${trace.url} [${id}] - ${duration.toFixed(1)}ms ${cacheEmoji}`,
       );
 
       // Warn about slow requests
       if (duration > this.slowQueryThreshold) {
-        console.warn(`🐌 Slow API request detected: ${duration.toFixed(1)}ms - ${trace.method} ${trace.url}`);
+        console.warn(
+          `🐌 Slow API request detected: ${duration.toFixed(1)}ms - ${trace.method} ${trace.url}`,
+        );
       }
     }
 
     // In production, send to monitoring service
-    if (process.env.NODE_ENV === 'production') {
+    if (process.env.NODE_ENV === "production") {
       this.sendToMonitoring(completedTrace);
     }
   }
@@ -109,7 +111,9 @@ class APITracer {
    * Get performance metrics
    */
   getMetrics(): PerformanceMetrics {
-    const validTraces = this.completedTraces.filter(t => t.duration !== undefined);
+    const validTraces = this.completedTraces.filter(
+      (t) => t.duration !== undefined,
+    );
     const totalRequests = validTraces.length;
 
     if (totalRequests === 0) {
@@ -122,10 +126,16 @@ class APITracer {
       };
     }
 
-    const averageResponseTime = validTraces.reduce((sum, t) => sum + (t.duration || 0), 0) / totalRequests;
-    const errorCount = validTraces.filter(t => t.error || (t.status && t.status >= 400)).length;
-    const cacheHits = validTraces.filter(t => t.cacheHit).length;
-    const slowQueries = validTraces.filter(t => (t.duration || 0) > this.slowQueryThreshold);
+    const averageResponseTime =
+      validTraces.reduce((sum, t) => sum + (t.duration || 0), 0) /
+      totalRequests;
+    const errorCount = validTraces.filter(
+      (t) => t.error || (t.status && t.status >= 400),
+    ).length;
+    const cacheHits = validTraces.filter((t) => t.cacheHit).length;
+    const slowQueries = validTraces.filter(
+      (t) => (t.duration || 0) > this.slowQueryThreshold,
+    );
 
     return {
       averageResponseTime,
@@ -142,7 +152,6 @@ class APITracer {
   private sendToMonitoring(trace: RequestTrace): void {
     // Placeholder for production monitoring integration
     // Examples: DataDog, New Relic, Sentry Performance, etc.
-    
     // Example payload:
     // {
     //   timestamp: Date.now(),
@@ -174,19 +183,19 @@ export async function tracedFetch(
   url: string,
   options: RequestInit = {},
   cacheKey?: string,
-  cacheTimeMs: number = 300000 // 5 minutes default
+  cacheTimeMs: number = 300000, // 5 minutes default
 ): Promise<Response> {
-  const method = options.method || 'GET';
+  const method = options.method || "GET";
   const traceId = apiTracer.startTrace(method, url);
 
   // Simple in-memory cache for GET requests
-  if (method.toUpperCase() === 'GET' && cacheKey) {
+  if (method.toUpperCase() === "GET" && cacheKey) {
     const cached = getCachedResponse(cacheKey);
     if (cached) {
       apiTracer.endTrace(traceId, 200, undefined, undefined, true);
       return new Response(JSON.stringify(cached.data), {
         status: 200,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
       });
     }
   }
@@ -196,20 +205,29 @@ export async function tracedFetch(
     const response = await fetch(url, {
       ...options,
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         ...options.headers,
       },
     });
 
-    const responseSize = parseInt(response.headers.get('content-length') || '0', 10);
+    const responseSize = parseInt(
+      response.headers.get("content-length") || "0",
+      10,
+    );
 
     // Cache successful GET responses
-    if (method.toUpperCase() === 'GET' && response.ok && cacheKey) {
+    if (method.toUpperCase() === "GET" && response.ok && cacheKey) {
       const data = await response.clone().json();
       setCachedResponse(cacheKey, data, cacheTimeMs);
     }
 
-    apiTracer.endTrace(traceId, response.status, undefined, responseSize, false);
+    apiTracer.endTrace(
+      traceId,
+      response.status,
+      undefined,
+      responseSize,
+      false,
+    );
     return response;
   } catch (error) {
     apiTracer.endTrace(traceId, 0, error as Error);
@@ -265,7 +283,7 @@ export function getCacheStats() {
   const now = Date.now();
   const entries = Array.from(cache.entries());
   const validEntries = entries.filter(([, entry]) => now <= entry.expiresAt);
-  
+
   return {
     totalEntries: cache.size,
     validEntries: validEntries.length,

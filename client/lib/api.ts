@@ -188,7 +188,7 @@ class ApiClient {
           signal: controller.signal,
         },
         `get-${endpoint}-${JSON.stringify(params)}`, // cache key
-        300000 // 5 minute cache
+        300000, // 5 minute cache
       );
 
       clearTimeout(timeoutId);
@@ -255,7 +255,7 @@ class ApiClient {
           headers: this.getHeaders(customHeaders),
           body: data ? JSON.stringify(data) : undefined,
           signal: controller.signal,
-        }
+        },
         // No caching for POST requests
       );
 

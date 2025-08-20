@@ -14,18 +14,14 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  DollarSign,
-  Sparkles,
-  X,
-} from "lucide-react";
+import { DollarSign, Sparkles, X } from "lucide-react";
 import { formatPriceNoDecimals } from "@/lib/formatPrice";
 import { AINegotiationChat } from "@/components/AINegotiationChat";
 import {
   useAIBargain,
   createFlightBargainDetails,
   createHotelBargainDetails,
-  createSightseeingBargainDetails
+  createSightseeingBargainDetails,
 } from "@/hooks/useAIBargain";
 
 interface BargainModalPhase1Props {
@@ -92,12 +88,12 @@ export default function BargainModalPhase1({
   // Setup success/failure callbacks
   useEffect(() => {
     bargainHook.setSuccessCallback((finalPrice: number, orderRef: string) => {
-      console.log('Phase1 bargain success:', finalPrice, orderRef);
+      console.log("Phase1 bargain success:", finalPrice, orderRef);
       onBookingConfirmed(finalPrice);
     });
 
     bargainHook.setFailureCallback(() => {
-      console.log('Phase1 bargain failed');
+      console.log("Phase1 bargain failed");
       setShowAIChat(false);
     });
   }, [onBookingConfirmed]);
@@ -117,30 +113,30 @@ export default function BargainModalPhase1({
     let productDetails;
 
     switch (itemDetails.type) {
-      case 'flight':
+      case "flight":
         productDetails = createFlightBargainDetails({
           id: itemDetails.itemId,
           totalPrice: itemDetails.basePrice,
           airline: itemDetails.airline,
-          flightNumber: itemDetails.flightNo || '',
-          departure: { iataCode: itemDetails.route?.from || '' },
-          arrival: { iataCode: itemDetails.route?.to || '' }
+          flightNumber: itemDetails.flightNo || "",
+          departure: { iataCode: itemDetails.route?.from || "" },
+          arrival: { iataCode: itemDetails.route?.to || "" },
         });
         break;
-      case 'hotel':
+      case "hotel":
         productDetails = createHotelBargainDetails({
           id: itemDetails.itemId,
           name: itemDetails.hotelName || itemDetails.title,
           totalPrice: itemDetails.basePrice,
-          city: itemDetails.city || ''
+          city: itemDetails.city || "",
         });
         break;
-      case 'sightseeing':
+      case "sightseeing":
         productDetails = createSightseeingBargainDetails({
           id: itemDetails.itemId,
           name: itemDetails.activityName || itemDetails.title,
           price: itemDetails.basePrice,
-          location: itemDetails.location || itemDetails.city || ''
+          location: itemDetails.location || itemDetails.city || "",
         });
         break;
       default:
@@ -152,7 +148,7 @@ export default function BargainModalPhase1({
 
     // Start AI bargain
     bargainHook.startBargain({
-      module: itemDetails.type as 'flights' | 'hotels' | 'sightseeing',
+      module: itemDetails.type as "flights" | "hotels" | "sightseeing",
       title: `${itemDetails.title} - AI Bargain`,
       productDetails,
       userOffer: offerPrice,
@@ -187,7 +183,8 @@ export default function BargainModalPhase1({
               </Button>
             </div>
             <DialogDescription>
-              {itemDetails.title} • Enter your target price to start AI negotiation
+              {itemDetails.title} • Enter your target price to start AI
+              negotiation
             </DialogDescription>
           </DialogHeader>
 
@@ -219,24 +216,30 @@ export default function BargainModalPhase1({
                 </div>
               </div>
 
-              {userOfferPrice && parseFloat(userOfferPrice) >= itemDetails.basePrice && (
-                <p className="text-sm text-red-600">
-                  Target price must be lower than current price
-                </p>
-              )}
+              {userOfferPrice &&
+                parseFloat(userOfferPrice) >= itemDetails.basePrice && (
+                  <p className="text-sm text-red-600">
+                    Target price must be lower than current price
+                  </p>
+                )}
 
               {userOfferPrice &&
                 parseFloat(userOfferPrice) > 0 &&
                 parseFloat(userOfferPrice) < itemDetails.basePrice && (
                   <p className="text-sm text-green-600">
-                    Potential savings: {formatPriceNoDecimals(itemDetails.basePrice - parseFloat(userOfferPrice))}
+                    Potential savings:{" "}
+                    {formatPriceNoDecimals(
+                      itemDetails.basePrice - parseFloat(userOfferPrice),
+                    )}
                   </p>
                 )}
 
               <div className="bg-yellow-50 p-3 rounded-lg">
                 <p className="text-sm text-yellow-800">
                   <strong>AI Suggestion:</strong> Try offering around{" "}
-                  {formatPriceNoDecimals(Math.round(itemDetails.basePrice * 0.8))}
+                  {formatPriceNoDecimals(
+                    Math.round(itemDetails.basePrice * 0.8),
+                  )}
                 </p>
               </div>
 

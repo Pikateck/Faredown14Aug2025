@@ -39,14 +39,18 @@ const HotelResults = lazy(() => import("./pages/HotelResults"));
 const HotelDetails = lazy(() => import("./pages/HotelDetails"));
 const HotelBooking = lazy(() => import("./pages/HotelBooking"));
 const ReservationPage = lazy(() => import("./pages/ReservationPage"));
-const HotelBookingConfirmation = lazy(() => import("./pages/HotelBookingConfirmation"));
+const HotelBookingConfirmation = lazy(
+  () => import("./pages/HotelBookingConfirmation"),
+);
 const BookingVoucher = lazy(() => import("./pages/BookingVoucher"));
 const BookingInvoice = lazy(() => import("./pages/BookingInvoice"));
 const Bookings = lazy(() => import("./pages/Bookings"));
 const SightseeingResults = lazy(() => import("./pages/SightseeingResults"));
 const SightseeingDetails = lazy(() => import("./pages/SightseeingDetails"));
 const SightseeingBooking = lazy(() => import("./pages/SightseeingBooking"));
-const SightseeingBookingConfirmation = lazy(() => import("./pages/SightseeingBookingConfirmation"));
+const SightseeingBookingConfirmation = lazy(
+  () => import("./pages/SightseeingBookingConfirmation"),
+);
 const SportsEvents = lazy(() => import("./pages/SportsEvents"));
 const Transfers = lazy(() => import("./pages/Transfers"));
 const TransferResults = lazy(() => import("./pages/TransferResults"));
@@ -100,191 +104,236 @@ function App() {
     <div className="App">
       <ErrorBoundary>
         <AuthProvider>
-        <CurrencyProvider>
-          <DateProvider>
-            <LoyaltyProvider>
-              <Router>
-                <Suspense fallback={<PageLoadingSpinner />}>
-                  <Routes>
-                  {/* Original Web Routes */}
-                  <Route path="/" element={<Index />} />
-                  <Route
-                    path="/flights"
-                    element={<Navigate to="/?tab=flights" replace />}
-                  />
-                  <Route path="/flights/results" element={<FlightResults />} />
-                  <Route
-                    path="/flight-details/:flightId"
-                    element={<FlightDetails />}
-                  />
-                  <Route path="/booking-flow" element={<BookingFlow />} />
-                  <Route path="/booking" element={<Booking />} />
-                  <Route
-                    path="/booking-confirmation"
-                    element={<BookingConfirmation />}
-                  />
-                  <Route path="/account" element={<Account />} />
-                  <Route path="/my-account" element={<Account />} />
-                  <Route path="/account/trips" element={<MyTrips />} />
-                  <Route path="/account/payment" element={<Account />} />
-                  <Route path="/saved" element={<Saved />} />
-                  <Route path="/hotels" element={<Hotels />} />
-                  <Route path="/hotels/results" element={<HotelResults />} />
-                  <Route path="/hotels/:hotelId" element={<HotelDetails />} />
-                  <Route path="/hotels/booking" element={<HotelBooking />} />
-                  <Route
-                    path="/booking/hotel"
-                    element={<HotelBookingConfirmation />}
-                  />
-                  <Route path="/reserve" element={<ReservationPage />} />
-                  <Route
-                    path="/booking-confirmation"
-                    element={<HotelBookingConfirmation />}
-                  />
-                  <Route
-                    path="/booking/confirmation/:bookingRef"
-                    element={<BookingConfirmation />}
-                  />
-                  <Route path="/booking-voucher" element={<BookingVoucher />} />
-                  <Route path="/booking-invoice" element={<BookingInvoice />} />
-                  <Route path="/bookings" element={<Bookings />} />
-                  <Route
-                    path="/sightseeing"
-                    element={<Navigate to="/?tab=sightseeing" replace />}
-                  />
-                  <Route
-                    path="/sightseeing/results"
-                    element={<SightseeingResults />}
-                  />
-                  <Route
-                    path="/sightseeing/:attractionId"
-                    element={<SightseeingDetails />}
-                  />
-                  <Route
-                    path="/sightseeing/booking"
-                    element={<SightseeingBooking />}
-                  />
-                  <Route
-                    path="/sightseeing/booking/confirmation"
-                    element={<SightseeingBookingConfirmation />}
-                  />
-                  <Route path="/sports" element={<SportsEvents />} />
-                  <Route path="/sports-events" element={<SportsEvents />} />
-                  <Route path="/transfers" element={<Transfers />} />
-                  <Route
-                    path="/transfer-results"
-                    element={<TransferResults />}
-                  />
-                  <Route
-                    path="/transfer-details/:id"
-                    element={<TransferDetails />}
-                  />
-                  <Route
-                    path="/transfer-booking"
-                    element={<TransferBooking />}
-                  />
-                  <Route
-                    path="/transfer-confirmation"
-                    element={<TransferConfirmation />}
-                  />
-                  <Route path="/help" element={<HelpCenter />} />
-                  <Route path="/help-center" element={<HelpCenter />} />
-                  <Route path="/support" element={<HelpCenter />} />
-                  <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                  <Route
-                    path="/terms-conditions"
-                    element={<TermsConditions />}
-                  />
-                  <Route path="/refund-policy" element={<RefundPolicy />} />
-                  <Route path="/cookie-policy" element={<CookiePolicy />} />
-                  <Route path="/my-trips" element={<MyTrips />} />
+          <CurrencyProvider>
+            <DateProvider>
+              <LoyaltyProvider>
+                <Router>
+                  <Suspense fallback={<PageLoadingSpinner />}>
+                    <Routes>
+                      {/* Original Web Routes */}
+                      <Route path="/" element={<Index />} />
+                      <Route
+                        path="/flights"
+                        element={<Navigate to="/?tab=flights" replace />}
+                      />
+                      <Route
+                        path="/flights/results"
+                        element={<FlightResults />}
+                      />
+                      <Route
+                        path="/flight-details/:flightId"
+                        element={<FlightDetails />}
+                      />
+                      <Route path="/booking-flow" element={<BookingFlow />} />
+                      <Route path="/booking" element={<Booking />} />
+                      <Route
+                        path="/booking-confirmation"
+                        element={<BookingConfirmation />}
+                      />
+                      <Route path="/account" element={<Account />} />
+                      <Route path="/my-account" element={<Account />} />
+                      <Route path="/account/trips" element={<MyTrips />} />
+                      <Route path="/account/payment" element={<Account />} />
+                      <Route path="/saved" element={<Saved />} />
+                      <Route path="/hotels" element={<Hotels />} />
+                      <Route
+                        path="/hotels/results"
+                        element={<HotelResults />}
+                      />
+                      <Route
+                        path="/hotels/:hotelId"
+                        element={<HotelDetails />}
+                      />
+                      <Route
+                        path="/hotels/booking"
+                        element={<HotelBooking />}
+                      />
+                      <Route
+                        path="/booking/hotel"
+                        element={<HotelBookingConfirmation />}
+                      />
+                      <Route path="/reserve" element={<ReservationPage />} />
+                      <Route
+                        path="/booking-confirmation"
+                        element={<HotelBookingConfirmation />}
+                      />
+                      <Route
+                        path="/booking/confirmation/:bookingRef"
+                        element={<BookingConfirmation />}
+                      />
+                      <Route
+                        path="/booking-voucher"
+                        element={<BookingVoucher />}
+                      />
+                      <Route
+                        path="/booking-invoice"
+                        element={<BookingInvoice />}
+                      />
+                      <Route path="/bookings" element={<Bookings />} />
+                      <Route
+                        path="/sightseeing"
+                        element={<Navigate to="/?tab=sightseeing" replace />}
+                      />
+                      <Route
+                        path="/sightseeing/results"
+                        element={<SightseeingResults />}
+                      />
+                      <Route
+                        path="/sightseeing/:attractionId"
+                        element={<SightseeingDetails />}
+                      />
+                      <Route
+                        path="/sightseeing/booking"
+                        element={<SightseeingBooking />}
+                      />
+                      <Route
+                        path="/sightseeing/booking/confirmation"
+                        element={<SightseeingBookingConfirmation />}
+                      />
+                      <Route path="/sports" element={<SportsEvents />} />
+                      <Route path="/sports-events" element={<SportsEvents />} />
+                      <Route path="/transfers" element={<Transfers />} />
+                      <Route
+                        path="/transfer-results"
+                        element={<TransferResults />}
+                      />
+                      <Route
+                        path="/transfer-details/:id"
+                        element={<TransferDetails />}
+                      />
+                      <Route
+                        path="/transfer-booking"
+                        element={<TransferBooking />}
+                      />
+                      <Route
+                        path="/transfer-confirmation"
+                        element={<TransferConfirmation />}
+                      />
+                      <Route path="/help" element={<HelpCenter />} />
+                      <Route path="/help-center" element={<HelpCenter />} />
+                      <Route path="/support" element={<HelpCenter />} />
+                      <Route
+                        path="/privacy-policy"
+                        element={<PrivacyPolicy />}
+                      />
+                      <Route
+                        path="/terms-conditions"
+                        element={<TermsConditions />}
+                      />
+                      <Route path="/refund-policy" element={<RefundPolicy />} />
+                      <Route path="/cookie-policy" element={<CookiePolicy />} />
+                      <Route path="/my-trips" element={<MyTrips />} />
 
-                  {/* Development/Testing Routes */}
-                  <Route path="/api-test" element={<ApiTestPanel />} />
-                  <Route
-                    path="/backend-test"
-                    element={<BackendTestDashboard />}
-                  />
-                  <Route path="/amadeus-test" element={<AmadeusTestPanel />} />
-                  <Route
-                    path="/api-integration-test"
-                    element={<ApiIntegrationTest />}
-                  />
-                  <Route
-                    path="/bargain-error-test"
-                    element={<BargainErrorTest />}
-                  />
-                  <Route path="/logo-designs" element={<LogoDesignOptions />} />
-                  <Route
-                    path="/color-palette"
-                    element={<FaredownColorPalette />}
-                  />
+                      {/* Development/Testing Routes */}
+                      <Route path="/api-test" element={<ApiTestPanel />} />
+                      <Route
+                        path="/backend-test"
+                        element={<BackendTestDashboard />}
+                      />
+                      <Route
+                        path="/amadeus-test"
+                        element={<AmadeusTestPanel />}
+                      />
+                      <Route
+                        path="/api-integration-test"
+                        element={<ApiIntegrationTest />}
+                      />
+                      <Route
+                        path="/bargain-error-test"
+                        element={<BargainErrorTest />}
+                      />
+                      <Route
+                        path="/logo-designs"
+                        element={<LogoDesignOptions />}
+                      />
+                      <Route
+                        path="/color-palette"
+                        element={<FaredownColorPalette />}
+                      />
 
-                  {/* Admin CMS Routes */}
-                  <Route path="/admin/login" element={<AdminLogin />} />
-                  <Route path="/admin" element={<AdminDashboard />} />
-                  <Route path="/admin/dashboard" element={<AdminDashboard />} />
-                  <Route path="/admin/users" element={<UserManagement />} />
-                  <Route path="/admin/bargain" element={<BargainEngine />} />
-                  <Route
-                    path="/admin/payments"
-                    element={<PaymentDashboard />}
-                  />
-                  <Route
-                    path="/admin/testing"
-                    element={<AdminTestingDashboard />}
-                  />
-                  <Route path="/admin/api" element={<APITestingDashboard />} />
-                  <Route
-                    path="/admin/AIBargainingDashboard"
-                    element={<AIBargainingDashboard />}
-                  />
-                  <Route
-                    path="/admin/ai-bargaining"
-                    element={<AIBargainingDashboard />}
-                  />
-                  <Route
-                    path="/admin/api-testing"
-                    element={<APITestingDashboard />}
-                  />
-                  <Route
-                    path="/admin/APITestingDashboard"
-                    element={<APITestingDashboard />}
-                  />
+                      {/* Admin CMS Routes */}
+                      <Route path="/admin/login" element={<AdminLogin />} />
+                      <Route path="/admin" element={<AdminDashboard />} />
+                      <Route
+                        path="/admin/dashboard"
+                        element={<AdminDashboard />}
+                      />
+                      <Route path="/admin/users" element={<UserManagement />} />
+                      <Route
+                        path="/admin/bargain"
+                        element={<BargainEngine />}
+                      />
+                      <Route
+                        path="/admin/payments"
+                        element={<PaymentDashboard />}
+                      />
+                      <Route
+                        path="/admin/testing"
+                        element={<AdminTestingDashboard />}
+                      />
+                      <Route
+                        path="/admin/api"
+                        element={<APITestingDashboard />}
+                      />
+                      <Route
+                        path="/admin/AIBargainingDashboard"
+                        element={<AIBargainingDashboard />}
+                      />
+                      <Route
+                        path="/admin/ai-bargaining"
+                        element={<AIBargainingDashboard />}
+                      />
+                      <Route
+                        path="/admin/api-testing"
+                        element={<APITestingDashboard />}
+                      />
+                      <Route
+                        path="/admin/APITestingDashboard"
+                        element={<APITestingDashboard />}
+                      />
 
-                  {/* Mobile App Routes */}
-                  <Route path="/mobile" element={<MobileSplash />} />
-                  <Route path="/mobile-splash" element={<MobileSplash />} />
-                  <Route path="/mobile-home" element={<MobileHome />} />
-                  <Route
-                    path="/mobile-hotels"
-                    element={<MobileHotelResults />}
-                  />
-                  <Route
-                    path="/mobile-hotel-results"
-                    element={<MobileHotelResults />}
-                  />
-                  <Route path="/mobile-search" element={<MobileSearch />} />
-                  <Route path="/mobile-bargain" element={<MobileBargain />} />
-                  <Route path="/mobile-booking" element={<MobileBooking />} />
-                  <Route
-                    path="/mobile-confirmation"
-                    element={<MobileConfirmation />}
-                  />
-                  <Route path="/mobile-trips" element={<MobileTrips />} />
-                  <Route path="/mobile-profile" element={<MobileTrips />} />
+                      {/* Mobile App Routes */}
+                      <Route path="/mobile" element={<MobileSplash />} />
+                      <Route path="/mobile-splash" element={<MobileSplash />} />
+                      <Route path="/mobile-home" element={<MobileHome />} />
+                      <Route
+                        path="/mobile-hotels"
+                        element={<MobileHotelResults />}
+                      />
+                      <Route
+                        path="/mobile-hotel-results"
+                        element={<MobileHotelResults />}
+                      />
+                      <Route path="/mobile-search" element={<MobileSearch />} />
+                      <Route
+                        path="/mobile-bargain"
+                        element={<MobileBargain />}
+                      />
+                      <Route
+                        path="/mobile-booking"
+                        element={<MobileBooking />}
+                      />
+                      <Route
+                        path="/mobile-confirmation"
+                        element={<MobileConfirmation />}
+                      />
+                      <Route path="/mobile-trips" element={<MobileTrips />} />
+                      <Route path="/mobile-profile" element={<MobileTrips />} />
 
-                  {/* Loyalty Routes */}
-                  <Route path="/membership-card" element={<MembershipCard />} />
+                      {/* Loyalty Routes */}
+                      <Route
+                        path="/membership-card"
+                        element={<MembershipCard />}
+                      />
 
-                  {/* Fallback */}
-                  <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </Suspense>
-              </Router>
-            </LoyaltyProvider>
-          </DateProvider>
-        </CurrencyProvider>
+                      {/* Fallback */}
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </Suspense>
+                </Router>
+              </LoyaltyProvider>
+            </DateProvider>
+          </CurrencyProvider>
         </AuthProvider>
       </ErrorBoundary>
     </div>

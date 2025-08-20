@@ -1,8 +1,8 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef } from "react";
 
 interface BargainStatus {
   sessionId: string;
-  state: 'negotiating' | 'holding' | 'expired' | 'booked';
+  state: "negotiating" | "holding" | "expired" | "booked";
   secondsLeft: number | null;
   attempt: {
     count: number;
@@ -30,12 +30,12 @@ export function useBargainStatus({
   pollInterval = 1000, // 1 second default
   onStateChange,
   onExpired,
-  onBooked
+  onBooked,
 }: UseBargainStatusOptions) {
   const [status, setStatus] = useState<BargainStatus | null>(null);
   const [isPolling, setIsPolling] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
+
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const lastStateRef = useRef<string | null>(null);
 
@@ -43,27 +43,29 @@ export function useBargainStatus({
     if (!sessionId) return;
 
     try {
-      const response = await fetch(`/api/bargains/status?sessionId=${sessionId}`);
-      
+      const response = await fetch(
+        `/api/bargains/status?sessionId=${sessionId}`,
+      );
+
       if (!response.ok) {
         if (response.status === 404) {
-          setError('Session not found');
+          setError("Session not found");
           return;
         }
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
 
       const newStatus: BargainStatus = await response.json();
-      
+
       // Call state change callback if state changed
       if (newStatus.state !== lastStateRef.current) {
         lastStateRef.current = newStatus.state;
         onStateChange?.(newStatus);
 
         // Call specific callbacks
-        if (newStatus.state === 'expired') {
+        if (newStatus.state === "expired") {
           onExpired?.();
-        } else if (newStatus.state === 'booked' && newStatus.hold) {
+        } else if (newStatus.state === "booked" && newStatus.hold) {
           onBooked?.(newStatus.hold.orderRef, newStatus.hold.finalPrice);
         }
       }
@@ -72,13 +74,12 @@ export function useBargainStatus({
       setError(null);
 
       // Stop polling if we've reached a final state
-      if (newStatus.state === 'expired' || newStatus.state === 'booked') {
+      if (newStatus.state === "expired" || newStatus.state === "booked") {
         setIsPolling(false);
       }
-
     } catch (err) {
-      console.error('Status polling error:', err);
-      setError(err instanceof Error ? err.message : 'Failed to fetch status');
+      console.error("Status polling error:", err);
+      setError(err instanceof Error ? err.message : "Failed to fetch status");
     }
   }, [sessionId, onStateChange, onExpired, onBooked]);
 
@@ -129,7 +130,7 @@ export function useBargainStatus({
     error,
     startPolling,
     stopPolling,
-    refetch: fetchStatus
+    refetch: fetchStatus,
   };
 }
 
@@ -137,7 +138,7 @@ export function useBargainStatus({
 export function useCountdown(initialSeconds: number, onComplete?: () => void) {
   const [seconds, setSeconds] = useState(initialSeconds);
   const [isActive, setIsActive] = useState(false);
-  
+
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const start = useCallback(() => {
@@ -152,15 +153,18 @@ export function useCountdown(initialSeconds: number, onComplete?: () => void) {
     }
   }, []);
 
-  const reset = useCallback((newSeconds?: number) => {
-    stop();
-    setSeconds(newSeconds ?? initialSeconds);
-  }, [initialSeconds, stop]);
+  const reset = useCallback(
+    (newSeconds?: number) => {
+      stop();
+      setSeconds(newSeconds ?? initialSeconds);
+    },
+    [initialSeconds, stop],
+  );
 
   useEffect(() => {
     if (isActive && seconds > 0) {
       intervalRef.current = setInterval(() => {
-        setSeconds(prev => {
+        setSeconds((prev) => {
           if (prev <= 1) {
             setIsActive(false);
             onComplete?.();
@@ -188,12 +192,14 @@ export function useCountdown(initialSeconds: number, onComplete?: () => void) {
     isActive,
     start,
     stop,
-    reset
+    reset,
   };
 }
 
 // Hook for chat beat timing
-export function useChatBeats(beats: Array<{ delay: number; action: () => void }>) {
+export function useChatBeats(
+  beats: Array<{ delay: number; action: () => void }>,
+) {
   const [currentBeat, setCurrentBeat] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const timeoutsRef = useRef<NodeJS.Timeout[]>([]);
@@ -205,7 +211,7 @@ export function useChatBeats(beats: Array<{ delay: number; action: () => void }>
     setCurrentBeat(0);
 
     // Clear any existing timeouts
-    timeoutsRef.current.forEach(timeout => clearTimeout(timeout));
+    timeoutsRef.current.forEach((timeout) => clearTimeout(timeout));
     timeoutsRef.current = [];
 
     // Schedule all beats
@@ -213,7 +219,7 @@ export function useChatBeats(beats: Array<{ delay: number; action: () => void }>
       const timeout = setTimeout(() => {
         setCurrentBeat(index + 1);
         beat.action();
-        
+
         // Mark as complete if this was the last beat
         if (index === beats.length - 1) {
           setIsRunning(false);
@@ -226,7 +232,7 @@ export function useChatBeats(beats: Array<{ delay: number; action: () => void }>
 
   const stop = useCallback(() => {
     setIsRunning(false);
-    timeoutsRef.current.forEach(timeout => clearTimeout(timeout));
+    timeoutsRef.current.forEach((timeout) => clearTimeout(timeout));
     timeoutsRef.current = [];
   }, []);
 
@@ -238,7 +244,7 @@ export function useChatBeats(beats: Array<{ delay: number; action: () => void }>
   // Cleanup on unmount
   useEffect(() => {
     return () => {
-      timeoutsRef.current.forEach(timeout => clearTimeout(timeout));
+      timeoutsRef.current.forEach((timeout) => clearTimeout(timeout));
     };
   }, []);
 
@@ -247,6 +253,6 @@ export function useChatBeats(beats: Array<{ delay: number; action: () => void }>
     isRunning,
     start,
     stop,
-    reset
+    reset,
   };
 }

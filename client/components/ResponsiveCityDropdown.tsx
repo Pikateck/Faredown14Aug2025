@@ -1,10 +1,5 @@
 import React, { useState } from "react";
-import {
-  X,
-  Search,
-  Plane,
-  Building,
-} from "lucide-react";
+import { X, Search, Plane, Building } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface CityData {
@@ -35,14 +30,14 @@ export function ResponsiveCityDropdown({
 }: ResponsiveCityDropdownProps) {
   const [searchQuery, setSearchQuery] = useState("");
 
-  console.log('ResponsiveCityDropdown render:', { isOpen, title });
+  console.log("ResponsiveCityDropdown render:", { isOpen, title });
 
   if (!isOpen) {
-    console.log('Dropdown not open, returning null');
+    console.log("Dropdown not open, returning null");
     return null;
   }
-  
-  console.log('Dropdown should be visible!');
+
+  console.log("Dropdown should be visible!");
 
   // Filter cities based on search query
   const filteredCities = Object.entries(cities).filter(([city, data]) => {
@@ -141,12 +136,16 @@ export function ResponsiveCityDropdown({
               />
             </div>
           </div>
-          
+
           {/* Popular Destinations */}
           <div className="mb-6">
             <div className="px-4 py-2 bg-blue-50 border border-blue-200 rounded-lg mb-3">
-              <h3 className="text-sm font-semibold text-blue-800">Popular Flight Destinations</h3>
-              <p className="text-xs text-blue-600">Popular airports and cities worldwide</p>
+              <h3 className="text-sm font-semibold text-blue-800">
+                Popular Flight Destinations
+              </h3>
+              <p className="text-xs text-blue-600">
+                Popular airports and cities worldwide
+              </p>
             </div>
             <div className="space-y-2">
               {filteredPopularDestinations.map((dest) => (
@@ -165,14 +164,19 @@ export function ResponsiveCityDropdown({
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
                         <span className="text-base font-medium text-gray-900">
-                          <span className="font-semibold">{dest.code}</span> • {dest.name}
+                          <span className="font-semibold">{dest.code}</span> •{" "}
+                          {dest.name}
                         </span>
                         <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
                           Popular
                         </span>
                       </div>
-                      <div className="text-sm text-gray-500">{dest.airport}</div>
-                      <div className="text-xs text-gray-400">{dest.country}</div>
+                      <div className="text-sm text-gray-500">
+                        {dest.airport}
+                      </div>
+                      <div className="text-xs text-gray-400">
+                        {dest.country}
+                      </div>
                     </div>
                   </div>
                 </button>
@@ -182,7 +186,9 @@ export function ResponsiveCityDropdown({
 
           {/* Regular Cities */}
           <div className="mb-4">
-            <h3 className="text-sm font-semibold text-gray-700 px-4 py-2">Regular Destinations</h3>
+            <h3 className="text-sm font-semibold text-gray-700 px-4 py-2">
+              Regular Destinations
+            </h3>
           </div>
           <div className="space-y-2">
             {filteredCities.map(([city, data]) => (
@@ -194,7 +200,9 @@ export function ResponsiveCityDropdown({
                 }}
                 className={cn(
                   "w-full text-left px-4 py-4 hover:bg-gray-50 rounded-lg border touch-manipulation",
-                  selectedCity === city ? "border-blue-500 bg-blue-50" : "border-gray-100",
+                  selectedCity === city
+                    ? "border-blue-500 bg-blue-50"
+                    : "border-gray-100",
                 )}
               >
                 <div className="flex items-center space-x-3">
@@ -203,7 +211,8 @@ export function ResponsiveCityDropdown({
                   </div>
                   <div className="flex-1">
                     <div className="text-base font-medium text-gray-900">
-                      <span className="font-semibold">{data.code}</span> • {city}
+                      <span className="font-semibold">{data.code}</span> •{" "}
+                      {city}
                     </div>
                     <div className="text-sm text-gray-500">{data.airport}</div>
                     <div className="text-xs text-gray-400">{data.fullName}</div>
@@ -218,11 +227,11 @@ export function ResponsiveCityDropdown({
       {/* Desktop: Dropdown */}
       <div className="hidden sm:block fixed inset-0 z-[9999]">
         {/* Backdrop */}
-        <div 
-          className="fixed inset-0 bg-black bg-opacity-25" 
+        <div
+          className="fixed inset-0 bg-black bg-opacity-25"
           onClick={onClose}
         />
-        
+
         {/* Dropdown positioned relative to trigger */}
         <div className="fixed top-20 left-1/2 transform -translate-x-1/2 w-96 bg-white rounded-lg shadow-xl border border-gray-200 max-h-[80vh] overflow-hidden">
           <div className="p-4 border-b border-gray-200">
@@ -247,7 +256,7 @@ export function ResponsiveCityDropdown({
               />
             </div>
           </div>
-          
+
           <div className="max-h-[60vh] overflow-y-auto">
             {/* Popular Destinations - Compact */}
             <div className="p-4 border-b border-gray-100">
@@ -270,9 +279,12 @@ export function ResponsiveCityDropdown({
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="text-sm font-medium text-gray-900 truncate">
-                          <span className="font-semibold">{dest.code}</span> • {dest.name}
+                          <span className="font-semibold">{dest.code}</span> •{" "}
+                          {dest.name}
                         </div>
-                        <div className="text-xs text-gray-500 truncate">{dest.country}</div>
+                        <div className="text-xs text-gray-500 truncate">
+                          {dest.country}
+                        </div>
                       </div>
                     </div>
                   </button>
@@ -304,9 +316,12 @@ export function ResponsiveCityDropdown({
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="text-sm font-medium text-gray-900 truncate">
-                          <span className="font-semibold">{data.code}</span> • {city}
+                          <span className="font-semibold">{data.code}</span> •{" "}
+                          {city}
                         </div>
-                        <div className="text-xs text-gray-500 truncate">{data.airport}</div>
+                        <div className="text-xs text-gray-500 truncate">
+                          {data.airport}
+                        </div>
                       </div>
                     </div>
                   </button>

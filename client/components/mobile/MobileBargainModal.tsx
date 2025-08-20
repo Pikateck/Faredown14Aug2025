@@ -10,7 +10,10 @@ import {
 import { TrendingDown, X, CheckCircle, Clock, Sparkles } from "lucide-react";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { AINegotiationChat } from "@/components/AINegotiationChat";
-import { useAIBargain, createSightseeingBargainDetails } from "@/hooks/useAIBargain";
+import {
+  useAIBargain,
+  createSightseeingBargainDetails,
+} from "@/hooks/useAIBargain";
 
 interface MobileBargainModalProps {
   isOpen: boolean;
@@ -48,12 +51,12 @@ export const MobileBargainModal: React.FC<MobileBargainModalProps> = ({
   // Setup success/failure callbacks
   useEffect(() => {
     bargainHook.setSuccessCallback((finalPrice: number, orderRef: string) => {
-      console.log('Mobile bargain success:', finalPrice, orderRef);
+      console.log("Mobile bargain success:", finalPrice, orderRef);
       onBargainSuccess(finalPrice);
     });
 
     bargainHook.setFailureCallback(() => {
-      console.log('Mobile bargain failed');
+      console.log("Mobile bargain failed");
       setShowAIChat(false);
     });
   }, [onBargainSuccess]);
@@ -63,7 +66,7 @@ export const MobileBargainModal: React.FC<MobileBargainModalProps> = ({
     if (target && target < originalPrice && target > 0) {
       // Create product details for AI bargain
       const productDetails = createSightseeingBargainDetails({
-        id: 'sightseeing-' + Date.now(),
+        id: "sightseeing-" + Date.now(),
         name: ticketName,
         location: venueName,
         price: originalPrice,
@@ -71,7 +74,7 @@ export const MobileBargainModal: React.FC<MobileBargainModalProps> = ({
 
       // Start AI bargain
       bargainHook.startBargain({
-        module: 'sightseeing',
+        module: "sightseeing",
         title: `${ticketName} - AI Price Negotiator`,
         productDetails,
         userOffer: target,
@@ -97,7 +100,9 @@ export const MobileBargainModal: React.FC<MobileBargainModalProps> = ({
                 <div className="w-10 h-10 bg-white/20 backdrop-blur rounded-full flex items-center justify-center">
                   <Sparkles className="w-5 h-5 text-white" />
                 </div>
-                <span className="text-lg font-semibold">AI Price Negotiator</span>
+                <span className="text-lg font-semibold">
+                  AI Price Negotiator
+                </span>
               </DialogTitle>
               <Button
                 variant="ghost"

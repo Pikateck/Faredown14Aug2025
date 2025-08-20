@@ -340,9 +340,9 @@ export default function FlightResults() {
     };
 
     checkMobile();
-    window.addEventListener('resize', checkMobile);
+    window.addEventListener("resize", checkMobile);
 
-    return () => window.removeEventListener('resize', checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   // Live flight data states - Initialize with basic demo flights
@@ -463,7 +463,6 @@ export default function FlightResults() {
   const [showSortOptions, setShowSortOptions] = useState(false);
   const [showSearchEdit, setShowSearchEdit] = useState(false);
 
-
   // Search panel states
   const [showClassDropdown, setShowClassDropdown] = useState(false);
   const [selectedClass, setSelectedClass] = useState("Economy");
@@ -533,15 +532,19 @@ export default function FlightResults() {
   // Simplified bargain modal state
   const [bargainCtx, setBargainCtx] = useState<null | {
     open: boolean;
-    module: 'flights';
+    module: "flights";
     product: (typeof flightData)[0];
     attempt: number;
   }>(null);
   // Temporary variables for legacy UI compatibility (should be removed when old UI is cleaned up)
-  const [bargainStep, setBargainStep] = useState<"input" | "progress" | "result">("input");
+  const [bargainStep, setBargainStep] = useState<
+    "input" | "progress" | "result"
+  >("input");
   const [bargainPrice, setBargainPrice] = useState("");
   const [bargainProgress, setBargainProgress] = useState(0);
-  const [bargainResult, setBargainResult] = useState<"accepted" | "rejected" | "counter" | null>(null);
+  const [bargainResult, setBargainResult] = useState<
+    "accepted" | "rejected" | "counter" | null
+  >(null);
   const [bargainSession, setBargainSession] = useState<any>(null);
   const [showAINegotiationModal, setShowAINegotiationModal] = useState(false);
 
@@ -571,7 +574,6 @@ export default function FlightResults() {
   const [aiOfferPrice, setAiOfferPrice] = useState<number | null>(null);
   const [isOfferValid, setIsOfferValid] = useState(false);
   const [offerExpiryTime, setOfferExpiryTime] = useState(0);
-
 
   // Load flights from Amadeus API
   useEffect(() => {
@@ -1360,10 +1362,10 @@ export default function FlightResults() {
 
   // Single bargain handler - simplified
   function handleBargain(flight: (typeof flightData)[0]) {
-    console.log('🎯 handleBargain called with flight:', flight.id);
+    console.log("🎯 handleBargain called with flight:", flight.id);
 
     if (!flight) {
-      console.error('❌ Invalid flight data:', flight);
+      console.error("❌ Invalid flight data:", flight);
       return;
     }
 
@@ -1371,11 +1373,11 @@ export default function FlightResults() {
     Promise.resolve().then(() => {
       setBargainCtx({
         open: true,
-        module: 'flights',
+        module: "flights",
         product: flight,
-        attempt: 1
+        attempt: 1,
       });
-      console.log('🎯 Modal context set for flight:', flight.id);
+      console.log("🎯 Modal context set for flight:", flight.id);
     });
   }
 
@@ -1399,18 +1401,24 @@ export default function FlightResults() {
     // This function is legacy and should be removed when old UI is cleaned up
     // For now, redirect to the new ClassyBargainModal
     if (bargainCtx?.product) {
-      console.log('Legacy startBargaining called - redirecting to ClassyBargainModal');
+      console.log(
+        "Legacy startBargaining called - redirecting to ClassyBargainModal",
+      );
       // The ClassyBargainModal handles all the negotiation logic now
     }
   };
 
   // AI Negotiation Modal Functions
-  const handleStartBargain = (flight: (typeof flightData)[0], fareType: any, userOffer: number) => {
+  const handleStartBargain = (
+    flight: (typeof flightData)[0],
+    fareType: any,
+    userOffer: number,
+  ) => {
     // Check if there's already an active session for a different product
     if (bargainSession && bargainSession.productRef !== flight.id.toString()) {
       // Show switch prompt
       const confirmed = window.confirm(
-        `You have an active bargain session for another flight. Switch bargain to this offer?`
+        `You have an active bargain session for another flight. Switch bargain to this offer?`,
       );
       if (!confirmed) return;
     }
@@ -1418,7 +1426,7 @@ export default function FlightResults() {
     // Create session with attempt tracking
     const session = {
       sessionId: `session_${Date.now()}_${flight.id}`,
-      module: 'flights' as const,
+      module: "flights" as const,
       productRef: flight.id.toString(),
       userOffer,
       attemptCount: (bargainSession?.attemptCount || 0) + 1,
@@ -1430,9 +1438,9 @@ export default function FlightResults() {
         flightNo: flight.flightNumber,
         route: {
           from: flight.departureCode,
-          to: flight.arrivalCode
-        }
-      }
+          to: flight.arrivalCode,
+        },
+      },
     };
 
     setBargainSession(session);
@@ -1440,7 +1448,7 @@ export default function FlightResults() {
   };
 
   const handleBargainAccept = (finalPrice: number, orderRef: string) => {
-    console.log('Bargain accepted:', finalPrice, orderRef);
+    console.log("Bargain accepted:", finalPrice, orderRef);
 
     // Navigate to booking with accepted price
     if (bargainSession && bargainFlight && bargainFareType) {
@@ -1459,7 +1467,6 @@ export default function FlightResults() {
     // Close bargain UI
     handleCloseBargain();
   };
-
 
   return (
     <div className="min-h-screen bg-gray-50 pb-16 md:pb-0">
@@ -2990,7 +2997,10 @@ export default function FlightResults() {
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            console.log("📱 Mobile Bargain Now clicked!", flight.id);
+                            console.log(
+                              "📱 Mobile Bargain Now clicked!",
+                              flight.id,
+                            );
                             handleBargain(flight);
                           }}
                         >
@@ -3272,9 +3282,7 @@ export default function FlightResults() {
                           >
                             {flight.fareTypes[0].refundability}
                           </div>
-
                         </div>
-
                       </div>
 
                       {/* Card Footer - Buttons at bottom-right */}
@@ -3286,8 +3294,13 @@ export default function FlightResults() {
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            console.log("View Details clicked for flight:", flight.id);
-                            navigate(`/flight-details/${flight.id}`, { state: { flight } });
+                            console.log(
+                              "View Details clicked for flight:",
+                              flight.id,
+                            );
+                            navigate(`/flight-details/${flight.id}`, {
+                              state: { flight },
+                            });
                           }}
                         >
                           View Details
@@ -3649,7 +3662,7 @@ export default function FlightResults() {
                                             console.log(
                                               "🚀 Opening unified bargain modal (desktop):",
                                               flight,
-                                              fareType
+                                              fareType,
                                             );
 
                                             handleBargain(flight, fareType);
@@ -3948,7 +3961,7 @@ export default function FlightResults() {
                                             console.log(
                                               "📱 Opening unified bargain modal (mobile):",
                                               flight,
-                                              fareType
+                                              fareType,
                                             );
 
                                             handleBargain(flight, fareType);
@@ -4426,10 +4439,10 @@ export default function FlightResults() {
                                       </p>
                                       <div className="text-xs text-gray-700 space-y-1">
                                         <p>
-                                          ���� Direct flights are usually cheaper
-                                          than refundable flights. However, you
-                                          may have to pay a large fee to cancel
-                                          or change your flight.
+                                          ���� Direct flights are usually
+                                          cheaper than refundable flights.
+                                          However, you may have to pay a large
+                                          fee to cancel or change your flight.
                                         </p>
                                         <p>
                                           • Cancellation/Flight change charges
@@ -5534,17 +5547,22 @@ export default function FlightResults() {
                     <div className="flex items-center justify-between mb-3">
                       <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
                         <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                          <span className="text-white text-sm font-bold">AI</span>
+                          <span className="text-white text-sm font-bold">
+                            AI
+                          </span>
                         </div>
                         AI Price Negotiator
                       </h3>
                       <div className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded">
-                        {bargainProgress < 100 ? "Negotiating..." : "Negotiated in 8.2s"}
+                        {bargainProgress < 100
+                          ? "Negotiating..."
+                          : "Negotiated in 8.2s"}
                       </div>
                     </div>
 
                     <div className="text-sm text-gray-600">
-                      {bargainFlight?.airline} {bargainFlight?.flightNumber} • {bargainFareType?.name}
+                      {bargainFlight?.airline} {bargainFlight?.flightNumber} •{" "}
+                      {bargainFareType?.name}
                     </div>
                   </div>
 
@@ -5558,10 +5576,16 @@ export default function FlightResults() {
                       <div className="flex-1">
                         <div className="bg-blue-500 text-white p-3 rounded-lg max-w-[280px]">
                           <p className="text-sm">
-                            We have {selectedCurrency.symbol}{parseInt(bargainPrice || "0").toLocaleString()} for {bargainFlight?.airline} {bargainFlight?.flightNumber}. Can you approve?
+                            We have {selectedCurrency.symbol}
+                            {parseInt(
+                              bargainPrice || "0",
+                            ).toLocaleString()} for {bargainFlight?.airline}{" "}
+                            {bargainFlight?.flightNumber}. Can you approve?
                           </p>
                         </div>
-                        <p className="text-xs text-gray-500 mt-1">Faredown AI</p>
+                        <p className="text-xs text-gray-500 mt-1">
+                          Faredown AI
+                        </p>
                       </div>
                     </div>
 
@@ -5574,10 +5598,14 @@ export default function FlightResults() {
                         <div className="flex-1">
                           <div className="bg-white border shadow-sm p-3 rounded-lg max-w-[280px]">
                             <p className="text-sm">
-                              Listed at {formatPrice(bargainFareType?.price || 0)}. Checking now…
+                              Listed at{" "}
+                              {formatPrice(bargainFareType?.price || 0)}.
+                              Checking now…
                             </p>
                           </div>
-                          <p className="text-xs text-gray-500 mt-1">{bargainFlight?.airline}</p>
+                          <p className="text-xs text-gray-500 mt-1">
+                            {bargainFlight?.airline}
+                          </p>
                         </div>
                       </div>
                     )}
@@ -5591,10 +5619,16 @@ export default function FlightResults() {
                         <div className="flex-1">
                           <div className="bg-white border shadow-sm p-3 rounded-lg max-w-[280px]">
                             <p className="text-sm">
-                              I can do {selectedCurrency.symbol}{Math.round((bargainFareType?.price || 0) * 0.85).toLocaleString()}.
+                              I can do {selectedCurrency.symbol}
+                              {Math.round(
+                                (bargainFareType?.price || 0) * 0.85,
+                              ).toLocaleString()}
+                              .
                             </p>
                           </div>
-                          <p className="text-xs text-gray-500 mt-1">{bargainFlight?.airline}</p>
+                          <p className="text-xs text-gray-500 mt-1">
+                            {bargainFlight?.airline}
+                          </p>
                         </div>
                       </div>
                     )}
@@ -5603,13 +5637,19 @@ export default function FlightResults() {
                     {bargainProgress > 90 && (
                       <div className="flex items-start space-x-3 animate-in fade-in-50 slide-in-from-left-2">
                         <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
-                          <span className="text-white text-xs font-bold">AI</span>
+                          <span className="text-white text-xs font-bold">
+                            AI
+                          </span>
                         </div>
                         <div className="flex-1">
                           <div className="bg-blue-500 text-white p-3 rounded-lg max-w-[280px]">
-                            <p className="text-sm">Let me check with you if you want it.</p>
+                            <p className="text-sm">
+                              Let me check with you if you want it.
+                            </p>
                           </div>
-                          <p className="text-xs text-gray-500 mt-1">Faredown AI</p>
+                          <p className="text-xs text-gray-500 mt-1">
+                            Faredown AI
+                          </p>
                         </div>
                       </div>
                     )}
@@ -5619,8 +5659,12 @@ export default function FlightResults() {
                   {bargainProgress < 100 && (
                     <div className="bg-white rounded-lg p-3 border">
                       <div className="flex justify-between items-center mb-2">
-                        <span className="text-sm font-medium text-gray-700">Negotiation Progress</span>
-                        <span className="text-sm font-medium text-gray-700">{bargainProgress}%</span>
+                        <span className="text-sm font-medium text-gray-700">
+                          Negotiation Progress
+                        </span>
+                        <span className="text-sm font-medium text-gray-700">
+                          {bargainProgress}%
+                        </span>
                       </div>
                       <Progress value={bargainProgress} className="h-2" />
                     </div>
@@ -5734,7 +5778,8 @@ export default function FlightResults() {
                             ? parseInt(bargainPrice).toLocaleString()
                             : aiOfferPrice
                               ? convertPrice(aiOfferPrice).toLocaleString()
-                              : parseInt(bargainPrice).toLocaleString()} — 30s to book
+                              : parseInt(bargainPrice).toLocaleString()}{" "}
+                          — 30s to book
                         </Button>
 
                         <Button
@@ -5746,7 +5791,8 @@ export default function FlightResults() {
                         </Button>
 
                         <p className="text-xs text-gray-500 text-center mt-3">
-                          Most customers get the best deal early — demand is rising fast.
+                          Most customers get the best deal early — demand is
+                          rising fast.
                         </p>
                       </div>
                     </>
@@ -5781,64 +5827,81 @@ export default function FlightResults() {
       {/* Single Classy Bargain Modal - Only one modal path */}
       <ClassyBargainModal
         isOpen={!!bargainCtx?.open}
-        flight={bargainCtx?.product ? {
-          id: bargainCtx.product.id.toString(),
-          airline: bargainCtx.product.airline,
-          flightNumber: bargainCtx.product.flightNumber || `FL${bargainCtx.product.id}`,
-          departureCode: bargainCtx.product.departureCode || "BOM",
-          arrivalCode: bargainCtx.product.arrivalCode || "DXB",
-          departureTime: bargainCtx.product.departureTime,
-          arrivalTime: bargainCtx.product.arrivalTime,
-          duration: bargainCtx.product.duration,
-          aircraft: bargainCtx.product.aircraft || "Boeing 777",
-          price: bargainCtx.product.fareTypes?.[0]?.price || 0
-        } : null}
-        fareType={bargainCtx?.product ? {
-          type: bargainCtx.product.fareTypes?.[0]?.name || "Economy",
-          price: bargainCtx.product.fareTypes?.[0]?.price || 0,
-          currency: "INR",
-          features: bargainCtx.product.fareTypes?.[0]?.features || ["Seat Selection", "Meal", "Personal Entertainment"]
-        } : null}
+        flight={
+          bargainCtx?.product
+            ? {
+                id: bargainCtx.product.id.toString(),
+                airline: bargainCtx.product.airline,
+                flightNumber:
+                  bargainCtx.product.flightNumber ||
+                  `FL${bargainCtx.product.id}`,
+                departureCode: bargainCtx.product.departureCode || "BOM",
+                arrivalCode: bargainCtx.product.arrivalCode || "DXB",
+                departureTime: bargainCtx.product.departureTime,
+                arrivalTime: bargainCtx.product.arrivalTime,
+                duration: bargainCtx.product.duration,
+                aircraft: bargainCtx.product.aircraft || "Boeing 777",
+                price: bargainCtx.product.fareTypes?.[0]?.price || 0,
+              }
+            : null
+        }
+        fareType={
+          bargainCtx?.product
+            ? {
+                type: bargainCtx.product.fareTypes?.[0]?.name || "Economy",
+                price: bargainCtx.product.fareTypes?.[0]?.price || 0,
+                currency: "INR",
+                features: bargainCtx.product.fareTypes?.[0]?.features || [
+                  "Seat Selection",
+                  "Meal",
+                  "Personal Entertainment",
+                ],
+              }
+            : null
+        }
         onClose={() => {
-          console.log('🎯 Closing bargain modal');
+          console.log("🎯 Closing bargain modal");
           setBargainCtx(null);
         }}
         onAccept={(finalPrice: number, orderRef: string) => {
-          console.log('🎯 Bargain accepted:', finalPrice, orderRef);
+          console.log("🎯 Bargain accepted:", finalPrice, orderRef);
           if (bargainCtx?.product) {
-            const updatedFareType = { ...bargainCtx.product.fareTypes[0], price: finalPrice };
-            navigate('/booking-flow', {
+            const updatedFareType = {
+              ...bargainCtx.product.fareTypes[0],
+              price: finalPrice,
+            };
+            navigate("/booking-flow", {
               state: {
                 selectedFlight: bargainCtx.product,
                 selectedFareType: updatedFareType,
                 passengerCount: { adults, children },
                 isBargainAccepted: true,
                 finalBargainPrice: finalPrice,
-                orderRef
-              }
+                orderRef,
+              },
             });
           }
           setBargainCtx(null);
         }}
         onBookOriginal={() => {
-          console.log('🎯 Booking original price');
+          console.log("🎯 Booking original price");
           if (bargainCtx?.product) {
-            navigate('/booking-flow', {
+            navigate("/booking-flow", {
               state: {
                 selectedFlight: bargainCtx.product,
                 selectedFareType: bargainCtx.product.fareTypes[0],
-                passengerCount: { adults, children }
-              }
+                passengerCount: { adults, children },
+              },
             });
           }
           setBargainCtx(null);
         }}
         onRetry={() => {
-          console.log('🔄 Retry requested - incrementing attempt');
+          console.log("🔄 Retry requested - incrementing attempt");
           if (bargainCtx) {
             setBargainCtx({
               ...bargainCtx,
-              attempt: Math.min(bargainCtx.attempt + 1, 3)
+              attempt: Math.min(bargainCtx.attempt + 1, 3),
             });
           }
         }}
@@ -6287,7 +6350,9 @@ export default function FlightResults() {
                           <span className="text-red-700 font-medium">
                             Airline fee:
                           </span>
-                          <p className="text-red-600">����3,500 per passenger</p>
+                          <p className="text-red-600">
+                            ����3,500 per passenger
+                          </p>
                         </div>
                         <div>
                           <span className="text-red-700 font-medium">
@@ -6511,7 +6576,6 @@ export default function FlightResults() {
       />
 
       <MobileNavigation />
-
     </div>
   );
 }

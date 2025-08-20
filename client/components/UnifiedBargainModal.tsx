@@ -21,17 +21,20 @@ import {
   Clock,
   AlertCircle,
   Shield,
-  MessageCircle
+  MessageCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { formatPriceNoDecimals } from "@/lib/formatPrice";
 import { numberToWords } from "@/lib/numberToWords";
-import { getCopyVariantWithCurrency, getBrandString } from "@/utils/copyVariants";
+import {
+  getCopyVariantWithCurrency,
+  getBrandString,
+} from "@/utils/copyVariants";
 
 interface ChatBeat {
   id: string;
-  type: 'agent' | 'supplier' | 'system' | 'typing';
+  type: "agent" | "supplier" | "system" | "typing";
   message: string;
   timestamp: number;
   icon?: React.ReactNode;
@@ -60,7 +63,7 @@ interface FareType {
 }
 
 interface BargainResult {
-  status: 'accepted' | 'counter' | 'expired' | 'error';
+  status: "accepted" | "counter" | "expired" | "error";
   finalPrice?: number;
   basePrice?: number;
   negotiatedInMs?: number;
@@ -88,7 +91,13 @@ interface UnifiedBargainModalProps {
   onBookOriginal: () => void;
 }
 
-type BargainStep = 'input' | 'negotiating' | 'decision' | 'holding' | 'success' | 'expired';
+type BargainStep =
+  | "input"
+  | "negotiating"
+  | "decision"
+  | "holding"
+  | "success"
+  | "expired";
 
 export function UnifiedBargainModal({
   isOpen,
@@ -96,19 +105,23 @@ export function UnifiedBargainModal({
   fareType,
   onClose,
   onAccept,
-  onBookOriginal
+  onBookOriginal,
 }: UnifiedBargainModalProps) {
-  const [currentStep, setCurrentStep] = useState<BargainStep>('input');
-  const [bargainPrice, setBargainPrice] = useState('');
+  const [currentStep, setCurrentStep] = useState<BargainStep>("input");
+  const [bargainPrice, setBargainPrice] = useState("");
   const [duplicatePriceError, setDuplicatePriceError] = useState(false);
   const [chatBeats, setChatBeats] = useState<ChatBeat[]>([]);
-  const [bargainResult, setBargainResult] = useState<BargainResult | null>(null);
+  const [bargainResult, setBargainResult] = useState<BargainResult | null>(
+    null,
+  );
   const [holdData, setHoldData] = useState<HoldResponse | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [countdown, setCountdown] = useState(30);
   const [error, setError] = useState<string | null>(null);
   const [minDisplayTime, setMinDisplayTime] = useState(true);
-  const [sessionUsedKeys, setSessionUsedKeys] = useState<Set<string>>(new Set());
+  const [sessionUsedKeys, setSessionUsedKeys] = useState<Set<string>>(
+    new Set(),
+  );
   const [attemptNumber, setAttemptNumber] = useState(1);
   const [sessionId, setSessionId] = useState<string | null>(null);
 
@@ -117,9 +130,9 @@ export function UnifiedBargainModal({
 
   // Module configuration for flights
   const moduleConfig = {
-    icon: <Plane className="w-4 h-4" />, 
-    color: 'bg-blue-50 text-blue-600',
-    supplierName: 'Airline'
+    icon: <Plane className="w-4 h-4" />,
+    color: "bg-blue-50 text-blue-600",
+    supplierName: "Airline",
   };
 
   // Create template variables for copy variants
@@ -130,20 +143,20 @@ export function UnifiedBargainModal({
       base: fareType.price,
       airline: flight.airline,
       flight_no: flight.flightNumber,
-      hotel_name: '',
-      city: '',
-      tour_name: '',
-      location: '',
-      pickup: '',
-      dropoff: ''
+      hotel_name: "",
+      city: "",
+      tour_name: "",
+      location: "",
+      pickup: "",
+      dropoff: "",
     };
   }, [flight, fareType, bargainPrice]);
 
   // Reset state when modal opens
   useEffect(() => {
     if (isOpen) {
-      setCurrentStep('input');
-      setBargainPrice('');
+      setCurrentStep("input");
+      setBargainPrice("");
       setDuplicatePriceError(false);
       setChatBeats([]);
       setBargainResult(null);
@@ -156,80 +169,93 @@ export function UnifiedBargainModal({
   }, [isOpen, flight?.id]);
 
   // Add chat beat with animation
-  const addChatBeat = (beat: Omit<ChatBeat, 'id' | 'timestamp'>) => {
+  const addChatBeat = (beat: Omit<ChatBeat, "id" | "timestamp">) => {
     const newBeat: ChatBeat = {
       ...beat,
       id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
       timestamp: Date.now(),
     };
-    
-    setChatBeats(prev => [...prev, newBeat]);
-    
+
+    setChatBeats((prev) => [...prev, newBeat]);
+
     // Track variant key if provided
     if (beat.variantKey) {
-      setSessionUsedKeys(prev => new Set([...prev, beat.variantKey!]));
+      setSessionUsedKeys((prev) => new Set([...prev, beat.variantKey!]));
     }
-    
+
     // Scroll to bottom
     setTimeout(() => {
-      chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, 100);
   };
 
   // Add typing indicator
-  const addTypingIndicator = (type: 'agent' | 'supplier'): Promise<void> => {
+  const addTypingIndicator = (type: "agent" | "supplier"): Promise<void> => {
     return new Promise((resolve) => {
       const typingId = `typing-${Date.now()}`;
-      
+
       addChatBeat({
-        type: 'typing',
-        message: '',
+        type: "typing",
+        message: "",
         isTyping: true,
-        icon: type === 'agent' 
-          ? <Sparkles className="w-4 h-4 text-blue-500" />
-          : <div className={cn("w-8 h-8 rounded-full flex items-center justify-center", moduleConfig.color)}>
+        icon:
+          type === "agent" ? (
+            <Sparkles className="w-4 h-4 text-blue-500" />
+          ) : (
+            <div
+              className={cn(
+                "w-8 h-8 rounded-full flex items-center justify-center",
+                moduleConfig.color,
+              )}
+            >
               {moduleConfig.icon}
             </div>
+          ),
       });
 
       // Remove typing indicator after realistic typing time
       const typingDuration = Math.random() * 1500 + 1000; // 1-2.5s
       setTimeout(() => {
-        setChatBeats(prev => prev.filter(beat => beat.id !== typingId));
+        setChatBeats((prev) => prev.filter((beat) => beat.id !== typingId));
         resolve();
       }, typingDuration);
     });
   };
 
   // Progressive message reveal
-  const revealMessage = async (fullMessage: string, type: 'agent' | 'supplier', icon: React.ReactNode, variantKey?: string): Promise<void> => {
+  const revealMessage = async (
+    fullMessage: string,
+    type: "agent" | "supplier",
+    icon: React.ReactNode,
+    variantKey?: string,
+  ): Promise<void> => {
     return new Promise((resolve) => {
-      let currentText = '';
-      const words = fullMessage.split(' ');
+      let currentText = "";
+      const words = fullMessage.split(" ");
       let wordIndex = 0;
-      
+
       // Add initial empty beat
       addChatBeat({
         type,
-        message: '',
+        message: "",
         icon,
-        variantKey
+        variantKey,
       });
 
       const revealNextWord = () => {
         if (wordIndex < words.length) {
-          currentText += (currentText ? ' ' : '') + words[wordIndex];
+          currentText += (currentText ? " " : "") + words[wordIndex];
           wordIndex++;
-          
+
           // Update the last beat
-          setChatBeats(prev => 
-            prev.map(beat => 
-              beat.id === prev[prev.length - 1]?.id 
+          setChatBeats((prev) =>
+            prev.map((beat) =>
+              beat.id === prev[prev.length - 1]?.id
                 ? { ...beat, message: currentText }
-                : beat
-            )
+                : beat,
+            ),
           );
-          
+
           // Continue with next word after realistic delay
           setTimeout(revealNextWord, Math.random() * 200 + 100); // 100-300ms per word
         } else {
@@ -247,9 +273,10 @@ export function UnifiedBargainModal({
 
     const targetPriceInSelectedCurrency = parseInt(bargainPrice);
     // Convert from selected currency back to INR (base currency)
-    const targetPriceInINR = selectedCurrency.code === 'INR'
-      ? targetPriceInSelectedCurrency
-      : Math.round(targetPriceInSelectedCurrency / selectedCurrency.rate);
+    const targetPriceInINR =
+      selectedCurrency.code === "INR"
+        ? targetPriceInSelectedCurrency
+        : Math.round(targetPriceInSelectedCurrency / selectedCurrency.rate);
     const currentPriceInINR = fareType.price;
 
     if (targetPriceInINR >= currentPriceInINR) {
@@ -259,100 +286,110 @@ export function UnifiedBargainModal({
     }
 
     setDuplicatePriceError(false);
-    setCurrentStep('negotiating');
+    setCurrentStep("negotiating");
     setIsProcessing(true);
     setError(null);
     setChatBeats([]);
-    
+
     try {
       // Beat 1: Faredown AI offers
       const agentOfferVariant = getCopyVariantWithCurrency(
-        'flights',
-        'agent_offer',
+        "flights",
+        "agent_offer",
         attemptNumber,
-        'counter',
+        "counter",
         {
           ...templateVars,
-          offer: targetPriceInINR
+          offer: targetPriceInINR,
         },
         sessionUsedKeys,
         [],
-        (amount: number) => formatPriceNoDecimals(amount, selectedCurrency.symbol)
+        (amount: number) =>
+          formatPriceNoDecimals(amount, selectedCurrency.symbol),
       );
 
-      await addTypingIndicator('agent');
+      await addTypingIndicator("agent");
       await revealMessage(
         agentOfferVariant.text,
-        'agent',
+        "agent",
         <Sparkles className="w-4 h-4 text-blue-500" />,
-        agentOfferVariant.key
+        agentOfferVariant.key,
       );
 
       // Realistic pause for reading
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await new Promise((resolve) => setTimeout(resolve, 1500));
 
       // Beat 2: Supplier checks
       const supplierCheckVariant = getCopyVariantWithCurrency(
-        'flights',
-        'supplier_check',
+        "flights",
+        "supplier_check",
         1,
-        'counter',
+        "counter",
         templateVars,
         sessionUsedKeys,
         [],
-        (amount: number) => formatPriceNoDecimals(amount, selectedCurrency.symbol)
+        (amount: number) =>
+          formatPriceNoDecimals(amount, selectedCurrency.symbol),
       );
 
-      await addTypingIndicator('supplier');
+      await addTypingIndicator("supplier");
       await revealMessage(
         supplierCheckVariant.text,
-        'supplier',
-        <div className={cn("w-8 h-8 rounded-full flex items-center justify-center", moduleConfig.color)}>
+        "supplier",
+        <div
+          className={cn(
+            "w-8 h-8 rounded-full flex items-center justify-center",
+            moduleConfig.color,
+          )}
+        >
           {moduleConfig.icon}
         </div>,
-        supplierCheckVariant.key
+        supplierCheckVariant.key,
       );
 
       // Longer pause for "processing"
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
       // Call API
-      const response = await fetch('/api/bargains/quote', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/bargains/quote", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          module: 'flights',
+          module: "flights",
           productRef: flight.id.toString(),
           userOffer: targetPriceInINR,
           sessionId: sessionId,
           routeInfo: {
             airline: flight.airline,
             flight_no: flight.flightNumber,
-            hotel_name: '',
-            city: '',
-            tour_name: '',
-            pickup: '',
-            dropoff: '',
-          }
-        })
+            hotel_name: "",
+            city: "",
+            tour_name: "",
+            pickup: "",
+            dropoff: "",
+          },
+        }),
       });
 
       let result: BargainResult;
 
       if (!response.ok) {
         // Fallback response for development
-        console.warn('API call failed, using fallback');
+        console.warn("API call failed, using fallback");
         result = {
-          status: Math.random() > 0.3 ? 'counter' : 'accepted',
-          finalPrice: Math.random() > 0.5 ? Math.round(targetPriceInINR * 1.1) : targetPriceInINR,
+          status: Math.random() > 0.3 ? "counter" : "accepted",
+          finalPrice:
+            Math.random() > 0.5
+              ? Math.round(targetPriceInINR * 1.1)
+              : targetPriceInINR,
           basePrice: fareType.price,
           negotiatedInMs: Math.random() * 5000 + 2000,
           sessionId: sessionId || undefined,
           attempt: {
             count: attemptNumber,
             max: 3,
-            canRetry: attemptNumber < 3
-          }
+            canRetry: attemptNumber < 3,
+          },
         };
       } else {
         result = await response.json();
@@ -362,67 +399,73 @@ export function UnifiedBargainModal({
 
       // Beat 3: Supplier responds
       const supplierCounterVariant = getCopyVariantWithCurrency(
-        'flights',
-        'supplier_counter',
+        "flights",
+        "supplier_counter",
         1,
-        result.status as 'accepted' | 'counter',
+        result.status as "accepted" | "counter",
         {
           ...templateVars,
-          counter: result.finalPrice || targetPriceInINR
+          counter: result.finalPrice || targetPriceInINR,
         },
         sessionUsedKeys,
         [],
-        (amount: number) => formatPriceNoDecimals(amount, selectedCurrency.symbol)
+        (amount: number) =>
+          formatPriceNoDecimals(amount, selectedCurrency.symbol),
       );
 
-      await addTypingIndicator('supplier');
+      await addTypingIndicator("supplier");
       await revealMessage(
         supplierCounterVariant.text,
-        'supplier',
-        <div className={cn("w-8 h-8 rounded-full flex items-center justify-center", moduleConfig.color)}>
+        "supplier",
+        <div
+          className={cn(
+            "w-8 h-8 rounded-full flex items-center justify-center",
+            moduleConfig.color,
+          )}
+        >
           {moduleConfig.icon}
         </div>,
-        supplierCounterVariant.key
+        supplierCounterVariant.key,
       );
 
       // Brief pause for reading
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // Beat 4: Faredown AI confirms
       const agentConfirmVariant = getCopyVariantWithCurrency(
-        'flights',
-        'agent_user_confirm',
+        "flights",
+        "agent_user_confirm",
         1,
-        'counter',
+        "counter",
         templateVars,
         sessionUsedKeys,
         [],
-        (amount: number) => formatPriceNoDecimals(amount, selectedCurrency.symbol)
+        (amount: number) =>
+          formatPriceNoDecimals(amount, selectedCurrency.symbol),
       );
 
-      await addTypingIndicator('agent');
+      await addTypingIndicator("agent");
       await revealMessage(
         agentConfirmVariant.text,
-        'agent',
+        "agent",
         <Sparkles className="w-4 h-4 text-blue-500" />,
-        agentConfirmVariant.key
+        agentConfirmVariant.key,
       );
 
       // Brief pause then show decision
-      await new Promise(resolve => setTimeout(resolve, 800));
+      await new Promise((resolve) => setTimeout(resolve, 800));
 
-      setCurrentStep('decision');
+      setCurrentStep("decision");
 
       // Start 10-second minimum display timer for decision panel
       setMinDisplayTime(true);
       setTimeout(() => {
         setMinDisplayTime(false);
       }, 10000); // 10 seconds minimum
-      
     } catch (error) {
-      console.error('Negotiation error:', error);
-      setError(error instanceof Error ? error.message : 'Negotiation failed');
-      setCurrentStep('expired');
+      console.error("Negotiation error:", error);
+      setError(error instanceof Error ? error.message : "Negotiation failed");
+      setCurrentStep("expired");
     } finally {
       setIsProcessing(false);
     }
@@ -431,54 +474,55 @@ export function UnifiedBargainModal({
   // Accept the offer
   const handleAccept = async () => {
     if (!bargainResult?.finalPrice || !sessionId || minDisplayTime) return;
-    
+
     setIsProcessing(true);
-    
+
     try {
-      const response = await fetch('/api/bargains/accept', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/bargains/accept", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           sessionId: sessionId,
-          finalPrice: bargainResult.finalPrice
-        })
+          finalPrice: bargainResult.finalPrice,
+        }),
       });
 
       let holdResult: HoldResponse;
 
       if (!response.ok) {
         // Fallback for development
-        console.warn('Accept API call failed, using fallback');
+        console.warn("Accept API call failed, using fallback");
         holdResult = {
           holdSeconds: 30,
           orderRef: `ORDER-${Date.now()}`,
           expiresAt: new Date(Date.now() + 30000).toISOString(),
-          finalPrice: bargainResult.finalPrice
+          finalPrice: bargainResult.finalPrice,
         };
       } else {
         holdResult = await response.json();
       }
 
       setHoldData(holdResult);
-      setCurrentStep('holding');
+      setCurrentStep("holding");
       setCountdown(holdResult.holdSeconds);
 
       // Start countdown
       const countdownInterval = setInterval(() => {
-        setCountdown(prev => {
+        setCountdown((prev) => {
           if (prev <= 1) {
             clearInterval(countdownInterval);
-            setCurrentStep('success');
+            setCurrentStep("success");
             onAccept(holdResult.finalPrice, holdResult.orderRef);
             return 0;
           }
           return prev - 1;
         });
       }, 1000);
-
     } catch (error) {
-      console.error('Accept error:', error);
-      setError(error instanceof Error ? error.message : 'Failed to accept offer');
+      console.error("Accept error:", error);
+      setError(
+        error instanceof Error ? error.message : "Failed to accept offer",
+      );
     } finally {
       setIsProcessing(false);
     }
@@ -487,8 +531,8 @@ export function UnifiedBargainModal({
   // Retry bargain
   const handleRetry = () => {
     if (bargainResult?.attempt?.canRetry) {
-      setAttemptNumber(prev => prev + 1);
-      setCurrentStep('negotiating');
+      setAttemptNumber((prev) => prev + 1);
+      setCurrentStep("negotiating");
       setBargainResult(null);
       setError(null);
       startNegotiation();
@@ -505,10 +549,13 @@ export function UnifiedBargainModal({
           <div className="flex items-center justify-between">
             <div>
               <DialogTitle className="text-lg font-semibold text-gray-900">
-                {currentStep === 'input' ? 'AI Price Negotiation' : getBrandString('negotiatorTitle')}
+                {currentStep === "input"
+                  ? "AI Price Negotiation"
+                  : getBrandString("negotiatorTitle")}
               </DialogTitle>
               <p className="text-sm text-gray-600 mt-1">
-                {flight.airline} {flight.flightNumber} • {flight.departureCode} → {flight.arrivalCode}
+                {flight.airline} {flight.flightNumber} • {flight.departureCode}{" "}
+                → {flight.arrivalCode}
               </p>
             </div>
             <button
@@ -518,19 +565,20 @@ export function UnifiedBargainModal({
               <X className="w-5 h-5 text-gray-500" />
             </button>
           </div>
-          
+
           {/* Attempt indicator for negotiation steps */}
-          {bargainResult?.attempt && currentStep !== 'input' && (
+          {bargainResult?.attempt && currentStep !== "input" && (
             <div className="mt-2">
               <span className="text-xs text-gray-500">
-                Round {bargainResult.attempt.count} of {bargainResult.attempt.max}
+                Round {bargainResult.attempt.count} of{" "}
+                {bargainResult.attempt.max}
               </span>
             </div>
           )}
         </DialogHeader>
 
         {/* Price Input Step */}
-        {currentStep === 'input' && (
+        {currentStep === "input" && (
           <div className="p-6 space-y-6">
             {/* Flight Summary */}
             <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
@@ -540,12 +588,16 @@ export function UnifiedBargainModal({
                     {flight.airline} {flight.flightNumber}
                   </h3>
                   <p className="text-sm text-gray-600">
-                    {flight.departureCode} → {flight.arrivalCode} • {flight.duration}
+                    {flight.departureCode} → {flight.arrivalCode} •{" "}
+                    {flight.duration}
                   </p>
                 </div>
                 <div className="text-right">
                   <p className="text-lg font-bold text-[#003580]">
-                    {formatPriceNoDecimals(fareType.price, selectedCurrency.symbol)}
+                    {formatPriceNoDecimals(
+                      fareType.price,
+                      selectedCurrency.symbol,
+                    )}
                   </p>
                   <p className="text-sm text-gray-600">{fareType.type}</p>
                 </div>
@@ -612,21 +664,22 @@ export function UnifiedBargainModal({
                 variant="outline"
                 className="w-full py-4 md:py-6 text-base md:text-lg font-semibold rounded-xl border-2 border-[#003580]/20 text-[#003580] hover:bg-[#003580]/5"
               >
-                Book Original Price {formatPriceNoDecimals(fareType.price, selectedCurrency.symbol)}
+                Book Original Price{" "}
+                {formatPriceNoDecimals(fareType.price, selectedCurrency.symbol)}
               </Button>
             </div>
           </div>
         )}
 
         {/* Chat Messages (for negotiating and decision steps) */}
-        {(currentStep === 'negotiating' || currentStep === 'decision') && (
+        {(currentStep === "negotiating" || currentStep === "decision") && (
           <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 max-h-96">
             {chatBeats.map((beat) => (
               <div
                 key={beat.id}
                 className={cn(
                   "flex items-start space-x-3 animate-in fade-in-50 slide-in-from-left-2",
-                  beat.type === 'agent' ? 'flex-row' : 'flex-row'
+                  beat.type === "agent" ? "flex-row" : "flex-row",
                 )}
               >
                 <div className="flex-shrink-0">
@@ -638,31 +691,46 @@ export function UnifiedBargainModal({
                 </div>
                 <div className="flex-1">
                   {beat.isTyping ? (
-                    <div className={cn(
-                      "px-4 py-3 rounded-lg max-w-[280px]",
-                      beat.type === 'agent' || beat.type === 'typing'
-                        ? "bg-blue-500 text-white" 
-                        : "bg-white border shadow-sm"
-                    )}>
+                    <div
+                      className={cn(
+                        "px-4 py-3 rounded-lg max-w-[280px]",
+                        beat.type === "agent" || beat.type === "typing"
+                          ? "bg-blue-500 text-white"
+                          : "bg-white border shadow-sm",
+                      )}
+                    >
                       <div className="flex items-center space-x-1">
-                        <div className="w-2 h-2 bg-current rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                        <div className="w-2 h-2 bg-current rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                        <div className="w-2 h-2 bg-current rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                        <div
+                          className="w-2 h-2 bg-current rounded-full animate-bounce"
+                          style={{ animationDelay: "0ms" }}
+                        />
+                        <div
+                          className="w-2 h-2 bg-current rounded-full animate-bounce"
+                          style={{ animationDelay: "150ms" }}
+                        />
+                        <div
+                          className="w-2 h-2 bg-current rounded-full animate-bounce"
+                          style={{ animationDelay: "300ms" }}
+                        />
                       </div>
                     </div>
                   ) : (
-                    <div className={cn(
-                      "px-4 py-3 rounded-lg max-w-[280px]",
-                      beat.type === 'agent' 
-                        ? "bg-blue-500 text-white" 
-                        : "bg-white border shadow-sm"
-                    )}>
+                    <div
+                      className={cn(
+                        "px-4 py-3 rounded-lg max-w-[280px]",
+                        beat.type === "agent"
+                          ? "bg-blue-500 text-white"
+                          : "bg-white border shadow-sm",
+                      )}
+                    >
                       <p className="text-sm">{beat.message}</p>
                     </div>
                   )}
                   {!beat.isTyping && (
                     <p className="text-xs text-gray-500 mt-1">
-                      {beat.type === 'agent' ? getBrandString('aiName') : moduleConfig.supplierName}
+                      {beat.type === "agent"
+                        ? getBrandString("aiName")
+                        : moduleConfig.supplierName}
                     </p>
                   )}
                 </div>
@@ -674,14 +742,17 @@ export function UnifiedBargainModal({
         )}
 
         {/* Decision Panel */}
-        {currentStep === 'decision' && bargainResult && (
+        {currentStep === "decision" && bargainResult && (
           <div className="p-6 border-t bg-white">
             <div className="text-center mb-4">
               <Badge variant="secondary" className="mb-2">
-                {getBrandString('negotiatedBadge').replace('{seconds}', ((bargainResult.negotiatedInMs || 0) / 1000).toFixed(1))}
+                {getBrandString("negotiatedBadge").replace(
+                  "{seconds}",
+                  ((bargainResult.negotiatedInMs || 0) / 1000).toFixed(1),
+                )}
               </Badge>
-              
-              {bargainResult.status === 'accepted' ? (
+
+              {bargainResult.status === "accepted" ? (
                 <div className="flex items-center justify-center space-x-2 text-green-600 mb-3">
                   <CheckCircle className="w-5 h-5" />
                   <span className="font-medium">Offer Accepted!</span>
@@ -703,7 +774,14 @@ export function UnifiedBargainModal({
                 {minDisplayTime ? (
                   <>Reading offer details...</>
                 ) : (
-                  <>Accept {formatPriceNoDecimals(bargainResult.finalPrice || 0, selectedCurrency.symbol)} — 30s to book</>
+                  <>
+                    Accept{" "}
+                    {formatPriceNoDecimals(
+                      bargainResult.finalPrice || 0,
+                      selectedCurrency.symbol,
+                    )}{" "}
+                    — 30s to book
+                  </>
                 )}
               </Button>
 
@@ -717,7 +795,10 @@ export function UnifiedBargainModal({
                   {minDisplayTime ? (
                     <>Please wait...</>
                   ) : (
-                    <>{getBrandString('bargainAgain')} ({bargainResult.attempt.count}/{bargainResult.attempt.max})</>
+                    <>
+                      {getBrandString("bargainAgain")} (
+                      {bargainResult.attempt.count}/{bargainResult.attempt.max})
+                    </>
                   )}
                 </Button>
               )}
@@ -730,14 +811,14 @@ export function UnifiedBargainModal({
         )}
 
         {/* Holding State */}
-        {currentStep === 'holding' && holdData && (
+        {currentStep === "holding" && holdData && (
           <div className="p-6 border-t bg-white">
             <div className="text-center">
               <div className="flex items-center justify-center space-x-2 text-blue-600 mb-3">
                 <Shield className="w-5 h-5" />
                 <span className="font-medium">Price Locked!</span>
               </div>
-              
+
               <div className="text-2xl font-bold text-gray-900 mb-2">
                 {countdown}s
               </div>
@@ -747,7 +828,7 @@ export function UnifiedBargainModal({
               <p className="text-sm text-gray-600">
                 Hold expires in {countdown} seconds
               </p>
-              
+
               <p className="text-xs text-gray-500 mt-2">
                 Order Ref: {holdData.orderRef}
               </p>
@@ -756,20 +837,22 @@ export function UnifiedBargainModal({
         )}
 
         {/* Error/Expired State */}
-        {(currentStep === 'expired' || error) && (
+        {(currentStep === "expired" || error) && (
           <div className="p-6 border-t bg-white">
             <div className="text-center">
               <div className="flex items-center justify-center space-x-2 text-red-600 mb-3">
                 <AlertCircle className="w-5 h-5" />
-                <span className="font-medium">{getBrandString('expiredTitle')}</span>
+                <span className="font-medium">
+                  {getBrandString("expiredTitle")}
+                </span>
               </div>
-              
+
               <p className="text-sm text-gray-600 mb-4">
-                {error || getBrandString('expiredBody')}
+                {error || getBrandString("expiredBody")}
               </p>
-              
+
               <Button onClick={onClose} className="w-full">
-                {getBrandString('reSearchCta')}
+                {getBrandString("reSearchCta")}
               </Button>
             </div>
           </div>

@@ -32,7 +32,8 @@ export function BookingCalendar({
     tomorrow.setDate(tomorrow.getDate() + 1);
     const startDate = initialRange?.startDate || tomorrow;
     // For sightseeing and transfers, default to same day (single day activity)
-    const defaultDays = (bookingType === "sightseeing" || bookingType === "transfers") ? 0 : 3;
+    const defaultDays =
+      bookingType === "sightseeing" || bookingType === "transfers" ? 0 : 3;
     const endDate = initialRange?.endDate || addDays(startDate, defaultDays);
 
     console.log("Initial calendar range:", { startDate, endDate, bookingType });
@@ -66,19 +67,19 @@ export function BookingCalendar({
   useEffect(() => {
     const applyCalendarStyling = () => {
       // Apply month header styling
-      const monthHeaders = document.querySelectorAll('.rdrMonthAndYearPickers');
-      monthHeaders.forEach(header => {
-        (header as HTMLElement).style.color = '#1f2937';
-        (header as HTMLElement).style.fontWeight = '900';
-        (header as HTMLElement).style.fontSize = '20px';
+      const monthHeaders = document.querySelectorAll(".rdrMonthAndYearPickers");
+      monthHeaders.forEach((header) => {
+        (header as HTMLElement).style.color = "#1f2937";
+        (header as HTMLElement).style.fontWeight = "900";
+        (header as HTMLElement).style.fontSize = "20px";
       });
 
       // Apply weekday styling
-      const weekdays = document.querySelectorAll('.rdrWeekDay');
-      weekdays.forEach(weekday => {
-        (weekday as HTMLElement).style.color = '#1f2937';
-        (weekday as HTMLElement).style.fontWeight = '600';
-        (weekday as HTMLElement).style.textTransform = 'capitalize';
+      const weekdays = document.querySelectorAll(".rdrWeekDay");
+      weekdays.forEach((weekday) => {
+        (weekday as HTMLElement).style.color = "#1f2937";
+        (weekday as HTMLElement).style.fontWeight = "600";
+        (weekday as HTMLElement).style.textTransform = "capitalize";
       });
     };
 
@@ -164,7 +165,6 @@ export function BookingCalendar({
       }
     }
   };
-
 
   const formatSelectionText = () => {
     const { startDate, endDate } = selection[0];

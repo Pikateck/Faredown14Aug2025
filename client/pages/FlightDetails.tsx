@@ -561,38 +561,56 @@ export default function FlightDetails({
       {/* Flight Bargain Modal */}
       <ClassyBargainModal
         isOpen={showBargainModal}
-        flight={displayFlight ? {
-          id: displayFlight.id,
-          airline: displayFlight.airline,
-          flightNumber: displayFlight.flightNumber || displayFlight.id,
-          departureCode: displayFlight.origin || "BOM",
-          arrivalCode: displayFlight.destination || "DXB",
-          departureTime: displayFlight.departureTime,
-          arrivalTime: displayFlight.arrivalTime,
-          duration: displayFlight.duration,
-          aircraft: displayFlight.aircraft,
-          price: displayFlight.price?.amount || 0
-        } : null}
-        fareType={displayFlight ? {
-          type: displayFlight.fareClass || "Economy",
-          price: displayFlight.price?.amount || 0,
-          currency: "INR",
-          features: ["Seat Selection", "Meal", "Baggage"]
-        } : null}
+        flight={
+          displayFlight
+            ? {
+                id: displayFlight.id,
+                airline: displayFlight.airline,
+                flightNumber: displayFlight.flightNumber || displayFlight.id,
+                departureCode: displayFlight.origin || "BOM",
+                arrivalCode: displayFlight.destination || "DXB",
+                departureTime: displayFlight.departureTime,
+                arrivalTime: displayFlight.arrivalTime,
+                duration: displayFlight.duration,
+                aircraft: displayFlight.aircraft,
+                price: displayFlight.price?.amount || 0,
+              }
+            : null
+        }
+        fareType={
+          displayFlight
+            ? {
+                type: displayFlight.fareClass || "Economy",
+                price: displayFlight.price?.amount || 0,
+                currency: "INR",
+                features: ["Seat Selection", "Meal", "Baggage"],
+              }
+            : null
+        }
         onClose={() => setShowBargainModal(false)}
         onAccept={(finalPrice, orderRef) => {
-          console.log("Bargain accepted with price:", finalPrice, "Order:", orderRef);
+          console.log(
+            "Bargain accepted with price:",
+            finalPrice,
+            "Order:",
+            orderRef,
+          );
           setShowBargainModal(false);
           if (displayFlight) {
-            navigate('/booking-flow', {
+            navigate("/booking-flow", {
               state: {
                 selectedFlight: displayFlight,
-                selectedFareType: { type: displayFlight.fareClass || "Economy", price: finalPrice, currency: "INR", features: [] },
+                selectedFareType: {
+                  type: displayFlight.fareClass || "Economy",
+                  price: finalPrice,
+                  currency: "INR",
+                  features: [],
+                },
                 passengerCount: { adults: 1, children: 0 },
                 isBargainAccepted: true,
                 finalBargainPrice: finalPrice,
-                orderRef
-              }
+                orderRef,
+              },
             });
           }
         }}
@@ -600,12 +618,17 @@ export default function FlightDetails({
           console.log("Booking original price:", displayFlight?.price?.amount);
           setShowBargainModal(false);
           if (displayFlight) {
-            navigate('/booking-flow', {
+            navigate("/booking-flow", {
               state: {
                 selectedFlight: displayFlight,
-                selectedFareType: { type: displayFlight.fareClass || "Economy", price: displayFlight.price?.amount || 0, currency: "INR", features: [] },
-                passengerCount: { adults: 1, children: 0 }
-              }
+                selectedFareType: {
+                  type: displayFlight.fareClass || "Economy",
+                  price: displayFlight.price?.amount || 0,
+                  currency: "INR",
+                  features: [],
+                },
+                passengerCount: { adults: 1, children: 0 },
+              },
             });
           }
         }}

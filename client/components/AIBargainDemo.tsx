@@ -1,11 +1,21 @@
-import React from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Plane, Building, MapPin, Car, Sparkles } from 'lucide-react';
-import { AINegotiationChat } from './AINegotiationChat';
-import { useAIBargain, createFlightBargainDetails, createHotelBargainDetails } from '@/hooks/useAIBargain';
-import { formatPriceNoDecimals } from '@/lib/formatPrice';
-import { useCurrency } from '@/contexts/CurrencyContext';
+import React from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Plane, Building, MapPin, Car, Sparkles } from "lucide-react";
+import { AINegotiationChat } from "./AINegotiationChat";
+import {
+  useAIBargain,
+  createFlightBargainDetails,
+  createHotelBargainDetails,
+} from "@/hooks/useAIBargain";
+import { formatPriceNoDecimals } from "@/lib/formatPrice";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 export function AIBargainDemo() {
   const { selectedCurrency } = useCurrency();
@@ -14,53 +24,58 @@ export function AIBargainDemo() {
   // Set up success/failure callbacks
   React.useEffect(() => {
     bargainHook.setSuccessCallback((finalPrice, orderRef) => {
-      console.log(`🎉 Bargain successful! Final price: ${finalPrice}, Order: ${orderRef}`);
+      console.log(
+        `🎉 Bargain successful! Final price: ${finalPrice}, Order: ${orderRef}`,
+      );
       // Navigate to booking confirmation or update state
     });
 
     bargainHook.setFailureCallback(() => {
-      console.log('❌ Bargain failed - redirecting to search');
+      console.log("❌ Bargain failed - redirecting to search");
       // Redirect to search or show error
     });
   }, []);
 
   // Demo data
   const demoFlight = {
-    airline: 'IndiGo',
-    flightNumber: '6E-123',
-    origin: 'BOM',
-    destination: 'DEL',
+    airline: "IndiGo",
+    flightNumber: "6E-123",
+    origin: "BOM",
+    destination: "DEL",
     totalPrice: 8500,
-    departure: { iataCode: 'BOM' },
-    arrival: { iataCode: 'DEL' }
+    departure: { iataCode: "BOM" },
+    arrival: { iataCode: "DEL" },
   };
 
   const demoHotel = {
-    id: 'hotel-123',
-    name: 'The Taj Hotel',
-    location: 'Mumbai',
-    totalPrice: 12000
+    id: "hotel-123",
+    name: "The Taj Hotel",
+    location: "Mumbai",
+    totalPrice: 12000,
   };
 
   const startFlightBargain = () => {
-    const productDetails = createFlightBargainDetails(demoFlight, 'flight-demo-123');
-    
+    const productDetails = createFlightBargainDetails(
+      demoFlight,
+      "flight-demo-123",
+    );
+
     bargainHook.startBargain({
-      module: 'flights',
-      title: 'AI Price Negotiator',
+      module: "flights",
+      title: "AI Price Negotiator",
       productDetails,
-      userOffer: 7500 // User wants to pay 7500 instead of 8500
+      userOffer: 7500, // User wants to pay 7500 instead of 8500
     });
   };
 
   const startHotelBargain = () => {
     const productDetails = createHotelBargainDetails(demoHotel);
-    
+
     bargainHook.startBargain({
-      module: 'hotels',
-      title: 'AI Hotel Negotiator',
+      module: "hotels",
+      title: "AI Hotel Negotiator",
       productDetails,
-      userOffer: 10000 // User wants to pay 10000 instead of 12000
+      userOffer: 10000, // User wants to pay 10000 instead of 12000
     });
   };
 
@@ -72,7 +87,8 @@ export function AIBargainDemo() {
           AI Emotional-Intelligence Bargain Demo
         </h1>
         <p className="text-gray-600">
-          Experience live chat negotiation with our AI that understands emotions and adapts its strategy
+          Experience live chat negotiation with our AI that understands emotions
+          and adapts its strategy
         </p>
       </div>
 
@@ -97,13 +113,14 @@ export function AIBargainDemo() {
                 {demoFlight.origin} → {demoFlight.destination}
               </div>
               <div className="text-lg font-bold text-blue-900 mt-2">
-                Listed: {formatPriceNoDecimals(demoFlight.totalPrice, selectedCurrency)}
+                Listed:{" "}
+                {formatPriceNoDecimals(demoFlight.totalPrice, selectedCurrency)}
               </div>
               <div className="text-sm text-blue-600 mt-1">
                 Your offer: {formatPriceNoDecimals(7500, selectedCurrency)}
               </div>
             </div>
-            
+
             <Button onClick={startFlightBargain} className="w-full">
               Start AI Flight Negotiation
             </Button>
@@ -126,18 +143,20 @@ export function AIBargainDemo() {
               <div className="font-semibold text-green-900">
                 {demoHotel.name}
               </div>
-              <div className="text-green-700">
-                {demoHotel.location}
-              </div>
+              <div className="text-green-700">{demoHotel.location}</div>
               <div className="text-lg font-bold text-green-900 mt-2">
-                Listed: {formatPriceNoDecimals(demoHotel.totalPrice, selectedCurrency)}
+                Listed:{" "}
+                {formatPriceNoDecimals(demoHotel.totalPrice, selectedCurrency)}
               </div>
               <div className="text-sm text-green-600 mt-1">
                 Your offer: {formatPriceNoDecimals(10000, selectedCurrency)}
               </div>
             </div>
-            
-            <Button onClick={startHotelBargain} className="w-full bg-green-600 hover:bg-green-700">
+
+            <Button
+              onClick={startHotelBargain}
+              className="w-full bg-green-600 hover:bg-green-700"
+            >
               Start AI Hotel Negotiation
             </Button>
           </CardContent>
@@ -160,27 +179,30 @@ export function AIBargainDemo() {
               </div>
               <h3 className="font-semibold mb-2">Emotional Intelligence</h3>
               <p className="text-sm text-gray-600">
-                AI adapts its negotiation style based on your offer pattern and emotional cues
+                AI adapts its negotiation style based on your offer pattern and
+                emotional cues
               </p>
             </div>
-            
+
             <div className="text-center p-4">
               <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
                 <MapPin className="w-6 h-6 text-green-600" />
               </div>
               <h3 className="font-semibold mb-2">Never-Loss Pricing</h3>
               <p className="text-sm text-gray-600">
-                Advanced algorithms ensure profitability while maximizing customer satisfaction
+                Advanced algorithms ensure profitability while maximizing
+                customer satisfaction
               </p>
             </div>
-            
+
             <div className="text-center p-4">
               <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
                 <Car className="w-6 h-6 text-purple-600" />
               </div>
               <h3 className="font-semibold mb-2">Live Chat Experience</h3>
               <p className="text-sm text-gray-600">
-                Real-time negotiation with timed beats and authentic supplier interactions
+                Real-time negotiation with timed beats and authentic supplier
+                interactions
               </p>
             </div>
           </div>

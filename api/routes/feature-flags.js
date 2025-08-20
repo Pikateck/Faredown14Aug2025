@@ -24,25 +24,24 @@ router.get("/", async (req, res) => {
     `);
 
     const flags = {};
-    result.rows.forEach(row => {
+    result.rows.forEach((row) => {
       flags[row.key] = {
         enabled: row.enabled,
         payload: row.payload,
-        updatedAt: row.updated_at
+        updatedAt: row.updated_at,
       };
     });
 
     res.json({
       flags,
       count: result.rows.length,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
     console.error("Get feature flags error:", error);
     res.status(500).json({
       error: "Failed to fetch feature flags",
-      code: "INTERNAL_ERROR"
+      code: "INTERNAL_ERROR",
     });
   }
 });
@@ -57,14 +56,14 @@ router.get("/:key", async (req, res) => {
 
     const result = await db.query(
       "SELECT key, enabled, payload, updated_at FROM features WHERE key = $1",
-      [key]
+      [key],
     );
 
     if (result.rows.length === 0) {
       return res.status(404).json({
         error: "Feature flag not found",
         code: "FLAG_NOT_FOUND",
-        key
+        key,
       });
     }
 
@@ -74,14 +73,13 @@ router.get("/:key", async (req, res) => {
       key: flag.key,
       enabled: flag.enabled,
       payload: flag.payload,
-      updatedAt: flag.updated_at
+      updatedAt: flag.updated_at,
     });
-
   } catch (error) {
     console.error("Get feature flag error:", error);
     res.status(500).json({
       error: "Failed to fetch feature flag",
-      code: "INTERNAL_ERROR"
+      code: "INTERNAL_ERROR",
     });
   }
 });
@@ -96,15 +94,16 @@ router.put("/:key", authenticateToken, requireAdmin, async (req, res) => {
     const { enabled, payload } = req.body;
 
     // Validation
-    if (typeof enabled !== 'boolean') {
+    if (typeof enabled !== "boolean") {
       return res.status(400).json({
         error: "enabled field must be a boolean",
-        code: "INVALID_INPUT"
+        code: "INVALID_INPUT",
       });
     }
 
     // Update or insert feature flag
-    const result = await db.query(`
+    const result = await db.query(
+      `
       INSERT INTO features (key, enabled, payload, updated_at)
       VALUES ($1, $2, $3, NOW())
       ON CONFLICT (key) 
@@ -113,7 +112,9 @@ router.put("/:key", authenticateToken, requireAdmin, async (req, res) => {
         payload = EXCLUDED.payload,
         updated_at = NOW()
       RETURNING key, enabled, payload, updated_at
-    `, [key, enabled, payload || {}]);
+    `,
+      [key, enabled, payload || {}],
+    );
 
     const updatedFlag = result.rows[0];
 
@@ -125,14 +126,13 @@ router.put("/:key", authenticateToken, requireAdmin, async (req, res) => {
       enabled: updatedFlag.enabled,
       payload: updatedFlag.payload,
       updatedAt: updatedFlag.updated_at,
-      message: "Feature flag updated successfully"
+      message: "Feature flag updated successfully",
     });
-
   } catch (error) {
     console.error("Update feature flag error:", error);
     res.status(500).json({
       error: "Failed to update feature flag",
-      code: "INTERNAL_ERROR"
+      code: "INTERNAL_ERROR",
     });
   }
 });
@@ -148,7 +148,7 @@ router.post("/bulk", authenticateToken, requireAdmin, async (req, res) => {
     if (!Array.isArray(flags)) {
       return res.status(400).json({
         error: "flags must be an array",
-        code: "INVALID_INPUT"
+        code: "INVALID_INPUT",
       });
     }
 
@@ -159,11 +159,12 @@ router.post("/bulk", authenticateToken, requireAdmin, async (req, res) => {
       for (const flag of flags) {
         const { key, enabled, payload } = flag;
 
-        if (!key || typeof enabled !== 'boolean') {
+        if (!key || typeof enabled !== "boolean") {
           throw new Error(`Invalid flag: ${JSON.stringify(flag)}`);
         }
 
-        const result = await client.query(`
+        const result = await client.query(
+          `
           INSERT INTO features (key, enabled, payload, updated_at)
           VALUES ($1, $2, $3, NOW())
           ON CONFLICT (key) 
@@ -172,26 +173,29 @@ router.post("/bulk", authenticateToken, requireAdmin, async (req, res) => {
             payload = EXCLUDED.payload,
             updated_at = NOW()
           RETURNING key, enabled, payload, updated_at
-        `, [key, enabled, payload || {}]);
+        `,
+          [key, enabled, payload || {}],
+        );
 
         results.push(result.rows[0]);
       }
     });
 
-    console.log(`Bulk feature flags update: ${results.length} flags updated by admin`);
+    console.log(
+      `Bulk feature flags update: ${results.length} flags updated by admin`,
+    );
 
     res.json({
       updated: results,
       count: results.length,
-      message: "Feature flags updated successfully"
+      message: "Feature flags updated successfully",
     });
-
   } catch (error) {
     console.error("Bulk update feature flags error:", error);
     res.status(500).json({
       error: "Failed to update feature flags",
       code: "INTERNAL_ERROR",
-      details: error.message
+      details: error.message,
     });
   }
 });
@@ -206,14 +210,14 @@ router.delete("/:key", authenticateToken, requireAdmin, async (req, res) => {
 
     const result = await db.query(
       "DELETE FROM features WHERE key = $1 RETURNING key",
-      [key]
+      [key],
     );
 
     if (result.rows.length === 0) {
       return res.status(404).json({
         error: "Feature flag not found",
         code: "FLAG_NOT_FOUND",
-        key
+        key,
       });
     }
 
@@ -221,14 +225,13 @@ router.delete("/:key", authenticateToken, requireAdmin, async (req, res) => {
 
     res.json({
       key,
-      message: "Feature flag deleted successfully"
+      message: "Feature flag deleted successfully",
     });
-
   } catch (error) {
     console.error("Delete feature flag error:", error);
     res.status(500).json({
       error: "Failed to delete feature flag",
-      code: "INTERNAL_ERROR"
+      code: "INTERNAL_ERROR",
     });
   }
 });
@@ -243,7 +246,7 @@ router.get("/check/:key", async (req, res) => {
 
     const result = await db.query(
       "SELECT enabled FROM features WHERE key = $1",
-      [key]
+      [key],
     );
 
     const enabled = result.rows.length > 0 ? result.rows[0].enabled : false;
@@ -251,14 +254,13 @@ router.get("/check/:key", async (req, res) => {
     res.json({
       key,
       enabled,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
     console.error("Check feature flag error:", error);
     res.status(500).json({
       error: "Failed to check feature flag",
-      code: "INTERNAL_ERROR"
+      code: "INTERNAL_ERROR",
     });
   }
 });
@@ -276,24 +278,23 @@ router.get("/ai/config", async (req, res) => {
     `);
 
     const config = {};
-    result.rows.forEach(row => {
+    result.rows.forEach((row) => {
       config[row.key] = {
         enabled: row.enabled,
-        ...row.payload
+        ...row.payload,
       };
     });
 
     res.json({
       config,
       timestamp: new Date().toISOString(),
-      version: "1.0.0"
+      version: "1.0.0",
     });
-
   } catch (error) {
     console.error("Get AI config error:", error);
     res.status(500).json({
       error: "Failed to get AI configuration",
-      code: "INTERNAL_ERROR"
+      code: "INTERNAL_ERROR",
     });
   }
 });
@@ -302,97 +303,104 @@ router.get("/ai/config", async (req, res) => {
  * POST /feature-flags/preset/:preset
  * Apply predefined feature flag presets (admin only)
  */
-router.post("/preset/:preset", authenticateToken, requireAdmin, async (req, res) => {
-  try {
-    const { preset } = req.params;
+router.post(
+  "/preset/:preset",
+  authenticateToken,
+  requireAdmin,
+  async (req, res) => {
+    try {
+      const { preset } = req.params;
 
-    let presetFlags = [];
+      let presetFlags = [];
 
-    switch (preset) {
-      case 'conservative':
-        presetFlags = [
-          { key: 'ai_bargain_enabled', enabled: true },
-          { key: 'emotional_intelligence', enabled: false },
-          { key: 'visible_rounds_mode', enabled: true },
-          { key: 'hidden_rounds_mode', enabled: false },
-          { key: 'urgency_messaging', enabled: false },
-          { key: 'copy_pack_rotation', enabled: false }
-        ];
-        break;
+      switch (preset) {
+        case "conservative":
+          presetFlags = [
+            { key: "ai_bargain_enabled", enabled: true },
+            { key: "emotional_intelligence", enabled: false },
+            { key: "visible_rounds_mode", enabled: true },
+            { key: "hidden_rounds_mode", enabled: false },
+            { key: "urgency_messaging", enabled: false },
+            { key: "copy_pack_rotation", enabled: false },
+          ];
+          break;
 
-      case 'aggressive':
-        presetFlags = [
-          { key: 'ai_bargain_enabled', enabled: true },
-          { key: 'emotional_intelligence', enabled: true },
-          { key: 'visible_rounds_mode', enabled: false },
-          { key: 'hidden_rounds_mode', enabled: true },
-          { key: 'urgency_messaging', enabled: true },
-          { key: 'copy_pack_rotation', enabled: true }
-        ];
-        break;
+        case "aggressive":
+          presetFlags = [
+            { key: "ai_bargain_enabled", enabled: true },
+            { key: "emotional_intelligence", enabled: true },
+            { key: "visible_rounds_mode", enabled: false },
+            { key: "hidden_rounds_mode", enabled: true },
+            { key: "urgency_messaging", enabled: true },
+            { key: "copy_pack_rotation", enabled: true },
+          ];
+          break;
 
-      case 'balanced':
-        presetFlags = [
-          { key: 'ai_bargain_enabled', enabled: true },
-          { key: 'emotional_intelligence', enabled: true },
-          { key: 'visible_rounds_mode', enabled: true },
-          { key: 'hidden_rounds_mode', enabled: false },
-          { key: 'urgency_messaging', enabled: true },
-          { key: 'copy_pack_rotation', enabled: true }
-        ];
-        break;
+        case "balanced":
+          presetFlags = [
+            { key: "ai_bargain_enabled", enabled: true },
+            { key: "emotional_intelligence", enabled: true },
+            { key: "visible_rounds_mode", enabled: true },
+            { key: "hidden_rounds_mode", enabled: false },
+            { key: "urgency_messaging", enabled: true },
+            { key: "copy_pack_rotation", enabled: true },
+          ];
+          break;
 
-      case 'disabled':
-        presetFlags = [
-          { key: 'ai_bargain_enabled', enabled: false },
-          { key: 'emotional_intelligence', enabled: false },
-          { key: 'visible_rounds_mode', enabled: false },
-          { key: 'hidden_rounds_mode', enabled: false },
-          { key: 'urgency_messaging', enabled: false },
-          { key: 'copy_pack_rotation', enabled: false }
-        ];
-        break;
+        case "disabled":
+          presetFlags = [
+            { key: "ai_bargain_enabled", enabled: false },
+            { key: "emotional_intelligence", enabled: false },
+            { key: "visible_rounds_mode", enabled: false },
+            { key: "hidden_rounds_mode", enabled: false },
+            { key: "urgency_messaging", enabled: false },
+            { key: "copy_pack_rotation", enabled: false },
+          ];
+          break;
 
-      default:
-        return res.status(400).json({
-          error: "Invalid preset",
-          code: "INVALID_PRESET",
-          available: ['conservative', 'aggressive', 'balanced', 'disabled']
-        });
-    }
+        default:
+          return res.status(400).json({
+            error: "Invalid preset",
+            code: "INVALID_PRESET",
+            available: ["conservative", "aggressive", "balanced", "disabled"],
+          });
+      }
 
-    // Apply preset
-    const results = [];
-    await db.transaction(async (client) => {
-      for (const flag of presetFlags) {
-        const result = await client.query(`
+      // Apply preset
+      const results = [];
+      await db.transaction(async (client) => {
+        for (const flag of presetFlags) {
+          const result = await client.query(
+            `
           INSERT INTO features (key, enabled, payload, updated_at)
           VALUES ($1, $2, $3, NOW())
           ON CONFLICT (key) 
           DO UPDATE SET enabled = EXCLUDED.enabled, updated_at = NOW()
           RETURNING key, enabled
-        `, [flag.key, flag.enabled, {}]);
+        `,
+            [flag.key, flag.enabled, {}],
+          );
 
-        results.push(result.rows[0]);
-      }
-    });
+          results.push(result.rows[0]);
+        }
+      });
 
-    console.log(`Feature preset '${preset}' applied by admin`);
+      console.log(`Feature preset '${preset}' applied by admin`);
 
-    res.json({
-      preset,
-      applied: results,
-      count: results.length,
-      message: `Preset '${preset}' applied successfully`
-    });
-
-  } catch (error) {
-    console.error("Apply preset error:", error);
-    res.status(500).json({
-      error: "Failed to apply preset",
-      code: "INTERNAL_ERROR"
-    });
-  }
-});
+      res.json({
+        preset,
+        applied: results,
+        count: results.length,
+        message: `Preset '${preset}' applied successfully`,
+      });
+    } catch (error) {
+      console.error("Apply preset error:", error);
+      res.status(500).json({
+        error: "Failed to apply preset",
+        code: "INTERNAL_ERROR",
+      });
+    }
+  },
+);
 
 module.exports = router;

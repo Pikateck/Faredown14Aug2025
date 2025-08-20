@@ -1,12 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useDebounce } from "@/hooks/useDebounce";
-import {
-  X,
-  Search,
-  Plane,
-  Building,
-  MapPin,
-} from "lucide-react";
+import { X, Search, Plane, Building, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface CityData {
@@ -44,74 +38,79 @@ export function BookingStyleDropdown({
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Memoized popular destinations (static data)
-  const popularDestinations = useMemo(() => [
-    {
-      id: "DXB",
-      code: "DXB",
-      name: "Dubai",
-      country: "United Arab Emirates",
-      airport: "Dubai International Airport",
-    },
-    {
-      id: "BOM",
-      code: "BOM",
-      name: "Mumbai",
-      country: "India",
-      airport: "Rajiv Gandhi Shivaji International",
-    },
-    {
-      id: "DEL",
-      code: "DEL",
-      name: "Delhi",
-      country: "India",
-      airport: "Indira Gandhi International",
-    },
-    {
-      id: "SIN",
-      code: "SIN",
-      name: "Singapore",
-      country: "Singapore",
-      airport: "Changi Airport",
-    },
-    {
-      id: "LON",
-      code: "LON",
-      name: "London",
-      country: "United Kingdom",
-      airport: "Heathrow Airport",
-    },
-    {
-      id: "PAR",
-      code: "PAR",
-      name: "Paris",
-      country: "France",
-      airport: "Charles de Gaulle Airport",
-    },
-  ], []);
+  const popularDestinations = useMemo(
+    () => [
+      {
+        id: "DXB",
+        code: "DXB",
+        name: "Dubai",
+        country: "United Arab Emirates",
+        airport: "Dubai International Airport",
+      },
+      {
+        id: "BOM",
+        code: "BOM",
+        name: "Mumbai",
+        country: "India",
+        airport: "Rajiv Gandhi Shivaji International",
+      },
+      {
+        id: "DEL",
+        code: "DEL",
+        name: "Delhi",
+        country: "India",
+        airport: "Indira Gandhi International",
+      },
+      {
+        id: "SIN",
+        code: "SIN",
+        name: "Singapore",
+        country: "Singapore",
+        airport: "Changi Airport",
+      },
+      {
+        id: "LON",
+        code: "LON",
+        name: "London",
+        country: "United Kingdom",
+        airport: "Heathrow Airport",
+      },
+      {
+        id: "PAR",
+        code: "PAR",
+        name: "Paris",
+        country: "France",
+        airport: "Charles de Gaulle Airport",
+      },
+    ],
+    [],
+  );
 
   // Memoized city filtering with debounced search
   const filteredCities = useMemo(() => {
     if (!debouncedSearchQuery) return Object.entries(cities);
     const query = debouncedSearchQuery.toLowerCase();
-    return Object.entries(cities).filter(([city, data]) => (
-      city.toLowerCase().includes(query) ||
-      data.code.toLowerCase().includes(query) ||
-      data.name.toLowerCase().includes(query) ||
-      data.airport.toLowerCase().includes(query) ||
-      data.fullName.toLowerCase().includes(query)
-    ));
+    return Object.entries(cities).filter(
+      ([city, data]) =>
+        city.toLowerCase().includes(query) ||
+        data.code.toLowerCase().includes(query) ||
+        data.name.toLowerCase().includes(query) ||
+        data.airport.toLowerCase().includes(query) ||
+        data.fullName.toLowerCase().includes(query),
+    );
   }, [debouncedSearchQuery, cities]);
 
   // Memoized filtered popular destinations
   const filteredPopularDestinations = useMemo(() => {
     if (!debouncedSearchQuery) return popularDestinations;
     const query = debouncedSearchQuery.toLowerCase();
-    return popularDestinations.filter((dest) => (
-      dest.name.toLowerCase().includes(query) ||
-      dest.code.toLowerCase().includes(query) ||
-      dest.country.toLowerCase().includes(query) ||
-      dest.airport.toLowerCase().includes(query)
-    ));
+    return popularDestinations.filter(
+      (dest) =>
+        dest.name.toLowerCase().includes(query) ||
+        dest.code.toLowerCase().includes(query) ||
+        dest.country.toLowerCase().includes(query) ||
+        dest.airport.toLowerCase().includes(query),
+    );
   }, [debouncedSearchQuery, popularDestinations]);
 
   // Calculate position based on trigger element
@@ -129,14 +128,18 @@ export function BookingStyleDropdown({
   // Handle click outside to close
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         onClose();
       }
     };
 
     if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => document.removeEventListener('mousedown', handleClickOutside);
+      document.addEventListener("mousedown", handleClickOutside);
+      return () =>
+        document.removeEventListener("mousedown", handleClickOutside);
     }
   }, [isOpen, onClose]);
 
@@ -172,12 +175,16 @@ export function BookingStyleDropdown({
               />
             </div>
           </div>
-          
+
           {/* Popular Destinations */}
           <div className="mb-6">
             <div className="px-4 py-2 bg-blue-50 border border-blue-200 rounded-lg mb-3">
-              <h3 className="text-sm font-semibold text-blue-800">Popular Flight Destinations</h3>
-              <p className="text-xs text-blue-600">Popular airports and cities worldwide</p>
+              <h3 className="text-sm font-semibold text-blue-800">
+                Popular Flight Destinations
+              </h3>
+              <p className="text-xs text-blue-600">
+                Popular airports and cities worldwide
+              </p>
             </div>
             <div className="space-y-2">
               {filteredPopularDestinations.map((dest) => (
@@ -196,14 +203,19 @@ export function BookingStyleDropdown({
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
                         <span className="text-base font-medium text-gray-900">
-                          <span className="font-semibold">{dest.code}</span> • {dest.name}
+                          <span className="font-semibold">{dest.code}</span> •{" "}
+                          {dest.name}
                         </span>
                         <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
                           Popular
                         </span>
                       </div>
-                      <div className="text-sm text-gray-500">{dest.airport}</div>
-                      <div className="text-xs text-gray-400">{dest.country}</div>
+                      <div className="text-sm text-gray-500">
+                        {dest.airport}
+                      </div>
+                      <div className="text-xs text-gray-400">
+                        {dest.country}
+                      </div>
                     </div>
                   </div>
                 </button>
@@ -213,7 +225,9 @@ export function BookingStyleDropdown({
 
           {/* Regular Cities */}
           <div className="mb-4">
-            <h3 className="text-sm font-semibold text-gray-700 px-4 py-2">All Destinations</h3>
+            <h3 className="text-sm font-semibold text-gray-700 px-4 py-2">
+              All Destinations
+            </h3>
           </div>
           <div className="space-y-2">
             {filteredCities.map(([city, data]) => (
@@ -225,7 +239,9 @@ export function BookingStyleDropdown({
                 }}
                 className={cn(
                   "w-full text-left px-4 py-4 hover:bg-gray-50 rounded-lg border touch-manipulation",
-                  selectedCity === city ? "border-blue-500 bg-blue-50" : "border-gray-100",
+                  selectedCity === city
+                    ? "border-blue-500 bg-blue-50"
+                    : "border-gray-100",
                 )}
               >
                 <div className="flex items-center space-x-3">
@@ -234,7 +250,8 @@ export function BookingStyleDropdown({
                   </div>
                   <div className="flex-1">
                     <div className="text-base font-medium text-gray-900">
-                      <span className="font-semibold">{data.code}</span> • {city}
+                      <span className="font-semibold">{data.code}</span> •{" "}
+                      {city}
                     </div>
                     <div className="text-sm text-gray-500">{data.airport}</div>
                     <div className="text-xs text-gray-400">{data.fullName}</div>
@@ -248,7 +265,7 @@ export function BookingStyleDropdown({
 
       {/* Desktop: Booking.com style dropdown positioned below input */}
       <div className="hidden sm:block">
-        <div 
+        <div
           ref={dropdownRef}
           className="fixed bg-white rounded-lg shadow-2xl border border-gray-200 max-h-[400px] overflow-hidden z-[9999]"
           style={{
@@ -272,7 +289,7 @@ export function BookingStyleDropdown({
               />
             </div>
           </div>
-          
+
           <div className="max-h-[350px] overflow-y-auto">
             {/* Popular Destinations */}
             {searchQuery === "" && (
@@ -295,11 +312,16 @@ export function BookingStyleDropdown({
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="text-sm font-medium text-gray-900">
-                          <span className="font-bold">{dest.code}</span> {dest.name}
+                          <span className="font-bold">{dest.code}</span>{" "}
+                          {dest.name}
                         </div>
-                        <div className="text-xs text-gray-500 truncate">{dest.airport}</div>
+                        <div className="text-xs text-gray-500 truncate">
+                          {dest.airport}
+                        </div>
                       </div>
-                      <div className="text-xs text-gray-400">{dest.country}</div>
+                      <div className="text-xs text-gray-400">
+                        {dest.country}
+                      </div>
                     </button>
                   ))}
                 </div>
@@ -314,36 +336,44 @@ export function BookingStyleDropdown({
                 </h4>
               )}
               <div className="space-y-1">
-                {(searchQuery ? filteredCities : Object.entries(cities)).slice(0, 8).map(([city, data]) => (
-                  <button
-                    key={city}
-                    onClick={() => {
-                      onSelectCity(city);
-                      onClose();
-                    }}
-                    className={cn(
-                      "w-full text-left px-2 py-2 hover:bg-gray-50 rounded-md flex items-center space-x-3",
-                      selectedCity === city ? "bg-blue-50" : "",
-                    )}
-                  >
-                    <div className="w-8 h-8 bg-gray-50 rounded-full flex items-center justify-center flex-shrink-0">
-                      <Plane className="w-4 h-4 text-gray-600" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-sm font-medium text-gray-900">
-                        <span className="font-bold">{data.code}</span> {city}
+                {(searchQuery ? filteredCities : Object.entries(cities))
+                  .slice(0, 8)
+                  .map(([city, data]) => (
+                    <button
+                      key={city}
+                      onClick={() => {
+                        onSelectCity(city);
+                        onClose();
+                      }}
+                      className={cn(
+                        "w-full text-left px-2 py-2 hover:bg-gray-50 rounded-md flex items-center space-x-3",
+                        selectedCity === city ? "bg-blue-50" : "",
+                      )}
+                    >
+                      <div className="w-8 h-8 bg-gray-50 rounded-full flex items-center justify-center flex-shrink-0">
+                        <Plane className="w-4 h-4 text-gray-600" />
                       </div>
-                      <div className="text-xs text-gray-500 truncate">{data.airport}</div>
-                    </div>
-                    <div className="text-xs text-gray-400">{data.fullName.split(',').pop()?.trim()}</div>
-                  </button>
-                ))}
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm font-medium text-gray-900">
+                          <span className="font-bold">{data.code}</span> {city}
+                        </div>
+                        <div className="text-xs text-gray-500 truncate">
+                          {data.airport}
+                        </div>
+                      </div>
+                      <div className="text-xs text-gray-400">
+                        {data.fullName.split(",").pop()?.trim()}
+                      </div>
+                    </button>
+                  ))}
               </div>
-              
+
               {filteredCities.length === 0 && searchQuery && (
                 <div className="text-center py-4 text-gray-500">
                   <MapPin className="w-6 h-6 mx-auto mb-2 text-gray-400" />
-                  <p className="text-sm">No destinations found for "{searchQuery}"</p>
+                  <p className="text-sm">
+                    No destinations found for "{searchQuery}"
+                  </p>
                 </div>
               )}
             </div>

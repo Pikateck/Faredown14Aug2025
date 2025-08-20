@@ -45,14 +45,14 @@ export function MobileCityDropdown({
 }: MobileCityDropdownProps) {
   const [searchQuery, setSearchQuery] = useState("");
 
-  console.log('MobileCityDropdown render:', { isOpen, title });
+  console.log("MobileCityDropdown render:", { isOpen, title });
 
   if (!isOpen) {
-    console.log('Dropdown not open, returning null');
+    console.log("Dropdown not open, returning null");
     return null;
   }
 
-  console.log('Dropdown should be visible!');
+  console.log("Dropdown should be visible!");
 
   // Filter cities based on search query
   const filteredCities = Object.entries(cities).filter(([city, data]) => {

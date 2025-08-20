@@ -1,12 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
+import React, { useState, useEffect } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import {
   BarChart,
   Bar,
@@ -21,8 +33,8 @@ import {
   Pie,
   Cell,
   AreaChart,
-  Area
-} from 'recharts';
+  Area,
+} from "recharts";
 import {
   Brain,
   TrendingUp,
@@ -39,8 +51,8 @@ import {
   Zap,
   RefreshCw,
   AlertTriangle,
-  CheckCircle
-} from 'lucide-react';
+  CheckCircle,
+} from "lucide-react";
 
 interface BargainMetrics {
   totalSessions: number;
@@ -75,11 +87,17 @@ interface BehaviorPattern {
 
 export function AIBargainAnalytics() {
   const [metrics, setMetrics] = useState<BargainMetrics | null>(null);
-  const [modulePerformance, setModulePerformance] = useState<ModulePerformance[]>([]);
-  const [emotionalResponses, setEmotionalResponses] = useState<EmotionalResponse[]>([]);
-  const [behaviorPatterns, setBehaviorPatterns] = useState<BehaviorPattern[]>([]);
+  const [modulePerformance, setModulePerformance] = useState<
+    ModulePerformance[]
+  >([]);
+  const [emotionalResponses, setEmotionalResponses] = useState<
+    EmotionalResponse[]
+  >([]);
+  const [behaviorPatterns, setBehaviorPatterns] = useState<BehaviorPattern[]>(
+    [],
+  );
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedTimeRange, setSelectedTimeRange] = useState('7d');
+  const [selectedTimeRange, setSelectedTimeRange] = useState("7d");
   const [featureFlags, setFeatureFlags] = useState<Record<string, boolean>>({});
   const [aiSettings, setAiSettings] = useState({
     minMargin: 4.0,
@@ -87,7 +105,7 @@ export function AIBargainAnalytics() {
     maxAttempts: 3,
     holdSeconds: 30,
     emotionalIntelligence: true,
-    adaptivePricing: true
+    adaptivePricing: true,
   });
 
   useEffect(() => {
@@ -106,28 +124,92 @@ export function AIBargainAnalytics() {
         avgFinalMargin: 6.8,
         avgNegotiationTime: 8.4,
         totalRevenue: 2847500,
-        topPerformingModule: 'flights'
+        topPerformingModule: "flights",
       };
 
       const mockModulePerformance: ModulePerformance[] = [
-        { module: 'flights', sessions: 523, conversions: 398, avgMargin: 7.2, revenue: 1247500 },
-        { module: 'hotels', sessions: 387, conversions: 289, avgMargin: 8.1, revenue: 987600 },
-        { module: 'sightseeing', sessions: 201, conversions: 142, avgMargin: 12.5, revenue: 423800 },
-        { module: 'transfers', sessions: 136, conversions: 84, avgMargin: 5.9, revenue: 188600 }
+        {
+          module: "flights",
+          sessions: 523,
+          conversions: 398,
+          avgMargin: 7.2,
+          revenue: 1247500,
+        },
+        {
+          module: "hotels",
+          sessions: 387,
+          conversions: 289,
+          avgMargin: 8.1,
+          revenue: 987600,
+        },
+        {
+          module: "sightseeing",
+          sessions: 201,
+          conversions: 142,
+          avgMargin: 12.5,
+          revenue: 423800,
+        },
+        {
+          module: "transfers",
+          sessions: 136,
+          conversions: 84,
+          avgMargin: 5.9,
+          revenue: 188600,
+        },
       ];
 
       const mockEmotionalResponses: EmotionalResponse[] = [
-        { emotion: 'pleased', count: 412, conversionRate: 89.3, avgFinalPrice: 18500 },
-        { emotion: 'negotiating', count: 387, conversionRate: 71.2, avgFinalPrice: 16800 },
-        { emotion: 'firm', count: 234, conversionRate: 58.7, avgFinalPrice: 19200 },
-        { emotion: 'flexible', count: 214, conversionRate: 82.1, avgFinalPrice: 17200 }
+        {
+          emotion: "pleased",
+          count: 412,
+          conversionRate: 89.3,
+          avgFinalPrice: 18500,
+        },
+        {
+          emotion: "negotiating",
+          count: 387,
+          conversionRate: 71.2,
+          avgFinalPrice: 16800,
+        },
+        {
+          emotion: "firm",
+          count: 234,
+          conversionRate: 58.7,
+          avgFinalPrice: 19200,
+        },
+        {
+          emotion: "flexible",
+          count: 214,
+          conversionRate: 82.1,
+          avgFinalPrice: 17200,
+        },
       ];
 
       const mockBehaviorPatterns: BehaviorPattern[] = [
-        { pattern: 'Early Acceptor', frequency: 34.2, successRate: 91.5, description: 'Users who accept within first 2 rounds' },
-        { pattern: 'Persistent Negotiator', frequency: 28.7, successRate: 68.3, description: 'Users who use all 3 rounds' },
-        { pattern: 'Quick Decision', frequency: 22.1, successRate: 85.7, description: 'Decisions made under 10 seconds' },
-        { pattern: 'Price Sensitive', frequency: 15.0, successRate: 52.4, description: 'Offers significantly below base price' }
+        {
+          pattern: "Early Acceptor",
+          frequency: 34.2,
+          successRate: 91.5,
+          description: "Users who accept within first 2 rounds",
+        },
+        {
+          pattern: "Persistent Negotiator",
+          frequency: 28.7,
+          successRate: 68.3,
+          description: "Users who use all 3 rounds",
+        },
+        {
+          pattern: "Quick Decision",
+          frequency: 22.1,
+          successRate: 85.7,
+          description: "Decisions made under 10 seconds",
+        },
+        {
+          pattern: "Price Sensitive",
+          frequency: 15.0,
+          successRate: 52.4,
+          description: "Offers significantly below base price",
+        },
       ];
 
       setMetrics(mockMetrics);
@@ -135,7 +217,7 @@ export function AIBargainAnalytics() {
       setEmotionalResponses(mockEmotionalResponses);
       setBehaviorPatterns(mockBehaviorPatterns);
     } catch (error) {
-      console.error('Failed to fetch analytics:', error);
+      console.error("Failed to fetch analytics:", error);
     } finally {
       setIsLoading(false);
     }
@@ -152,10 +234,10 @@ export function AIBargainAnalytics() {
         competitor_panel: false,
         ai_admin_analytics: true,
         copy_pack_rotation: true,
-        urgency_messaging: true
+        urgency_messaging: true,
       });
     } catch (error) {
-      console.error('Failed to fetch feature flags:', error);
+      console.error("Failed to fetch feature flags:", error);
     }
   };
 
@@ -167,31 +249,31 @@ export function AIBargainAnalytics() {
       maxAttempts: 3,
       holdSeconds: 30,
       emotionalIntelligence: true,
-      adaptivePricing: true
+      adaptivePricing: true,
     });
   };
 
   const updateFeatureFlag = async (key: string, value: boolean) => {
     try {
-      setFeatureFlags(prev => ({ ...prev, [key]: value }));
+      setFeatureFlags((prev) => ({ ...prev, [key]: value }));
       // In production: await fetch('/api/admin/feature-flags', { ... })
       console.log(`Feature flag ${key} updated to ${value}`);
     } catch (error) {
-      console.error('Failed to update feature flag:', error);
+      console.error("Failed to update feature flag:", error);
     }
   };
 
   const updateAISetting = async (key: string, value: any) => {
     try {
-      setAiSettings(prev => ({ ...prev, [key]: value }));
+      setAiSettings((prev) => ({ ...prev, [key]: value }));
       // In production: await fetch('/api/admin/ai-settings', { ... })
       console.log(`AI setting ${key} updated to ${value}`);
     } catch (error) {
-      console.error('Failed to update AI setting:', error);
+      console.error("Failed to update AI setting:", error);
     }
   };
 
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8'];
+  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8"];
 
   if (isLoading) {
     return (
@@ -217,9 +299,12 @@ export function AIBargainAnalytics() {
             Emotional intelligence insights and behavioral optimization
           </p>
         </div>
-        
+
         <div className="flex items-center gap-4">
-          <Select value={selectedTimeRange} onValueChange={setSelectedTimeRange}>
+          <Select
+            value={selectedTimeRange}
+            onValueChange={setSelectedTimeRange}
+          >
             <SelectTrigger className="w-32">
               <SelectValue />
             </SelectTrigger>
@@ -230,7 +315,7 @@ export function AIBargainAnalytics() {
               <SelectItem value="90d">Last 90 days</SelectItem>
             </SelectContent>
           </Select>
-          
+
           <Button onClick={fetchAnalytics} variant="outline" size="sm">
             <RefreshCw className="w-4 h-4 mr-2" />
             Refresh
@@ -246,7 +331,9 @@ export function AIBargainAnalytics() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600">Total Sessions</p>
-                  <p className="text-2xl font-bold">{metrics.totalSessions.toLocaleString()}</p>
+                  <p className="text-2xl font-bold">
+                    {metrics.totalSessions.toLocaleString()}
+                  </p>
                 </div>
                 <Users className="w-8 h-8 text-blue-500" />
               </div>
@@ -258,7 +345,9 @@ export function AIBargainAnalytics() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600">Conversion Rate</p>
-                  <p className="text-2xl font-bold">{metrics.conversionRate}%</p>
+                  <p className="text-2xl font-bold">
+                    {metrics.conversionRate}%
+                  </p>
                 </div>
                 <Target className="w-8 h-8 text-green-500" />
               </div>
@@ -270,7 +359,9 @@ export function AIBargainAnalytics() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600">Avg Final Margin</p>
-                  <p className="text-2xl font-bold">{metrics.avgFinalMargin}%</p>
+                  <p className="text-2xl font-bold">
+                    {metrics.avgFinalMargin}%
+                  </p>
                 </div>
                 <TrendingUp className="w-8 h-8 text-purple-500" />
               </div>
@@ -282,7 +373,9 @@ export function AIBargainAnalytics() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600">Avg Time</p>
-                  <p className="text-2xl font-bold">{metrics.avgNegotiationTime}s</p>
+                  <p className="text-2xl font-bold">
+                    {metrics.avgNegotiationTime}s
+                  </p>
                 </div>
                 <Clock className="w-8 h-8 text-orange-500" />
               </div>
@@ -294,7 +387,9 @@ export function AIBargainAnalytics() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600">Revenue</p>
-                  <p className="text-2xl font-bold">₹{(metrics.totalRevenue / 100000).toFixed(1)}L</p>
+                  <p className="text-2xl font-bold">
+                    ₹{(metrics.totalRevenue / 100000).toFixed(1)}L
+                  </p>
                 </div>
                 <DollarSign className="w-8 h-8 text-green-600" />
               </div>
@@ -306,7 +401,9 @@ export function AIBargainAnalytics() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600">Top Module</p>
-                  <p className="text-2xl font-bold capitalize">{metrics.topPerformingModule}</p>
+                  <p className="text-2xl font-bold capitalize">
+                    {metrics.topPerformingModule}
+                  </p>
                 </div>
                 <BarChart3 className="w-8 h-8 text-blue-600" />
               </div>
@@ -329,7 +426,9 @@ export function AIBargainAnalytics() {
             <Card>
               <CardHeader>
                 <CardTitle>Module Performance</CardTitle>
-                <CardDescription>Revenue and conversion by product type</CardDescription>
+                <CardDescription>
+                  Revenue and conversion by product type
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
@@ -355,17 +454,25 @@ export function AIBargainAnalytics() {
                     <Pie
                       data={modulePerformance.map((item, index) => ({
                         ...item,
-                        conversionRate: ((item.conversions / item.sessions) * 100).toFixed(1)
+                        conversionRate: (
+                          (item.conversions / item.sessions) *
+                          100
+                        ).toFixed(1),
                       }))}
                       cx="50%"
                       cy="50%"
                       outerRadius={80}
                       fill="#8884d8"
                       dataKey="conversions"
-                      label={(entry) => `${entry.module}: ${entry.conversionRate}%`}
+                      label={(entry) =>
+                        `${entry.module}: ${entry.conversionRate}%`
+                      }
                     >
                       {modulePerformance.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={COLORS[index % COLORS.length]}
+                        />
                       ))}
                     </Pie>
                     <Tooltip />
@@ -382,7 +489,9 @@ export function AIBargainAnalytics() {
             <Card>
               <CardHeader>
                 <CardTitle>AI Emotional Responses</CardTitle>
-                <CardDescription>How AI emotions correlate with success</CardDescription>
+                <CardDescription>
+                  How AI emotions correlate with success
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
@@ -400,25 +509,40 @@ export function AIBargainAnalytics() {
             <Card>
               <CardHeader>
                 <CardTitle>Emotion Impact on Final Price</CardTitle>
-                <CardDescription>Average final price by AI emotional state</CardDescription>
+                <CardDescription>
+                  Average final price by AI emotional state
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   {emotionalResponses.map((emotion, index) => (
-                    <div key={emotion.emotion} className="flex items-center justify-between p-3 border rounded-lg">
+                    <div
+                      key={emotion.emotion}
+                      className="flex items-center justify-between p-3 border rounded-lg"
+                    >
                       <div className="flex items-center gap-3">
-                        <div 
+                        <div
                           className="w-4 h-4 rounded-full"
-                          style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                          style={{
+                            backgroundColor: COLORS[index % COLORS.length],
+                          }}
                         />
                         <div>
-                          <p className="font-medium capitalize">{emotion.emotion}</p>
-                          <p className="text-sm text-gray-600">{emotion.count} occurrences</p>
+                          <p className="font-medium capitalize">
+                            {emotion.emotion}
+                          </p>
+                          <p className="text-sm text-gray-600">
+                            {emotion.count} occurrences
+                          </p>
                         </div>
                       </div>
                       <div className="text-right">
-                        <p className="font-semibold">₹{emotion.avgFinalPrice.toLocaleString()}</p>
-                        <p className="text-sm text-gray-600">{emotion.conversionRate}% conversion</p>
+                        <p className="font-semibold">
+                          ₹{emotion.avgFinalPrice.toLocaleString()}
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          {emotion.conversionRate}% conversion
+                        </p>
                       </div>
                     </div>
                   ))}
@@ -433,7 +557,9 @@ export function AIBargainAnalytics() {
           <Card>
             <CardHeader>
               <CardTitle>User Behavior Patterns</CardTitle>
-              <CardDescription>Identified patterns and their success rates</CardDescription>
+              <CardDescription>
+                Identified patterns and their success rates
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid gap-4">
@@ -441,12 +567,22 @@ export function AIBargainAnalytics() {
                   <div key={pattern.pattern} className="p-4 border rounded-lg">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-3">
-                        <Badge variant={pattern.successRate > 80 ? "default" : pattern.successRate > 60 ? "secondary" : "destructive"}>
+                        <Badge
+                          variant={
+                            pattern.successRate > 80
+                              ? "default"
+                              : pattern.successRate > 60
+                                ? "secondary"
+                                : "destructive"
+                          }
+                        >
                           {pattern.successRate}% Success
                         </Badge>
                         <h3 className="font-semibold">{pattern.pattern}</h3>
                       </div>
-                      <span className="text-sm text-gray-600">{pattern.frequency}% of users</span>
+                      <span className="text-sm text-gray-600">
+                        {pattern.frequency}% of users
+                      </span>
                     </div>
                     <p className="text-gray-600">{pattern.description}</p>
                   </div>
@@ -463,20 +599,28 @@ export function AIBargainAnalytics() {
             <Card>
               <CardHeader>
                 <CardTitle>Feature Flags</CardTitle>
-                <CardDescription>Control AI behavior and features</CardDescription>
+                <CardDescription>
+                  Control AI behavior and features
+                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 {Object.entries(featureFlags).map(([key, enabled]) => (
                   <div key={key} className="flex items-center justify-between">
                     <div>
                       <Label htmlFor={key} className="font-medium">
-                        {key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                        {key
+                          .replace(/_/g, " ")
+                          .replace(/\b\w/g, (l) => l.toUpperCase())}
                       </Label>
                       <p className="text-sm text-gray-600">
-                        {key === 'ai_bargain_enabled' && 'Enable/disable AI bargaining globally'}
-                        {key === 'emotional_intelligence' && 'Use emotional intelligence in responses'}
-                        {key === 'visible_rounds_mode' && 'Show users their bargain attempt count'}
-                        {key === 'urgency_messaging' && 'Use time pressure and scarcity messaging'}
+                        {key === "ai_bargain_enabled" &&
+                          "Enable/disable AI bargaining globally"}
+                        {key === "emotional_intelligence" &&
+                          "Use emotional intelligence in responses"}
+                        {key === "visible_rounds_mode" &&
+                          "Show users their bargain attempt count"}
+                        {key === "urgency_messaging" &&
+                          "Use time pressure and scarcity messaging"}
                       </p>
                     </div>
                     <Switch
@@ -502,12 +646,16 @@ export function AIBargainAnalytics() {
                     id="minMargin"
                     type="number"
                     value={aiSettings.minMargin}
-                    onChange={(e) => updateAISetting('minMargin', parseFloat(e.target.value))}
+                    onChange={(e) =>
+                      updateAISetting("minMargin", parseFloat(e.target.value))
+                    }
                     min="0"
                     max="20"
                     step="0.1"
                   />
-                  <p className="text-sm text-gray-600 mt-1">Never-loss guardrail percentage</p>
+                  <p className="text-sm text-gray-600 mt-1">
+                    Never-loss guardrail percentage
+                  </p>
                 </div>
 
                 <div>
@@ -516,12 +664,19 @@ export function AIBargainAnalytics() {
                     id="maxConcession"
                     type="number"
                     value={aiSettings.maxConcession}
-                    onChange={(e) => updateAISetting('maxConcession', parseFloat(e.target.value))}
+                    onChange={(e) =>
+                      updateAISetting(
+                        "maxConcession",
+                        parseFloat(e.target.value),
+                      )
+                    }
                     min="0"
                     max="25"
                     step="0.1"
                   />
-                  <p className="text-sm text-gray-600 mt-1">Maximum discount from base price</p>
+                  <p className="text-sm text-gray-600 mt-1">
+                    Maximum discount from base price
+                  </p>
                 </div>
 
                 <div>
@@ -530,11 +685,15 @@ export function AIBargainAnalytics() {
                     id="maxAttempts"
                     type="number"
                     value={aiSettings.maxAttempts}
-                    onChange={(e) => updateAISetting('maxAttempts', parseInt(e.target.value))}
+                    onChange={(e) =>
+                      updateAISetting("maxAttempts", parseInt(e.target.value))
+                    }
                     min="1"
                     max="10"
                   />
-                  <p className="text-sm text-gray-600 mt-1">Maximum bargaining rounds per session</p>
+                  <p className="text-sm text-gray-600 mt-1">
+                    Maximum bargaining rounds per session
+                  </p>
                 </div>
 
                 <div>
@@ -543,29 +702,39 @@ export function AIBargainAnalytics() {
                     id="holdSeconds"
                     type="number"
                     value={aiSettings.holdSeconds}
-                    onChange={(e) => updateAISetting('holdSeconds', parseInt(e.target.value))}
+                    onChange={(e) =>
+                      updateAISetting("holdSeconds", parseInt(e.target.value))
+                    }
                     min="10"
                     max="300"
                   />
-                  <p className="text-sm text-gray-600 mt-1">Time to hold accepted offers</p>
+                  <p className="text-sm text-gray-600 mt-1">
+                    Time to hold accepted offers
+                  </p>
                 </div>
 
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <Label htmlFor="emotionalIntelligence">Emotional Intelligence</Label>
+                    <Label htmlFor="emotionalIntelligence">
+                      Emotional Intelligence
+                    </Label>
                     <Switch
                       id="emotionalIntelligence"
                       checked={aiSettings.emotionalIntelligence}
-                      onCheckedChange={(value) => updateAISetting('emotionalIntelligence', value)}
+                      onCheckedChange={(value) =>
+                        updateAISetting("emotionalIntelligence", value)
+                      }
                     />
                   </div>
-                  
+
                   <div className="flex items-center justify-between">
                     <Label htmlFor="adaptivePricing">Adaptive Pricing</Label>
                     <Switch
                       id="adaptivePricing"
                       checked={aiSettings.adaptivePricing}
-                      onCheckedChange={(value) => updateAISetting('adaptivePricing', value)}
+                      onCheckedChange={(value) =>
+                        updateAISetting("adaptivePricing", value)
+                      }
                     />
                   </div>
                 </div>

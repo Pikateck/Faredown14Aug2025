@@ -19,7 +19,7 @@ import {
   TrendingUp,
   Clock,
   AlertCircle,
-  Shield
+  Shield,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCurrency } from "@/contexts/CurrencyContext";
@@ -27,7 +27,7 @@ import { formatPriceNoDecimals } from "@/lib/formatPrice";
 
 interface ChatBeat {
   id: string;
-  type: 'agent' | 'supplier' | 'system';
+  type: "agent" | "supplier" | "system";
   message: string;
   timestamp: number;
   icon?: React.ReactNode;
@@ -35,7 +35,7 @@ interface ChatBeat {
 
 interface BargainSession {
   sessionId: string;
-  module: 'flights' | 'hotels' | 'sightseeing' | 'transfers';
+  module: "flights" | "hotels" | "sightseeing" | "transfers";
   productRef: string;
   userOffer: number;
   productDetails: {
@@ -55,7 +55,7 @@ interface BargainSession {
 }
 
 interface BargainResult {
-  status: 'accepted' | 'counter' | 'expired' | 'error';
+  status: "accepted" | "counter" | "expired" | "error";
   finalPrice?: number;
   basePrice?: number;
   negotiatedInMs?: number;
@@ -83,7 +83,12 @@ interface BargainBottomSheetProps {
   onSwitch?: (newProductRef: string) => void;
 }
 
-type BargainStep = 'negotiating' | 'decision' | 'holding' | 'success' | 'expired';
+type BargainStep =
+  | "negotiating"
+  | "decision"
+  | "holding"
+  | "success"
+  | "expired";
 
 export function BargainBottomSheet({
   isOpen,
@@ -91,11 +96,13 @@ export function BargainBottomSheet({
   onClose,
   onAccept,
   onRetry,
-  onSwitch
+  onSwitch,
 }: BargainBottomSheetProps) {
   const [chatBeats, setChatBeats] = useState<ChatBeat[]>([]);
-  const [currentStep, setCurrentStep] = useState<BargainStep>('negotiating');
-  const [bargainResult, setBargainResult] = useState<BargainResult | null>(null);
+  const [currentStep, setCurrentStep] = useState<BargainStep>("negotiating");
+  const [bargainResult, setBargainResult] = useState<BargainResult | null>(
+    null,
+  );
   const [holdData, setHoldData] = useState<HoldResponse | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [countdown, setCountdown] = useState(30);
@@ -107,71 +114,76 @@ export function BargainBottomSheet({
 
   // Module configuration
   const moduleConfig = React.useMemo(() => {
-    if (!session) return { icon: <Sparkles className="w-4 h-4" />, color: 'bg-gray-50 text-gray-600', supplierName: 'Supplier' };
-    
+    if (!session)
+      return {
+        icon: <Sparkles className="w-4 h-4" />,
+        color: "bg-gray-50 text-gray-600",
+        supplierName: "Supplier",
+      };
+
     switch (session.module) {
-      case 'flights':
-        return { 
-          icon: <Plane className="w-4 h-4" />, 
-          color: 'bg-blue-50 text-blue-600',
-          supplierName: 'Airline'
+      case "flights":
+        return {
+          icon: <Plane className="w-4 h-4" />,
+          color: "bg-blue-50 text-blue-600",
+          supplierName: "Airline",
         };
-      case 'hotels':
-        return { 
-          icon: <Building className="w-4 h-4" />, 
-          color: 'bg-green-50 text-green-600',
-          supplierName: 'Hotel'
+      case "hotels":
+        return {
+          icon: <Building className="w-4 h-4" />,
+          color: "bg-green-50 text-green-600",
+          supplierName: "Hotel",
         };
-      case 'sightseeing':
-        return { 
-          icon: <MapPin className="w-4 h-4" />, 
-          color: 'bg-purple-50 text-purple-600',
-          supplierName: 'Tour Provider'
+      case "sightseeing":
+        return {
+          icon: <MapPin className="w-4 h-4" />,
+          color: "bg-purple-50 text-purple-600",
+          supplierName: "Tour Provider",
         };
-      case 'transfers':
-        return { 
-          icon: <Car className="w-4 h-4" />, 
-          color: 'bg-orange-50 text-orange-600',
-          supplierName: 'Transfer Service'
+      case "transfers":
+        return {
+          icon: <Car className="w-4 h-4" />,
+          color: "bg-orange-50 text-orange-600",
+          supplierName: "Transfer Service",
         };
       default:
-        return { 
-          icon: <Sparkles className="w-4 h-4" />, 
-          color: 'bg-gray-50 text-gray-600',
-          supplierName: 'Supplier'
+        return {
+          icon: <Sparkles className="w-4 h-4" />,
+          color: "bg-gray-50 text-gray-600",
+          supplierName: "Supplier",
         };
     }
   }, [session?.module]);
 
   // Add chat beat with animation
-  const addChatBeat = (beat: Omit<ChatBeat, 'id' | 'timestamp'>) => {
+  const addChatBeat = (beat: Omit<ChatBeat, "id" | "timestamp">) => {
     const newBeat: ChatBeat = {
       ...beat,
       id: Date.now().toString(),
       timestamp: Date.now(),
     };
-    
-    setChatBeats(prev => [...prev, newBeat]);
-    
+
+    setChatBeats((prev) => [...prev, newBeat]);
+
     // Scroll to bottom
     setTimeout(() => {
-      chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, 100);
   };
 
   // Start negotiation sequence
   const startNegotiation = async () => {
     if (!session || isProcessing) return;
-    
+
     setIsProcessing(true);
     setError(null);
     setChatBeats([]);
-    setCurrentStep('negotiating');
-    
+    setCurrentStep("negotiating");
+
     try {
       // Beat 1: Faredown AI offers (immediately)
       addChatBeat({
-        type: 'agent',
+        type: "agent",
         message: `We have ${formatPriceNoDecimals(session.userOffer, selectedCurrency)} for ${session.productDetails.title}. Can you approve?`,
         icon: <Sparkles className="w-4 h-4 text-blue-500" />,
       });
@@ -179,20 +191,27 @@ export function BargainBottomSheet({
       // Beat 2: Supplier checks (after 2s)
       setTimeout(() => {
         addChatBeat({
-          type: 'supplier',
+          type: "supplier",
           message: `Listed at ${formatPriceNoDecimals(session.productDetails.basePrice, selectedCurrency)}. Checking now…`,
-          icon: <div className={cn("w-8 h-8 rounded-full flex items-center justify-center", moduleConfig.color)}>
-            {moduleConfig.icon}
-          </div>,
+          icon: (
+            <div
+              className={cn(
+                "w-8 h-8 rounded-full flex items-center justify-center",
+                moduleConfig.color,
+              )}
+            >
+              {moduleConfig.icon}
+            </div>
+          ),
         });
       }, 2000);
 
       // Call API after 3s
       setTimeout(async () => {
         try {
-          const response = await fetch('/api/bargains/quote', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+          const response = await fetch("/api/bargains/quote", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               module: session.module,
               productRef: session.productRef,
@@ -206,8 +225,8 @@ export function BargainBottomSheet({
                 tour_name: session.productDetails.tourName,
                 pickup: session.productDetails.pickup,
                 dropoff: session.productDetails.dropoff,
-              }
-            })
+              },
+            }),
           });
 
           if (!response.ok) {
@@ -218,46 +237,54 @@ export function BargainBottomSheet({
           setBargainResult(result);
 
           // Beat 3: Supplier responds (immediately after API)
-          const supplierMessage = result.status === 'accepted' 
-            ? `I can do ${formatPriceNoDecimals(result.finalPrice || session.userOffer, selectedCurrency)}.`
-            : `Best I can return now is ${formatPriceNoDecimals(result.finalPrice || session.productDetails.basePrice, selectedCurrency)}.`;
+          const supplierMessage =
+            result.status === "accepted"
+              ? `I can do ${formatPriceNoDecimals(result.finalPrice || session.userOffer, selectedCurrency)}.`
+              : `Best I can return now is ${formatPriceNoDecimals(result.finalPrice || session.productDetails.basePrice, selectedCurrency)}.`;
 
           addChatBeat({
-            type: 'supplier',
+            type: "supplier",
             message: supplierMessage,
-            icon: <div className={cn("w-8 h-8 rounded-full flex items-center justify-center", moduleConfig.color)}>
-              {moduleConfig.icon}
-            </div>,
+            icon: (
+              <div
+                className={cn(
+                  "w-8 h-8 rounded-full flex items-center justify-center",
+                  moduleConfig.color,
+                )}
+              >
+                {moduleConfig.icon}
+              </div>
+            ),
           });
 
           // Beat 4: Faredown AI confirms (after 1s)
           setTimeout(() => {
             addChatBeat({
-              type: 'agent',
+              type: "agent",
               message: "Let me check with you if you want it.",
               icon: <Sparkles className="w-4 h-4 text-blue-500" />,
             });
 
             // Show decision panel after 1s
             setTimeout(() => {
-              setCurrentStep('decision');
+              setCurrentStep("decision");
               setMinDisplayTime(true);
               // Allow interaction after 2s
               setTimeout(() => setMinDisplayTime(false), 2000);
             }, 1000);
           }, 1000);
-
         } catch (error) {
-          console.error('Negotiation error:', error);
-          setError(error instanceof Error ? error.message : 'Negotiation failed');
-          setCurrentStep('expired');
+          console.error("Negotiation error:", error);
+          setError(
+            error instanceof Error ? error.message : "Negotiation failed",
+          );
+          setCurrentStep("expired");
         }
       }, 3000);
-      
     } catch (error) {
-      console.error('Negotiation error:', error);
-      setError(error instanceof Error ? error.message : 'Negotiation failed');
-      setCurrentStep('expired');
+      console.error("Negotiation error:", error);
+      setError(error instanceof Error ? error.message : "Negotiation failed");
+      setCurrentStep("expired");
     } finally {
       setIsProcessing(false);
     }
@@ -265,18 +292,19 @@ export function BargainBottomSheet({
 
   // Accept the offer
   const handleAccept = async () => {
-    if (!bargainResult?.finalPrice || !session?.sessionId || minDisplayTime) return;
-    
+    if (!bargainResult?.finalPrice || !session?.sessionId || minDisplayTime)
+      return;
+
     setIsProcessing(true);
-    
+
     try {
-      const response = await fetch('/api/bargains/accept', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/bargains/accept", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           sessionId: session.sessionId,
-          finalPrice: bargainResult.finalPrice
-        })
+          finalPrice: bargainResult.finalPrice,
+        }),
       });
 
       if (!response.ok) {
@@ -285,25 +313,26 @@ export function BargainBottomSheet({
 
       const holdResult: HoldResponse = await response.json();
       setHoldData(holdResult);
-      setCurrentStep('holding');
+      setCurrentStep("holding");
       setCountdown(holdResult.holdSeconds);
 
       // Start countdown
       const countdownInterval = setInterval(() => {
-        setCountdown(prev => {
+        setCountdown((prev) => {
           if (prev <= 1) {
             clearInterval(countdownInterval);
-            setCurrentStep('success');
+            setCurrentStep("success");
             onAccept(holdResult.finalPrice, holdResult.orderRef);
             return 0;
           }
           return prev - 1;
         });
       }, 1000);
-
     } catch (error) {
-      console.error('Accept error:', error);
-      setError(error instanceof Error ? error.message : 'Failed to accept offer');
+      console.error("Accept error:", error);
+      setError(
+        error instanceof Error ? error.message : "Failed to accept offer",
+      );
     } finally {
       setIsProcessing(false);
     }
@@ -336,7 +365,9 @@ export function BargainBottomSheet({
               <DialogTitle className="text-lg font-semibold text-gray-900">
                 AI Price Negotiator
               </DialogTitle>
-              <p className="text-sm text-gray-600 truncate">{session.productDetails.title}</p>
+              <p className="text-sm text-gray-600 truncate">
+                {session.productDetails.title}
+              </p>
             </div>
             <button
               onClick={onClose}
@@ -345,12 +376,13 @@ export function BargainBottomSheet({
               <X className="w-5 h-5 text-gray-500" />
             </button>
           </div>
-          
+
           {/* Attempt indicator */}
           {bargainResult?.attempt && (
             <div className="mt-2">
               <span className="text-xs text-gray-500">
-                Round {bargainResult.attempt.count} of {bargainResult.attempt.max}
+                Round {bargainResult.attempt.count} of{" "}
+                {bargainResult.attempt.max}
               </span>
             </div>
           )}
@@ -363,7 +395,7 @@ export function BargainBottomSheet({
               key={beat.id}
               className={cn(
                 "flex items-start space-x-3 animate-in fade-in-50 slide-in-from-left-2",
-                beat.type === 'agent' ? 'flex-row' : 'flex-row'
+                beat.type === "agent" ? "flex-row" : "flex-row",
               )}
             >
               <div className="flex-shrink-0">
@@ -374,28 +406,41 @@ export function BargainBottomSheet({
                 )}
               </div>
               <div className="flex-1">
-                <div className={cn(
-                  "px-4 py-3 rounded-lg max-w-[280px]",
-                  beat.type === 'agent' 
-                    ? "bg-blue-500 text-white" 
-                    : "bg-white border shadow-sm"
-                )}>
+                <div
+                  className={cn(
+                    "px-4 py-3 rounded-lg max-w-[280px]",
+                    beat.type === "agent"
+                      ? "bg-blue-500 text-white"
+                      : "bg-white border shadow-sm",
+                  )}
+                >
                   <p className="text-sm">{beat.message}</p>
                 </div>
                 <p className="text-xs text-gray-500 mt-1">
-                  {beat.type === 'agent' ? 'Faredown AI' : moduleConfig.supplierName}
+                  {beat.type === "agent"
+                    ? "Faredown AI"
+                    : moduleConfig.supplierName}
                 </p>
               </div>
             </div>
           ))}
 
           {/* Processing indicator */}
-          {isProcessing && currentStep === 'negotiating' && (
+          {isProcessing && currentStep === "negotiating" && (
             <div className="flex items-center justify-center py-4">
               <div className="flex items-center space-x-2 text-gray-500">
-                <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                <div
+                  className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
+                  style={{ animationDelay: "0ms" }}
+                />
+                <div
+                  className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
+                  style={{ animationDelay: "150ms" }}
+                />
+                <div
+                  className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
+                  style={{ animationDelay: "300ms" }}
+                />
               </div>
             </div>
           )}
@@ -404,14 +449,15 @@ export function BargainBottomSheet({
         </div>
 
         {/* Decision Panel */}
-        {currentStep === 'decision' && bargainResult && (
+        {currentStep === "decision" && bargainResult && (
           <div className="p-6 border-t bg-white flex-shrink-0">
             <div className="text-center mb-4">
               <Badge variant="secondary" className="mb-2">
-                Negotiated in {((bargainResult.negotiatedInMs || 0) / 1000).toFixed(1)}s
+                Negotiated in{" "}
+                {((bargainResult.negotiatedInMs || 0) / 1000).toFixed(1)}s
               </Badge>
-              
-              {bargainResult.status === 'accepted' ? (
+
+              {bargainResult.status === "accepted" ? (
                 <div className="flex items-center justify-center space-x-2 text-green-600 mb-3">
                   <CheckCircle className="w-5 h-5" />
                   <span className="font-medium">Offer Accepted!</span>
@@ -433,7 +479,14 @@ export function BargainBottomSheet({
                 {minDisplayTime ? (
                   <>Reading offer details...</>
                 ) : (
-                  <>Accept {formatPriceNoDecimals(bargainResult.finalPrice || 0, selectedCurrency)} — 30s to book</>
+                  <>
+                    Accept{" "}
+                    {formatPriceNoDecimals(
+                      bargainResult.finalPrice || 0,
+                      selectedCurrency,
+                    )}{" "}
+                    — 30s to book
+                  </>
                 )}
               </Button>
 
@@ -447,7 +500,10 @@ export function BargainBottomSheet({
                   {minDisplayTime ? (
                     <>Please wait...</>
                   ) : (
-                    <>Bargain Again ({bargainResult.attempt.count}/{bargainResult.attempt.max})</>
+                    <>
+                      Bargain Again ({bargainResult.attempt.count}/
+                      {bargainResult.attempt.max})
+                    </>
                   )}
                 </Button>
               )}
@@ -460,14 +516,14 @@ export function BargainBottomSheet({
         )}
 
         {/* Holding State */}
-        {currentStep === 'holding' && holdData && (
+        {currentStep === "holding" && holdData && (
           <div className="p-6 border-t bg-white flex-shrink-0">
             <div className="text-center">
               <div className="flex items-center justify-center space-x-2 text-blue-600 mb-3">
                 <Shield className="w-5 h-5" />
                 <span className="font-medium">Price Locked!</span>
               </div>
-              
+
               <div className="text-2xl font-bold text-gray-900 mb-2">
                 {countdown}s
               </div>
@@ -477,7 +533,7 @@ export function BargainBottomSheet({
               <p className="text-sm text-gray-600">
                 Hold expires in {countdown} seconds
               </p>
-              
+
               <p className="text-xs text-gray-500 mt-2">
                 Order Ref: {holdData.orderRef}
               </p>
@@ -486,18 +542,19 @@ export function BargainBottomSheet({
         )}
 
         {/* Error/Expired State */}
-        {(currentStep === 'expired' || error) && (
+        {(currentStep === "expired" || error) && (
           <div className="p-6 border-t bg-white flex-shrink-0">
             <div className="text-center">
               <div className="flex items-center justify-center space-x-2 text-red-600 mb-3">
                 <AlertCircle className="w-5 h-5" />
                 <span className="font-medium">Bargain Session Ended</span>
               </div>
-              
+
               <p className="text-sm text-gray-600 mb-4">
-                {error || "This bargain session has expired. Re-search to try again."}
+                {error ||
+                  "This bargain session has expired. Re-search to try again."}
               </p>
-              
+
               <Button onClick={onClose} className="w-full h-12 text-base">
                 Close
               </Button>

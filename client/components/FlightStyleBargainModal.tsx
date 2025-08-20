@@ -762,14 +762,20 @@ export function FlightStyleBargainModal({
                   AI Price Negotiator
                 </h3>
                 <div className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded">
-                  {bargainState.negotiationProgress < 100 ? "Negotiating..." : "Negotiated in 8.2s"}
+                  {bargainState.negotiationProgress < 100
+                    ? "Negotiating..."
+                    : "Negotiated in 8.2s"}
                 </div>
               </div>
 
               <div className="text-sm text-gray-600">
-                {type === "hotel" ? `${hotel?.name} • ${hotel?.location}` :
-                 type === "sightseeing" ? `${roomType?.name} • ${hotel?.location}` :
-                 type === "transfer" ? `${roomType?.name} Transfer` : "Service"}
+                {type === "hotel"
+                  ? `${hotel?.name} • ${hotel?.location}`
+                  : type === "sightseeing"
+                    ? `${roomType?.name} • ${hotel?.location}`
+                    : type === "transfer"
+                      ? `${roomType?.name} Transfer`
+                      : "Service"}
               </div>
             </div>
 
@@ -783,11 +789,20 @@ export function FlightStyleBargainModal({
                 <div className="flex-1">
                   <div className="bg-blue-500 text-white p-3 rounded-lg max-w-[280px]">
                     <p className="text-sm">
-                      We have {formatLocalPrice(parseInt(bargainPrice || "0"), selectedCurrency.code)} for {
-                        type === "hotel" ? `${roomType?.name} at ${hotel?.name}` :
-                        type === "sightseeing" ? `${roomType?.name}` :
-                        type === "transfer" ? `${roomType?.name} transfer` : "this service"
-                      }. Can you approve?
+                      We have{" "}
+                      {formatLocalPrice(
+                        parseInt(bargainPrice || "0"),
+                        selectedCurrency.code,
+                      )}{" "}
+                      for{" "}
+                      {type === "hotel"
+                        ? `${roomType?.name} at ${hotel?.name}`
+                        : type === "sightseeing"
+                          ? `${roomType?.name}`
+                          : type === "transfer"
+                            ? `${roomType?.name} transfer`
+                            : "this service"}
+                      . Can you approve?
                     </p>
                   </div>
                   <p className="text-xs text-gray-500 mt-1">Faredown AI</p>
@@ -797,25 +812,46 @@ export function FlightStyleBargainModal({
               {/* Beat 2: Supplier - appears after 25% progress */}
               {bargainState.negotiationProgress > 25 && (
                 <div className="flex items-start space-x-3 animate-in fade-in-50 slide-in-from-left-2">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                    type === "hotel" ? "bg-green-50 text-green-600" :
-                    type === "sightseeing" ? "bg-purple-50 text-purple-600" :
-                    type === "transfer" ? "bg-orange-50 text-orange-600" : "bg-gray-50 text-gray-600"
-                  }`}>
+                  <div
+                    className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                      type === "hotel"
+                        ? "bg-green-50 text-green-600"
+                        : type === "sightseeing"
+                          ? "bg-purple-50 text-purple-600"
+                          : type === "transfer"
+                            ? "bg-orange-50 text-orange-600"
+                            : "bg-gray-50 text-gray-600"
+                    }`}
+                  >
                     <span className="text-sm">
-                      {type === "hotel" ? "🏨" : type === "sightseeing" ? "📍" : type === "transfer" ? "🚗" : "🏢"}
+                      {type === "hotel"
+                        ? "🏨"
+                        : type === "sightseeing"
+                          ? "📍"
+                          : type === "transfer"
+                            ? "🚗"
+                            : "🏢"}
                     </span>
                   </div>
                   <div className="flex-1">
                     <div className="bg-white border shadow-sm p-3 rounded-lg max-w-[280px]">
                       <p className="text-sm">
-                        Listed at {formatLocalPrice(priceCalculation?.total || 0, selectedCurrency.code)}. Checking now…
+                        Listed at{" "}
+                        {formatLocalPrice(
+                          priceCalculation?.total || 0,
+                          selectedCurrency.code,
+                        )}
+                        . Checking now…
                       </p>
                     </div>
                     <p className="text-xs text-gray-500 mt-1">
-                      {type === "hotel" ? "Hotel Partner" :
-                       type === "sightseeing" ? "Tour Provider" :
-                       type === "transfer" ? "Transfer Service" : "Supplier"}
+                      {type === "hotel"
+                        ? "Hotel Partner"
+                        : type === "sightseeing"
+                          ? "Tour Provider"
+                          : type === "transfer"
+                            ? "Transfer Service"
+                            : "Supplier"}
                     </p>
                   </div>
                 </div>
@@ -824,28 +860,49 @@ export function FlightStyleBargainModal({
               {/* Beat 3: Supplier Response - appears after 60% progress */}
               {bargainState.negotiationProgress > 60 && (
                 <div className="flex items-start space-x-3 animate-in fade-in-50 slide-in-from-left-2">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                    type === "hotel" ? "bg-green-50 text-green-600" :
-                    type === "sightseeing" ? "bg-purple-50 text-purple-600" :
-                    type === "transfer" ? "bg-orange-50 text-orange-600" : "bg-gray-50 text-gray-600"
-                  }`}>
+                  <div
+                    className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                      type === "hotel"
+                        ? "bg-green-50 text-green-600"
+                        : type === "sightseeing"
+                          ? "bg-purple-50 text-purple-600"
+                          : type === "transfer"
+                            ? "bg-orange-50 text-orange-600"
+                            : "bg-gray-50 text-gray-600"
+                    }`}
+                  >
                     <span className="text-sm">
-                      {type === "hotel" ? "🏨" : type === "sightseeing" ? "📍" : type === "transfer" ? "🚗" : "🏢"}
+                      {type === "hotel"
+                        ? "🏨"
+                        : type === "sightseeing"
+                          ? "📍"
+                          : type === "transfer"
+                            ? "🚗"
+                            : "🏢"}
                     </span>
                   </div>
                   <div className="flex-1">
                     <div className="bg-white border shadow-sm p-3 rounded-lg max-w-[280px]">
                       <p className="text-sm">
-                        I can do {formatLocalPrice(
-                          Math.round((priceCalculation?.total || 0) * (0.8 + Math.random() * 0.1)),
-                          selectedCurrency.code
-                        )}.
+                        I can do{" "}
+                        {formatLocalPrice(
+                          Math.round(
+                            (priceCalculation?.total || 0) *
+                              (0.8 + Math.random() * 0.1),
+                          ),
+                          selectedCurrency.code,
+                        )}
+                        .
                       </p>
                     </div>
                     <p className="text-xs text-gray-500 mt-1">
-                      {type === "hotel" ? "Hotel Partner" :
-                       type === "sightseeing" ? "Tour Provider" :
-                       type === "transfer" ? "Transfer Service" : "Supplier"}
+                      {type === "hotel"
+                        ? "Hotel Partner"
+                        : type === "sightseeing"
+                          ? "Tour Provider"
+                          : type === "transfer"
+                            ? "Transfer Service"
+                            : "Supplier"}
                     </p>
                   </div>
                 </div>
@@ -859,7 +916,9 @@ export function FlightStyleBargainModal({
                   </div>
                   <div className="flex-1">
                     <div className="bg-blue-500 text-white p-3 rounded-lg max-w-[280px]">
-                      <p className="text-sm">Let me check with you if you want it.</p>
+                      <p className="text-sm">
+                        Let me check with you if you want it.
+                      </p>
                     </div>
                     <p className="text-xs text-gray-500 mt-1">Faredown AI</p>
                   </div>
@@ -871,10 +930,17 @@ export function FlightStyleBargainModal({
             {bargainState.negotiationProgress < 100 && (
               <div className="bg-white rounded-lg p-3 border">
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm font-medium text-gray-700">Negotiation Progress</span>
-                  <span className="text-sm font-medium text-gray-700">{bargainState.negotiationProgress}%</span>
+                  <span className="text-sm font-medium text-gray-700">
+                    Negotiation Progress
+                  </span>
+                  <span className="text-sm font-medium text-gray-700">
+                    {bargainState.negotiationProgress}%
+                  </span>
                 </div>
-                <Progress value={bargainState.negotiationProgress} className="h-2" />
+                <Progress
+                  value={bargainState.negotiationProgress}
+                  className="h-2"
+                />
               </div>
             )}
           </div>
@@ -941,7 +1007,9 @@ export function FlightStyleBargainModal({
                 disabled={bargainState.timeRemaining === 0}
                 className="w-full bg-green-600 hover:bg-green-700 text-white py-5 text-lg font-bold rounded-xl shadow-lg"
               >
-                Accept {selectedCurrency.symbol}{(bargainState.currentCounterOffer || 0).toLocaleString()} — 30s to book
+                Accept {selectedCurrency.symbol}
+                {(bargainState.currentCounterOffer || 0).toLocaleString()} — 30s
+                to book
               </Button>
 
               <Button

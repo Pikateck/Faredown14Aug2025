@@ -1,4 +1,11 @@
-import React, { useState, useEffect, Fragment, useRef, useMemo, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  Fragment,
+  useRef,
+  useMemo,
+  useCallback,
+} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useDateContext } from "@/contexts/DateContext";
@@ -437,38 +444,41 @@ export default function Index() {
   };
 
   // City data mapping - memoized to prevent recreation on every render
-  const cityData = useMemo(() => ({
-    Mumbai: {
-      code: "BOM",
-      name: "Mumbai",
-      airport: "Rajiv Gandhi Shivaji International",
-      fullName: "Mumbai, Maharashtra, India",
-    },
-    Delhi: {
-      code: "DEL",
-      name: "Delhi",
-      airport: "Indira Gandhi International",
-      fullName: "New Delhi, Delhi, India",
-    },
-    Dubai: {
-      code: "DXB",
-      name: "Dubai",
-      airport: "Dubai International Airport",
-      fullName: "Dubai, United Arab Emirates",
-    },
-    "Abu Dhabi": {
-      code: "AUH",
-      name: "Abu Dhabi",
-      airport: "Zayed International",
-      fullName: "Abu Dhabi, United Arab Emirates",
-    },
-    Singapore: {
-      code: "SIN",
-      name: "Singapore",
-      airport: "Changi Airport",
-      fullName: "Singapore, Singapore",
-    },
-  }), []);
+  const cityData = useMemo(
+    () => ({
+      Mumbai: {
+        code: "BOM",
+        name: "Mumbai",
+        airport: "Rajiv Gandhi Shivaji International",
+        fullName: "Mumbai, Maharashtra, India",
+      },
+      Delhi: {
+        code: "DEL",
+        name: "Delhi",
+        airport: "Indira Gandhi International",
+        fullName: "New Delhi, Delhi, India",
+      },
+      Dubai: {
+        code: "DXB",
+        name: "Dubai",
+        airport: "Dubai International Airport",
+        fullName: "Dubai, United Arab Emirates",
+      },
+      "Abu Dhabi": {
+        code: "AUH",
+        name: "Abu Dhabi",
+        airport: "Zayed International",
+        fullName: "Abu Dhabi, United Arab Emirates",
+      },
+      Singapore: {
+        code: "SIN",
+        name: "Singapore",
+        airport: "Changi Airport",
+        fullName: "Singapore, Singapore",
+      },
+    }),
+    [],
+  );
 
   // Memoized event handlers to prevent recreation on every render
   const handleFromCityClick = useCallback((e: React.MouseEvent) => {
@@ -1106,7 +1116,7 @@ export default function Index() {
                       ref={fromCityButtonRef}
                       onClick={handleFromCityClick}
                       className="w-full text-left touch-manipulation"
-                      style={{ WebkitTapHighlightColor: 'transparent' }}
+                      style={{ WebkitTapHighlightColor: "transparent" }}
                     >
                       <div className="text-xs text-gray-500 mb-1">From</div>
                       <div className="flex items-center space-x-2">
@@ -1149,7 +1159,7 @@ export default function Index() {
                       ref={toCityButtonRef}
                       onClick={handleToCityClick}
                       className="w-full text-left touch-manipulation"
-                      style={{ WebkitTapHighlightColor: 'transparent' }}
+                      style={{ WebkitTapHighlightColor: "transparent" }}
                     >
                       <div className="text-xs text-gray-500 mb-1">To</div>
                       <div className="flex items-center space-x-2">
@@ -1260,7 +1270,6 @@ export default function Index() {
                   </button>
                 </div>
               </div>
-
 
               {/* Search Button */}
               <Button
@@ -3361,7 +3370,11 @@ export default function Index() {
         cities={cityData}
         selectedCity={selectedFromCity}
         onSelectCity={handleSelectFromCity}
-        triggerRef={desktopFromButtonRef.current ? desktopFromButtonRef : fromCityButtonRef}
+        triggerRef={
+          desktopFromButtonRef.current
+            ? desktopFromButtonRef
+            : fromCityButtonRef
+        }
       />
 
       <BookingStyleDropdown
@@ -3371,7 +3384,9 @@ export default function Index() {
         cities={cityData}
         selectedCity={selectedToCity}
         onSelectCity={handleSelectToCity}
-        triggerRef={desktopToButtonRef.current ? desktopToButtonRef : toCityButtonRef}
+        triggerRef={
+          desktopToButtonRef.current ? desktopToButtonRef : toCityButtonRef
+        }
       />
       <Toaster />
     </div>
