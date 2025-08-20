@@ -536,17 +536,7 @@ export default function FlightResults() {
     module: 'flights';
     product: (typeof flightData)[0];
   }>(null);
-  const [bargainStep, setBargainStep] = useState<
-    "input" | "progress" | "result"
-  >("input");
-  const [bargainPrice, setBargainPrice] = useState("");
-  const [bargainProgress, setBargainProgress] = useState(0);
-  const [bargainResult, setBargainResult] = useState<
-    "accepted" | "rejected" | "counter" | null
-  >(null);
-  const [finalPrice, setFinalPrice] = useState(0);
-  const [bargainTimer, setBargainTimer] = useState(0);
-  const [faredownBonus, setFaredownBonus] = useState(0);
+  // Old bargain state variables removed - using simplified bargainCtx only
 
   const [sortBy, setSortBy] = useState<"cheapest" | "fastest">("cheapest");
   const [expandedTicketOptions, setExpandedTicketOptions] = useState<
@@ -5809,7 +5799,7 @@ export default function FlightResults() {
           setBargainCtx(null);
         }}
         onAccept={(finalPrice: number, orderRef: string) => {
-          console.log('🎯 Bargain accepted:', finalPrice, orderRef);
+          console.log('���� Bargain accepted:', finalPrice, orderRef);
           if (bargainCtx?.product) {
             const updatedFareType = { ...bargainCtx.product.fareTypes[0], price: finalPrice };
             navigate('/booking', {
