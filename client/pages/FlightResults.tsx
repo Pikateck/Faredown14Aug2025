@@ -5711,11 +5711,13 @@ export default function FlightResults() {
                       <div className="space-y-4">
                         <Button
                           onClick={() => {
-                            setShowBargainModal(false);
-                            handleBooking(bargainFlight, {
-                              ...bargainFareType,
-                              price: aiOfferPrice || parseInt(bargainPrice),
-                            });
+                            setBargainCtx(null);
+                            if (bargainCtx?.product) {
+                              handleBooking(bargainCtx.product, {
+                                ...bargainCtx.product.fareTypes[0],
+                                price: 0, // This old UI section should be removed anyway
+                              });
+                            }
                           }}
                           disabled={!isOfferValid}
                           className="w-full bg-green-600 hover:bg-green-700 text-white py-5 text-lg font-bold rounded-xl shadow-lg"
