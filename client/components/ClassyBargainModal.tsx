@@ -68,22 +68,7 @@ export function ClassyBargainModal({
   const { selectedCurrency } = useCurrency();
 
   // Module configuration with role styling
-  const moduleConfig = {
-    icon: <Plane className="w-4 h-4" />,
-    supplierName: 'Airline',
-    roles: {
-      agent: {
-        label: 'Faredown Agent',
-        bubbleClasses: 'bg-emerald-600 text-white',
-        priceVariant: 'white' as const
-      },
-      supplier: {
-        label: 'Airline',
-        bubbleClasses: 'bg-blue-600 text-white',
-        priceVariant: 'white' as const
-      }
-    }
-  };
+  const moduleConfig = getModuleConfig(moduleType);
 
   // Chat beats template with natural timings
   const beatsTemplate = useMemo(() => [
