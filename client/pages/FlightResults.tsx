@@ -3046,15 +3046,8 @@ export default function FlightResults() {
                         <Button
                           className="min-h-[44px] px-6 py-3 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold text-sm touch-manipulation flex items-center justify-center gap-2"
                           onClick={() => {
-                            setBargainFlight(flight);
-                            setBargainFareType({
-                              id: "default",
-                              name: flight.fareClass || "Economy",
-                              price: flight.price.amount,
-                              refundability: "Non-Refundable",
-                            });
-                            setShowBargainModal(true);
-                            setBargainStep("input");
+                            console.log("📱 Mobile Bargain Now clicked!", flight.id);
+                            handleBargain(flight, flight.fareTypes[0]);
                           }}
                         >
                           <TrendingDown className="w-4 h-4" />
@@ -4389,7 +4382,7 @@ export default function FlightResults() {
                                     </p>
                                     <div className="text-xs text-gray-700 space-y-1">
                                       <p>
-                                        • Direct flights are usually cheaper
+                                        �� Direct flights are usually cheaper
                                         than refundable flights. However, you
                                         may have to pay a large fee to cancel or
                                         change your flight.
