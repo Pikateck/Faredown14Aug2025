@@ -113,7 +113,7 @@ export function UnifiedBargainModal({
   const [sessionId, setSessionId] = useState<string | null>(null);
 
   const chatEndRef = useRef<HTMLDivElement>(null);
-  const { selectedCurrency, exchangeRates } = useCurrency();
+  const { selectedCurrency, convertPrice } = useCurrency();
 
   // Module configuration for flights
   const moduleConfig = {
