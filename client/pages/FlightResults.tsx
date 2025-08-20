@@ -463,31 +463,6 @@ export default function FlightResults() {
   const [showSortOptions, setShowSortOptions] = useState(false);
   const [showSearchEdit, setShowSearchEdit] = useState(false);
 
-  // Phase 1 Bargain Engine integration with live API
-  const bargainHook = useBargainPhase1({
-    useLiveAPI: true, // Enable live API integration
-    onBookingConfirmed: (item, finalPrice) => {
-      // Custom handling after bargain success
-      console.log("✅ Live bargain successful!", { item, finalPrice });
-
-      // Create flight object for booking flow
-      const flightForBooking = flightData.find(
-        (f) => f.id.toString() === item.itemId,
-      );
-      if (flightForBooking) {
-        handleBooking(flightForBooking, {
-          id: "bargained",
-          name: item.class || "Economy",
-          price: finalPrice,
-          refundability: "Non-Refundable",
-          features: ["AI Bargained Price"],
-          baggage: "23kg",
-        });
-      }
-    },
-    redirectToBooking: true,
-    deviceType: window.innerWidth <= 768 ? "mobile" : "desktop",
-  });
 
   // Search panel states
   const [showClassDropdown, setShowClassDropdown] = useState(false);
@@ -2733,7 +2708,7 @@ export default function FlightResults() {
               !searchError &&
               filteredFlights.map((flight, index) => (
                 <div key={flight.id}>
-                  {/* MOBILE CARD DESIGN (≤768px) - App Style */}
+                  {/* MOBILE CARD DESIGN (��768px) - App Style */}
                   <div className="block md:hidden bg-white border border-gray-200 rounded-lg mb-4 shadow-sm relative">
                     <div className="p-4">
                       {/* Flight Header */}
