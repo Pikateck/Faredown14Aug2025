@@ -583,12 +583,31 @@ export default function FlightDetails({
         onAccept={(finalPrice, orderRef) => {
           console.log("Bargain accepted with price:", finalPrice, "Order:", orderRef);
           setShowBargainModal(false);
-          // Navigate to booking or show success
+          if (displayFlight) {
+            navigate('/booking-flow', {
+              state: {
+                selectedFlight: displayFlight,
+                selectedFareType: { type: displayFlight.fareClass || "Economy", price: finalPrice, currency: "INR", features: [] },
+                passengerCount: { adults: 1, children: 0 },
+                isBargainAccepted: true,
+                finalBargainPrice: finalPrice,
+                orderRef
+              }
+            });
+          }
         }}
         onBookOriginal={() => {
           console.log("Booking original price:", displayFlight?.price?.amount);
           setShowBargainModal(false);
-          // Handle original booking
+          if (displayFlight) {
+            navigate('/booking-flow', {
+              state: {
+                selectedFlight: displayFlight,
+                selectedFareType: { type: displayFlight.fareClass || "Economy", price: displayFlight.price?.amount || 0, currency: "INR", features: [] },
+                passengerCount: { adults: 1, children: 0 }
+              }
+            });
+          }
         }}
         attempt={1}
         moduleType="flights"
