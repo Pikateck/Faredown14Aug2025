@@ -79,6 +79,7 @@ export function ClassyBargainModal({
   // Reset state when modal opens
   useEffect(() => {
     if (isOpen) {
+      console.log('🎭 ClassyBargainModal opened with data:', { flight, fareType, isOpen });
       setStep('input');
       setOffer(null);
       setCounter(null);
@@ -87,6 +88,8 @@ export function ClassyBargainModal({
       setError(null);
       sessionUsed.clear();
       reset();
+    } else {
+      console.log('🎭 ClassyBargainModal closed');
     }
   }, [isOpen, reset]);
 
