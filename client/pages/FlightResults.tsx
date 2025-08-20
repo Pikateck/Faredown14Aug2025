@@ -3710,33 +3710,13 @@ export default function FlightResults() {
                                                 (ft) => ft.id === fareTypeId,
                                               ) || flight.fareTypes[0];
 
-                                            const bargainItem =
-                                              createFlightBargainItem({
-                                                id: flight.id.toString(),
-                                                airline: flight.airline,
-                                                route: {
-                                                  from:
-                                                    selectedFromCity ||
-                                                    flight.origin,
-                                                  to:
-                                                    selectedToCity ||
-                                                    flight.destination,
-                                                },
-                                                class: selectedClass,
-                                                price:
-                                                  fareType.price ||
-                                                  flight.price?.amount ||
-                                                  0,
-                                              });
-
                                             console.log(
-                                              "🚀 Starting live API bargain (desktop):",
-                                              bargainItem,
+                                              "🚀 Opening unified bargain modal (desktop):",
+                                              flight,
+                                              fareType
                                             );
 
-                                            bargainHook.startBargain(
-                                              bargainItem,
-                                            );
+                                            handleBargain(flight, fareType);
                                           }}
                                           className="w-full bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black py-3 text-lg font-semibold rounded-lg shadow-md transition-all duration-200 transform hover:scale-[1.01] flex items-center justify-center gap-2"
                                         >
