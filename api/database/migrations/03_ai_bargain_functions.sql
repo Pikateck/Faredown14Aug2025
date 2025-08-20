@@ -181,25 +181,30 @@ BEGIN
       counter_max NUMERIC := LEAST(v_base, v_net * (1 + v_accept_band_high));
       offer_ratio NUMERIC := p_user_offer / v_base;
     BEGIN
-      -- Emotional AI: adjust counter based on user's offer aggressiveness
-      IF offer_ratio < 0.7 THEN
-        -- Very low offer - be firm but not insulting
-        v_final := counter_max;
-        v_ai_emotion := 'firm';
-      ELSIF offer_ratio < 0.85 THEN
-        -- Reasonable offer - meet in middle
-        v_final := ROUND((p_user_offer + counter_max) / 2, 2);
-        v_ai_emotion := 'negotiating';
-      ELSE
-        -- Close offer - small concession
-        v_final := ROUND(GREATEST(counter_min, p_user_offer * 1.05), 2);
-        v_ai_emotion := 'flexible';
-      END IF;
+      -- Add randomization factor to vary responses for same price
+      DECLARE
+        randomization_factor NUMERIC := 0.95 + (random() * 0.1); -- 0.95 to 1.05
+      BEGIN
+        -- Emotional AI: adjust counter based on user's offer aggressiveness
+        IF offer_ratio < 0.7 THEN
+          -- Very low offer - be firm but not insulting (with variation)
+          v_final := ROUND(counter_max * randomization_factor, 2);
+          v_ai_emotion := CASE WHEN random() > 0.5 THEN 'firm' ELSE 'assertive' END;
+        ELSIF offer_ratio < 0.85 THEN
+          -- Reasonable offer - meet in middle (with variation)
+          v_final := ROUND(((p_user_offer + counter_max) / 2) * randomization_factor, 2);
+          v_ai_emotion := CASE WHEN random() > 0.5 THEN 'negotiating' ELSE 'collaborative' END;
+        ELSE
+          -- Close offer - small concession (with variation)
+          v_final := ROUND(GREATEST(counter_min, p_user_offer * (1.05 * randomization_factor)), 2);
+          v_ai_emotion := CASE WHEN random() > 0.5 THEN 'flexible' ELSE 'accommodating' END;
+        END IF;
 
-      -- Ensure never-loss constraint
-      v_final := GREATEST(v_final, v_lowest_accept);
-      v_status := 'counter';
-      v_decision_path := v_decision_path || jsonb_build_array('counter_calculated', 'emotional_adjustment');
+        -- Ensure never-loss constraint
+        v_final := GREATEST(v_final, v_lowest_accept);
+        v_status := 'counter';
+        v_decision_path := v_decision_path || jsonb_build_array('counter_calculated', 'emotional_adjustment', 'randomized');
+      END;
     END;
   END IF;
 
