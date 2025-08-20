@@ -5861,6 +5861,21 @@ export default function FlightResults() {
         </DialogContent>
       </Dialog>
 
+      {/* NEW: Unified Bargain Modal - will replace above */}
+      <UnifiedBargainModal
+        isOpen={showBargainModal}
+        flight={bargainFlight}
+        fareType={bargainFareType}
+        onClose={() => setShowBargainModal(false)}
+        onAccept={handleBargainAccept}
+        onBookOriginal={() => {
+          setShowBargainModal(false);
+          if (bargainFlight && bargainFareType) {
+            handleBooking(bargainFlight, bargainFareType);
+          }
+        }}
+      />
+
       {/* Sign In Modal */}
       <Dialog open={showSignIn} onOpenChange={setShowSignIn}>
         <DialogContent className="max-w-md">
