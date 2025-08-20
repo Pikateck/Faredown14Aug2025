@@ -958,6 +958,10 @@ export function FlightStyleBargainModal({
               >
                 Bargain Again
               </Button>
+
+              <p className="text-xs text-gray-500 text-center mt-3">
+                Most customers get the best deal early — demand is rising fast.
+              </p>
             </div>
           </>
         );
