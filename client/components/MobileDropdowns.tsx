@@ -45,6 +45,8 @@ export function MobileCityDropdown({
 }: MobileCityDropdownProps) {
   const [searchQuery, setSearchQuery] = useState("");
 
+  console.log('MobileCityDropdown render:', { isOpen, title });
+
   if (!isOpen) return null;
 
   // Filter cities based on search query
