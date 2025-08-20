@@ -98,7 +98,8 @@ function App() {
 
   return (
     <div className="App">
-      <AuthProvider>
+      <ErrorBoundary>
+        <AuthProvider>
         <CurrencyProvider>
           <DateProvider>
             <LoyaltyProvider>
@@ -284,7 +285,8 @@ function App() {
             </LoyaltyProvider>
           </DateProvider>
         </CurrencyProvider>
-      </AuthProvider>
+        </AuthProvider>
+      </ErrorBoundary>
     </div>
   );
 }
