@@ -237,7 +237,7 @@ export function BookingSearchForm() {
             country: dest.country,
             type: dest.type as "city" | "region" | "country" | "landmark",
             popular: (dest as any).popular || false,
-            flag: (dest as any).flag || "����",
+            flag: (dest as any).flag || "🌍",
           }));
 
           setDestinationSuggestions(formattedResults);
@@ -344,7 +344,7 @@ export function BookingSearchForm() {
       }
 
       const url = `/hotels/results?${searchParams.toString()}`;
-      console.log("�� Navigating to live Hotelbeds search:", url);
+      console.log("🏬 Navigating to live Hotelbeds search:", url);
       navigate(url);
     } catch (error) {
       console.error("🚨 Error in handleSearch:", error);
