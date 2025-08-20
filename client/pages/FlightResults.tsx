@@ -3313,6 +3313,7 @@ export default function FlightResults() {
                           <Button
                             onClick={() => {
                               console.log("🎯 Desktop Bargain Now clicked!", flight.id);
+                              alert(`Bargain Now clicked for flight ${flight.id}. Modal should open now.`);
                               handleBargain(flight, flight.fareTypes[0]);
                             }}
                             className="min-h-[48px] px-6 py-3 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold text-sm touch-manipulation flex items-center justify-center gap-2 border-2 border-[#febb02] hover:border-[#e6a602]"
