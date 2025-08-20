@@ -1,4 +1,3 @@
-// Cache bust v3 - Updated 2024-12-30 to fix bargain modal
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -3005,7 +3004,6 @@ export default function FlightResults() {
                           className="min-h-[44px] px-6 py-3 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold text-sm touch-manipulation flex items-center justify-center gap-2"
                           onClick={() => {
                             console.log("📱 Mobile Bargain Now clicked!", flight.id);
-                            alert(`Mobile Bargain Now clicked for flight ${flight.id}. Modal should open now.`);
                             handleBargain(flight, flight.fareTypes[0]);
                           }}
                         >
@@ -3315,7 +3313,6 @@ export default function FlightResults() {
                           <Button
                             onClick={() => {
                               console.log("🎯 Desktop Bargain Now clicked!", flight.id);
-                              alert(`Bargain Now clicked for flight ${flight.id}. Modal should open now.`);
                               handleBargain(flight, flight.fareTypes[0]);
                             }}
                             className="min-h-[48px] px-6 py-3 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold text-sm touch-manipulation flex items-center justify-center gap-2 border-2 border-[#febb02] hover:border-[#e6a602]"
