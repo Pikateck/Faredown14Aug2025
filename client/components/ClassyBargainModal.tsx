@@ -439,21 +439,32 @@ export function ClassyBargainModal({
       {/* Chat Step */}
       {step === 'chat' && (
         <section className="fd-chat">
-          {beats.slice(0, Math.min(cursor + 1, beats.length)).map((beat, i) => (
-            <div key={beat.id} className={`fd-bubble fd-bubble--${beat.speaker}`}>
-              {i === cursor && running ? (
-                <span className="fd-typing" aria-hidden>•••</span>
-              ) : i < cursor ? (
-                <span className="text-slate-800">
-                  {formatChatTextWithPrices(
-                    beat.text,
-                    beat.speaker === 'supplier' ? 'emerald' : 'slate'
-                  )}
-                </span>
-              ) : null}
-            </div>
-          ))}
-          
+          {beats.slice(0, Math.min(cursor + 1, beats.length)).map((beat, i) => {
+            const roleConfig = moduleConfig.roles[beat.speaker];
+            return (
+              <div key={beat.id} className={`fd-bubble fd-bubble--${beat.speaker}`}>
+                {/* Speaker label */}
+                <div className="text-xs opacity-75 mb-1 font-medium">
+                  {roleConfig.label}
+                </div>
+
+                {/* Message content */}
+                <div>
+                  {i === cursor && running ? (
+                    <span className="fd-typing" aria-hidden>•••</span>
+                  ) : i < cursor ? (
+                    <span>
+                      {formatChatTextWithPrices(
+                        beat.text,
+                        roleConfig.priceVariant
+                      )}
+                    </span>
+                  ) : null}
+                </div>
+              </div>
+            );
+          })}
+
           <div className="fd-meta">
             {negotiatedMs > 0 && (
               <span className="fd-chip">
