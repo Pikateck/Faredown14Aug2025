@@ -1352,6 +1352,7 @@ export default function FlightResults() {
 
   // Bargain functions
   const handleBargain = (flight: (typeof flightData)[0], fareType: any) => {
+    console.log('🎯 handleBargain called with:', { flight, fareType });
     setBargainFlight(flight);
     setBargainFareType(fareType);
     setShowBargainModal(true);
@@ -1362,6 +1363,7 @@ export default function FlightResults() {
     setFinalPrice(0);
     setFaredownBonus(0);
     setDuplicatePriceError(false);
+    console.log('🎯 Modal should open now, showBargainModal set to true');
   };
 
   const generateAICounterOffer = (userPrice: number, originalPrice: number) => {
