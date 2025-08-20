@@ -3350,8 +3350,8 @@ export default function Index() {
         onSelectClass={setSelectedClass}
       />
 
-      {/* Responsive City Dropdowns */}
-      <ResponsiveCityDropdown
+      {/* Booking.com Style City Dropdowns */}
+      <BookingStyleDropdown
         isOpen={showFromCities}
         onClose={() => {
           console.log('Closing From cities dropdown');
@@ -3364,9 +3364,10 @@ export default function Index() {
           console.log('Selected from city:', city);
           setSelectedFromCity(city);
         }}
+        triggerRef={window.innerWidth >= 640 ? desktopFromButtonRef : fromCityButtonRef}
       />
 
-      <ResponsiveCityDropdown
+      <BookingStyleDropdown
         isOpen={showToCities}
         onClose={() => {
           console.log('Closing To cities dropdown');
@@ -3379,6 +3380,7 @@ export default function Index() {
           console.log('Selected to city:', city);
           setSelectedToCity(city);
         }}
+        triggerRef={window.innerWidth >= 640 ? desktopToButtonRef : toCityButtonRef}
       />
     </div>
   );
