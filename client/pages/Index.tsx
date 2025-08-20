@@ -100,11 +100,11 @@ import {
 } from "lucide-react";
 import { downloadProjectInfo } from "@/lib/codeExport";
 import {
-  MobileCityDropdown,
   MobileDatePicker,
   MobileTravelers,
   MobileClassDropdown,
 } from "@/components/MobileDropdowns";
+import { ResponsiveCityDropdown } from "@/components/ResponsiveCityDropdown";
 import { Airport } from "@/shared/airportSearch";
 
 export default function Index() {
