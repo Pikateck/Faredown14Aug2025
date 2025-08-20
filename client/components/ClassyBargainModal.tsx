@@ -5,6 +5,7 @@ import { useCurrency } from '@/contexts/CurrencyContext';
 import { Sparkles, Plane, Building, MapPin, Car, Clock, Shield } from 'lucide-react';
 import copyPack from '../../api/data/copy_packs.json';
 import DecisionCard from './DecisionCard';
+import { PriceChip, formatChatTextWithPrices } from './PriceChip';
 import '@/styles/fd-bargain.css';
 
 interface FlightDetails {
