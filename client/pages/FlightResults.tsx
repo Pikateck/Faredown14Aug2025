@@ -593,23 +593,6 @@ export default function FlightResults() {
   const [offerExpiryTime, setOfferExpiryTime] = useState(0);
   const [duplicatePriceError, setDuplicatePriceError] = useState(false);
 
-  // AI Negotiation Modal states
-  const [showAINegotiationModal, setShowAINegotiationModal] = useState(false);
-  const [bargainSession, setBargainSession] = useState<{
-    sessionId: string;
-    module: 'flights' | 'hotels' | 'sightseeing' | 'transfers';
-    productRef: string;
-    userOffer: number;
-    attemptCount?: number;
-    productDetails: {
-      title: string;
-      subtitle?: string;
-      basePrice: number;
-      airline?: string;
-      flightNo?: string;
-      route?: { from: string; to: string };
-    };
-  } | null>(null);
 
   // Load flights from Amadeus API
   useEffect(() => {
@@ -3879,7 +3862,7 @@ export default function FlightResults() {
                                                     Airline fee:
                                                   </span>
                                                   <span className="text-gray-900 font-medium">
-                                                    ₹0
+                                                    ���0
                                                   </span>
                                                 </div>
                                                 <div className="flex justify-between">
