@@ -3353,17 +3353,11 @@ export default function Index() {
       {/* Booking.com Style City Dropdowns */}
       <BookingStyleDropdown
         isOpen={showFromCities}
-        onClose={() => {
-          console.log('Closing From cities dropdown');
-          setShowFromCities(false);
-        }}
+        onClose={handleCloseFromCities}
         title="Select departure city"
         cities={cityData}
         selectedCity={selectedFromCity}
-        onSelectCity={(city) => {
-          console.log('Selected from city:', city);
-          setSelectedFromCity(city);
-        }}
+        onSelectCity={handleSelectFromCity}
         triggerRef={desktopFromButtonRef.current ? desktopFromButtonRef : fromCityButtonRef}
       />
 
