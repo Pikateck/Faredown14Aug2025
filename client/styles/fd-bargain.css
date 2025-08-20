@@ -221,18 +221,17 @@
   position: relative;
 }
 
-.fd-bubble--agent { 
-  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); 
-  color: #fff; 
+.fd-bubble--agent {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  color: #fff;
   align-self: flex-start;
   border-bottom-left-radius: 4px;
 }
 
-.fd-bubble--supplier { 
-  background: #fff; 
-  color: #1f2937; 
+.fd-bubble--supplier {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: #fff;
   align-self: flex-end;
-  border: 1px solid #e5e7eb;
   border-bottom-right-radius: 4px;
 }
 
