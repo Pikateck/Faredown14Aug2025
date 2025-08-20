@@ -1,447 +1,398 @@
+/**
+ * Feature Flags API for AI Bargain System
+ * Allows real-time control of AI behavior and features
+ */
+
 const express = require("express");
 const router = express.Router();
-const redisClient = require("../services/redisHotCache");
+const db = require("../database/connection");
 
-// Feature flag configuration with defaults
-const DEFAULT_FLAGS = {
-  AI_TRAFFIC: 0.0, // Percentage of traffic to AI variant (0.0 to 1.0)
-  AI_SHADOW: true, // Enable shadow mode (logs AI predictions without using them)
-  AI_AUTO_SCALE: false, // Enable auto-scaling for AI components
-  SUPPRESS_AI_ALERTS: false, // Suppress alerts during rollback periods
-  ENABLE_OFFERABILITY: true, // Enable offerability engine
-  ENABLE_MODEL_INFERENCE: true, // Enable ML model inference
-  MAX_OFFER_ROUNDS: 3, // Maximum bargaining rounds per session
-  CACHE_WARMER_ENABLED: true, // Enable cache warming
-  CIRCUIT_BREAKER_ENABLED: true, // Enable circuit breakers
-  PROFIT_GUARD_ENABLED: true, // Enable profit margin protection
-  AUDIT_LEVEL: "full", // Audit logging level: 'minimal', 'standard', 'full'
-};
+// Middleware for admin authentication (reuse existing auth)
+const authenticateToken = require("../middleware/auth").authenticateToken;
+const requireAdmin = require("../middleware/auth").requireAdmin;
 
-// Flag metadata for documentation and validation
-const FLAG_METADATA = {
-  AI_TRAFFIC: {
-    type: "float",
-    range: [0.0, 1.0],
-    description: "Percentage of traffic routed to AI bargaining engine",
-    rollout_phases: [0.0, 0.1, 0.5, 1.0],
-    safety_critical: true,
-  },
-  AI_SHADOW: {
-    type: "boolean",
-    description: "Enable shadow mode for AI predictions (logging only)",
-    safety_critical: false,
-  },
-  AI_AUTO_SCALE: {
-    type: "boolean",
-    description: "Enable automatic scaling of AI components",
-    safety_critical: true,
-  },
-  SUPPRESS_AI_ALERTS: {
-    type: "boolean",
-    description: "Temporarily suppress AI-related alerts during maintenance",
-    safety_critical: false,
-  },
-  ENABLE_OFFERABILITY: {
-    type: "boolean",
-    description: "Enable the offerability engine for product eligibility",
-    safety_critical: true,
-  },
-  ENABLE_MODEL_INFERENCE: {
-    type: "boolean",
-    description: "Enable ML model inference for pricing",
-    safety_critical: true,
-  },
-  MAX_OFFER_ROUNDS: {
-    type: "integer",
-    range: [1, 10],
-    description: "Maximum number of bargaining rounds per session",
-    safety_critical: false,
-  },
-  CACHE_WARMER_ENABLED: {
-    type: "boolean",
-    description: "Enable automatic cache warming",
-    safety_critical: false,
-  },
-  CIRCUIT_BREAKER_ENABLED: {
-    type: "boolean",
-    description: "Enable circuit breakers for external dependencies",
-    safety_critical: true,
-  },
-  PROFIT_GUARD_ENABLED: {
-    type: "boolean",
-    description: "Enable profit margin protection and auto-rollback",
-    safety_critical: true,
-  },
-  AUDIT_LEVEL: {
-    type: "string",
-    values: ["minimal", "standard", "full"],
-    description: "Level of audit logging and data collection",
-    safety_critical: false,
-  },
-};
-
-// Validate flag value against metadata
-function validateFlagValue(flagName, value) {
-  const metadata = FLAG_METADATA[flagName];
-  if (!metadata) {
-    return { valid: false, error: `Unknown flag: ${flagName}` };
-  }
-
-  switch (metadata.type) {
-    case "boolean":
-      if (typeof value !== "boolean") {
-        return { valid: false, error: `${flagName} must be a boolean` };
-      }
-      break;
-
-    case "float":
-      if (typeof value !== "number") {
-        return { valid: false, error: `${flagName} must be a number` };
-      }
-      if (
-        metadata.range &&
-        (value < metadata.range[0] || value > metadata.range[1])
-      ) {
-        return {
-          valid: false,
-          error: `${flagName} must be between ${metadata.range[0]} and ${metadata.range[1]}`,
-        };
-      }
-      break;
-
-    case "integer":
-      if (!Number.isInteger(value)) {
-        return { valid: false, error: `${flagName} must be an integer` };
-      }
-      if (
-        metadata.range &&
-        (value < metadata.range[0] || value > metadata.range[1])
-      ) {
-        return {
-          valid: false,
-          error: `${flagName} must be between ${metadata.range[0]} and ${metadata.range[1]}`,
-        };
-      }
-      break;
-
-    case "string":
-      if (typeof value !== "string") {
-        return { valid: false, error: `${flagName} must be a string` };
-      }
-      if (metadata.values && !metadata.values.includes(value)) {
-        return {
-          valid: false,
-          error: `${flagName} must be one of: ${metadata.values.join(", ")}`,
-        };
-      }
-      break;
-  }
-
-  return { valid: true };
-}
-
-// Get feature flag value with fallback to default
-async function getFlag(flagName) {
-  try {
-    const cached = await redisClient.get(`config:flags:${flagName}`);
-    if (cached !== null) {
-      return JSON.parse(cached);
-    }
-    return DEFAULT_FLAGS[flagName];
-  } catch (error) {
-    console.error(`Error getting flag ${flagName}:`, error);
-    return DEFAULT_FLAGS[flagName];
-  }
-}
-
-// Set feature flag value with validation
-async function setFlag(flagName, value, ttl = 0) {
-  const validation = validateFlagValue(flagName, value);
-  if (!validation.valid) {
-    throw new Error(validation.error);
-  }
-
-  const flagKey = `config:flags:${flagName}`;
-  const flagValue = JSON.stringify(value);
-
-  if (ttl > 0) {
-    await redisClient.setex(flagKey, ttl, flagValue);
-  } else {
-    await redisClient.set(flagKey, flagValue);
-  }
-
-  // Log flag change for audit
-  await redisClient.lpush(
-    "audit:flag_changes",
-    JSON.stringify({
-      flag: flagName,
-      old_value: await getFlag(flagName),
-      new_value: value,
-      timestamp: new Date().toISOString(),
-      user: "system", // In production, would track actual user
-    }),
-  );
-
-  // Keep only last 100 flag changes
-  await redisClient.ltrim("audit:flag_changes", 0, 99);
-}
-
-// Initialize default flags
-async function initializeFlags() {
-  for (const [flagName, defaultValue] of Object.entries(DEFAULT_FLAGS)) {
-    const exists = await redisClient.exists(`config:flags:${flagName}`);
-    if (!exists) {
-      await setFlag(flagName, defaultValue);
-    }
-  }
-}
-
-// GET /feature-flags - Get all current flag values
+/**
+ * GET /feature-flags
+ * Get all feature flags
+ */
 router.get("/", async (req, res) => {
   try {
+    const result = await db.query(`
+      SELECT key, enabled, payload, updated_at 
+      FROM features 
+      ORDER BY key
+    `);
+
     const flags = {};
-
-    for (const flagName of Object.keys(DEFAULT_FLAGS)) {
-      flags[flagName] = await getFlag(flagName);
-    }
-
-    res.json(flags);
-  } catch (error) {
-    console.error("Error getting feature flags:", error);
-    res.status(500).json({ error: "Failed to get feature flags" });
-  }
-});
-
-// GET /feature-flags/:flag - Get specific flag value
-router.get("/:flag", async (req, res) => {
-  try {
-    const { flag } = req.params;
-
-    if (!DEFAULT_FLAGS.hasOwnProperty(flag)) {
-      return res.status(404).json({ error: `Unknown flag: ${flag}` });
-    }
-
-    const value = await getFlag(flag);
-    const metadata = FLAG_METADATA[flag];
-
-    res.json({
-      flag: flag,
-      value: value,
-      metadata: metadata,
-    });
-  } catch (error) {
-    console.error(`Error getting flag ${req.params.flag}:`, error);
-    res.status(500).json({ error: "Failed to get feature flag" });
-  }
-});
-
-// POST /feature-flags/set - Set feature flag value
-router.post("/set", async (req, res) => {
-  try {
-    const { flag, value, ttl } = req.body;
-
-    if (!flag || value === undefined) {
-      return res
-        .status(400)
-        .json({ error: "Missing required fields: flag, value" });
-    }
-
-    if (!DEFAULT_FLAGS.hasOwnProperty(flag)) {
-      return res.status(404).json({ error: `Unknown flag: ${flag}` });
-    }
-
-    await setFlag(flag, value, ttl);
-
-    res.json({
-      flag: flag,
-      value: value,
-      ttl: ttl || "permanent",
-      updated_at: new Date().toISOString(),
-    });
-  } catch (error) {
-    console.error("Error setting feature flag:", error);
-    res.status(400).json({ error: error.message });
-  }
-});
-
-// POST /feature-flags/batch-set - Set multiple flags atomically
-router.post("/batch-set", async (req, res) => {
-  try {
-    const { flags } = req.body;
-
-    if (!flags || typeof flags !== "object") {
-      return res
-        .status(400)
-        .json({ error: "Missing required field: flags (object)" });
-    }
-
-    // Validate all flags first
-    for (const [flagName, value] of Object.entries(flags)) {
-      if (!DEFAULT_FLAGS.hasOwnProperty(flagName)) {
-        return res.status(404).json({ error: `Unknown flag: ${flagName}` });
-      }
-
-      const validation = validateFlagValue(flagName, value);
-      if (!validation.valid) {
-        return res.status(400).json({ error: validation.error });
-      }
-    }
-
-    // Set all flags
-    const results = {};
-    for (const [flagName, value] of Object.entries(flags)) {
-      await setFlag(flagName, value);
-      results[flagName] = value;
-    }
-
-    res.json({
-      updated_flags: results,
-      updated_at: new Date().toISOString(),
-    });
-  } catch (error) {
-    console.error("Error batch setting feature flags:", error);
-    res.status(500).json({ error: "Failed to set feature flags" });
-  }
-});
-
-// GET /feature-flags/metadata - Get flag metadata and documentation
-router.get("/meta/documentation", async (req, res) => {
-  try {
-    const documentation = {};
-
-    for (const [flagName, metadata] of Object.entries(FLAG_METADATA)) {
-      const currentValue = await getFlag(flagName);
-      documentation[flagName] = {
-        ...metadata,
-        current_value: currentValue,
-        default_value: DEFAULT_FLAGS[flagName],
+    result.rows.forEach(row => {
+      flags[row.key] = {
+        enabled: row.enabled,
+        payload: row.payload,
+        updatedAt: row.updated_at
       };
-    }
+    });
 
     res.json({
-      flags: documentation,
-      rollout_guide: {
-        phases: [
-          {
-            phase: "shadow",
-            ai_traffic: 0.0,
-            ai_shadow: true,
-            description: "Log predictions only",
-          },
-          {
-            phase: "canary",
-            ai_traffic: 0.1,
-            ai_shadow: true,
-            description: "10% traffic with monitoring",
-          },
-          {
-            phase: "partial",
-            ai_traffic: 0.5,
-            ai_shadow: false,
-            description: "50% traffic rollout",
-          },
-          {
-            phase: "full",
-            ai_traffic: 1.0,
-            ai_shadow: false,
-            description: "Full production traffic",
-          },
-        ],
-      },
+      flags,
+      count: result.rows.length,
+      timestamp: new Date().toISOString()
     });
+
   } catch (error) {
-    console.error("Error getting feature flag metadata:", error);
-    res.status(500).json({ error: "Failed to get metadata" });
+    console.error("Get feature flags error:", error);
+    res.status(500).json({
+      error: "Failed to fetch feature flags",
+      code: "INTERNAL_ERROR"
+    });
   }
 });
 
-// GET /feature-flags/audit/history - Get flag change history
-router.get("/audit/history", async (req, res) => {
+/**
+ * GET /feature-flags/:key
+ * Get specific feature flag
+ */
+router.get("/:key", async (req, res) => {
   try {
-    const limit = parseInt(req.query.limit) || 50;
-    const history = await redisClient.lrange(
-      "audit:flag_changes",
-      0,
-      limit - 1,
+    const { key } = req.params;
+
+    const result = await db.query(
+      "SELECT key, enabled, payload, updated_at FROM features WHERE key = $1",
+      [key]
     );
 
-    const changes = history.map((change) => JSON.parse(change));
-
-    res.json({
-      changes: changes,
-      total_returned: changes.length,
-    });
-  } catch (error) {
-    console.error("Error getting flag change history:", error);
-    res.status(500).json({ error: "Failed to get change history" });
-  }
-});
-
-// POST /feature-flags/rollout/:phase - Execute predefined rollout phase
-router.post("/rollout/:phase", async (req, res) => {
-  try {
-    const { phase } = req.params;
-
-    const rolloutPhases = {
-      shadow: { AI_TRAFFIC: 0.0, AI_SHADOW: true, SUPPRESS_AI_ALERTS: false },
-      canary: { AI_TRAFFIC: 0.1, AI_SHADOW: true, SUPPRESS_AI_ALERTS: false },
-      partial: { AI_TRAFFIC: 0.5, AI_SHADOW: false, SUPPRESS_AI_ALERTS: false },
-      full: { AI_TRAFFIC: 1.0, AI_SHADOW: false, SUPPRESS_AI_ALERTS: false },
-      rollback: { AI_TRAFFIC: 0.0, AI_SHADOW: true, SUPPRESS_AI_ALERTS: true },
-    };
-
-    if (!rolloutPhases[phase]) {
-      return res.status(400).json({
-        error: `Unknown rollout phase: ${phase}`,
-        available_phases: Object.keys(rolloutPhases),
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        error: "Feature flag not found",
+        code: "FLAG_NOT_FOUND",
+        key
       });
     }
 
-    const phaseConfig = rolloutPhases[phase];
-    const results = {};
-
-    for (const [flagName, value] of Object.entries(phaseConfig)) {
-      await setFlag(flagName, value);
-      results[flagName] = value;
-    }
+    const flag = result.rows[0];
 
     res.json({
-      phase: phase,
-      configured_flags: results,
-      executed_at: new Date().toISOString(),
-      message: `Successfully executed ${phase} rollout phase`,
+      key: flag.key,
+      enabled: flag.enabled,
+      payload: flag.payload,
+      updatedAt: flag.updated_at
     });
+
   } catch (error) {
-    console.error(`Error executing rollout phase ${req.params.phase}:`, error);
-    res.status(500).json({ error: "Failed to execute rollout phase" });
+    console.error("Get feature flag error:", error);
+    res.status(500).json({
+      error: "Failed to fetch feature flag",
+      code: "INTERNAL_ERROR"
+    });
   }
 });
 
-// Middleware to check if AI traffic is enabled for a request
-function aiTrafficGate(req, res, next) {
-  getFlag("AI_TRAFFIC")
-    .then((aiTraffic) => {
-      if (Math.random() < aiTraffic) {
-        req.useAI = true;
-      } else {
-        req.useAI = false;
-      }
-      next();
-    })
-    .catch((error) => {
-      console.error("Error in AI traffic gate:", error);
-      req.useAI = false; // Default to control on error
-      next();
+/**
+ * PUT /feature-flags/:key
+ * Update feature flag (admin only)
+ */
+router.put("/:key", authenticateToken, requireAdmin, async (req, res) => {
+  try {
+    const { key } = req.params;
+    const { enabled, payload } = req.body;
+
+    // Validation
+    if (typeof enabled !== 'boolean') {
+      return res.status(400).json({
+        error: "enabled field must be a boolean",
+        code: "INVALID_INPUT"
+      });
+    }
+
+    // Update or insert feature flag
+    const result = await db.query(`
+      INSERT INTO features (key, enabled, payload, updated_at)
+      VALUES ($1, $2, $3, NOW())
+      ON CONFLICT (key) 
+      DO UPDATE SET 
+        enabled = EXCLUDED.enabled,
+        payload = EXCLUDED.payload,
+        updated_at = NOW()
+      RETURNING key, enabled, payload, updated_at
+    `, [key, enabled, payload || {}]);
+
+    const updatedFlag = result.rows[0];
+
+    // Log the change
+    console.log(`Feature flag updated: ${key} = ${enabled} by admin`);
+
+    res.json({
+      key: updatedFlag.key,
+      enabled: updatedFlag.enabled,
+      payload: updatedFlag.payload,
+      updatedAt: updatedFlag.updated_at,
+      message: "Feature flag updated successfully"
     });
-}
 
-// Initialize flags on startup
-initializeFlags().catch(console.error);
+  } catch (error) {
+    console.error("Update feature flag error:", error);
+    res.status(500).json({
+      error: "Failed to update feature flag",
+      code: "INTERNAL_ERROR"
+    });
+  }
+});
 
-module.exports = {
-  router,
-  getFlag,
-  setFlag,
-  aiTrafficGate,
-  initializeFlags,
-};
+/**
+ * POST /feature-flags/bulk
+ * Bulk update multiple feature flags (admin only)
+ */
+router.post("/bulk", authenticateToken, requireAdmin, async (req, res) => {
+  try {
+    const { flags } = req.body;
+
+    if (!Array.isArray(flags)) {
+      return res.status(400).json({
+        error: "flags must be an array",
+        code: "INVALID_INPUT"
+      });
+    }
+
+    const results = [];
+
+    // Use transaction for bulk update
+    await db.transaction(async (client) => {
+      for (const flag of flags) {
+        const { key, enabled, payload } = flag;
+
+        if (!key || typeof enabled !== 'boolean') {
+          throw new Error(`Invalid flag: ${JSON.stringify(flag)}`);
+        }
+
+        const result = await client.query(`
+          INSERT INTO features (key, enabled, payload, updated_at)
+          VALUES ($1, $2, $3, NOW())
+          ON CONFLICT (key) 
+          DO UPDATE SET 
+            enabled = EXCLUDED.enabled,
+            payload = EXCLUDED.payload,
+            updated_at = NOW()
+          RETURNING key, enabled, payload, updated_at
+        `, [key, enabled, payload || {}]);
+
+        results.push(result.rows[0]);
+      }
+    });
+
+    console.log(`Bulk feature flags update: ${results.length} flags updated by admin`);
+
+    res.json({
+      updated: results,
+      count: results.length,
+      message: "Feature flags updated successfully"
+    });
+
+  } catch (error) {
+    console.error("Bulk update feature flags error:", error);
+    res.status(500).json({
+      error: "Failed to update feature flags",
+      code: "INTERNAL_ERROR",
+      details: error.message
+    });
+  }
+});
+
+/**
+ * DELETE /feature-flags/:key
+ * Delete feature flag (admin only)
+ */
+router.delete("/:key", authenticateToken, requireAdmin, async (req, res) => {
+  try {
+    const { key } = req.params;
+
+    const result = await db.query(
+      "DELETE FROM features WHERE key = $1 RETURNING key",
+      [key]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        error: "Feature flag not found",
+        code: "FLAG_NOT_FOUND",
+        key
+      });
+    }
+
+    console.log(`Feature flag deleted: ${key} by admin`);
+
+    res.json({
+      key,
+      message: "Feature flag deleted successfully"
+    });
+
+  } catch (error) {
+    console.error("Delete feature flag error:", error);
+    res.status(500).json({
+      error: "Failed to delete feature flag",
+      code: "INTERNAL_ERROR"
+    });
+  }
+});
+
+/**
+ * GET /feature-flags/check/:key
+ * Quick check if feature is enabled (public endpoint for frontend)
+ */
+router.get("/check/:key", async (req, res) => {
+  try {
+    const { key } = req.params;
+
+    const result = await db.query(
+      "SELECT enabled FROM features WHERE key = $1",
+      [key]
+    );
+
+    const enabled = result.rows.length > 0 ? result.rows[0].enabled : false;
+
+    res.json({
+      key,
+      enabled,
+      timestamp: new Date().toISOString()
+    });
+
+  } catch (error) {
+    console.error("Check feature flag error:", error);
+    res.status(500).json({
+      error: "Failed to check feature flag",
+      code: "INTERNAL_ERROR"
+    });
+  }
+});
+
+/**
+ * GET /feature-flags/ai/config
+ * Get AI-specific configuration (public for bargain system)
+ */
+router.get("/ai/config", async (req, res) => {
+  try {
+    const result = await db.query(`
+      SELECT key, enabled, payload 
+      FROM features 
+      WHERE key LIKE 'ai_%' OR key IN ('visible_rounds_mode', 'hidden_rounds_mode', 'copy_pack_rotation', 'urgency_messaging')
+    `);
+
+    const config = {};
+    result.rows.forEach(row => {
+      config[row.key] = {
+        enabled: row.enabled,
+        ...row.payload
+      };
+    });
+
+    res.json({
+      config,
+      timestamp: new Date().toISOString(),
+      version: "1.0.0"
+    });
+
+  } catch (error) {
+    console.error("Get AI config error:", error);
+    res.status(500).json({
+      error: "Failed to get AI configuration",
+      code: "INTERNAL_ERROR"
+    });
+  }
+});
+
+/**
+ * POST /feature-flags/preset/:preset
+ * Apply predefined feature flag presets (admin only)
+ */
+router.post("/preset/:preset", authenticateToken, requireAdmin, async (req, res) => {
+  try {
+    const { preset } = req.params;
+
+    let presetFlags = [];
+
+    switch (preset) {
+      case 'conservative':
+        presetFlags = [
+          { key: 'ai_bargain_enabled', enabled: true },
+          { key: 'emotional_intelligence', enabled: false },
+          { key: 'visible_rounds_mode', enabled: true },
+          { key: 'hidden_rounds_mode', enabled: false },
+          { key: 'urgency_messaging', enabled: false },
+          { key: 'copy_pack_rotation', enabled: false }
+        ];
+        break;
+
+      case 'aggressive':
+        presetFlags = [
+          { key: 'ai_bargain_enabled', enabled: true },
+          { key: 'emotional_intelligence', enabled: true },
+          { key: 'visible_rounds_mode', enabled: false },
+          { key: 'hidden_rounds_mode', enabled: true },
+          { key: 'urgency_messaging', enabled: true },
+          { key: 'copy_pack_rotation', enabled: true }
+        ];
+        break;
+
+      case 'balanced':
+        presetFlags = [
+          { key: 'ai_bargain_enabled', enabled: true },
+          { key: 'emotional_intelligence', enabled: true },
+          { key: 'visible_rounds_mode', enabled: true },
+          { key: 'hidden_rounds_mode', enabled: false },
+          { key: 'urgency_messaging', enabled: true },
+          { key: 'copy_pack_rotation', enabled: true }
+        ];
+        break;
+
+      case 'disabled':
+        presetFlags = [
+          { key: 'ai_bargain_enabled', enabled: false },
+          { key: 'emotional_intelligence', enabled: false },
+          { key: 'visible_rounds_mode', enabled: false },
+          { key: 'hidden_rounds_mode', enabled: false },
+          { key: 'urgency_messaging', enabled: false },
+          { key: 'copy_pack_rotation', enabled: false }
+        ];
+        break;
+
+      default:
+        return res.status(400).json({
+          error: "Invalid preset",
+          code: "INVALID_PRESET",
+          available: ['conservative', 'aggressive', 'balanced', 'disabled']
+        });
+    }
+
+    // Apply preset
+    const results = [];
+    await db.transaction(async (client) => {
+      for (const flag of presetFlags) {
+        const result = await client.query(`
+          INSERT INTO features (key, enabled, payload, updated_at)
+          VALUES ($1, $2, $3, NOW())
+          ON CONFLICT (key) 
+          DO UPDATE SET enabled = EXCLUDED.enabled, updated_at = NOW()
+          RETURNING key, enabled
+        `, [flag.key, flag.enabled, {}]);
+
+        results.push(result.rows[0]);
+      }
+    });
+
+    console.log(`Feature preset '${preset}' applied by admin`);
+
+    res.json({
+      preset,
+      applied: results,
+      count: results.length,
+      message: `Preset '${preset}' applied successfully`
+    });
+
+  } catch (error) {
+    console.error("Apply preset error:", error);
+    res.status(500).json({
+      error: "Failed to apply preset",
+      code: "INTERNAL_ERROR"
+    });
+  }
+});
+
+module.exports = router;
