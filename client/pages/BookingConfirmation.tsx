@@ -718,7 +718,7 @@ export default function BookingConfirmation() {
                             {extra.name}
                           </span>
                           <span className="font-medium">
-                            ��{(extra.price || 0).toLocaleString()}
+                            ₹{(extra.price || 0).toLocaleString()}
                           </span>
                         </div>
                       ))}
