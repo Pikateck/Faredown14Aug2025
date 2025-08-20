@@ -11,6 +11,7 @@ import { Progress } from "@/components/ui/progress";
 import { MobileNavigation } from "@/components/mobile/MobileNavigation";
 import BargainModalPhase1 from "@/components/BargainModalPhase1";
 import { AINegotiationModal } from "@/components/AINegotiationModal";
+import { UnifiedBargainModal } from "@/components/UnifiedBargainModal";
 import {
   useBargainPhase1,
   createFlightBargainItem,
