@@ -452,6 +452,24 @@ export function ClassyBargainModal({
         </section>
       )}
 
+      {/* Sticky Action Bar - Brief preview before decision card */}
+      {step === 'chat' && counter && cursor >= 3 && (
+        <div className="sticky bottom-3 mx-4 flex gap-3 justify-end opacity-80 animate-in fade-in-50 slide-in-from-bottom-2 duration-300">
+          <button
+            className="px-3 py-2 text-sm rounded-md border bg-white text-slate-700 hover:bg-slate-50 transition-colors"
+            onClick={handleRetry}
+          >
+            Bargain Again
+          </button>
+          <button
+            className="px-3 py-2 text-sm rounded-md bg-emerald-600 text-white hover:bg-emerald-700 transition-colors"
+            onClick={onAcceptOffer}
+          >
+            Accept
+          </button>
+        </div>
+      )}
+
       {/* Decision Step - New DecisionCard Component */}
       {step === 'decision' && counter && (
         <section className="p-4">
