@@ -540,10 +540,18 @@ export default function FlightResults() {
   const [bargainPrice, setBargainPrice] = useState("");
   const [bargainProgress, setBargainProgress] = useState(0);
   const [bargainResult, setBargainResult] = useState<"accepted" | "rejected" | "counter" | null>(null);
+  const [bargainSession, setBargainSession] = useState<any>(null);
+  const [showAINegotiationModal, setShowAINegotiationModal] = useState(false);
 
   // Legacy variables that reference bargainCtx data when available
   const bargainFlight = bargainCtx?.product || null;
   const bargainFareType = bargainCtx?.product?.fareTypes?.[0] || null;
+
+  // Legacy functions - should be removed when old UI is cleaned up
+  const handleCloseBargain = () => {
+    setBargainSession(null);
+    setShowAINegotiationModal(false);
+  };
 
   const [sortBy, setSortBy] = useState<"cheapest" | "fastest">("cheapest");
   const [expandedTicketOptions, setExpandedTicketOptions] = useState<
