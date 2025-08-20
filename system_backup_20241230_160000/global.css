@@ -1,0 +1,352 @@
+/* Import mobile enhancements */
+@import "./styles/mobile-enhancements.css";
+@import "./styles/admin-mobile.css";
+@import "./styles/mobile-optimizations.css";
+
+/* Import classy bargain modal styles - updated */
+@import "./styles/fd-bargain.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /**
+   * Font rendering optimizations for crisp, sharp text
+   */
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "kern" 1;
+    font-kerning: normal;
+    font-variant-ligatures: contextual common-ligatures;
+  }
+
+  /* Inherit crisp rendering into menu panels */
+  .menu-panel,
+  .menu-panel * {
+    -webkit-font-smoothing: inherit;
+    -moz-osx-font-smoothing: inherit;
+    text-rendering: optimizeLegibility;
+    font-kerning: normal;
+    font-variant-ligatures: contextual common-ligatures;
+  }
+
+  /**
+   * CRISP MENU - Razor-sharp text rendering
+   * Remove all rasterizing transforms/filters
+   */
+  .mobile-menu-enhanced {
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+    text-rendering: optimizeLegibility !important;
+    font-feature-settings:
+      "kern" 1,
+      "liga" 1 !important;
+    font-kerning: normal !important;
+    font-variant-ligatures: contextual common-ligatures !important;
+    /* Remove all rasterizing properties */
+    transform: none !important;
+    filter: none !important;
+    will-change: auto !important;
+    backface-visibility: visible !important;
+    background: #fff;
+    border-radius: 12px;
+  }
+
+  /**
+   * Menu items with whole-pixel values only
+   */
+  .menu-item {
+    font-weight: 500; /* use the real 500 font file */
+    font-size: 16px;
+    line-height: 20px;
+    padding: 12px 16px;
+    gap: 12px;
+    display: flex;
+    align-items: center;
+  }
+
+  .menu-subtext {
+    font-size: 14px;
+    line-height: 18px;
+  }
+
+  .menu-divider {
+    height: 1px;
+    background: rgba(0, 0, 0, 0.06);
+  }
+
+  .menu-item svg {
+    flex-shrink: 0;
+    stroke-width: 2;
+    shape-rendering: geometricPrecision;
+  }
+
+  /**
+   * Faredown brand color system
+   * tailwind.config.ts expects the following color variables to be expressed as HSL values.
+   */
+  :root {
+    /* Crisp font rendering at root level */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    --background: 0 0% 100%;
+    --foreground: 214 31% 17%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 214 31% 17%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 214 31% 17%;
+
+    --primary: 217 100% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 210 15% 95%;
+    --secondary-foreground: 214 31% 17%;
+
+    --muted: 210 15% 96%;
+    --muted-foreground: 214 16% 46%;
+
+    --accent: 30 100% 55%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 214 20% 90%;
+    --input: 214 20% 95%;
+    --ring: 217 100% 50%;
+
+    --radius: 0.75rem;
+
+    /* Faredown specific colors */
+    --faredown-blue: 217 100% 50%;
+    --faredown-orange: 30 100% 55%;
+    --faredown-green: 142 70% 45%;
+    --faredown-red: 0 75% 55%;
+    --faredown-gray: 214 16% 46%;
+    --faredown-light: 210 15% 96%;
+
+    /* Price trend colors */
+    --price-up: 0 75% 55%;
+    --price-down: 142 70% 45%;
+    --price-neutral: 214 16% 46%;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 214 45% 6%;
+    --foreground: 210 40% 98%;
+
+    --card: 214 35% 8%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 214 35% 8%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 217 100% 60%;
+    --primary-foreground: 214 45% 6%;
+
+    --secondary: 214 25% 15%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 214 25% 15%;
+    --muted-foreground: 215 25% 65%;
+
+    --accent: 30 100% 60%;
+    --accent-foreground: 214 45% 6%;
+
+    --destructive: 0 75% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214 25% 18%;
+    --input: 214 25% 15%;
+    --ring: 217 100% 60%;
+
+    /* Dark mode Faredown colors */
+    --faredown-blue: 217 100% 60%;
+    --faredown-orange: 30 100% 60%;
+    --faredown-green: 142 70% 50%;
+    --faredown-red: 0 75% 60%;
+    --faredown-gray: 215 25% 65%;
+    --faredown-light: 214 25% 15%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  /* Mobile-first responsive improvements */
+  html {
+    @apply scroll-smooth;
+  }
+
+  /* Better touch targets for mobile */
+  button,
+  a,
+  input,
+  textarea,
+  select {
+    @apply touch-manipulation;
+  }
+
+  /* Improved mobile typography */
+  h1 {
+    @apply text-2xl sm:text-3xl lg:text-4xl;
+  }
+
+  h2 {
+    @apply text-xl sm:text-2xl lg:text-3xl;
+  }
+
+  h3 {
+    @apply text-lg sm:text-xl lg:text-2xl;
+  }
+
+  /* Mobile-friendly input sizing */
+  input,
+  textarea,
+  select {
+    @apply min-h-[44px] text-base;
+  }
+
+  /* Better mobile scrollbars */
+  ::-webkit-scrollbar {
+    @apply w-2 h-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-100 rounded;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-400 rounded;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-500;
+  }
+}
+
+@layer utilities {
+  /* Mobile-specific utilities */
+  .mobile-container {
+    @apply w-full max-w-7xl mx-auto px-3 sm:px-4 lg:px-8;
+  }
+
+  .mobile-padding {
+    @apply p-3 sm:p-4 lg:p-6;
+  }
+
+  .mobile-text {
+    @apply text-sm sm:text-base;
+  }
+
+  .mobile-gap {
+    @apply gap-3 sm:gap-4 lg:gap-6;
+  }
+
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px] touch-manipulation;
+  }
+
+  .mobile-grid {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3;
+  }
+
+  .mobile-flex {
+    @apply flex flex-col sm:flex-row;
+  }
+
+  /* Text truncation with responsive behavior */
+  .mobile-truncate {
+    @apply truncate sm:text-clip;
+  }
+
+  /* Hide/show utilities for different screen sizes */
+  .mobile-only {
+    @apply block sm:hidden;
+  }
+
+  .tablet-up {
+    @apply hidden sm:block;
+  }
+
+  .desktop-only {
+    @apply hidden lg:block;
+  }
+
+  /* Safe area support for mobile devices */
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .safe-area-left {
+    padding-left: env(safe-area-inset-left);
+  }
+
+  .safe-area-right {
+    padding-right: env(safe-area-inset-right);
+  }
+
+  /* React Date Range Calendar Overrides - Global */
+  .rdrMonthAndYearPickers,
+  .rdrMonthAndYearPickers *,
+  .rdrMonthPicker select,
+  .rdrYearPicker select {
+    color: #1f2937 !important;
+    font-weight: 900 !important;
+    font-size: 20px !important;
+  }
+
+  .rdrWeekDay,
+  .rdrWeekDay * {
+    color: #1f2937 !important;
+    font-weight: 600 !important;
+    text-transform: capitalize !important;
+  }
+}
