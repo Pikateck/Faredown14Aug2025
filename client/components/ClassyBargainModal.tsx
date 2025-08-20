@@ -67,6 +67,7 @@ export function ClassyBargainModal({
   const counterRef = useRef<number | null>(null);
 
   const { selectedCurrency } = useCurrency();
+  const { user } = useAuth();
 
   // Module configuration with role styling
   const moduleConfig = getModuleConfig(moduleType);
