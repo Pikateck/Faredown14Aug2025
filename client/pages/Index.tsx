@@ -3364,7 +3364,7 @@ export default function Index() {
           console.log('Selected from city:', city);
           setSelectedFromCity(city);
         }}
-        triggerRef={window.innerWidth >= 640 ? desktopFromButtonRef : fromCityButtonRef}
+        triggerRef={desktopFromButtonRef.current ? desktopFromButtonRef : fromCityButtonRef}
       />
 
       <BookingStyleDropdown
