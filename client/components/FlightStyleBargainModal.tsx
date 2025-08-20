@@ -808,7 +808,7 @@ export function FlightStyleBargainModal({
                     type === "transfer" ? "bg-orange-50 text-orange-600" : "bg-gray-50 text-gray-600"
                   }`}>
                     <span className="text-sm">
-                      {type === "hotel" ? "🏨" : type === "sightseeing" ? "📍" : type === "transfer" ? "🚗" : "����"}
+                      {type === "hotel" ? "🏨" : type === "sightseeing" ? "📍" : type === "transfer" ? "🚗" : "🏢"}
                     </span>
                   </div>
                   <div className="flex-1">
@@ -931,9 +931,10 @@ export function FlightStyleBargainModal({
               </div>
             </div>
 
-            <div className="bg-white border-2 border-[#febb02] rounded-xl p-4 shadow-lg">
-              <div className="flex items-center justify-center space-x-3">
-                <span className="font-bold text-[#003580] text-xl">
+            <div className="bg-orange-50 border-2 border-orange-200 rounded-xl p-4 shadow-lg">
+              <div className="flex items-center justify-center space-x-2">
+                <Clock className="w-5 h-5 text-orange-600" />
+                <span className="font-bold text-orange-600 text-lg">
                   Offer expires in: {bargainState.timeRemaining}s
                 </span>
               </div>
@@ -943,10 +944,9 @@ export function FlightStyleBargainModal({
               <Button
                 onClick={handleAcceptCounterOffer}
                 disabled={bargainState.timeRemaining === 0}
-                className="w-full bg-gradient-to-r from-[#003580] to-[#0071c2] hover:from-[#002d6b] hover:to-[#005a9f] text-white py-5 text-xl font-bold rounded-xl shadow-lg"
+                className="w-full bg-green-600 hover:bg-green-700 text-white py-5 text-lg font-bold rounded-xl shadow-lg"
               >
-                Book This Deal - {selectedCurrency.symbol}
-                {(bargainState.currentCounterOffer || 0).toLocaleString()}
+                Accept {selectedCurrency.symbol}{(bargainState.currentCounterOffer || 0).toLocaleString()} — 30s to book
               </Button>
 
               <Button
