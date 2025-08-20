@@ -20,6 +20,7 @@ export default function DecisionCard({
   onBargainAgain,
   onExpire,
   holdSeconds = 30,
+  userName,
 }: DecisionCardProps) {
   const [secondsLeft, setSecondsLeft] = useState<number>(holdSeconds);
   const [mounted, setMounted] = useState(false);
