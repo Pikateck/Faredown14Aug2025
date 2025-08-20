@@ -104,6 +104,8 @@ export function AINegotiationChat({
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [retryOffer, setRetryOffer] = useState(userOffer);
   const [error, setError] = useState<string | null>(null);
+  const [minDisplayTimer, setMinDisplayTimer] = useState<NodeJS.Timeout | null>(null);
+  const [canProceedFromDecision, setCanProceedFromDecision] = useState(false);
 
   const chatEndRef = useRef<HTMLDivElement>(null);
 
