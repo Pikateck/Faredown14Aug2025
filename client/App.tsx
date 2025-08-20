@@ -10,6 +10,7 @@ import { CurrencyProvider } from "./contexts/CurrencyContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import { DateProvider } from "./contexts/DateContext";
 import { LoyaltyProvider } from "./contexts/LoyaltyContext";
+import { ErrorBoundary } from "./utils/errorBoundary";
 
 // Core pages - loaded immediately for better initial experience
 import Index from "./pages/Index";
