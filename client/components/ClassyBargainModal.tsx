@@ -2,6 +2,7 @@ import React, { useMemo, useRef, useState, useEffect, useCallback } from 'react'
 import { useChatBeats } from '@/hooks/useChatBeats';
 import { chooseVariant, formatCurrency } from '@/lib/copySelector';
 import { useCurrency } from '@/contexts/CurrencyContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { Sparkles, Clock, Shield } from 'lucide-react';
 import copyPack from '../../api/data/copy_packs.json';
 import DecisionCard from './DecisionCard';
