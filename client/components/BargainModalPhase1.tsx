@@ -74,105 +74,33 @@ export default function BargainModalPhase1({
   userLocation,
   deviceType = "desktop",
 }: BargainModalPhase1Props) {
-  const [step, setStep] = useState<BargainStep>("loading");
   const [userOfferPrice, setUserOfferPrice] = useState("");
-  const [attemptCount, setAttemptCount] = useState(0);
-  const [showPricingDetails, setShowPricingDetails] = useState(false);
+  const [showAIChat, setShowAIChat] = useState(false);
+  const bargainHook = useAIBargain();
 
-  // Use live bargain API
-  const {
-    isLoading,
-    error: bargainError,
-    session,
-    lastOffer,
-    startBargainSession,
-    submitOffer,
-    acceptCurrentOffer,
-    resetSession,
-    getErrorMessage,
-    currentPrice,
-    minFloor,
-    explanation,
-  } = useBargain();
-
-  const [error, setError] = useState<string | null>(null);
-  const [showRepriceModal, setShowRepriceModal] = useState(false);
-  const [repriceData, setRepriceData] = useState<{
-    oldPrice: number;
-    newPrice?: number;
-  } | null>(null);
-
-  // 30-second timer for counter-offers (Zubin's requirement)
-  const [counterOfferTimer, setCounterOfferTimer] = useState(0);
-  const [isCounterOfferExpired, setIsCounterOfferExpired] = useState(false);
-
-  // Prevent repeat price entries (Zubin's requirement)
-  const [usedPrices, setUsedPrices] = useState<Set<number>>(new Set());
-
-  // Initialize bargain session when modal opens
+  // Reset state when modal opens
   useEffect(() => {
-    if (isOpen && step === "loading") {
-      initializeBargainSession();
-    }
-  }, [isOpen]);
-
-  // 30-second countdown timer for counter-offers
-  useEffect(() => {
-    let interval: NodeJS.Timeout;
-
-    if (counterOfferTimer > 0 && step === "negotiating") {
-      interval = setInterval(() => {
-        setCounterOfferTimer((prev) => {
-          if (prev <= 1) {
-            setIsCounterOfferExpired(true);
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-    }
-
-    return () => clearInterval(interval);
-  }, [counterOfferTimer, step]);
-
-  const initializeBargainSession = async () => {
-    try {
-      setError(null);
-
-      // Create CPO (Comparable Product Object) for the API
-      const productCPO: BargainProductCPO = {
-        type: itemDetails.type,
-        supplier: itemDetails.airline || "hotelbeds", // Determine supplier
-        product_id: itemDetails.itemId,
-        ...(itemDetails.route && {
-          route: `${itemDetails.route.from}-${itemDetails.route.to}`,
-        }),
-        ...(itemDetails.city && { city: itemDetails.city }),
-        ...(itemDetails.category && { activity_type: itemDetails.category }),
-        ...(itemDetails.class && { class_of_service: itemDetails.class }),
-      };
-
-      const result = await startBargainSession(productCPO, promoCode);
-      setStep("initial");
-
-      // Set suggested target price (80% of initial offer as default)
-      const suggestedPrice = Math.round(result.initial_offer.price * 0.8);
+    if (isOpen) {
+      setUserOfferPrice("");
+      setShowAIChat(false);
+      // Set suggested target price (80% of base price as default)
+      const suggestedPrice = Math.round(itemDetails.basePrice * 0.8);
       setUserOfferPrice(suggestedPrice.toString());
-    } catch (err: any) {
-      console.error("❌ Failed to initialize bargain session:", err);
-
-      const errorMsg = getErrorMessage(err);
-      setError(errorMsg);
-
-      // For network errors, still allow offline mode
-      if (step === "loading" && errorMsg.includes("Network")) {
-        setStep("initial");
-        // Fallback pricing based on base price
-        const fallbackPrice = Math.round(itemDetails.basePrice * 0.8);
-        setUserOfferPrice(fallbackPrice.toString());
-      }
     }
-  };
+  }, [isOpen, itemDetails.basePrice]);
+
+  // Setup success/failure callbacks
+  useEffect(() => {
+    bargainHook.setSuccessCallback((finalPrice: number, orderRef: string) => {
+      console.log('Phase1 bargain success:', finalPrice, orderRef);
+      onBookingConfirmed(finalPrice);
+    });
+
+    bargainHook.setFailureCallback(() => {
+      console.log('Phase1 bargain failed');
+      setShowAIChat(false);
+    });
+  }, [onBookingConfirmed]);
 
   const handleUserOffer = async () => {
     if (!session || !userOfferPrice) return;
