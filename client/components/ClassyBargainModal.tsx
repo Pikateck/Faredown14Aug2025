@@ -242,12 +242,22 @@ export function ClassyBargainModal({
 
       // Wait for beats to finish, then show decision
       const checkCompletion = setInterval(() => {
-        if (!running && cursor >= 4) {
+        console.log('🎭 Checking completion - running:', running, 'cursor:', cursor, 'beats length:', filledBeats.length);
+        if (!running && cursor >= filledBeats.length) {
+          console.log('🎭 Chat completed! Transitioning to decision step');
           clearInterval(checkCompletion);
           setStep('decision');
           setCountdown(30); // Reset countdown for decision
         }
       }, 100);
+
+      // Fallback: Force transition after 10 seconds if stuck
+      const fallbackTimer = setTimeout(() => {
+        console.log('🎭 Fallback timer triggered - forcing transition to decision');
+        clearInterval(checkCompletion);
+        setStep('decision');
+        setCountdown(30);
+      }, 10000);
 
     } catch (err) {
       console.error('Negotiation error:', err);
