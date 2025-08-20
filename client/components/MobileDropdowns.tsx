@@ -45,7 +45,7 @@ export function MobileCityDropdown({
 }: MobileCityDropdownProps) {
   const [searchQuery, setSearchQuery] = useState("");
 
-  console.log('MobileCityDropdown render:', { isOpen, title });
+  console.log('MobileCityDropdown render:', { isOpen, title, context, citiesCount: Object.keys(cities).length });
 
   if (!isOpen) return null;
 
