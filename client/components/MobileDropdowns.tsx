@@ -47,7 +47,12 @@ export function MobileCityDropdown({
 
   console.log('MobileCityDropdown render:', { isOpen, title });
 
-  if (!isOpen) return null;
+  if (!isOpen) {
+    console.log('Dropdown not open, returning null');
+    return null;
+  }
+
+  console.log('Dropdown should be visible!');
 
   // Filter cities based on search query
   const filteredCities = Object.entries(cities).filter(([city, data]) => {
@@ -692,7 +697,7 @@ export function MobileTravelers({
               disabled={travelers.adults <= 1}
               className="w-12 h-12 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-blue-600 font-bold text-xl touch-manipulation"
             >
-              ���
+              −
             </button>
             <span className="w-8 text-center font-medium text-gray-900 text-lg">
               {travelers.adults}
