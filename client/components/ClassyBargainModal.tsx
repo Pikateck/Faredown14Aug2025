@@ -246,6 +246,7 @@ export function ClassyBargainModal({
         if (!running && cursor >= filledBeats.length) {
           console.log('🎭 Chat completed! Transitioning to decision step');
           clearInterval(checkCompletion);
+          clearTimeout(fallbackTimer);
           setStep('decision');
           setCountdown(30); // Reset countdown for decision
         }
@@ -258,6 +259,12 @@ export function ClassyBargainModal({
         setStep('decision');
         setCountdown(30);
       }, 10000);
+
+      // Cleanup function
+      return () => {
+        clearInterval(checkCompletion);
+        clearTimeout(fallbackTimer);
+      };
 
     } catch (err) {
       console.error('Negotiation error:', err);
