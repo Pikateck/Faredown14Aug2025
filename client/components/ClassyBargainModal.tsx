@@ -205,7 +205,7 @@ export function ClassyBargainModal({
         {
           ...beatsTemplate[0],
           text: chooseVariant(copyPack, {
-            module: 'flights',
+            module: moduleType,
             beat: 'agent_offer',
             attempt: attempt as 1|2|3,
             sessionUsedKeys: sessionUsed,
@@ -215,7 +215,7 @@ export function ClassyBargainModal({
         {
           ...beatsTemplate[1],
           text: chooseVariant(copyPack, {
-            module: 'flights',
+            module: moduleType,
             beat: 'supplier_check',
             attempt: attempt as 1|2|3,
             sessionUsedKeys: sessionUsed,
