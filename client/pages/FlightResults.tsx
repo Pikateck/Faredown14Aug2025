@@ -1,3 +1,4 @@
+// Cache bust v3 - Updated 2024-12-30 to fix bargain modal
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
