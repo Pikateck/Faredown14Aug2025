@@ -286,7 +286,8 @@ export function ClassyBargainModal({
   const savings = counter && fareType.price - counter > 0 ? fareType.price - counter : 0;
 
   return (
-    <dialog open={isOpen} className="fd-modal">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="fd-modal">
       {/* Header */}
       <header className="fd-modal__hdr">
         <div className="fd-hdr__left">
@@ -434,6 +435,7 @@ export function ClassyBargainModal({
           </div>
         </section>
       )}
-    </dialog>
+      </div>
+    </div>
   );
 }
