@@ -320,21 +320,11 @@ export function AINegotiationChat({
 
       const holdResult: HoldResponse = await response.json();
       setHoldData(holdResult);
-      setCountdown(holdResult.holdSeconds);
       setCurrentStep('holding');
-      
-      // Start countdown
-      const timer = setInterval(() => {
-        setCountdown(prev => {
-          if (prev <= 1) {
-            clearInterval(timer);
-            setCurrentStep('success');
-            onBargainSuccess(holdResult.finalPrice, holdResult.orderRef);
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
+
+      // Start countdown timer
+      countdown.reset(holdResult.holdSeconds);
+      countdown.start();
 
     } catch (error) {
       console.error('Accept error:', error);
