@@ -3002,9 +3002,11 @@ export default function FlightResults() {
                         </Button>
                         <Button
                           className="min-h-[44px] px-6 py-3 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold text-sm touch-manipulation flex items-center justify-center gap-2"
-                          onClick={() => {
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
                             console.log("📱 Mobile Bargain Now clicked!", flight.id);
-                            handleBargain(flight, flight.fareTypes[0]);
+                            handleBargain(flight);
                           }}
                         >
                           <TrendingDown className="w-4 h-4" />
@@ -3288,39 +3290,36 @@ export default function FlightResults() {
 
                         </div>
 
-                        {/* Action Buttons Row - Full Width Below Pricing */}
-        <div className="w-full grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-gray-100">
-                          <Button
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              console.log(
-                                "Desktop View Details clicked for flight:",
-                                flight.id,
-                              );
-                              navigate(`/flight-details/${flight.id}`, {
-                                state: { flight },
-                              });
-                            }}
-                            variant="outline"
-                            className="min-h-[48px] px-6 py-3 font-semibold text-sm touch-manipulation flex items-center justify-center relative z-50 border-2 border-gray-300 hover:border-[#003580] hover:text-[#003580]"
-                            onTouchStart={(e) => {
-                              e.stopPropagation();
-                            }}
-                          >
-                            View Details
-                          </Button>
-                          <Button
-                            onClick={() => {
-                              console.log("🎯 Desktop Bargain Now clicked!", flight.id);
-                              handleBargain(flight, flight.fareTypes[0]);
-                            }}
-                            className="min-h-[48px] px-6 py-3 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold text-sm touch-manipulation flex items-center justify-center gap-2 border-2 border-[#febb02] hover:border-[#e6a602]"
-                          >
-                            <TrendingDown className="w-4 h-4" />
-                            Bargain Now
-                          </Button>
-                        </div>
+                      </div>
+
+                      {/* Card Footer - Buttons at bottom-right */}
+                      <div className="mt-4 border-t pt-4 flex items-center justify-end gap-3">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          className="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 font-medium text-sm"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            console.log("View Details clicked for flight:", flight.id);
+                            navigate(`/flight-details/${flight.id}`, { state: { flight } });
+                          }}
+                        >
+                          View Details
+                        </Button>
+                        <Button
+                          type="button"
+                          className="px-4 py-2 rounded-lg bg-[#febb02] text-black hover:bg-[#e6a602] font-medium text-sm flex items-center gap-2"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            console.log("🎯 Bargain Now clicked!", flight.id);
+                            handleBargain(flight);
+                          }}
+                        >
+                          <TrendingDown className="w-4 h-4" />
+                          Bargain Now
+                        </Button>
                       </div>
                     </div>
                   </div>
@@ -4302,7 +4301,7 @@ export default function FlightResults() {
                                           Airline fee:
                                         </span>
                                         <span className="text-gray-900 font-medium">
-                                          ₹0
+                                          ��0
                                         </span>
                                       </div>
                                       <div className="flex justify-between">
