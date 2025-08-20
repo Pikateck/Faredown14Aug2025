@@ -22,6 +22,7 @@ export default function DecisionCard({
 }: DecisionCardProps) {
   const [secondsLeft, setSecondsLeft] = useState<number>(holdSeconds);
   const [mounted, setMounted] = useState(false);
+  const [lastAnnounced, setLastAnnounced] = useState<number>(holdSeconds);
   const intervalRef = useRef<number | null>(null);
 
   // mount animation
