@@ -243,7 +243,12 @@ export function UnifiedBargainModal({
 
   // Start AI negotiation
   const startNegotiation = async () => {
-    if (!flight || !fareType || !bargainPrice) return;
+    console.log('🔥 startNegotiation called!', { flight, fareType, bargainPrice, currentStep });
+
+    if (!flight || !fareType || !bargainPrice) {
+      console.error('❌ Missing required data:', { flight: !!flight, fareType: !!fareType, bargainPrice: !!bargainPrice });
+      return;
+    }
 
     const targetPriceInSelectedCurrency = parseInt(bargainPrice);
     const targetPriceInINR = Math.round(
