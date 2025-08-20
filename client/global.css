@@ -7,6 +7,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import classy bargain modal styles */
+@import './styles/fd-bargain.css';
+
 @layer base {
   /**
    * Font rendering optimizations for crisp, sharp text
