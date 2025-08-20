@@ -631,7 +631,7 @@ BOOKING DETAILS
 ========================================
 Booking Reference: ${trip.id}
 Booking Date: ${bookingDate}
-Total Amount: ₹${trip.total?.toLocaleString() || "N/A"}
+Total Amount: ���${trip.total?.toLocaleString() || "N/A"}
 Number of Guests: ${trip.guests || 1}
 Number of Nights: ${trip.nights || 1}
 
@@ -911,7 +911,7 @@ Thank you for choosing Faredown!
         <div>
           <p className="text-sm text-gray-500">Total Amount</p>
           <p className="text-lg font-bold text-gray-900">
-            ��{trip.total?.toLocaleString() || "N/A"}
+            ₹{trip.total?.toLocaleString() || "N/A"}
           </p>
         </div>
         <div className="flex gap-2">
