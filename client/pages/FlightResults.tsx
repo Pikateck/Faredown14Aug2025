@@ -3004,6 +3004,7 @@ export default function FlightResults() {
                           className="min-h-[44px] px-6 py-3 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold text-sm touch-manipulation flex items-center justify-center gap-2"
                           onClick={() => {
                             console.log("📱 Mobile Bargain Now clicked!", flight.id);
+                            alert(`Mobile Bargain Now clicked for flight ${flight.id}. Modal should open now.`);
                             handleBargain(flight, flight.fareTypes[0]);
                           }}
                         >
