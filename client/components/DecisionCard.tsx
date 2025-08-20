@@ -99,6 +99,17 @@ export default function DecisionCard({
         Offer expires in: <span className="font-medium text-slate-700">{secondsLeft}s</span>
       </div>
 
+      {/* Accessibility - Screen reader announcements */}
+      <div
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {lastAnnounced === secondsLeft && secondsLeft <= 15 && secondsLeft > 0 && (
+          `Offer expires in ${secondsLeft} seconds`
+        )}
+      </div>
+
       <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
         <button
           onClick={onAccept}
