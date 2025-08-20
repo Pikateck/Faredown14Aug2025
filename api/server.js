@@ -226,6 +226,7 @@ app.use("/api/sightseeing-search", sightseeingSearchRoutes);
 app.use("/api/transfers", transfersRoutes);
 app.use("/api/transfers-bargain", transfersBargainRoutes);
 app.use("/api/bargains", aiBargainRoutes);
+app.use("/api/feature-flags", featureFlagsRoutes);
 
 // New admin module routes
 app.use("/api/markup", authenticateToken, markupRoutes);
