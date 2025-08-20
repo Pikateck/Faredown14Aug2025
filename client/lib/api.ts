@@ -180,11 +180,16 @@ class ApiClient {
 
     try {
       console.log(`🌐 API GET: ${url.toString()}`);
-      const response = await fetch(url.toString(), {
-        method: "GET",
-        headers: this.getHeaders(),
-        signal: controller.signal,
-      });
+      const response = await tracedFetch(
+        url.toString(),
+        {
+          method: "GET",
+          headers: this.getHeaders(),
+          signal: controller.signal,
+        },
+        `get-${endpoint}-${JSON.stringify(params)}`, // cache key
+        300000 // 5 minute cache
+      );
 
       clearTimeout(timeoutId);
       console.log(`✅ API Response: ${response.status}`);
