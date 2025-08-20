@@ -2979,7 +2979,7 @@ export default function FlightResults() {
                       </div>
 
                       {/* Action Buttons - Hotel Section Style Mobile */}
-                      <div className="grid grid-cols-2 gap-2 mt-3 relative z-50 pointer-events-auto">
+                      <div className="w-full grid grid-cols-2 gap-2 mt-3 relative z-50 pointer-events-auto">
                         <Button
                           variant="outline"
                           className="min-h-[44px] px-6 py-3 font-semibold text-sm touch-manipulation flex items-center justify-center relative z-50"
