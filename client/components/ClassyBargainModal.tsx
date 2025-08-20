@@ -90,6 +90,11 @@ export function ClassyBargainModal({
     }
   }, [isOpen, reset]);
 
+  // Keep counterRef in sync
+  useEffect(() => {
+    counterRef.current = counter;
+  }, [counter]);
+
   // Countdown timer for decision/hold phases
   useEffect(() => {
     if (step === 'decision' || step === 'hold') {
