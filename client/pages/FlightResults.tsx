@@ -1391,7 +1391,7 @@ export default function FlightResults() {
 
     // Clear any existing error and close the modal
     setDuplicatePriceError(false);
-    setShowBargainModal(false);
+    setBargainCtx(null);
 
     // Start the new dock-based bargain system
     handleStartBargain(bargainFlight, bargainFareType, targetPriceInINR);
