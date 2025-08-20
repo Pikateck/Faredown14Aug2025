@@ -237,13 +237,8 @@ export function FlightStyleBargainModal({
     const proposedPrice = parseInt(bargainPrice);
     const priceKey = `${priceCalculation.total}-${proposedPrice}`;
 
-    // Check if price was already used
-    if (usedPrices.has(priceKey)) {
-      return;
-    }
-
-    // Add to used prices
-    setUsedPrices((prev) => new Set([...prev, priceKey]));
+    // Allow same price to be entered multiple times for different AI responses
+    // Remove duplicate price restriction as requested by user
 
     setBargainState((prev) => ({
       ...prev,
