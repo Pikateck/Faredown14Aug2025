@@ -1044,6 +1044,7 @@ export default function Index() {
                     <button
                       onClick={() => {
                         console.log('From button clicked, current state:', showFromCities);
+                        alert('From button clicked!');
                         setShowFromCities(true);
                         console.log('State should now be true');
                       }}
