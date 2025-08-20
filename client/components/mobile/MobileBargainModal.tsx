@@ -32,69 +32,53 @@ export const MobileBargainModal: React.FC<MobileBargainModalProps> = ({
   ticketFeatures,
 }) => {
   const { formatPrice } = useCurrency();
+  const bargainHook = useAIBargain();
 
   const [targetPrice, setTargetPrice] = useState("");
-  const [negotiationPhase, setNegotiationPhase] = useState<
-    "input" | "negotiating" | "success" | "counteroffer"
-  >("input");
-  const [progress, setProgress] = useState(0);
-  const [finalPrice, setFinalPrice] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(60);
+  const [showAIChat, setShowAIChat] = useState(false);
 
   // Reset state when modal opens
   useEffect(() => {
     if (isOpen) {
       setTargetPrice("");
-      setNegotiationPhase("input");
-      setProgress(0);
-      setTimeLeft(60);
+      setShowAIChat(false);
     }
   }, [isOpen]);
 
-  // Timer effect
+  // Setup success/failure callbacks
   useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (negotiationPhase === "negotiating" && timeLeft > 0) {
-      interval = setInterval(() => {
-        setTimeLeft((prev) => prev - 1);
-        setProgress((prev) => Math.min(prev + 1.67, 100));
-      }, 1000);
-    }
-    return () => clearInterval(interval);
-  }, [negotiationPhase, timeLeft]);
+    bargainHook.setSuccessCallback((finalPrice: number, orderRef: string) => {
+      console.log('Mobile bargain success:', finalPrice, orderRef);
+      onBargainSuccess(finalPrice);
+    });
 
-  // Auto-complete negotiation
-  useEffect(() => {
-    if (negotiationPhase === "negotiating" && timeLeft === 0) {
-      const target = parseInt(targetPrice);
-      const savings = originalPrice - target;
-      const savingsPercent = (savings / originalPrice) * 100;
-
-      if (savingsPercent >= 20) {
-        // High savings - show counter offer
-        const counterOffer = target + Math.floor(savings * 0.3);
-        setFinalPrice(counterOffer);
-        setNegotiationPhase("counteroffer");
-      } else {
-        // Low savings - accept target price
-        setFinalPrice(target);
-        setNegotiationPhase("success");
-      }
-    }
-  }, [timeLeft, negotiationPhase, targetPrice, originalPrice]);
+    bargainHook.setFailureCallback(() => {
+      console.log('Mobile bargain failed');
+      setShowAIChat(false);
+    });
+  }, [onBargainSuccess]);
 
   const handleStartNegotiation = () => {
     const target = parseInt(targetPrice);
     if (target && target < originalPrice && target > 0) {
-      setNegotiationPhase("negotiating");
-      setProgress(0);
-      setTimeLeft(60);
-    }
-  };
+      // Create product details for AI bargain
+      const productDetails = createSightseeingBargainDetails({
+        id: 'sightseeing-' + Date.now(),
+        name: ticketName,
+        location: venueName,
+        price: originalPrice,
+      });
 
-  const handleAcceptOffer = () => {
-    onBargainSuccess(finalPrice);
-    onClose();
+      // Start AI bargain
+      bargainHook.startBargain({
+        module: 'sightseeing',
+        title: `${ticketName} - AI Price Negotiator`,
+        productDetails,
+        userOffer: target,
+      });
+
+      setShowAIChat(true);
+    }
   };
 
   const handleBookOriginal = () => {
