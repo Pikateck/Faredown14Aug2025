@@ -98,9 +98,11 @@ export default function DecisionCard({
         />
       </div>
 
-      <div className="mt-2 flex items-center justify-between text-sm">
-        <span className="text-slate-600">Offer expires in:</span>
-        <span className="font-bold text-lg text-red-600">{secondsLeft}s left</span>
+      <div className="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg">
+        <div className="flex items-center justify-between">
+          <span className="text-red-700 font-medium text-sm">⏰ Offer expires in:</span>
+          <span className="font-bold text-xl text-red-600">{secondsLeft}s</span>
+        </div>
       </div>
 
       {/* Accessibility - Screen reader announcements */}
