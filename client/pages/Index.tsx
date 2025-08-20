@@ -209,6 +209,15 @@ export default function Index() {
   const [showToCities, setShowToCities] = useState(false);
   const [selectedFromCity, setSelectedFromCity] = useState("");
   const [selectedToCity, setSelectedToCity] = useState("");
+
+  // Debug: Monitor dropdown state changes
+  useEffect(() => {
+    console.log('showFromCities changed:', showFromCities);
+  }, [showFromCities]);
+
+  useEffect(() => {
+    console.log('showToCities changed:', showToCities);
+  }, [showToCities]);
   // Airport state for CityAutocomplete
   const [fromAirport, setFromAirport] = useState<Airport | null>(null);
   const [toAirport, setToAirport] = useState<Airport | null>(null);
