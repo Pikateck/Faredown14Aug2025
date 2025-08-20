@@ -232,6 +232,12 @@ export default function Index() {
   // Airport state for CityAutocomplete
   const [fromAirport, setFromAirport] = useState<Airport | null>(null);
   const [toAirport, setToAirport] = useState<Airport | null>(null);
+
+  // Refs for dropdown positioning
+  const fromCityButtonRef = useRef<HTMLButtonElement>(null);
+  const toCityButtonRef = useRef<HTMLButtonElement>(null);
+  const desktopFromButtonRef = useRef<HTMLButtonElement>(null);
+  const desktopToButtonRef = useRef<HTMLButtonElement>(null);
   const [showCalendar, setShowCalendar] = useState(false);
   const [showTravelers, setShowTravelers] = useState(false);
   const [travelers, setTravelers] = useState({ adults: 1, children: 0 });
