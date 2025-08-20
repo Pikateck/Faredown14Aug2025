@@ -471,20 +471,28 @@ export function AINegotiationChat({
             <div className="space-y-3">
               <Button
                 onClick={acceptOffer}
-                disabled={isProcessing}
-                className="w-full bg-green-600 hover:bg-green-700 text-white"
+                disabled={isProcessing || !canProceedFromDecision}
+                className="w-full bg-green-600 hover:bg-green-700 text-white disabled:opacity-50"
               >
-                Accept {formatPriceNoDecimals(bargainResult.finalPrice || 0, selectedCurrency)} — 30s to book
+                {!canProceedFromDecision ? (
+                  <>Reading offer details...</>
+                ) : (
+                  <>Accept {formatPriceNoDecimals(bargainResult.finalPrice || 0, selectedCurrency)} — 30s to book</>
+                )}
               </Button>
 
               {bargainResult.attempt?.canRetry && (
                 <Button
                   onClick={retryBargain}
                   variant="outline"
-                  className="w-full"
-                  disabled={isProcessing}
+                  className="w-full disabled:opacity-50"
+                  disabled={isProcessing || !canProceedFromDecision}
                 >
-                  Bargain Again ({bargainResult.attempt.count}/{bargainResult.attempt.max})
+                  {!canProceedFromDecision ? (
+                    <>Please wait...</>
+                  ) : (
+                    <>Bargain Again ({bargainResult.attempt.count}/{bargainResult.attempt.max})</>
+                  )}
                 </Button>
               )}
             </div>
