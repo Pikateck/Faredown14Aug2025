@@ -2,7 +2,7 @@ import React from 'react';
 
 interface PriceChipProps {
   amount: number;
-  variant?: 'emerald' | 'slate';
+  variant?: 'emerald' | 'slate' | 'white';
   currency?: string;
 }
 
