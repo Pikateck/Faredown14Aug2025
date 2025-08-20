@@ -43,6 +43,50 @@
   margin-bottom: 8px;
 }
 
+/* Chat bubble improvements */
+.fd-bubble {
+  word-wrap: break-word;
+  line-height: 1.5;
+}
+
+/* Sticky action bar animations */
+.animate-in {
+  animation-duration: 0.15s;
+  animation-timing-function: ease-out;
+  animation-fill-mode: both;
+}
+
+.fade-in-50 {
+  animation-name: fadeIn50;
+}
+
+.slide-in-from-bottom-2 {
+  animation-name: slideInFromBottom2;
+}
+
+@keyframes fadeIn50 {
+  from { opacity: 0; }
+  to { opacity: 0.8; }
+}
+
+@keyframes slideInFromBottom2 {
+  from { transform: translateY(8px); }
+  to { transform: translateY(0); }
+}
+
+/* Screen reader only class */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .fd-modal__hdr { 
   display: flex; 
   align-items: center; 
