@@ -1660,7 +1660,7 @@ export default function FlightResults() {
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
                       { code: "hi", name: "हिन्दी", flag: "🇮����" },
                       { code: "ja", name: "日本語", flag: "🇯🇵" },
-                      { code: "ko", name: "한국어", flag: "🇰🇷" },
+                      { code: "ko", name: "한국어", flag: "����🇷" },
                       { code: "zh", name: "中文", flag: "🇨🇳" },
                     ].map((language) => (
                       <DropdownMenuItem
@@ -5752,14 +5752,14 @@ export default function FlightResults() {
                             });
                           }}
                           disabled={!isOfferValid}
-                          className="w-full bg-gradient-to-r from-[#003580] to-[#0071c2] hover:from-[#002d6b] hover:to-[#005a9f] text-white py-5 text-xl font-bold rounded-xl shadow-lg"
+                          className="w-full bg-green-600 hover:bg-green-700 text-white py-5 text-lg font-bold rounded-xl shadow-lg"
                         >
-                          Book This Deal - {selectedCurrency.symbol}
+                          Accept {selectedCurrency.symbol}
                           {bargainResult === "accepted"
                             ? parseInt(bargainPrice).toLocaleString()
                             : aiOfferPrice
                               ? convertPrice(aiOfferPrice).toLocaleString()
-                              : parseInt(bargainPrice).toLocaleString()}
+                              : parseInt(bargainPrice).toLocaleString()} — 30s to book
                         </Button>
 
                         <Button
@@ -5767,7 +5767,7 @@ export default function FlightResults() {
                           variant="outline"
                           className="w-full border-2 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white py-4 text-lg font-semibold rounded-xl"
                         >
-                          Try Different Price
+                          Bargain Again
                         </Button>
                       </div>
                     </>
