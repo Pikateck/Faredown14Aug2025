@@ -117,11 +117,8 @@ export function FlightBargainModal({
     const proposedPrice = parseInt(bargainPrice);
     const priceKey = `${flight.id}-${proposedPrice}`;
 
-    // Check if price was already used
-    if (usedPrices.has(priceKey)) {
-      setDuplicatePriceError(true);
-      return;
-    }
+    // Allow same price to be entered multiple times for different AI responses
+    // Remove duplicate price restriction as requested by user
 
     // Check if price is too high
     if (proposedPrice >= flight.price.amount) {
