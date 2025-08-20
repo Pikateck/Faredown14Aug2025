@@ -42,7 +42,14 @@ export default function DecisionCard({
           onExpire();
           return 0;
         }
-        return s - 1;
+
+        // Announce countdown every 5 seconds for accessibility
+        const newValue = s - 1;
+        if (newValue % 5 === 0 && newValue !== lastAnnounced && newValue <= 15) {
+          setLastAnnounced(newValue);
+        }
+
+        return newValue;
       });
     }, 1000) as unknown as number;
 
