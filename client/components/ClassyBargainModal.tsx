@@ -406,7 +406,12 @@ export function ClassyBargainModal({
               {i === cursor && running ? (
                 <span className="fd-typing" aria-hidden>•••</span>
               ) : i < cursor ? (
-                <span>{beat.text}</span>
+                <span className="text-slate-800">
+                  {formatChatTextWithPrices(
+                    beat.text,
+                    beat.speaker === 'supplier' ? 'emerald' : 'slate'
+                  )}
+                </span>
               ) : null}
             </div>
           ))}
