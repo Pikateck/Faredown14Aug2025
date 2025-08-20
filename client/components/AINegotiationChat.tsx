@@ -274,8 +274,8 @@ export function AINegotiationChat({
         </div>,
       });
 
-      // Wait 2 seconds
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Wait 3 seconds for users to read supplier response
+      await new Promise(resolve => setTimeout(resolve, 3000));
 
       // Beat 4: Faredown AI confirms
       addChatBeat({
@@ -284,8 +284,8 @@ export function AINegotiationChat({
         icon: <Sparkles className="w-4 h-4 text-blue-500" />,
       });
 
-      // Wait 1 second then show decision
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Wait 2 seconds then show decision
+      await new Promise(resolve => setTimeout(resolve, 2000));
       
       setCurrentStep('decision');
       
