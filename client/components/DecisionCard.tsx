@@ -9,6 +9,7 @@ type DecisionCardProps = {
   onBargainAgain: () => void;
   onExpire: () => void;          // called when countdown hits 0
   holdSeconds?: number;          // default 30
+  userName?: string;             // for personalization
 };
 
 export default function DecisionCard({
