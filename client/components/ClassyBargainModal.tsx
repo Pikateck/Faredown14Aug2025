@@ -51,7 +51,8 @@ export function ClassyBargainModal({
   onAccept,
   onBookOriginal,
   onRetry,
-  attempt = 1
+  attempt = 1,
+  moduleType = 'flights'
 }: ClassyBargainModalProps) {
   const [step, setStep] = useState<ModalStep>('input');
   const [offer, setOffer] = useState<number | null>(null);
