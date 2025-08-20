@@ -429,7 +429,7 @@ export function AINegotiationModal({
             <div className="flex-1">
               <DialogTitle className="text-lg font-semibold text-gray-900 flex items-center gap-2">
                 <Sparkles className="w-5 h-5 text-blue-500" />
-                AI Price Negotiator
+{getBrandString('negotiatorTitle')}
               </DialogTitle>
               <p className="text-sm text-gray-600 truncate">{session.productDetails.title}</p>
               {session.productDetails.subtitle && (
