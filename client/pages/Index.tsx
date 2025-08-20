@@ -435,6 +435,35 @@ export default function Index() {
     },
   }), []);
 
+  // Memoized event handlers to prevent recreation on every render
+  const handleFromCityClick = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setShowFromCities(true);
+  }, []);
+
+  const handleToCityClick = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setShowToCities(true);
+  }, []);
+
+  const handleCloseFromCities = useCallback(() => {
+    setShowFromCities(false);
+  }, []);
+
+  const handleCloseToCities = useCallback(() => {
+    setShowToCities(false);
+  }, []);
+
+  const handleSelectFromCity = useCallback((city: string) => {
+    setSelectedFromCity(city);
+  }, []);
+
+  const handleSelectToCity = useCallback((city: string) => {
+    setSelectedToCity(city);
+  }, []);
+
   return (
     <div className="min-h-screen bg-white">
       {/* MOBILE-FIRST DESIGN: App-style layout for mobile, standard for desktop */}
