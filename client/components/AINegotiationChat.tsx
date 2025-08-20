@@ -368,6 +368,15 @@ export function AINegotiationChat({
     }
   }, [isOpen]);
 
+  // Cleanup timer on unmount
+  useEffect(() => {
+    return () => {
+      if (minDisplayTimer) {
+        clearTimeout(minDisplayTimer);
+      }
+    };
+  }, [minDisplayTimer]);
+
   if (!isOpen) return null;
 
   return (
@@ -481,7 +490,7 @@ export function AINegotiationChat({
             </div>
 
             <p className="text-xs text-gray-500 text-center mt-3">
-              Most customers get the best deal early ��� demand is rising fast.
+              Most customers get the best deal early — demand is rising fast.
             </p>
           </div>
         )}
