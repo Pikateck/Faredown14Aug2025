@@ -284,11 +284,15 @@ export function ClassyBargainModal({
 
   // Retry bargain
   const onRetry = useCallback(() => {
+    console.log('🔄 Retry bargain clicked - resetting to input step');
     reset();
     setStep('input');
     setOffer(null);
     setCounter(null);
     setError(null);
+    setNegotiatedMs(0);
+    setCountdown(30);
+    sessionUsed.clear(); // Clear used copy keys for new attempt
   }, [reset]);
 
   // Stable input handler
