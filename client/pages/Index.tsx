@@ -1005,6 +1005,10 @@ export default function Index() {
                 Turn your seat into an upgrade and your fare into a win, with AI
                 that bargains for you.
               </p>
+              {/* Debug State Display */}
+              <div className="bg-yellow-100 p-2 text-xs rounded mb-3">
+                Debug: showFromCities={showFromCities.toString()}, showToCities={showToCities.toString()}
+              </div>
             </div>
 
             {/* Mobile Trip Type Selector */}
