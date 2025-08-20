@@ -555,7 +555,7 @@ export function AINegotiationChat({
           <div className="flex items-center justify-between">
             <div>
               <DialogTitle className="text-lg font-semibold text-gray-900">
-                {title}
+                {getBrandString('negotiatorTitle')}
               </DialogTitle>
               <p className="text-sm text-gray-600 mt-1">{productSummary}</p>
             </div>
