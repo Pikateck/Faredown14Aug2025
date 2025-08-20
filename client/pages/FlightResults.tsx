@@ -5781,8 +5781,24 @@ export default function FlightResults() {
       {/* NEW: Classy Bargain Modal */}
       <ClassyBargainModal
         isOpen={showBargainModal}
-        flight={bargainFlight}
-        fareType={bargainFareType}
+        flight={bargainFlight ? {
+          id: bargainFlight.id.toString(),
+          airline: bargainFlight.airline,
+          flightNumber: bargainFlight.flightNumber || bargainFlight.id.toString(),
+          departureCode: bargainFlight.departureCode || "BOM",
+          arrivalCode: bargainFlight.arrivalCode || "DXB",
+          departureTime: bargainFlight.departureTime,
+          arrivalTime: bargainFlight.arrivalTime,
+          duration: bargainFlight.duration,
+          aircraft: bargainFlight.aircraft,
+          price: bargainFareType?.price || bargainFlight.fareTypes?.[0]?.price || 0
+        } : null}
+        fareType={bargainFareType ? {
+          type: bargainFareType.name || "Economy",
+          price: bargainFareType.price || 0,
+          currency: "INR",
+          features: bargainFareType.features || ["Seat Selection", "Meal"]
+        } : null}
         onClose={() => setShowBargainModal(false)}
         onAccept={handleBargainAccept}
         onBookOriginal={() => {
