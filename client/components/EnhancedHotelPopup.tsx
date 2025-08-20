@@ -407,7 +407,7 @@ export function EnhancedHotelPopup({
                     </div>
                     <div className="text-xs text-gray-600">
                       <p>• Walking distance to major attractions</p>
-                      <p>�� Close to public transportation</p>
+                      <p>• Close to public transportation</p>
                       <p>• Easy airport access</p>
                     </div>
                   </div>
