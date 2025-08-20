@@ -101,11 +101,14 @@
   flex: 1;
 }
 
-.fd-title { 
-  font-weight: 600; 
+.fd-title {
+  font-weight: 600;
   color: #1e293b;
   font-size: 1.1rem;
   margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .fd-sub { 
