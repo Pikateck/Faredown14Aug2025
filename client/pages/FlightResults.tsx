@@ -5555,28 +5555,103 @@ export default function FlightResults() {
               )}
 
               {bargainStep === "progress" && (
-                <div className="text-center space-y-6 py-8">
-                  <div className="relative">
-                    <div className="w-24 h-24 mx-auto bg-gradient-to-r from-[#003580] to-[#0071c2] rounded-full flex items-center justify-center animate-pulse shadow-lg">
-                      <RefreshCw className="w-12 h-12 text-white animate-spin" />
+                <div className="space-y-4">
+                  {/* AI Negotiation Header */}
+                  <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-4 border border-blue-200">
+                    <div className="flex items-center justify-between mb-3">
+                      <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                        <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                          <span className="text-white text-sm font-bold">AI</span>
+                        </div>
+                        AI Price Negotiator
+                      </h3>
+                      <div className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded">
+                        {bargainProgress < 100 ? "Negotiating..." : "Negotiated in 8.2s"}
+                      </div>
+                    </div>
+
+                    <div className="text-sm text-gray-600">
+                      {bargainFlight?.airline} {bargainFlight?.flightNumber} • {bargainFareType?.name}
                     </div>
                   </div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                      AI Negotiating with {bargainFlight.airline}
-                    </h3>
-                    <p className="text-sm text-gray-600 mb-4">
-                      Analyzing market rates and finding the best deal for
-                      you...
-                    </p>
-                    <Progress
-                      value={bargainProgress}
-                      className="w-full h-4 bg-gray-200"
-                    />
-                    <p className="text-sm text-[#003580] font-semibold mt-2">
-                      {bargainProgress}% Complete
-                    </p>
+
+                  {/* Live Chat Messages */}
+                  <div className="space-y-3 bg-gray-50 rounded-xl p-4 max-h-60 overflow-y-auto">
+                    {/* Beat 1: AI Agent */}
+                    <div className="flex items-start space-x-3 animate-in fade-in-50 slide-in-from-left-2">
+                      <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span className="text-white text-xs font-bold">AI</span>
+                      </div>
+                      <div className="flex-1">
+                        <div className="bg-blue-500 text-white p-3 rounded-lg max-w-[280px]">
+                          <p className="text-sm">
+                            We have {selectedCurrency.symbol}{parseInt(bargainPrice || "0").toLocaleString()} for {bargainFlight?.airline} {bargainFlight?.flightNumber}. Can you approve?
+                          </p>
+                        </div>
+                        <p className="text-xs text-gray-500 mt-1">Faredown AI</p>
+                      </div>
+                    </div>
+
+                    {/* Beat 2: Airline - appears after 25% progress */}
+                    {bargainProgress > 25 && (
+                      <div className="flex items-start space-x-3 animate-in fade-in-50 slide-in-from-left-2">
+                        <div className="w-8 h-8 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                          <Plane className="w-4 h-4" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="bg-white border shadow-sm p-3 rounded-lg max-w-[280px]">
+                            <p className="text-sm">
+                              Listed at {formatPrice(bargainFareType?.price || 0)}. Checking now…
+                            </p>
+                          </div>
+                          <p className="text-xs text-gray-500 mt-1">{bargainFlight?.airline}</p>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Beat 3: Airline Response - appears after 60% progress */}
+                    {bargainProgress > 60 && (
+                      <div className="flex items-start space-x-3 animate-in fade-in-50 slide-in-from-left-2">
+                        <div className="w-8 h-8 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                          <Plane className="w-4 h-4" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="bg-white border shadow-sm p-3 rounded-lg max-w-[280px]">
+                            <p className="text-sm">
+                              I can do {selectedCurrency.symbol}{Math.round((bargainFareType?.price || 0) * 0.85).toLocaleString()}.
+                            </p>
+                          </div>
+                          <p className="text-xs text-gray-500 mt-1">{bargainFlight?.airline}</p>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Beat 4: AI to Customer - appears after 90% progress */}
+                    {bargainProgress > 90 && (
+                      <div className="flex items-start space-x-3 animate-in fade-in-50 slide-in-from-left-2">
+                        <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
+                          <span className="text-white text-xs font-bold">AI</span>
+                        </div>
+                        <div className="flex-1">
+                          <div className="bg-blue-500 text-white p-3 rounded-lg max-w-[280px]">
+                            <p className="text-sm">Let me check with you if you want it.</p>
+                          </div>
+                          <p className="text-xs text-gray-500 mt-1">Faredown AI</p>
+                        </div>
+                      </div>
+                    )}
                   </div>
+
+                  {/* Progress indicator (only visible during active negotiation) */}
+                  {bargainProgress < 100 && (
+                    <div className="bg-white rounded-lg p-3 border">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-gray-700">Negotiation Progress</span>
+                        <span className="text-sm font-medium text-gray-700">{bargainProgress}%</span>
+                      </div>
+                      <Progress value={bargainProgress} className="h-2" />
+                    </div>
+                  )}
                 </div>
               )}
 
