@@ -3354,8 +3354,8 @@ export default function Index() {
         onSelectClass={setSelectedClass}
       />
 
-      {/* Mobile City Dropdowns */}
-      <MobileCityDropdown
+      {/* Responsive City Dropdowns */}
+      <ResponsiveCityDropdown
         isOpen={showFromCities}
         onClose={() => {
           console.log('Closing From cities dropdown');
@@ -3370,7 +3370,7 @@ export default function Index() {
         }}
       />
 
-      <MobileCityDropdown
+      <ResponsiveCityDropdown
         isOpen={showToCities}
         onClose={() => {
           console.log('Closing To cities dropdown');
