@@ -1897,6 +1897,7 @@ export default function Index() {
                         Going to
                       </label>
                       <button
+                        ref={desktopToButtonRef}
                         onClick={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
