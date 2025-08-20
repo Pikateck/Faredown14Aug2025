@@ -5843,6 +5843,7 @@ export default function FlightResults() {
           }
         }}
         attempt={bargainCtx?.attempt || 1}
+        moduleType="flights"
       />
 
       {/* Sign In Modal */}
