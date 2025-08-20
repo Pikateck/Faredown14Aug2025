@@ -261,7 +261,8 @@ export function UnifiedBargainModal({
       targetPriceInSelectedCurrency,
       targetPriceInINR,
       currentPriceInINR,
-      exchangeRate: exchangeRates[selectedCurrency.code as keyof typeof exchangeRates],
+      selectedCurrency: selectedCurrency.code,
+      currencyRate: selectedCurrency.rate,
       isValid: targetPriceInINR < currentPriceInINR
     });
 
