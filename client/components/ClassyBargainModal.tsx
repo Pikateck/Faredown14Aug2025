@@ -126,6 +126,19 @@ export function ClassyBargainModal({
     }
   }, [step]); // Remove counter and onAccept dependencies
 
+  // Debug logging for decision step
+  useEffect(() => {
+    if (step === 'decision' && counter) {
+      console.log('🎭 Decision step activated with:', {
+        step,
+        counter,
+        countdown,
+        negotiatedMs,
+        isOpen
+      });
+    }
+  }, [step, counter, countdown, negotiatedMs, isOpen]);
+
   // Start quote function with realistic timing
   async function startQuote(offerAmount: number): Promise<{ counter: number; negotiatedMs: number }> {
     const t0 = performance.now();
