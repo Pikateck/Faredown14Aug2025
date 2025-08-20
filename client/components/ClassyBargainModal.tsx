@@ -38,6 +38,7 @@ interface ClassyBargainModalProps {
   onBookOriginal: () => void;
   onRetry?: () => void;
   attempt?: number;
+  moduleType?: ModuleType;
 }
 
 type ModalStep = 'input' | 'chat' | 'decision' | 'hold';
