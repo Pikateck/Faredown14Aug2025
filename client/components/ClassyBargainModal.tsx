@@ -56,6 +56,7 @@ export function ClassyBargainModal({
   const [error, setError] = useState<string | null>(null);
   const sessionUsed = useRef(new Set<string>()).current;
   const holdTimer = useRef<number | null>(null);
+  const counterRef = useRef<number | null>(null);
 
   const { selectedCurrency } = useCurrency();
 
