@@ -135,13 +135,13 @@ export function BookingStyleDropdown({
   const filteredPopularDestinations = useMemo(() => {
     if (!debouncedSearchQuery) return popularDestinations;
     const query = debouncedSearchQuery.toLowerCase();
-    return (
+    return popularDestinations.filter((dest) => (
       dest.name.toLowerCase().includes(query) ||
       dest.code.toLowerCase().includes(query) ||
       dest.country.toLowerCase().includes(query) ||
       dest.airport.toLowerCase().includes(query)
-    );
-  });
+    ));
+  }, [debouncedSearchQuery, popularDestinations]);
 
   return (
     <>
