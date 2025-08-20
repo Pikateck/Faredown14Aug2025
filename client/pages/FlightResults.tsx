@@ -11,7 +11,7 @@ import { Progress } from "@/components/ui/progress";
 import { MobileNavigation } from "@/components/mobile/MobileNavigation";
 import BargainModalPhase1 from "@/components/BargainModalPhase1";
 import { AINegotiationModal } from "@/components/AINegotiationModal";
-import { UnifiedBargainModal } from "@/components/UnifiedBargainModal";
+import { ClassyBargainModal } from "@/components/ClassyBargainModal";
 import {
   useBargainPhase1,
   createFlightBargainItem,
@@ -6296,7 +6296,7 @@ export default function FlightResults() {
                           <span className="text-red-700 font-medium">
                             Airline fee:
                           </span>
-                          <p className="text-red-600">��3,500 per passenger</p>
+                          <p className="text-red-600">����3,500 per passenger</p>
                         </div>
                         <div>
                           <span className="text-red-700 font-medium">
@@ -6323,7 +6323,7 @@ export default function FlightResults() {
                             Airline fee:
                           </span>
                           <p className="text-yellow-600">
-                            ₹2,314 per passenger
+                            ��2,314 per passenger
                           </p>
                         </div>
                         <div>
