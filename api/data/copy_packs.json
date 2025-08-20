@@ -311,19 +311,19 @@
       "agent_user_confirm": {
 "1": [
           {
-            "text": "Good news—approved at ₹{counter}. Shall I hold it for 30s?",
+            "text": "Good news, {user_title}—approved at ₹{counter}. Shall I hold it for 30s?",
             "w": 4
           },
           {
-            "text": "I can secure ₹{counter} for you. Want me to lock it for 30s?",
+            "text": "Great news, {user_name}! I can secure ₹{counter} for you. Want me to lock it for 30s?",
             "w": 3
           },
           {
-            "text": "Great—₹{counter} is confirmed. Should I place a 30s hold?",
+            "text": "Perfect, {user_title}—₹{counter} is confirmed. Should I place a 30s hold?",
             "w": 2
           },
           {
-            "text": "Perfect! ₹{counter} approved. Hold for 30s?",
+            "text": "Excellent, {user_name}! ₹{counter} approved. Hold for 30s?",
             "w": 1
           }
         ],
