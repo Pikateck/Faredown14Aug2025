@@ -221,6 +221,7 @@
   position: relative;
 }
 
+/* Agent bubbles - always emerald */
 .fd-bubble--agent {
   background: linear-gradient(135deg, #059669 0%, #047857 100%);
   color: #fff;
@@ -228,11 +229,29 @@
   border-bottom-left-radius: 4px;
 }
 
+/* Supplier bubbles - module-specific colors */
 .fd-bubble--supplier {
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); /* Default airline blue */
   color: #fff;
   align-self: flex-end;
   border-bottom-right-radius: 4px;
+}
+
+/* Module-specific supplier colors */
+.fd-bubble--supplier.fd-bubble--flights {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); /* Blue */
+}
+
+.fd-bubble--supplier.fd-bubble--hotels {
+  background: linear-gradient(135deg, #9333ea 0%, #7c3aed 100%); /* Purple */
+}
+
+.fd-bubble--supplier.fd-bubble--sightseeing {
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); /* Orange */
+}
+
+.fd-bubble--supplier.fd-bubble--transfers {
+  background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%); /* Cyan */
 }
 
 .fd-bubble--system { 
