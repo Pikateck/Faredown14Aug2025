@@ -358,7 +358,10 @@ export function ClassyBargainModal({
       {/* Header */}
       <header className="fd-modal__hdr">
         <div className="fd-hdr__left">
-          <div className="fd-title">AI Price Negotiator</div>
+          <div className="fd-title flex items-center gap-2">
+            {moduleConfig.icon}
+            AI Price Negotiator
+          </div>
           <div className="fd-sub">
             {flight.airline} {flight.flightNumber} • {flight.departureCode} → {flight.arrivalCode}
           </div>
