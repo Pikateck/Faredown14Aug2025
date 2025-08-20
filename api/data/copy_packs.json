@@ -1,0 +1,352 @@
+{
+  "modules": {
+    "flights": {
+      "agent_offer": {
+        "1": [
+          {"text": "We have {offer} for {airline} {flight_no}. Can you approve?", "w": 3, "tone": "informative"},
+          {"text": "Customer is ready at {offer} for {airline} {flight_no}. Review?", "w": 2, "tone": "informative"},
+          {"text": "Requesting approval at {offer} for {airline} {flight_no}.", "w": 1, "tone": "informative"},
+          {"text": "Price request: {offer} for {airline} {flight_no}. Possible?", "w": 2, "tone": "informative"},
+          {"text": "Checking if {airline} {flight_no} works at {offer}.", "w": 1, "tone": "informative"},
+          {"text": "Passenger wants {airline} {flight_no} at {offer}. Thoughts?", "w": 2, "tone": "informative"},
+          {"text": "Can we secure {airline} {flight_no} for {offer}?", "w": 1, "tone": "informative"},
+          {"text": "Quick check on {airline} {flight_no} at {offer}.", "w": 1, "tone": "informative"},
+          {"text": "Customer offer: {offer} for {airline} {flight_no}.", "w": 2, "tone": "informative"},
+          {"text": "Looking to book {airline} {flight_no} at {offer}. Available?", "w": 1, "tone": "informative"}
+        ],
+        "2": [
+          {"text": "Following up—{offer} for {airline} {flight_no}. Any flex?", "w": 3, "tone": "persuasive"},
+          {"text": "Re-check at {offer} for {airline} {flight_no}. Can we make this work?", "w": 2, "tone": "persuasive"},
+          {"text": "Second attempt: {offer} for {airline} {flight_no}. Room to move?", "w": 2, "tone": "persuasive"},
+          {"text": "Trying again at {offer} for {airline} {flight_no}.", "w": 1, "tone": "persuasive"},
+          {"text": "Customer really wants {airline} {flight_no} at {offer}. Possible?", "w": 2, "tone": "persuasive"},
+          {"text": "Round 2: {offer} for {airline} {flight_no}. Any wiggle room?", "w": 1, "tone": "persuasive"},
+          {"text": "Still hoping for {offer} on {airline} {flight_no}.", "w": 1, "tone": "persuasive"},
+          {"text": "Back again with {offer} for {airline} {flight_no}.", "w": 1, "tone": "persuasive"}
+        ],
+        "3": [
+          {"text": "Final try—{offer} for {airline} {flight_no}. Possible to approve?", "w": 3, "tone": "urgent"},
+          {"text": "One last pass at {offer} for {airline} {flight_no}.", "w": 2, "tone": "urgent"},
+          {"text": "Last chance: {offer} for {airline} {flight_no}. Yes or no?", "w": 2, "tone": "urgent"},
+          {"text": "This is it—{offer} for {airline} {flight_no}. Final ask.", "w": 1, "tone": "urgent"},
+          {"text": "Customer's final offer: {offer} for {airline} {flight_no}.", "w": 2, "tone": "urgent"},
+          {"text": "Closing soon—{offer} for {airline} {flight_no}?", "w": 1, "tone": "urgent"},
+          {"text": "Last attempt at {offer} for {airline} {flight_no}.", "w": 1, "tone": "urgent"}
+        ]
+      },
+      "supplier_check": {
+        "any": [
+          {"text": "Listed at {base}. Checking now…", "w": 3},
+          {"text": "Published is {base}. Checking inventory…", "w": 2},
+          {"text": "Current listed fare {base}. Verifying now…", "w": 2},
+          {"text": "{base} is what I see. Let me review…", "w": 1},
+          {"text": "Standard price {base}. Checking availability…", "w": 1},
+          {"text": "Base fare {base}. Reviewing options…", "w": 1},
+          {"text": "Showing {base} normally. Checking specials…", "w": 1},
+          {"text": "Regular price {base}. Looking at overrides…", "w": 1},
+          {"text": "Current rate {base}. Verifying capacity…", "w": 1},
+          {"text": "Published at {base}. Checking for exceptions…", "w": 1}
+        ]
+      },
+      "supplier_counter": {
+        "accepted": [
+          {"text": "I can do {counter}.", "w": 3},
+          {"text": "Approved at {counter}.", "w": 2},
+          {"text": "Yes, {counter} works.", "w": 2},
+          {"text": "Confirmed at {counter}.", "w": 1},
+          {"text": "Done at {counter}.", "w": 1},
+          {"text": "Locked in at {counter}.", "w": 1},
+          {"text": "Perfect, {counter} is approved.", "w": 1},
+          {"text": "{counter} is a go.", "w": 1}
+        ],
+        "counter": [
+          {"text": "Best I can return now is {counter}.", "w": 3},
+          {"text": "I can offer {counter}.", "w": 2},
+          {"text": "How about {counter}?", "w": 2},
+          {"text": "Closest I can get is {counter}.", "w": 1},
+          {"text": "My best price is {counter}.", "w": 1},
+          {"text": "I can work with {counter}.", "w": 1},
+          {"text": "Available at {counter}.", "w": 1},
+          {"text": "Final offer: {counter}.", "w": 1},
+          {"text": "Counter at {counter}.", "w": 1},
+          {"text": "Best rate available: {counter}.", "w": 1}
+        ]
+      },
+      "agent_user_confirm": {
+        "any": [
+          {"text": "Let me check with you if you want it.", "w": 3},
+          {"text": "I can lock this in now if you'd like.", "w": 2},
+          {"text": "Shall I secure this price for you?", "w": 2},
+          {"text": "Ready to confirm if you approve.", "w": 1},
+          {"text": "Want me to book this for you?", "w": 1},
+          {"text": "Should I proceed with booking?", "w": 1},
+          {"text": "Your call—shall we book it?", "w": 1},
+          {"text": "What do you think? Good to go?", "w": 1},
+          {"text": "Ready when you are!", "w": 1},
+          {"text": "Decision time—yes or no?", "w": 1}
+        ]
+      }
+    },
+    "hotels": {
+      "agent_offer": {
+        "1": [
+          {"text": "We have {offer} for {hotel_name}. Can you approve?", "w": 3, "tone": "informative"},
+          {"text": "Customer is ready at {offer} for {hotel_name}. Review?", "w": 2, "tone": "informative"},
+          {"text": "Requesting approval at {offer} for {hotel_name}.", "w": 1, "tone": "informative"},
+          {"text": "Price request: {offer} for {hotel_name}. Possible?", "w": 2, "tone": "informative"},
+          {"text": "Checking if {hotel_name} works at {offer}.", "w": 1, "tone": "informative"},
+          {"text": "Guest wants {hotel_name} at {offer}. Thoughts?", "w": 2, "tone": "informative"},
+          {"text": "Can we secure {hotel_name} for {offer}?", "w": 1, "tone": "informative"},
+          {"text": "Quick check on {hotel_name} at {offer}.", "w": 1, "tone": "informative"},
+          {"text": "Customer offer: {offer} for {hotel_name}.", "w": 2, "tone": "informative"},
+          {"text": "Looking to book {hotel_name} at {offer}. Available?", "w": 1, "tone": "informative"}
+        ],
+        "2": [
+          {"text": "Following up—{offer} for {hotel_name}. Any flex?", "w": 3, "tone": "persuasive"},
+          {"text": "Re-check at {offer} for {hotel_name}. Can we make this work?", "w": 2, "tone": "persuasive"},
+          {"text": "Second attempt: {offer} for {hotel_name}. Room to move?", "w": 2, "tone": "persuasive"},
+          {"text": "Trying again at {offer} for {hotel_name}.", "w": 1, "tone": "persuasive"},
+          {"text": "Customer really wants {hotel_name} at {offer}. Possible?", "w": 2, "tone": "persuasive"},
+          {"text": "Round 2: {offer} for {hotel_name}. Any wiggle room?", "w": 1, "tone": "persuasive"},
+          {"text": "Still hoping for {offer} on {hotel_name}.", "w": 1, "tone": "persuasive"},
+          {"text": "Back again with {offer} for {hotel_name}.", "w": 1, "tone": "persuasive"}
+        ],
+        "3": [
+          {"text": "Final try—{offer} for {hotel_name}. Possible to approve?", "w": 3, "tone": "urgent"},
+          {"text": "One last pass at {offer} for {hotel_name}.", "w": 2, "tone": "urgent"},
+          {"text": "Last chance: {offer} for {hotel_name}. Yes or no?", "w": 2, "tone": "urgent"},
+          {"text": "This is it—{offer} for {hotel_name}. Final ask.", "w": 1, "tone": "urgent"},
+          {"text": "Customer's final offer: {offer} for {hotel_name}.", "w": 2, "tone": "urgent"},
+          {"text": "Closing soon—{offer} for {hotel_name}?", "w": 1, "tone": "urgent"},
+          {"text": "Last attempt at {offer} for {hotel_name}.", "w": 1, "tone": "urgent"}
+        ]
+      },
+      "supplier_check": {
+        "any": [
+          {"text": "Listed at {base}. Checking now…", "w": 3},
+          {"text": "Published is {base}. Checking availability…", "w": 2},
+          {"text": "Current room rate {base}. Verifying now…", "w": 2},
+          {"text": "{base} is what I see. Let me review…", "w": 1},
+          {"text": "Standard rate {base}. Checking rooms…", "w": 1},
+          {"text": "Base rate {base}. Reviewing options…", "w": 1},
+          {"text": "Showing {base} normally. Checking specials…", "w": 1},
+          {"text": "Regular rate {base}. Looking at overrides…", "w": 1},
+          {"text": "Current price {base}. Verifying rooms…", "w": 1},
+          {"text": "Published at {base}. Checking for deals…", "w": 1}
+        ]
+      },
+      "supplier_counter": {
+        "accepted": [
+          {"text": "I can do {counter}.", "w": 3},
+          {"text": "Approved at {counter}.", "w": 2},
+          {"text": "Yes, {counter} works.", "w": 2},
+          {"text": "Confirmed at {counter}.", "w": 1},
+          {"text": "Done at {counter}.", "w": 1},
+          {"text": "Room secured at {counter}.", "w": 1},
+          {"text": "Perfect, {counter} is approved.", "w": 1},
+          {"text": "{counter} is a go.", "w": 1}
+        ],
+        "counter": [
+          {"text": "Best I can return now is {counter}.", "w": 3},
+          {"text": "I can offer {counter}.", "w": 2},
+          {"text": "How about {counter}?", "w": 2},
+          {"text": "Closest I can get is {counter}.", "w": 1},
+          {"text": "My best rate is {counter}.", "w": 1},
+          {"text": "I can work with {counter}.", "w": 1},
+          {"text": "Available at {counter}.", "w": 1},
+          {"text": "Final offer: {counter}.", "w": 1},
+          {"text": "Counter at {counter}.", "w": 1},
+          {"text": "Best rate available: {counter}.", "w": 1}
+        ]
+      },
+      "agent_user_confirm": {
+        "any": [
+          {"text": "Let me check with you if you want it.", "w": 3},
+          {"text": "I can lock this in now if you'd like.", "w": 2},
+          {"text": "Shall I secure this rate for you?", "w": 2},
+          {"text": "Ready to confirm if you approve.", "w": 1},
+          {"text": "Want me to book this room for you?", "w": 1},
+          {"text": "Should I proceed with booking?", "w": 1},
+          {"text": "Your call—shall we book it?", "w": 1},
+          {"text": "What do you think? Good to go?", "w": 1},
+          {"text": "Ready when you are!", "w": 1},
+          {"text": "Decision time—yes or no?", "w": 1}
+        ]
+      }
+    },
+    "sightseeing": {
+      "agent_offer": {
+        "1": [
+          {"text": "We have {offer} for {tour_name}. Can you approve?", "w": 3, "tone": "informative"},
+          {"text": "Customer is ready at {offer} for {tour_name}. Review?", "w": 2, "tone": "informative"},
+          {"text": "Requesting approval at {offer} for {tour_name}.", "w": 1, "tone": "informative"},
+          {"text": "Price request: {offer} for {tour_name}. Possible?", "w": 2, "tone": "informative"},
+          {"text": "Checking if {tour_name} works at {offer}.", "w": 1, "tone": "informative"},
+          {"text": "Guest wants {tour_name} at {offer}. Thoughts?", "w": 2, "tone": "informative"},
+          {"text": "Can we secure {tour_name} for {offer}?", "w": 1, "tone": "informative"},
+          {"text": "Quick check on {tour_name} at {offer}.", "w": 1, "tone": "informative"},
+          {"text": "Customer offer: {offer} for {tour_name}.", "w": 2, "tone": "informative"},
+          {"text": "Looking to book {tour_name} at {offer}. Available?", "w": 1, "tone": "informative"}
+        ],
+        "2": [
+          {"text": "Following up—{offer} for {tour_name}. Any flex?", "w": 3, "tone": "persuasive"},
+          {"text": "Re-check at {offer} for {tour_name}. Can we make this work?", "w": 2, "tone": "persuasive"},
+          {"text": "Second attempt: {offer} for {tour_name}. Room to move?", "w": 2, "tone": "persuasive"},
+          {"text": "Trying again at {offer} for {tour_name}.", "w": 1, "tone": "persuasive"},
+          {"text": "Customer really wants {tour_name} at {offer}. Possible?", "w": 2, "tone": "persuasive"},
+          {"text": "Round 2: {offer} for {tour_name}. Any wiggle room?", "w": 1, "tone": "persuasive"},
+          {"text": "Still hoping for {offer} on {tour_name}.", "w": 1, "tone": "persuasive"},
+          {"text": "Back again with {offer} for {tour_name}.", "w": 1, "tone": "persuasive"}
+        ],
+        "3": [
+          {"text": "Final try—{offer} for {tour_name}. Possible to approve?", "w": 3, "tone": "urgent"},
+          {"text": "One last pass at {offer} for {tour_name}.", "w": 2, "tone": "urgent"},
+          {"text": "Last chance: {offer} for {tour_name}. Yes or no?", "w": 2, "tone": "urgent"},
+          {"text": "This is it—{offer} for {tour_name}. Final ask.", "w": 1, "tone": "urgent"},
+          {"text": "Customer's final offer: {offer} for {tour_name}.", "w": 2, "tone": "urgent"},
+          {"text": "Closing soon—{offer} for {tour_name}?", "w": 1, "tone": "urgent"},
+          {"text": "Last attempt at {offer} for {tour_name}.", "w": 1, "tone": "urgent"}
+        ]
+      },
+      "supplier_check": {
+        "any": [
+          {"text": "Listed at {base}. Checking now…", "w": 3},
+          {"text": "Published is {base}. Checking availability…", "w": 2},
+          {"text": "Current tour price {base}. Verifying now…", "w": 2},
+          {"text": "{base} is what I see. Let me review…", "w": 1},
+          {"text": "Standard price {base}. Checking spots…", "w": 1},
+          {"text": "Base price {base}. Reviewing options…", "w": 1},
+          {"text": "Showing {base} normally. Checking specials…", "w": 1},
+          {"text": "Regular price {base}. Looking at overrides…", "w": 1},
+          {"text": "Current rate {base}. Verifying capacity…", "w": 1},
+          {"text": "Published at {base}. Checking for deals…", "w": 1}
+        ]
+      },
+      "supplier_counter": {
+        "accepted": [
+          {"text": "I can do {counter}.", "w": 3},
+          {"text": "Approved at {counter}.", "w": 2},
+          {"text": "Yes, {counter} works.", "w": 2},
+          {"text": "Confirmed at {counter}.", "w": 1},
+          {"text": "Done at {counter}.", "w": 1},
+          {"text": "Spot secured at {counter}.", "w": 1},
+          {"text": "Perfect, {counter} is approved.", "w": 1},
+          {"text": "{counter} is a go.", "w": 1}
+        ],
+        "counter": [
+          {"text": "Best I can return now is {counter}.", "w": 3},
+          {"text": "I can offer {counter}.", "w": 2},
+          {"text": "How about {counter}?", "w": 2},
+          {"text": "Closest I can get is {counter}.", "w": 1},
+          {"text": "My best price is {counter}.", "w": 1},
+          {"text": "I can work with {counter}.", "w": 1},
+          {"text": "Available at {counter}.", "w": 1},
+          {"text": "Final offer: {counter}.", "w": 1},
+          {"text": "Counter at {counter}.", "w": 1},
+          {"text": "Best rate available: {counter}.", "w": 1}
+        ]
+      },
+      "agent_user_confirm": {
+        "any": [
+          {"text": "Let me check with you if you want it.", "w": 3},
+          {"text": "I can lock this in now if you'd like.", "w": 2},
+          {"text": "Shall I secure this spot for you?", "w": 2},
+          {"text": "Ready to confirm if you approve.", "w": 1},
+          {"text": "Want me to book this tour for you?", "w": 1},
+          {"text": "Should I proceed with booking?", "w": 1},
+          {"text": "Your call—shall we book it?", "w": 1},
+          {"text": "What do you think? Good to go?", "w": 1},
+          {"text": "Ready when you are!", "w": 1},
+          {"text": "Decision time—yes or no?", "w": 1}
+        ]
+      }
+    },
+    "transfers": {
+      "agent_offer": {
+        "1": [
+          {"text": "We have {offer} for {pickup} to {dropoff}. Can you approve?", "w": 3, "tone": "informative"},
+          {"text": "Customer is ready at {offer} for transfer. Review?", "w": 2, "tone": "informative"},
+          {"text": "Requesting approval at {offer} for {pickup} pickup.", "w": 1, "tone": "informative"},
+          {"text": "Price request: {offer} for transfer. Possible?", "w": 2, "tone": "informative"},
+          {"text": "Checking if transfer works at {offer}.", "w": 1, "tone": "informative"},
+          {"text": "Guest wants transfer at {offer}. Thoughts?", "w": 2, "tone": "informative"},
+          {"text": "Can we secure transfer for {offer}?", "w": 1, "tone": "informative"},
+          {"text": "Quick check on transfer at {offer}.", "w": 1, "tone": "informative"},
+          {"text": "Customer offer: {offer} for transfer.", "w": 2, "tone": "informative"},
+          {"text": "Looking to book transfer at {offer}. Available?", "w": 1, "tone": "informative"}
+        ],
+        "2": [
+          {"text": "Following up—{offer} for transfer. Any flex?", "w": 3, "tone": "persuasive"},
+          {"text": "Re-check at {offer} for {pickup} pickup. Can we make this work?", "w": 2, "tone": "persuasive"},
+          {"text": "Second attempt: {offer} for transfer. Room to move?", "w": 2, "tone": "persuasive"},
+          {"text": "Trying again at {offer} for transfer.", "w": 1, "tone": "persuasive"},
+          {"text": "Customer really wants transfer at {offer}. Possible?", "w": 2, "tone": "persuasive"},
+          {"text": "Round 2: {offer} for transfer. Any wiggle room?", "w": 1, "tone": "persuasive"},
+          {"text": "Still hoping for {offer} on transfer.", "w": 1, "tone": "persuasive"},
+          {"text": "Back again with {offer} for transfer.", "w": 1, "tone": "persuasive"}
+        ],
+        "3": [
+          {"text": "Final try—{offer} for transfer. Possible to approve?", "w": 3, "tone": "urgent"},
+          {"text": "One last pass at {offer} for transfer.", "w": 2, "tone": "urgent"},
+          {"text": "Last chance: {offer} for transfer. Yes or no?", "w": 2, "tone": "urgent"},
+          {"text": "This is it—{offer} for transfer. Final ask.", "w": 1, "tone": "urgent"},
+          {"text": "Customer's final offer: {offer} for transfer.", "w": 2, "tone": "urgent"},
+          {"text": "Closing soon—{offer} for transfer?", "w": 1, "tone": "urgent"},
+          {"text": "Last attempt at {offer} for transfer.", "w": 1, "tone": "urgent"}
+        ]
+      },
+      "supplier_check": {
+        "any": [
+          {"text": "Listed at {base}. Checking now…", "w": 3},
+          {"text": "Published is {base}. Checking vehicle…", "w": 2},
+          {"text": "Current transfer rate {base}. Verifying now…", "w": 2},
+          {"text": "{base} is what I see. Let me review…", "w": 1},
+          {"text": "Standard rate {base}. Checking availability…", "w": 1},
+          {"text": "Base rate {base}. Reviewing options…", "w": 1},
+          {"text": "Showing {base} normally. Checking specials…", "w": 1},
+          {"text": "Regular rate {base}. Looking at overrides…", "w": 1},
+          {"text": "Current price {base}. Verifying cars…", "w": 1},
+          {"text": "Published at {base}. Checking for deals…", "w": 1}
+        ]
+      },
+      "supplier_counter": {
+        "accepted": [
+          {"text": "I can do {counter}.", "w": 3},
+          {"text": "Approved at {counter}.", "w": 2},
+          {"text": "Yes, {counter} works.", "w": 2},
+          {"text": "Confirmed at {counter}.", "w": 1},
+          {"text": "Done at {counter}.", "w": 1},
+          {"text": "Vehicle secured at {counter}.", "w": 1},
+          {"text": "Perfect, {counter} is approved.", "w": 1},
+          {"text": "{counter} is a go.", "w": 1}
+        ],
+        "counter": [
+          {"text": "Best I can return now is {counter}.", "w": 3},
+          {"text": "I can offer {counter}.", "w": 2},
+          {"text": "How about {counter}?", "w": 2},
+          {"text": "Closest I can get is {counter}.", "w": 1},
+          {"text": "My best rate is {counter}.", "w": 1},
+          {"text": "I can work with {counter}.", "w": 1},
+          {"text": "Available at {counter}.", "w": 1},
+          {"text": "Final offer: {counter}.", "w": 1},
+          {"text": "Counter at {counter}.", "w": 1},
+          {"text": "Best rate available: {counter}.", "w": 1}
+        ]
+      },
+      "agent_user_confirm": {
+        "any": [
+          {"text": "Let me check with you if you want it.", "w": 3},
+          {"text": "I can lock this in now if you'd like.", "w": 2},
+          {"text": "Shall I secure this transfer for you?", "w": 2},
+          {"text": "Ready to confirm if you approve.", "w": 1},
+          {"text": "Want me to book this transfer for you?", "w": 1},
+          {"text": "Should I proceed with booking?", "w": 1},
+          {"text": "Your call—shall we book it?", "w": 1},
+          {"text": "What do you think? Good to go?", "w": 1},
+          {"text": "Ready when you are!", "w": 1},
+          {"text": "Decision time—yes or no?", "w": 1}
+        ]
+      }
+    }
+  }
+}
