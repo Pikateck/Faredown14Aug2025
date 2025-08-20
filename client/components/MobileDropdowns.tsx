@@ -45,21 +45,22 @@ export function MobileCityDropdown({
 }: MobileCityDropdownProps) {
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Filter cities based on search query - MUST be called before any conditional returns
-  const filteredCities = React.useMemo(() => {
-    if (!searchQuery) return Object.entries(cities);
+  console.log('MobileCityDropdown render:', { isOpen, title });
 
+  if (!isOpen) return null;
+
+  // Filter cities based on search query
+  const filteredCities = Object.entries(cities).filter(([city, data]) => {
+    if (!searchQuery) return true;
     const query = searchQuery.toLowerCase();
-    return Object.entries(cities).filter(([city, data]) => {
-      return (
-        city.toLowerCase().includes(query) ||
-        data.code.toLowerCase().includes(query) ||
-        data.name.toLowerCase().includes(query) ||
-        data.airport.toLowerCase().includes(query) ||
-        data.fullName.toLowerCase().includes(query)
-      );
-    });
-  }, [searchQuery, cities]);
+    return (
+      city.toLowerCase().includes(query) ||
+      data.code.toLowerCase().includes(query) ||
+      data.name.toLowerCase().includes(query) ||
+      data.airport.toLowerCase().includes(query) ||
+      data.fullName.toLowerCase().includes(query)
+    );
+  });
 
   // Filter popular destinations based on search query
   const popularDestinations =
