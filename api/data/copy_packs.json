@@ -117,7 +117,7 @@
             "w": 4
           },
           {
-            "text": "One last pass at ₹{offer} for {airline} {flight_no}.",
+            "text": "One last pass at ��{offer} for {airline} {flight_no}.",
             "w": 3
           },
           {
@@ -309,53 +309,57 @@
         ]
       },
       "agent_user_confirm": {
-        "any": [
+"1": [
           {
-            "text": "Let me check with you if you want it.",
+            "text": "Good news—approved at ₹{counter}. Shall I hold it for 30s?",
             "w": 4
           },
           {
-            "text": "I can lock this in now if you'd like.",
+            "text": "I can secure ₹{counter} for you. Want me to lock it for 30s?",
             "w": 3
           },
           {
-            "text": "Shall I secure this price for you?",
+            "text": "Great—₹{counter} is confirmed. Should I place a 30s hold?",
+            "w": 2
+          },
+          {
+            "text": "Perfect! ₹{counter} approved. Hold for 30s?",
+            "w": 1
+          }
+        ],
+        "2": [
+          {
+            "text": "Approved at ₹{counter}. I can hold it for 30s—should I secure it now?",
+            "w": 4
+          },
+          {
+            "text": "We've got ₹{counter}. I'll place a 30-second hold if you'd like.",
             "w": 3
           },
           {
-            "text": "Ready to confirm if you approve.",
+            "text": "₹{counter} is yours. Want me to lock it for 30s while you decide?",
             "w": 2
           },
           {
-            "text": "Want me to book this for you?",
+            "text": "Success! ₹{counter} confirmed. Shall I secure it with a 30s hold?",
+            "w": 1
+          }
+        ],
+        "3": [
+          {
+            "text": "Last slot approved at ₹{counter}. Hold for 30s?",
+            "w": 4
+          },
+          {
+            "text": "Final call—₹{counter} approved. Lock it for 30s now?",
+            "w": 3
+          },
+          {
+            "text": "This is it—₹{counter} secured. 30s hold to finalize?",
             "w": 2
           },
           {
-            "text": "Should I proceed with booking?",
-            "w": 2
-          },
-          {
-            "text": "Your call — shall we book it?",
-            "w": 1
-          },
-          {
-            "text": "What do you think? Good to go?",
-            "w": 1
-          },
-          {
-            "text": "Ready when you are!",
-            "w": 1
-          },
-          {
-            "text": "Decision time — yes or no?",
-            "w": 1
-          },
-          {
-            "text": "Looks good to you?",
-            "w": 1
-          },
-          {
-            "text": "Shall we move forward?",
+            "text": "Time-sensitive: ₹{counter} approved. Hold now for 30s?",
             "w": 1
           }
         ]
