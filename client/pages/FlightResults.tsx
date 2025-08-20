@@ -5840,8 +5840,8 @@ export default function FlightResults() {
         </DialogContent>
       </Dialog>
 
-      {/* NEW: Unified Bargain Modal - will replace above */}
-      <UnifiedBargainModal
+      {/* NEW: Classy Bargain Modal */}
+      <ClassyBargainModal
         isOpen={showBargainModal}
         flight={bargainFlight}
         fareType={bargainFareType}
@@ -5853,6 +5853,7 @@ export default function FlightResults() {
             handleBooking(bargainFlight, bargainFareType);
           }
         }}
+        attempt={1}
       />
 
       {/* Sign In Modal */}
