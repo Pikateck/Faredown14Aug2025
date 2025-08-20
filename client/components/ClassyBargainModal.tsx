@@ -33,6 +33,7 @@ interface ClassyBargainModalProps {
   onClose: () => void;
   onAccept: (finalPrice: number, orderRef: string) => void;
   onBookOriginal: () => void;
+  onRetry?: () => void;
   attempt?: number;
 }
 
