@@ -22,7 +22,7 @@ import { cn } from "@/lib/utils";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { formatPriceNoDecimals } from "@/lib/formatPrice";
 import { useBargainStatus, useCountdown, useChatBeats } from "@/hooks/useBargainStatus";
-import { getCopyVariant } from "@/utils/copyVariants";
+import { getCopyVariantWithCurrency, getBrandString, getFallbackVariant } from "@/utils/copyVariants";
 
 interface ChatBeat {
   id: string;
@@ -191,10 +191,10 @@ export function AINegotiationChat({
     }
   }, [module, productDetails]);
 
-  // Create template variables for copy variants
+  // Create template variables for copy variants (numbers for auto-formatting)
   const templateVars = useMemo(() => ({
-    offer: formatPriceNoDecimals(userOffer, selectedCurrency),
-    base: formatPriceNoDecimals(productDetails.basePrice, selectedCurrency),
+    offer: userOffer,
+    base: productDetails.basePrice,
     airline: productDetails.airline || '',
     flight_no: productDetails.flightNo || '',
     hotel_name: productDetails.hotelName || '',
@@ -203,7 +203,7 @@ export function AINegotiationChat({
     location: productDetails.location || '',
     pickup: productDetails.pickup || '',
     dropoff: productDetails.dropoff || ''
-  }), [userOffer, productDetails, selectedCurrency]);
+  }), [userOffer, productDetails]);
 
   // Add chat beat with typing animation
   const addChatBeat = (beat: Omit<ChatBeat, 'id' | 'timestamp'>) => {
@@ -296,14 +296,16 @@ export function AINegotiationChat({
     setChatBeats([]);
     
     try {
-      // Beat 1: Faredown AI offers (with dynamic content)
-      const agentOfferVariant = getCopyVariant(
+      // Beat 1: Faredown AI offers (with dynamic content and currency formatting)
+      const agentOfferVariant = getCopyVariantWithCurrency(
         module,
         'agent_offer',
         attemptNumber,
         'counter',
         templateVars,
-        usedKeys
+        usedKeys,
+        [],
+        (amount: number) => formatPriceNoDecimals(amount, selectedCurrency)
       );
       usedKeys.add(agentOfferVariant.key);
 
@@ -317,14 +319,16 @@ export function AINegotiationChat({
       // Realistic pause for reading
       await new Promise(resolve => setTimeout(resolve, 1500));
 
-      // Beat 2: Supplier checks (with dynamic content)
-      const supplierCheckVariant = getCopyVariant(
+      // Beat 2: Supplier checks (with dynamic content and currency formatting)
+      const supplierCheckVariant = getCopyVariantWithCurrency(
         module,
         'supplier_check',
         1,
         'counter',
         templateVars,
-        usedKeys
+        usedKeys,
+        [],
+        (amount: number) => formatPriceNoDecimals(amount, selectedCurrency)
       );
       usedKeys.add(supplierCheckVariant.key);
 
@@ -390,17 +394,19 @@ export function AINegotiationChat({
         finalPrice: Math.random() > 0.5 ? Math.round(userOffer * 1.1) : userOffer,
       };
 
-      // Beat 3: Supplier responds (with dynamic content)
-      const supplierCounterVariant = getCopyVariant(
+      // Beat 3: Supplier responds (with dynamic content and currency formatting)
+      const supplierCounterVariant = getCopyVariantWithCurrency(
         module,
         'supplier_counter',
         1,
         result.status as 'accepted' | 'counter',
         {
           ...templateVars,
-          counter: formatPriceNoDecimals(result.finalPrice || userOffer, selectedCurrency)
+          counter: result.finalPrice || userOffer
         },
-        usedKeys
+        usedKeys,
+        [],
+        (amount: number) => formatPriceNoDecimals(amount, selectedCurrency)
       );
       usedKeys.add(supplierCounterVariant.key);
 
@@ -416,14 +422,16 @@ export function AINegotiationChat({
       // Brief pause for reading
       await new Promise(resolve => setTimeout(resolve, 1000));
 
-      // Beat 4: Faredown AI confirms (with dynamic content)
-      const agentConfirmVariant = getCopyVariant(
+      // Beat 4: Faredown AI confirms (with dynamic content and currency formatting)
+      const agentConfirmVariant = getCopyVariantWithCurrency(
         module,
         'agent_user_confirm',
         1,
         'counter',
         templateVars,
-        usedKeys
+        usedKeys,
+        [],
+        (amount: number) => formatPriceNoDecimals(amount, selectedCurrency)
       );
       usedKeys.add(agentConfirmVariant.key);
 
@@ -618,7 +626,7 @@ export function AINegotiationChat({
           <div className="p-6 border-t bg-white">
             <div className="text-center mb-4">
               <Badge variant="secondary" className="mb-2">
-                Negotiated in {((bargainResult.negotiatedInMs || 0) / 1000).toFixed(1)}s
+                {getBrandString('negotiatedBadge').replace('{seconds}', ((bargainResult.negotiatedInMs || 0) / 1000).toFixed(1))}
               </Badge>
               
               {bargainResult.status === 'accepted' ? (
@@ -643,7 +651,7 @@ export function AINegotiationChat({
                 {!canProceedFromDecision ? (
                   <>Reading offer details...</>
                 ) : (
-                  <>Accept {formatPriceNoDecimals(bargainResult.finalPrice || 0, selectedCurrency)} — 30s to book</>
+                  <>{getBrandString('acceptButton').replace('{final_price}', formatPriceNoDecimals(bargainResult.finalPrice || 0, selectedCurrency)).replace('{seconds_left}', '30')}</>
                 )}
               </Button>
 
