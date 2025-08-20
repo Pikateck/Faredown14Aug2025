@@ -1032,9 +1032,9 @@ export default function Index() {
                   <div className="flex-1">
                     <button
                       onClick={() => {
-                        console.log('From button clicked');
-                        alert('From button clicked!');
+                        console.log('From button clicked, current state:', showFromCities);
                         setShowFromCities(true);
+                        console.log('State should now be true');
                       }}
                       className="w-full text-left"
                     >
