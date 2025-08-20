@@ -10,6 +10,8 @@ import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { MobileNavigation } from "@/components/mobile/MobileNavigation";
 import BargainModalPhase1 from "@/components/BargainModalPhase1";
+import { BargainDock } from "@/components/BargainDock";
+import { BargainBottomSheet } from "@/components/BargainBottomSheet";
 import {
   useBargainPhase1,
   createFlightBargainItem,
