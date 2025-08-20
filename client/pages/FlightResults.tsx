@@ -1438,10 +1438,6 @@ export default function FlightResults() {
           1),
     );
     const currentPriceInINR = bargainFareType.price;
-    const priceKey = `${bargainFlight.id}-${bargainFareType.name}-${targetPriceInSelectedCurrency}`;
-
-    // Allow same price to be entered multiple times for different AI responses
-    // Remove duplicate price restriction as requested by user
 
     if (targetPriceInINR >= currentPriceInINR) {
       setDuplicatePriceError(true);
@@ -1449,45 +1445,12 @@ export default function FlightResults() {
       return;
     }
 
-    // Clear any existing error - don't track used prices anymore to allow repeats
+    // Clear any existing error and close the modal
     setDuplicatePriceError(false);
-    setBargainStep("progress");
-    setBargainProgress(0);
+    setShowBargainModal(false);
 
-    const progressInterval = setInterval(() => {
-      setBargainProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(progressInterval);
-
-          const aiOfferInINR = generateAICounterOffer(
-            targetPriceInINR,
-            currentPriceInINR,
-          );
-          setAiOfferPrice(aiOfferInINR);
-
-          const isExactMatch = aiOfferInINR === targetPriceInINR;
-          setBargainResult(isExactMatch ? "accepted" : "counter");
-          setBargainStep("result");
-
-          setIsOfferValid(true);
-          setOfferExpiryTime(30);
-
-          const timerInterval = setInterval(() => {
-            setOfferExpiryTime((prev) => {
-              if (prev <= 1) {
-                clearInterval(timerInterval);
-                setIsOfferValid(false);
-                return 0;
-              }
-              return prev - 1;
-            });
-          }, 1000);
-
-          return 100;
-        }
-        return prev + 10;
-      });
-    }, 150);
+    // Start the new dock-based bargain system
+    handleStartBargain(bargainFlight, bargainFareType, targetPriceInINR);
   };
 
   // Bargain Dock Functions
