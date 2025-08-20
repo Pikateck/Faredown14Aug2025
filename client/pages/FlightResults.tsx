@@ -1717,7 +1717,7 @@ export default function FlightResults() {
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
                       { code: "hi", name: "हिन्दी", flag: "🇮����" },
                       { code: "ja", name: "日本語", flag: "🇯🇵" },
-                      { code: "ko", name: "한국어", flag: "🇰🇷" },
+                      { code: "ko", name: "한국어", flag: "🇰����" },
                       { code: "zh", name: "中文", flag: "🇨🇳" },
                     ].map((language) => (
                       <DropdownMenuItem
@@ -4309,7 +4309,7 @@ export default function FlightResults() {
                                         change your flight.
                                       </p>
                                       <p>
-                                        �� Cancellation/Flight change charges are
+                                        • Cancellation/Flight change charges are
                                         indicated per traveller. Clearing will
                                         stop accepting cancellation/change
                                         request if 72 hours before departure of
@@ -4582,15 +4582,6 @@ export default function FlightResults() {
             </div>
           </div>
         </div>
-
-        {/* Bargain Dock (Desktop only) */}
-        <BargainDock
-          isOpen={showBargainDock && !isMobile}
-          session={bargainSession}
-          onClose={handleCloseBargain}
-          onAccept={handleBargainAccept}
-          onRetry={handleBargainRetry}
-        />
       </div>
 
       {/* Mobile Bottom Padding */}
@@ -6395,7 +6386,7 @@ export default function FlightResults() {
                         �� Passenger names cannot be changed after booking
                       </li>
                       <li>
-                        �� Check-in must be completed 2 hours before departure
+                        ��� Check-in must be completed 2 hours before departure
                       </li>
                       <li>• Valid government-issued photo ID required</li>
                       <li>
