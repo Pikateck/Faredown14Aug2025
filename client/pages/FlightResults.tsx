@@ -535,6 +535,7 @@ export default function FlightResults() {
     open: boolean;
     module: 'flights';
     product: (typeof flightData)[0];
+    attempt: number;
   }>(null);
   // Temporary variables for legacy UI compatibility (should be removed when old UI is cleaned up)
   const [bargainStep, setBargainStep] = useState<"input" | "progress" | "result">("input");
