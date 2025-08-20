@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -19,7 +19,8 @@ import {
   TrendingUp,
   Clock,
   AlertCircle,
-  Shield
+  Shield,
+  MessageCircle
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCurrency } from "@/contexts/CurrencyContext";
@@ -28,11 +29,12 @@ import { getCopyVariantWithCurrency, getBrandString } from "@/utils/copyVariants
 
 interface ChatBeat {
   id: string;
-  type: 'agent' | 'supplier' | 'system';
+  type: 'agent' | 'supplier' | 'system' | 'typing';
   message: string;
   timestamp: number;
   icon?: React.ReactNode;
   variantKey?: string;
+  isTyping?: boolean;
 }
 
 interface BargainSession {
@@ -103,12 +105,13 @@ export function AINegotiationModal({
   const [error, setError] = useState<string | null>(null);
   const [minDisplayTime, setMinDisplayTime] = useState(true);
   const [sessionUsedKeys, setSessionUsedKeys] = useState<Set<string>>(new Set());
+  const [attemptNumber, setAttemptNumber] = useState(1);
 
   const chatEndRef = useRef<HTMLDivElement>(null);
   const { selectedCurrency } = useCurrency();
 
   // Module configuration
-  const moduleConfig = React.useMemo(() => {
+  const moduleConfig = useMemo(() => {
     if (!session) return { icon: <Sparkles className="w-4 h-4" />, color: 'bg-gray-50 text-gray-600', supplierName: 'Supplier' };
     
     switch (session.module) {
@@ -145,11 +148,28 @@ export function AINegotiationModal({
     }
   }, [session?.module]);
 
-  // Add chat beat with animation and variant tracking
+  // Create template variables for copy variants (numbers for auto-formatting)
+  const templateVars = useMemo(() => {
+    if (!session) return {};
+    return {
+      offer: session.userOffer,
+      base: session.productDetails.basePrice,
+      airline: session.productDetails.airline || '',
+      flight_no: session.productDetails.flightNo || '',
+      hotel_name: session.productDetails.hotelName || '',
+      city: session.productDetails.city || '',
+      tour_name: session.productDetails.tourName || '',
+      location: session.productDetails.location || '',
+      pickup: session.productDetails.pickup || '',
+      dropoff: session.productDetails.dropoff || ''
+    };
+  }, [session]);
+
+  // Add chat beat with animation
   const addChatBeat = (beat: Omit<ChatBeat, 'id' | 'timestamp'>) => {
     const newBeat: ChatBeat = {
       ...beat,
-      id: Date.now().toString(),
+      id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
       timestamp: Date.now(),
     };
     
@@ -166,7 +186,74 @@ export function AINegotiationModal({
     }, 100);
   };
 
-  // Start negotiation sequence with varied copy
+  // Add typing indicator
+  const addTypingIndicator = (type: 'agent' | 'supplier'): Promise<void> => {
+    return new Promise((resolve) => {
+      const typingId = `typing-${Date.now()}`;
+      
+      addChatBeat({
+        type: 'typing',
+        message: '',
+        isTyping: true,
+        icon: type === 'agent' 
+          ? <Sparkles className="w-4 h-4 text-blue-500" />
+          : <div className={cn("w-8 h-8 rounded-full flex items-center justify-center", moduleConfig.color)}>
+              {moduleConfig.icon}
+            </div>
+      });
+
+      // Remove typing indicator after realistic typing time
+      const typingDuration = Math.random() * 1500 + 1000; // 1-2.5s
+      setTimeout(() => {
+        setChatBeats(prev => prev.filter(beat => beat.id !== typingId));
+        resolve();
+      }, typingDuration);
+    });
+  };
+
+  // Progressive message reveal
+  const revealMessage = async (fullMessage: string, type: 'agent' | 'supplier', icon: React.ReactNode, variantKey?: string): Promise<void> => {
+    return new Promise((resolve) => {
+      let currentText = '';
+      const words = fullMessage.split(' ');
+      let wordIndex = 0;
+      
+      const beatId = `reveal-${Date.now()}`;
+      
+      // Add initial empty beat
+      addChatBeat({
+        type,
+        message: '',
+        icon,
+        variantKey
+      });
+
+      const revealNextWord = () => {
+        if (wordIndex < words.length) {
+          currentText += (currentText ? ' ' : '') + words[wordIndex];
+          wordIndex++;
+          
+          // Update the last beat
+          setChatBeats(prev => 
+            prev.map(beat => 
+              beat.id === prev[prev.length - 1]?.id 
+                ? { ...beat, message: currentText }
+                : beat
+            )
+          );
+          
+          // Continue with next word after realistic delay
+          setTimeout(revealNextWord, Math.random() * 200 + 100); // 100-300ms per word
+        } else {
+          resolve();
+        }
+      };
+
+      revealNextWord();
+    });
+  };
+
+  // Start negotiation sequence with smooth flow
   const startNegotiation = async () => {
     if (!session || isProcessing) return;
     
@@ -178,161 +265,158 @@ export function AINegotiationModal({
     
     try {
       const attemptNo = session.attemptCount || 1;
+      setAttemptNumber(attemptNo);
       
-      // Beat 1: Agent offer with varied copy and currency formatting
+      // Beat 1: Faredown AI offers (with dynamic content and currency formatting)
       const agentOfferVariant = getCopyVariantWithCurrency(
         session.module,
         'agent_offer',
         attemptNo,
         'counter',
+        templateVars,
+        sessionUsedKeys,
+        [],
+        (amount: number) => formatPriceNoDecimals(amount, selectedCurrency)
+      );
+
+      await addTypingIndicator('agent');
+      await revealMessage(
+        agentOfferVariant.text,
+        'agent',
+        <Sparkles className="w-4 h-4 text-blue-500" />,
+        agentOfferVariant.key
+      );
+
+      // Realistic pause for reading
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      // Beat 2: Supplier checks (with dynamic content and currency formatting)
+      const supplierCheckVariant = getCopyVariantWithCurrency(
+        session.module,
+        'supplier_check',
+        1,
+        'counter',
+        templateVars,
+        sessionUsedKeys,
+        [],
+        (amount: number) => formatPriceNoDecimals(amount, selectedCurrency)
+      );
+
+      await addTypingIndicator('supplier');
+      await revealMessage(
+        supplierCheckVariant.text,
+        'supplier',
+        <div className={cn("w-8 h-8 rounded-full flex items-center justify-center", moduleConfig.color)}>
+          {moduleConfig.icon}
+        </div>,
+        supplierCheckVariant.key
+      );
+
+      // Longer pause for "processing"
+      await new Promise(resolve => setTimeout(resolve, 2000));
+
+      // Call API
+      const response = await fetch('/api/bargains/quote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          module: session.module,
+          productRef: session.productRef,
+          userOffer: session.userOffer,
+          sessionId: session.sessionId,
+          routeInfo: {
+            airline: session.productDetails.airline,
+            flight_no: session.productDetails.flightNo,
+            hotel_name: session.productDetails.hotelName,
+            city: session.productDetails.city,
+            tour_name: session.productDetails.tourName,
+            pickup: session.productDetails.pickup,
+            dropoff: session.productDetails.dropoff,
+          }
+        })
+      });
+
+      let result: BargainResult;
+
+      if (!response.ok) {
+        // Fallback response for development
+        console.warn('API call failed, using fallback');
+        result = {
+          status: Math.random() > 0.3 ? 'counter' : 'accepted',
+          finalPrice: Math.random() > 0.5 ? Math.round(session.userOffer * 1.1) : session.userOffer,
+          basePrice: session.productDetails.basePrice,
+          negotiatedInMs: Math.random() * 5000 + 2000,
+          sessionId: session.sessionId,
+          attempt: {
+            count: attemptNo,
+            max: 3,
+            canRetry: attemptNo < 3
+          }
+        };
+      } else {
+        result = await response.json();
+      }
+
+      setBargainResult(result);
+
+      // Beat 3: Supplier responds (with dynamic content and currency formatting)
+      const supplierCounterVariant = getCopyVariantWithCurrency(
+        session.module,
+        'supplier_counter',
+        1,
+        result.status as 'accepted' | 'counter',
         {
-          offer: session.userOffer,
-          airline: session.productDetails.airline || 'Airline',
-          flight_no: session.productDetails.flightNo || '',
-          hotel_name: session.productDetails.hotelName || 'Hotel',
-          tour_name: session.productDetails.tourName || 'Tour',
-          pickup: session.productDetails.pickup || 'Pickup',
-          dropoff: session.productDetails.dropoff || 'Dropoff'
+          ...templateVars,
+          counter: result.finalPrice || session.userOffer
         },
         sessionUsedKeys,
         [],
         (amount: number) => formatPriceNoDecimals(amount, selectedCurrency)
       );
 
-      addChatBeat({
-        type: 'agent',
-        message: agentOfferVariant.text,
-        icon: <Sparkles className="w-4 h-4 text-blue-500" />,
-        variantKey: agentOfferVariant.key
-      });
+      await addTypingIndicator('supplier');
+      await revealMessage(
+        supplierCounterVariant.text,
+        'supplier',
+        <div className={cn("w-8 h-8 rounded-full flex items-center justify-center", moduleConfig.color)}>
+          {moduleConfig.icon}
+        </div>,
+        supplierCounterVariant.key
+      );
 
-      // Beat 2: Supplier checks (after 3s)
+      // Brief pause for reading
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      // Beat 4: Faredown AI confirms (with dynamic content and currency formatting)
+      const agentConfirmVariant = getCopyVariantWithCurrency(
+        session.module,
+        'agent_user_confirm',
+        1,
+        'counter',
+        templateVars,
+        sessionUsedKeys,
+        [],
+        (amount: number) => formatPriceNoDecimals(amount, selectedCurrency)
+      );
+
+      await addTypingIndicator('agent');
+      await revealMessage(
+        agentConfirmVariant.text,
+        'agent',
+        <Sparkles className="w-4 h-4 text-blue-500" />,
+        agentConfirmVariant.key
+      );
+
+      // Brief pause then show decision
+      await new Promise(resolve => setTimeout(resolve, 800));
+
+      setCurrentStep('decision');
+
+      // Start 10-second minimum display timer for decision panel
+      setMinDisplayTime(true);
       setTimeout(() => {
-        const supplierCheckVariant = getCopyVariantWithCurrency(
-          session.module,
-          'supplier_check',
-          attemptNo,
-          'counter',
-          {
-            base: session.productDetails.basePrice
-          },
-          sessionUsedKeys,
-          [],
-          (amount: number) => formatPriceNoDecimals(amount, selectedCurrency)
-        );
-
-        addChatBeat({
-          type: 'supplier',
-          message: supplierCheckVariant.text,
-          icon: <div className={cn("w-8 h-8 rounded-full flex items-center justify-center", moduleConfig.color)}>
-            {moduleConfig.icon}
-          </div>,
-          variantKey: supplierCheckVariant.key
-        });
-      }, 3000);
-
-      // Call API after 4s
-      setTimeout(async () => {
-        try {
-          const response = await fetch('/api/bargains/quote', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              module: session.module,
-              productRef: session.productRef,
-              userOffer: session.userOffer,
-              sessionId: session.sessionId,
-              routeInfo: {
-                airline: session.productDetails.airline,
-                flight_no: session.productDetails.flightNo,
-                hotel_name: session.productDetails.hotelName,
-                city: session.productDetails.city,
-                tour_name: session.productDetails.tourName,
-                pickup: session.productDetails.pickup,
-                dropoff: session.productDetails.dropoff,
-              }
-            })
-          });
-
-          if (!response.ok) {
-            // Fallback response for development
-            console.warn('API call failed, using fallback');
-            const fallbackResult: BargainResult = {
-              status: Math.random() > 0.3 ? 'counter' : 'accepted',
-              finalPrice: Math.random() > 0.5 ? Math.round(session.userOffer * 1.1) : session.userOffer,
-              basePrice: session.productDetails.basePrice,
-              negotiatedInMs: Math.random() * 5000 + 2000,
-              sessionId: session.sessionId,
-              attempt: {
-                count: session.attemptCount || 1,
-                max: 3,
-                canRetry: (session.attemptCount || 1) < 3
-              }
-            };
-            setBargainResult(fallbackResult);
-          } else {
-            const result: BargainResult = await response.json();
-            setBargainResult(result);
-          }
-
-          // Beat 3: Supplier responds with varied copy and currency formatting
-          const supplierCounterVariant = getCopyVariantWithCurrency(
-            session.module,
-            'supplier_counter',
-            attemptNo,
-            result.status === 'accepted' ? 'accepted' : 'counter',
-            {
-              counter: result.finalPrice || session.productDetails.basePrice
-            },
-            sessionUsedKeys,
-            [],
-            (amount: number) => formatPriceNoDecimals(amount, selectedCurrency)
-          );
-
-          addChatBeat({
-            type: 'supplier',
-            message: supplierCounterVariant.text,
-            icon: <div className={cn("w-8 h-8 rounded-full flex items-center justify-center", moduleConfig.color)}>
-              {moduleConfig.icon}
-            </div>,
-            variantKey: supplierCounterVariant.key
-          });
-
-          // Beat 4: Agent confirms (after 2s)
-          setTimeout(() => {
-            const agentConfirmVariant = getCopyVariantWithCurrency(
-              session.module,
-              'agent_user_confirm',
-              attemptNo,
-              'counter',
-              {},
-              sessionUsedKeys,
-              [],
-              (amount: number) => formatPriceNoDecimals(amount, selectedCurrency)
-            );
-
-            addChatBeat({
-              type: 'agent',
-              message: agentConfirmVariant.text,
-              icon: <Sparkles className="w-4 h-4 text-blue-500" />,
-              variantKey: agentConfirmVariant.key
-            });
-
-            // Show decision panel after 1s
-            setTimeout(() => {
-              setCurrentStep('decision');
-              setMinDisplayTime(true);
-              // Allow interaction after 10s minimum
-              setTimeout(() => setMinDisplayTime(false), 10000);
-            }, 1000);
-          }, 2000);
-
-        } catch (error) {
-          console.error('Negotiation error:', error);
-          setError(error instanceof Error ? error.message : 'Negotiation failed');
-          setCurrentStep('expired');
-        }
-      }, 4000);
+        setMinDisplayTime(false);
+      }, 10000); // 10 seconds minimum
       
     } catch (error) {
       console.error('Negotiation error:', error);
@@ -359,24 +443,24 @@ export function AINegotiationModal({
         })
       });
 
+      let holdResult: HoldResponse;
+
       if (!response.ok) {
         // Fallback for development
         console.warn('Accept API call failed, using fallback');
-        const holdResult: HoldResponse = {
+        holdResult = {
           holdSeconds: 30,
           orderRef: `ORDER-${Date.now()}`,
           expiresAt: new Date(Date.now() + 30000).toISOString(),
           finalPrice: bargainResult.finalPrice
         };
-        setHoldData(holdResult);
-        setCurrentStep('holding');
-        setCountdown(holdResult.holdSeconds);
       } else {
-        const holdResult: HoldResponse = await response.json();
-        setHoldData(holdResult);
-        setCurrentStep('holding');
-        setCountdown(holdResult.holdSeconds);
+        holdResult = await response.json();
       }
+
+      setHoldData(holdResult);
+      setCurrentStep('holding');
+      setCountdown(holdResult.holdSeconds);
 
       // Start countdown
       const countdownInterval = setInterval(() => {
@@ -402,6 +486,7 @@ export function AINegotiationModal({
   // Retry bargain
   const handleRetry = () => {
     if (bargainResult?.attempt?.canRetry) {
+      setAttemptNumber(prev => prev + 1);
       onRetry();
       // Reset state for new attempt
       setCurrentStep('negotiating');
@@ -422,23 +507,22 @@ export function AINegotiationModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-lg mx-auto max-h-[80vh] flex flex-col overflow-hidden">
+      <DialogContent className="max-w-md mx-auto h-[600px] flex flex-col p-0 overflow-hidden">
         {/* Header */}
-        <DialogHeader className="px-6 py-4 border-b bg-gradient-to-r from-blue-50 to-purple-50 flex-shrink-0">
+        <DialogHeader className="px-6 py-4 border-b bg-gradient-to-r from-blue-50 to-purple-50">
           <div className="flex items-center justify-between">
-            <div className="flex-1">
-              <DialogTitle className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-blue-500" />
-{getBrandString('negotiatorTitle')}
+            <div>
+              <DialogTitle className="text-lg font-semibold text-gray-900">
+                {getBrandString('negotiatorTitle')}
               </DialogTitle>
-              <p className="text-sm text-gray-600 truncate">{session.productDetails.title}</p>
+              <p className="text-sm text-gray-600 mt-1 truncate">{session.productDetails.title}</p>
               {session.productDetails.subtitle && (
                 <p className="text-xs text-gray-500">{session.productDetails.subtitle}</p>
               )}
             </div>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-white/50 rounded-lg transition-colors ml-4"
+              className="p-2 hover:bg-white/50 rounded-lg transition-colors"
             >
               <X className="w-5 h-5 text-gray-500" />
             </button>
@@ -467,46 +551,52 @@ export function AINegotiationModal({
               <div className="flex-shrink-0">
                 {beat.icon || (
                   <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
-                    <Sparkles className="w-4 h-4 text-gray-500" />
+                    <MessageCircle className="w-4 h-4 text-gray-500" />
                   </div>
                 )}
               </div>
               <div className="flex-1">
-                <div className={cn(
-                  "px-4 py-3 rounded-lg max-w-[320px]",
-                  beat.type === 'agent' 
-                    ? "bg-blue-500 text-white" 
-                    : "bg-white border shadow-sm"
-                )}>
-                  <p className="text-sm">{beat.message}</p>
-                </div>
-                <p className="text-xs text-gray-500 mt-1">
-                  {beat.type === 'agent' ? getBrandString('aiName') : moduleConfig.supplierName}
-                </p>
+                {beat.isTyping ? (
+                  <div className={cn(
+                    "px-4 py-3 rounded-lg max-w-[280px]",
+                    beat.type === 'agent' || beat.type === 'typing'
+                      ? "bg-blue-500 text-white" 
+                      : "bg-white border shadow-sm"
+                  )}>
+                    <div className="flex items-center space-x-1">
+                      <div className="w-2 h-2 bg-current rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                      <div className="w-2 h-2 bg-current rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                      <div className="w-2 h-2 bg-current rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                    </div>
+                  </div>
+                ) : (
+                  <div className={cn(
+                    "px-4 py-3 rounded-lg max-w-[280px]",
+                    beat.type === 'agent' 
+                      ? "bg-blue-500 text-white" 
+                      : "bg-white border shadow-sm"
+                  )}>
+                    <p className="text-sm">{beat.message}</p>
+                  </div>
+                )}
+                {!beat.isTyping && (
+                  <p className="text-xs text-gray-500 mt-1">
+                    {beat.type === 'agent' ? getBrandString('aiName') : moduleConfig.supplierName}
+                  </p>
+                )}
               </div>
             </div>
           ))}
-
-          {/* Processing indicator */}
-          {isProcessing && currentStep === 'negotiating' && (
-            <div className="flex items-center justify-center py-4">
-              <div className="flex items-center space-x-2 text-gray-500">
-                <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-              </div>
-            </div>
-          )}
 
           <div ref={chatEndRef} />
         </div>
 
         {/* Decision Panel */}
         {currentStep === 'decision' && bargainResult && (
-          <div className="p-6 border-t bg-white flex-shrink-0">
+          <div className="p-6 border-t bg-white">
             <div className="text-center mb-4">
               <Badge variant="secondary" className="mb-2">
-                Negotiated in {((bargainResult.negotiatedInMs || 0) / 1000).toFixed(1)}s
+                {getBrandString('negotiatedBadge').replace('{seconds}', ((bargainResult.negotiatedInMs || 0) / 1000).toFixed(1))}
               </Badge>
               
               {bargainResult.status === 'accepted' ? (
@@ -531,7 +621,7 @@ export function AINegotiationModal({
                 {minDisplayTime ? (
                   <>Reading offer details...</>
                 ) : (
-                  <>Accept {formatPriceNoDecimals(bargainResult.finalPrice || 0, selectedCurrency)} — 30s to book</>
+                  <>{getBrandString('acceptButton').replace('{final_price}', formatPriceNoDecimals(bargainResult.finalPrice || 0, selectedCurrency)).replace('{seconds_left}', '30')}</>
                 )}
               </Button>
 
@@ -545,7 +635,7 @@ export function AINegotiationModal({
                   {minDisplayTime ? (
                     <>Please wait...</>
                   ) : (
-                    <>Bargain Again ({bargainResult.attempt.count}/{bargainResult.attempt.max})</>
+                    <>{getBrandString('bargainAgain')} ({bargainResult.attempt.count}/{bargainResult.attempt.max})</>
                   )}
                 </Button>
               )}
@@ -559,7 +649,7 @@ export function AINegotiationModal({
 
         {/* Holding State */}
         {currentStep === 'holding' && holdData && (
-          <div className="p-6 border-t bg-white flex-shrink-0">
+          <div className="p-6 border-t bg-white">
             <div className="text-center">
               <div className="flex items-center justify-center space-x-2 text-blue-600 mb-3">
                 <Shield className="w-5 h-5" />
@@ -585,19 +675,19 @@ export function AINegotiationModal({
 
         {/* Error/Expired State */}
         {(currentStep === 'expired' || error) && (
-          <div className="p-6 border-t bg-white flex-shrink-0">
+          <div className="p-6 border-t bg-white">
             <div className="text-center">
               <div className="flex items-center justify-center space-x-2 text-red-600 mb-3">
                 <AlertCircle className="w-5 h-5" />
-                <span className="font-medium">Bargain Session Ended</span>
+                <span className="font-medium">{getBrandString('expiredTitle')}</span>
               </div>
               
               <p className="text-sm text-gray-600 mb-4">
-                {error || "This bargain session has expired. Re-search to try again."}
+                {error || getBrandString('expiredBody')}
               </p>
               
               <Button onClick={onClose} className="w-full">
-                Close
+                {getBrandString('reSearchCta')}
               </Button>
             </div>
           </div>
