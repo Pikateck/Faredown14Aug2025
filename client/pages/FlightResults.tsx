@@ -9,8 +9,6 @@ import { MobileFilters } from "@/components/MobileFilters";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { MobileNavigation } from "@/components/mobile/MobileNavigation";
-import BargainModalPhase1 from "@/components/BargainModalPhase1";
-import { AINegotiationModal } from "@/components/AINegotiationModal";
 import { ClassyBargainModal } from "@/components/ClassyBargainModal";
 import {
   useBargainPhase1,
@@ -4382,7 +4380,7 @@ export default function FlightResults() {
                                     </p>
                                     <div className="text-xs text-gray-700 space-y-1">
                                       <p>
-                                        �� Direct flights are usually cheaper
+                                        • Direct flights are usually cheaper
                                         than refundable flights. However, you
                                         may have to pay a large fee to cancel or
                                         change your flight.
