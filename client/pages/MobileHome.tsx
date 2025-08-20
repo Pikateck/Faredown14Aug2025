@@ -294,7 +294,7 @@ const MobileHome = () => {
             <span className="text-sm font-medium text-gray-700">Hotels</span>
           </button>
           <button className="bg-white rounded-lg p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-            <div className="text-2xl mb-2">���</div>
+            <div className="text-2xl mb-2">📋</div>
             <span className="text-sm font-medium text-gray-700">
               My Bookings
             </span>
