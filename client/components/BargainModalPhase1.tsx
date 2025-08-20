@@ -1,22 +1,12 @@
 /**
  * Phase 1 Bargain Modal Component
- * Implements: Base Price + Markup (randomized) + Counter-offers
- * User Flow: User sees marked-up fare → Enters desired price → System responds with match or counter-offer
+ * Now uses the new AI live chat negotiation system
  */
 
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
 import {
   Dialog,
   DialogContent,
@@ -25,31 +15,18 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import {
-  AlertTriangle,
-  CheckCircle,
   DollarSign,
-  TrendingDown,
-  TrendingUp,
-  Target,
-  MessageCircle,
-  ThumbsUp,
-  ThumbsDown,
-  Calculator,
-  Zap,
-  Clock,
-  Award,
-  Info,
   Sparkles,
+  X,
 } from "lucide-react";
-import {
-  useBargain,
-  type BargainProductCPO,
-  type BargainSessionStartResponse,
-  type BargainOfferResponse,
-} from "@/hooks/useBargain";
 import { formatPriceNoDecimals } from "@/lib/formatPrice";
-import RepriceModal from "@/components/RepriceModal";
-import { RotatingBargainSkeleton } from "@/components/BargainLoadingSkeleton";
+import { AINegotiationChat } from "@/components/AINegotiationChat";
+import {
+  useAIBargain,
+  createFlightBargainDetails,
+  createHotelBargainDetails,
+  createSightseeingBargainDetails
+} from "@/hooks/useAIBargain";
 
 interface BargainModalPhase1Props {
   isOpen: boolean;
