@@ -55,12 +55,18 @@ export function useChatBeats(beatsTemplate: Omit<Beat,'text'>[]) {
     return clearTimer;
   }, [running, cursor, beats]);
 
+  const reset = useCallback(() => {
+    stop();
+    setBeats([]);
+    setCursor(0);
+  }, [stop]);
+
   return {
     running,
     cursor,     // UI can show typing indicator for current beat
     beats,      // array of beats; render <= cursor for revealed items
     start,
     stop,
-    reset: () => { stop(); setBeats([]); setCursor(0); },
+    reset,
   };
 }
