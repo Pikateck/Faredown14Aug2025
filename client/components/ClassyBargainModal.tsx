@@ -265,6 +265,13 @@ export function ClassyBargainModal({
     setError(null);
   }, [reset]);
 
+  // Stable input handler
+  const handleOfferChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(e.target.value.replace(/\D/g, '')) || null;
+    setOffer(value);
+    setError(null);
+  }, []);
+
   if (!isOpen || !flight || !fareType) return null;
 
   const savings = counter && fareType.price - counter > 0 ? fareType.price - counter : 0;
