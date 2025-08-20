@@ -3373,6 +3373,7 @@ export default function Index() {
         onSelectCity={handleSelectToCity}
         triggerRef={desktopToButtonRef.current ? desktopToButtonRef : toCityButtonRef}
       />
+      <Toaster />
     </div>
   );
 }
