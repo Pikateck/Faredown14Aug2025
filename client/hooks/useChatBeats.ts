@@ -1,5 +1,5 @@
 // hooks/useChatBeats.ts
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 
 export type Speaker = 'agent' | 'supplier' | 'system';
 export type Beat = {
