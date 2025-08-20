@@ -703,7 +703,7 @@ export function UnifiedBargainModal({
                 {minDisplayTime ? (
                   <>Reading offer details...</>
                 ) : (
-                  <>{getBrandString('acceptButton').replace('{final_price}', formatPriceNoDecimals(bargainResult.finalPrice || 0, selectedCurrency)).replace('{seconds_left}', '30')}</>
+                  <>Accept {formatPriceNoDecimals(bargainResult.finalPrice || 0, selectedCurrency)} — 30s to book</>
                 )}
               </Button>
 
