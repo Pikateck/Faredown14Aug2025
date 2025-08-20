@@ -207,16 +207,20 @@ export function MobileCityDropdown({
           },
         ];
 
-  const filteredPopularDestinations = popularDestinations.filter((dest) => {
+  const filteredPopularDestinations = React.useMemo(() => {
+    if (!searchQuery) return popularDestinations;
+
     const query = searchQuery.toLowerCase();
-    return (
-      dest.name.toLowerCase().includes(query) ||
-      dest.code.toLowerCase().includes(query) ||
-      dest.country.toLowerCase().includes(query) ||
-      dest.airport.toLowerCase().includes(query) ||
-      (dest.description && dest.description.toLowerCase().includes(query))
-    );
-  });
+    return popularDestinations.filter((dest) => {
+      return (
+        dest.name.toLowerCase().includes(query) ||
+        dest.code.toLowerCase().includes(query) ||
+        dest.country.toLowerCase().includes(query) ||
+        dest.airport.toLowerCase().includes(query) ||
+        (dest.description && dest.description.toLowerCase().includes(query))
+      );
+    });
+  }, [searchQuery, popularDestinations]);
 
   return (
     <div className="sm:hidden fixed inset-0 bg-white z-[60] overflow-y-auto">
