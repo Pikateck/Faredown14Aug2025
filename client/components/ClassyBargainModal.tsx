@@ -308,11 +308,7 @@ export function ClassyBargainModal({
               type="number"
               inputMode="numeric"
               placeholder="Enter your target price"
-              onChange={(e) => {
-                const value = parseInt(e.target.value.replace(/\D/g, '')) || null;
-                setOffer(value);
-                setError(null);
-              }}
+              onChange={handleOfferChange}
               value={offer || ''}
             />
           </div>
