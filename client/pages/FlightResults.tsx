@@ -336,7 +336,7 @@ export default function FlightResults() {
   } = useDateContext();
   const userName = user?.name || "";
 
-  // Mobile detection
+  // Mobile detection (kept for legacy compatibility)
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -1710,7 +1710,7 @@ export default function FlightResults() {
                     {[
                       { code: "en", name: "English", flag: "🇬🇧" },
                       { code: "es", name: "Español", flag: "🇪🇸" },
-                      { code: "fr", name: "Français", flag: "🇫����" },
+                      { code: "fr", name: "Français", flag: "🇫������" },
                       { code: "de", name: "Deutsch", flag: "🇩🇪" },
                       { code: "it", name: "Italiano", flag: "🇮🇹" },
                       { code: "pt", name: "Portugu��s", flag: "🇵🇹" },
