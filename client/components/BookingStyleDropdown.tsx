@@ -72,18 +72,18 @@ export function BookingStyleDropdown({
     return null;
   }
 
-  // Filter cities based on search query
-  const filteredCities = Object.entries(cities).filter(([city, data]) => {
-    if (!searchQuery) return true;
-    const query = searchQuery.toLowerCase();
-    return (
+  // Memoized city filtering with debounced search
+  const filteredCities = useMemo(() => {
+    if (!debouncedSearchQuery) return Object.entries(cities);
+    const query = debouncedSearchQuery.toLowerCase();
+    return Object.entries(cities).filter(([city, data]) => (
       city.toLowerCase().includes(query) ||
       data.code.toLowerCase().includes(query) ||
       data.name.toLowerCase().includes(query) ||
       data.airport.toLowerCase().includes(query) ||
       data.fullName.toLowerCase().includes(query)
-    );
-  });
+    ));
+  }, [debouncedSearchQuery, cities]);
 
   // Popular destinations
   const popularDestinations = [
