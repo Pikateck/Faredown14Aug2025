@@ -665,7 +665,7 @@ export function AINegotiationChat({
                   {!canProceedFromDecision ? (
                     <>Please wait...</>
                   ) : (
-                    <>Bargain Again ({bargainResult.attempt.count}/{bargainResult.attempt.max})</>
+                    <>{getBrandString('bargainAgain')} ({bargainResult.attempt.count}/{bargainResult.attempt.max})</>
                   )}
                 </Button>
               )}
