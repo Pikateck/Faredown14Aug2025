@@ -1372,7 +1372,8 @@ export default function FlightResults() {
       setBargainCtx({
         open: true,
         module: 'flights',
-        product: flight
+        product: flight,
+        attempt: 1
       });
       console.log('🎯 Modal context set for flight:', flight.id);
     });
