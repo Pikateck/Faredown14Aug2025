@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState, useEffect } from 'react';
+import React, { useMemo, useRef, useState, useEffect, useCallback } from 'react';
 import { useChatBeats } from '@/hooks/useChatBeats';
 import { chooseVariant, formatCurrency } from '@/lib/copySelector';
 import { useCurrency } from '@/contexts/CurrencyContext';
