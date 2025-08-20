@@ -1660,7 +1660,7 @@ export default function FlightResults() {
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
                       { code: "hi", name: "हिन्दी", flag: "🇮����" },
                       { code: "ja", name: "日本語", flag: "🇯🇵" },
-                      { code: "ko", name: "한국어", flag: "����🇷" },
+                      { code: "ko", name: "한국어", flag: "🇰🇷" },
                       { code: "zh", name: "中文", flag: "🇨🇳" },
                     ].map((language) => (
                       <DropdownMenuItem
@@ -5769,6 +5769,10 @@ export default function FlightResults() {
                         >
                           Bargain Again
                         </Button>
+
+                        <p className="text-xs text-gray-500 text-center mt-3">
+                          Most customers get the best deal early — demand is rising fast.
+                        </p>
                       </div>
                     </>
                   ) : (
