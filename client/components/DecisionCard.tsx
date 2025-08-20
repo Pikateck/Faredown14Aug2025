@@ -62,10 +62,11 @@ export default function DecisionCard({
 
   const negotiatedSecs = Math.max(0.1, Math.round((negotiatedMs / 1000) * 10) / 10).toFixed(1);
 
+  const userGreeting = userName ? `${userName}, ` : '';
   const ctasByAttempt: Record<1 | 2 | 3, { headline: string; sub?: string }> = {
-    1: { headline: `Good news — approved at ₹${price.toLocaleString("en-IN")}. Shall I hold it for 30s?` },
-    2: { headline: `Approved at ₹${price.toLocaleString("en-IN")}. I can hold it for 30s — secure it now?` },
-    3: { headline: `Last slot approved at ₹${price.toLocaleString("en-IN")}. Hold for 30s?`, sub: `Demand is rising quickly.` },
+    1: { headline: `Good news, ${userGreeting}approved at ₹${price.toLocaleString("en-IN")}. Shall I hold it for 30s?` },
+    2: { headline: `Great news, ${userGreeting}approved at ₹${price.toLocaleString("en-IN")}. Secure it now?` },
+    3: { headline: `Final opportunity, ${userGreeting}last slot at ₹${price.toLocaleString("en-IN")}. Hold for 30s?`, sub: `Demand is rising quickly.` },
   };
 
   return (
