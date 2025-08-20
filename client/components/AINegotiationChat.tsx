@@ -611,7 +611,7 @@ export function AINegotiationChat({
                 )}
                 {!beat.isTyping && (
                   <p className="text-xs text-gray-500 mt-1">
-                    {beat.type === 'agent' ? 'Faredown AI' : moduleConfig.supplierName}
+                    {beat.type === 'agent' ? getBrandString('aiName') : moduleConfig.supplierName}
                   </p>
                 )}
               </div>
