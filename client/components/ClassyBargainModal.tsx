@@ -512,6 +512,7 @@ export function ClassyBargainModal({
               onClose();
             }}
             holdSeconds={30}
+            userName={user?.name?.split(' ')[0]}
           />
         </section>
       )}
