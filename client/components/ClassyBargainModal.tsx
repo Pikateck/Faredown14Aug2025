@@ -101,21 +101,16 @@ export function ClassyBargainModal({
     counterRef.current = counter;
   }, [counter]);
 
-  // Countdown timer for decision/hold phases
+  // Countdown timer for hold phase only (decision handled by DecisionCard)
   useEffect(() => {
-    if (step === 'decision' || step === 'hold') {
+    if (step === 'hold') {
       const interval = setInterval(() => {
         setCountdown(prev => {
           if (prev <= 0) {
             clearInterval(interval);
-            if (step === 'decision') {
-              console.log('🕐 Decision timer expired - closing modal');
-              onClose(); // Close modal when decision timer expires
-            } else if (step === 'hold') {
-              // Auto-accept in hold phase
-              if (counterRef.current) {
-                onAccept(counterRef.current, `ORDER-${Date.now()}`);
-              }
+            // Auto-accept in hold phase
+            if (counterRef.current) {
+              onAccept(counterRef.current, `ORDER-${Date.now()}`);
             }
             return 0;
           }
@@ -345,7 +340,7 @@ export function ClassyBargainModal({
           {formatCurrency(fareType.price, selectedCurrency.symbol)}
         </div>
         <button className="fd-close" onClick={onClose} aria-label="Close">
-          ×
+          ��
         </button>
       </header>
 
