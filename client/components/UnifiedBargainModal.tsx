@@ -251,10 +251,10 @@ export function UnifiedBargainModal({
     }
 
     const targetPriceInSelectedCurrency = parseInt(bargainPrice);
-    const targetPriceInINR = Math.round(
-      targetPriceInSelectedCurrency /
-        (exchangeRates[selectedCurrency.code as keyof typeof exchangeRates] || 1)
-    );
+    // Convert from selected currency back to INR (base currency)
+    const targetPriceInINR = selectedCurrency.code === 'INR'
+      ? targetPriceInSelectedCurrency
+      : Math.round(targetPriceInSelectedCurrency / selectedCurrency.rate);
     const currentPriceInINR = fareType.price;
 
     console.log('💰 Price validation:', {
