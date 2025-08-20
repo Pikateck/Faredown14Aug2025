@@ -285,8 +285,10 @@ export function ClassyBargainModal({
   }, [counter]);
 
   // Retry bargain
-  const onRetry = useCallback(() => {
+  const handleRetry = useCallback(() => {
     console.log('🔄 Retry bargain clicked - resetting to input step');
+
+    // Reset modal internal state
     reset();
     setStep('input');
     setOffer(null);
@@ -295,7 +297,12 @@ export function ClassyBargainModal({
     setNegotiatedMs(0);
     setCountdown(30);
     sessionUsed.clear(); // Clear used copy keys for new attempt
-  }, [reset]);
+
+    // Call parent onRetry if provided (for attempt increment)
+    if (onRetry) {
+      onRetry();
+    }
+  }, [reset, onRetry]);
 
   // Stable input handler
   const handleOfferChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
