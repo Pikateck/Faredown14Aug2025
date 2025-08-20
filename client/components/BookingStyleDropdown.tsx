@@ -85,8 +85,8 @@ export function BookingStyleDropdown({
     ));
   }, [debouncedSearchQuery, cities]);
 
-  // Popular destinations
-  const popularDestinations = [
+  // Memoized popular destinations (static data)
+  const popularDestinations = useMemo(() => [
     {
       id: "DXB",
       code: "DXB",
@@ -96,7 +96,7 @@ export function BookingStyleDropdown({
     },
     {
       id: "BOM",
-      code: "BOM", 
+      code: "BOM",
       name: "Mumbai",
       country: "India",
       airport: "Rajiv Gandhi Shivaji International",
@@ -104,7 +104,7 @@ export function BookingStyleDropdown({
     {
       id: "DEL",
       code: "DEL",
-      name: "Delhi", 
+      name: "Delhi",
       country: "India",
       airport: "Indira Gandhi International",
     },
@@ -112,7 +112,7 @@ export function BookingStyleDropdown({
       id: "SIN",
       code: "SIN",
       name: "Singapore",
-      country: "Singapore", 
+      country: "Singapore",
       airport: "Changi Airport",
     },
     {
@@ -129,11 +129,12 @@ export function BookingStyleDropdown({
       country: "France",
       airport: "Charles de Gaulle Airport",
     },
-  ];
+  ], []);
 
-  const filteredPopularDestinations = popularDestinations.filter((dest) => {
-    if (!searchQuery) return true;
-    const query = searchQuery.toLowerCase();
+  // Memoized filtered popular destinations
+  const filteredPopularDestinations = useMemo(() => {
+    if (!debouncedSearchQuery) return popularDestinations;
+    const query = debouncedSearchQuery.toLowerCase();
     return (
       dest.name.toLowerCase().includes(query) ||
       dest.code.toLowerCase().includes(query) ||
