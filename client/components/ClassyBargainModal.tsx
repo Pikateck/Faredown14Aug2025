@@ -425,51 +425,27 @@ export function ClassyBargainModal({
         </section>
       )}
 
-      {/* Decision Step */}
+      {/* Decision Step - New DecisionCard Component */}
       {step === 'decision' && counter && (
-        <section className="fd-decision">
-          {negotiatedMs > 0 && (
-            <div className="fd-negotiated-badge">
-              Negotiated in {(negotiatedMs / 1000).toFixed(1)}s
-            </div>
-          )}
-          <div className="fd-offerCard">
-            <div className="fd-offerPrice">
-              {formatCurrency(counter, selectedCurrency.symbol)}
-            </div>
-            {savings > 0 && (
-              <div className="fd-savings">
-                You save {formatCurrency(savings, selectedCurrency.symbol)}
-              </div>
-            )}
-            <div className="fd-exp">
-              Offer expires in: <strong>{countdown}s</strong>
-            </div>
-            <div className="fd-bar" />
-          </div>
-          
-          <div className="fd-actions">
-            <button 
-              className="fd-btn fd-btn--success"
-              onClick={onAcceptOffer}
-            >
-              <Shield className="w-4 h-4" />
-              Accept {formatCurrency(counter, selectedCurrency.symbol)} — {countdown}s to book
-            </button>
-            
-            {attempt < 3 && (
-              <button
-                className="fd-btn fd-btn--outline"
-                onClick={handleRetry}
-              >
-                Bargain Again ({attempt}/3)
-              </button>
-            )}
-          </div>
-          
-          <p className="fd-fomo">
-            Most customers get the best deal early — demand is rising fast.
-          </p>
+        <section className="p-4">
+          <DecisionCard
+            price={counter}
+            negotiatedMs={negotiatedMs}
+            attempt={attempt as 1|2|3}
+            onAccept={() => {
+              console.log('🎯 Decision card - Accept clicked');
+              onAcceptOffer();
+            }}
+            onBargainAgain={() => {
+              console.log('🔄 Decision card - Bargain Again clicked');
+              handleRetry();
+            }}
+            onExpire={() => {
+              console.log('🕐 Decision card - Timer expired');
+              onClose();
+            }}
+            holdSeconds={30}
+          />
         </section>
       )}
 
