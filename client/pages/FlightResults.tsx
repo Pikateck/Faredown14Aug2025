@@ -5807,7 +5807,7 @@ export default function FlightResults() {
           console.log('🎯 Bargain accepted:', finalPrice, orderRef);
           if (bargainCtx?.product) {
             const updatedFareType = { ...bargainCtx.product.fareTypes[0], price: finalPrice };
-            navigate('/booking', {
+            navigate('/booking-flow', {
               state: {
                 selectedFlight: bargainCtx.product,
                 selectedFareType: updatedFareType,
