@@ -4,6 +4,7 @@
  */
 
 import { DevApiClient } from "./api-dev";
+import { tracedFetch, apiTracer } from "@/utils/apiTracing";
 
 // Auto-detect backend URL based on environment
 const getBackendUrl = () => {
