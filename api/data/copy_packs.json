@@ -329,19 +329,19 @@
         ],
         "2": [
           {
-            "text": "Approved at ₹{counter}. I can hold it for 30s—should I secure it now?",
+            "text": "Great news, {user_title}! Approved at ₹{counter}. Should I secure it now?",
             "w": 4
           },
           {
-            "text": "We've got ₹{counter}. I'll place a 30-second hold if you'd like.",
+            "text": "We've got it, {user_name}! ₹{counter} confirmed. Shall I place a 30-second hold?",
             "w": 3
           },
           {
-            "text": "₹{counter} is yours. Want me to lock it for 30s while you decide?",
+            "text": "Perfect, {user_title}—₹{counter} is yours. Lock it for 30s?",
             "w": 2
           },
           {
-            "text": "Success! ₹{counter} confirmed. Shall I secure it with a 30s hold?",
+            "text": "Success, {user_name}! ₹{counter} confirmed. Secure it with a 30s hold?",
             "w": 1
           }
         ],
