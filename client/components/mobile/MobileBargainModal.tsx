@@ -7,9 +7,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Progress } from "@/components/ui/progress";
-import { TrendingDown, X, CheckCircle, Clock, RefreshCw } from "lucide-react";
+import { TrendingDown, X, CheckCircle, Clock, Sparkles } from "lucide-react";
 import { useCurrency } from "@/contexts/CurrencyContext";
+import { AINegotiationChat } from "@/components/AINegotiationChat";
+import { useAIBargain, createSightseeingBargainDetails } from "@/hooks/useAIBargain";
 
 interface MobileBargainModalProps {
   isOpen: boolean;
