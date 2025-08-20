@@ -50,16 +50,20 @@ export function MobileCityDropdown({
   if (!isOpen) return null;
 
   // Filter cities based on search query
-  const filteredCities = Object.entries(cities).filter(([city, data]) => {
+  const filteredCities = React.useMemo(() => {
+    if (!searchQuery) return Object.entries(cities);
+
     const query = searchQuery.toLowerCase();
-    return (
-      city.toLowerCase().includes(query) ||
-      data.code.toLowerCase().includes(query) ||
-      data.name.toLowerCase().includes(query) ||
-      data.airport.toLowerCase().includes(query) ||
-      data.fullName.toLowerCase().includes(query)
-    );
-  });
+    return Object.entries(cities).filter(([city, data]) => {
+      return (
+        city.toLowerCase().includes(query) ||
+        data.code.toLowerCase().includes(query) ||
+        data.name.toLowerCase().includes(query) ||
+        data.airport.toLowerCase().includes(query) ||
+        data.fullName.toLowerCase().includes(query)
+      );
+    });
+  }, [searchQuery, cities]);
 
   // Filter popular destinations based on search query
   const popularDestinations =
