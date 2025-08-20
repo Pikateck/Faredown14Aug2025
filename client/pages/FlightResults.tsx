@@ -5833,7 +5833,16 @@ export default function FlightResults() {
           }
           setBargainCtx(null);
         }}
-        attempt={1}
+        onRetry={() => {
+          console.log('🔄 Retry requested - incrementing attempt');
+          if (bargainCtx) {
+            setBargainCtx({
+              ...bargainCtx,
+              attempt: Math.min(bargainCtx.attempt + 1, 3)
+            });
+          }
+        }}
+        attempt={bargainCtx?.attempt || 1}
       />
 
       {/* Sign In Modal */}
