@@ -337,6 +337,20 @@ export default function FlightResults() {
   } = useDateContext();
   const userName = user?.name || "";
 
+  // Mobile detection
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   // Live flight data states - Initialize with basic demo flights
   const [flights, setFlights] = useState<Flight[]>([
     {
