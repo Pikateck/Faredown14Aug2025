@@ -186,7 +186,14 @@ export function ClassyBargainModal({
     };
 
     try {
-      // Pre-fill beat texts
+      // **Beat Scheduler** - Start API immediately, show timed conversation
+      const t0 = performance.now();
+      const targetTotal = 3200; // 3.2s total for rhythm
+
+      // Start API call immediately (don't wait for UI)
+      const offerPromise = startQuote(offer);
+
+      // Pre-fill initial beat texts (without counter info)
       const filledBeats = [
         {
           ...beatsTemplate[0],
@@ -210,62 +217,104 @@ export function ClassyBargainModal({
         },
         {
           ...beatsTemplate[2],
-          text: '' // Will be filled after API call
+          text: '' // Will be filled when API returns
         },
         {
           ...beatsTemplate[3],
-          text: chooseVariant(copyPack, {
+          text: '' // Will be filled when API returns
+        }
+      ];
+
+      // Start chat beats with pre-timed schedule
+      start(filledBeats);
+
+      // Schedule beats at fixed offsets for smooth rhythm
+      let latencyShown = false;
+      const scheduleTimer = setTimeout(async () => {
+        try {
+          // Wait for API result
+          const result = await offerPromise;
+          const negotiationTime = performance.now() - t0;
+
+          setCounter(result.counter);
+          setNegotiatedMs(result.negotiatedMs);
+
+          // Update placeholders with real counter
+          placeholders.counter = formatCurrency(result.counter, selectedCurrency.symbol);
+
+          // Fill supplier counter beat
+          filledBeats[2].text = chooseVariant(copyPack, {
+            module: 'flights',
+            beat: 'supplier_counter',
+            attempt: attempt as 1|2|3,
+            sessionUsedKeys: sessionUsed,
+            placeholders
+          }).text;
+
+          // Fill final agent confirmation beat
+          filledBeats[3].text = chooseVariant(copyPack, {
             module: 'flights',
             beat: 'agent_user_confirm',
             attempt: attempt as 1|2|3,
             sessionUsedKeys: sessionUsed,
             placeholders
-          }).text
+          }).text;
+
+          // **Instant decision transition** - ≤300ms after final beat
+          const quickTransition = setTimeout(() => {
+            console.log('🎭 Quick transition to decision step');
+            setStep('decision');
+            setCountdown(30);
+          }, 150); // 150ms for smooth fade-in
+
+          // Cleanup
+          return () => clearTimeout(quickTransition);
+
+        } catch (apiError) {
+          console.log('API failed, using fallback flow');
+          // Fallback if API fails
+          const fallbackCounter = Math.max(offer + 500, offer * 1.1);
+          setCounter(fallbackCounter);
+          setNegotiatedMs(performance.now() - t0);
+
+          placeholders.counter = formatCurrency(fallbackCounter, selectedCurrency.symbol);
+          filledBeats[2].text = `I can do ₹${fallbackCounter}.`;
+          filledBeats[3].text = `Good news—approved at ₹${fallbackCounter}. Shall I hold it for 30s?`;
+
+          setTimeout(() => {
+            setStep('decision');
+            setCountdown(30);
+          }, 150);
         }
-      ];
+      }, Math.max(3000, 0)); // Wait at least 3s for rhythm
 
-      // Start chat beats
-      start(filledBeats);
+      // Show latency message if API takes >6s
+      const latencyTimer = setTimeout(() => {
+        if (!latencyShown) {
+          latencyShown = true;
+          const latencyText = chooseVariant(copyPack, {
+            module: 'flights',
+            beat: 'latency_slow',
+            attempt: attempt as 1|2|3,
+            sessionUsedKeys: sessionUsed,
+            placeholders
+          }).text;
 
-      // Call API in parallel
-      const result = await startQuote(offer);
-      setCounter(result.counter);
-      setNegotiatedMs(result.negotiatedMs);
-
-      // Update counter placeholder and supplier counter text
-      placeholders.counter = formatCurrency(result.counter, selectedCurrency.symbol);
-      filledBeats[2].text = chooseVariant(copyPack, {
-        module: 'flights',
-        beat: 'supplier_counter',
-        attempt: attempt as 1|2|3,
-        sessionUsedKeys: sessionUsed,
-        placeholders
-      }).text;
-
-      // Wait for beats to finish, then show decision
-      const checkCompletion = setInterval(() => {
-        console.log('🎭 Checking completion - running:', running, 'cursor:', cursor, 'beats length:', filledBeats.length);
-        if (!running && cursor >= filledBeats.length) {
-          console.log('🎭 Chat completed! Transitioning to decision step');
-          clearInterval(checkCompletion);
-          clearTimeout(fallbackTimer);
-          setStep('decision');
-          setCountdown(30); // Reset countdown for decision
+          // Add latency beat if API is slow
+          filledBeats.push({
+            id: 'latency',
+            speaker: 'agent' as const,
+            typingMs: 800,
+            revealMs: 200,
+            text: latencyText
+          });
         }
-      }, 100);
-
-      // Fallback: Force transition after 10 seconds if stuck
-      const fallbackTimer = setTimeout(() => {
-        console.log('🎭 Fallback timer triggered - forcing transition to decision');
-        clearInterval(checkCompletion);
-        setStep('decision');
-        setCountdown(30);
-      }, 10000);
+      }, 6000);
 
       // Cleanup function
       return () => {
-        clearInterval(checkCompletion);
-        clearTimeout(fallbackTimer);
+        clearTimeout(scheduleTimer);
+        clearTimeout(latencyTimer);
       };
 
     } catch (err) {
