@@ -1033,6 +1033,7 @@ export default function Index() {
                     <button
                       onClick={() => {
                         console.log('From button clicked');
+                        alert('From button clicked!');
                         setShowFromCities(true);
                       }}
                       className="w-full text-left"
