@@ -362,6 +362,20 @@
             "text": "Time-sensitive: ₹{counter} approved. Hold now for 30s?",
             "w": 1
           }
+        ],
+        "latency_slow": [
+          {
+            "text": "Thanks for waiting—confirming the final number…",
+            "w": 3
+          },
+          {
+            "text": "Almost done—securing availability…",
+            "w": 2
+          },
+          {
+            "text": "Just a moment—finalizing your price…",
+            "w": 1
+          }
         ]
       }
     },
