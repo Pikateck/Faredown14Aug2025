@@ -243,7 +243,7 @@ export function ClassyBargainModal({
       // Update counter placeholder and supplier counter text
       placeholders.counter = formatCurrency(result.counter, selectedCurrency.symbol);
       filledBeats[2].text = chooseVariant(copyPack, {
-        module: 'flights',
+        module: moduleType,
         beat: 'supplier_counter',
         attempt: attempt as 1|2|3,
         sessionUsedKeys: sessionUsed,
@@ -251,7 +251,7 @@ export function ClassyBargainModal({
       }).text;
 
       filledBeats[3].text = chooseVariant(copyPack, {
-        module: 'flights',
+        module: moduleType,
         beat: 'agent_user_confirm',
         attempt: attempt as 1|2|3,
         sessionUsedKeys: sessionUsed,
