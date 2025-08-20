@@ -548,7 +548,11 @@ export default function FlightResults() {
     symbol: "₹",
     name: "Indian Rupee",
   });
-  // Old AI bargain state variables removed - ClassyBargainModal handles this internally
+  // Temporary variables for legacy UI (should be removed when old UI is cleaned up)
+  const [duplicatePriceError, setDuplicatePriceError] = useState(false);
+  const [usedPrices, setUsedPrices] = useState<Set<string>>(new Set());
+  const [aiOfferPrice, setAiOfferPrice] = useState<number | null>(null);
+  const [isOfferValid, setIsOfferValid] = useState(false);
 
 
   // Load flights from Amadeus API
