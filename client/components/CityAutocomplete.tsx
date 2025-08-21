@@ -6,6 +6,7 @@ type Props = {
   placeholder?: string;
   value: Airport | null;
   onChange: (a: Airport | null) => void;
+  onSelectAsync?: (a: Airport) => Promise<void>;
   autoFocus?: boolean;
   className?: string;
 };
