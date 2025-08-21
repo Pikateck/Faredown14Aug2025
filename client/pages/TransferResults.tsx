@@ -122,6 +122,7 @@ export default function TransferResults() {
   const [selectedTransfer, setSelectedTransfer] = useState<Transfer | null>(
     null,
   );
+  const [showConversationalBargain, setShowConversationalBargain] = useState(false);
 
   // Selection state for mobile
   const [selectedTransfers, setSelectedTransfers] = useState<Set<string>>(
