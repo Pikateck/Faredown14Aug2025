@@ -49,6 +49,7 @@ import {
   BookOpen,
   Award,
   Heart,
+  TrendingDown,
   LogOut,
   Settings,
   CreditCard,
