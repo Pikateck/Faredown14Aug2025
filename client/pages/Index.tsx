@@ -1089,7 +1089,10 @@ export default function Index() {
                 Round trip
               </button>
               <button
-                onClick={() => setTripType("one-way")}
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  setTripType("one-way");
+                }}
                 className={cn(
                   "flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors",
                   tripType === "one-way"
