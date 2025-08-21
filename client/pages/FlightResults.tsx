@@ -3307,18 +3307,17 @@ export default function FlightResults() {
                         >
                           View Details
                         </Button>
-                        <Button
-                          type="button"
-                          className="px-4 py-2 rounded-lg bg-[#febb02] text-black hover:bg-[#e6a602] font-medium text-sm flex items-center gap-2"
+                        <BargainButton
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            console.log("🎯 Enhanced Bargain clicked (desktop):", flight.id);
-                            handleEnhancedBargain(flight);
+                            handleConversationalBargain(flight);
                           }}
+                          size="sm"
+                          className="flex items-center gap-2"
                         >
                           🎯 Bargain Now
-                        </Button>
+                        </BargainButton>
                       </div>
                     </div>
                   </div>
