@@ -1800,7 +1800,10 @@ export default function Index() {
                     <div className="flex items-center bg-white rounded-lg p-2 sm:p-3 flex-1 w-full border sm:border-0">
                       <div className="flex flex-wrap items-center gap-2 sm:gap-3 md:gap-6 w-full sm:w-auto">
                         <button
-                          onClick={() => setTripType("round-trip")}
+                          onMouseDown={(e) => {
+                            e.preventDefault();
+                            setTripType("round-trip");
+                          }}
                           className="flex items-center space-x-2"
                         >
                           <div
