@@ -418,6 +418,9 @@ export default function FlightResults() {
       )?.[0];
       if (fromCity) {
         setSelectedFromCity(fromCity);
+      } else {
+        // If no matching city found, set the code directly for display
+        setSelectedFromCity(fromParam);
       }
     }
 
@@ -427,6 +430,9 @@ export default function FlightResults() {
       )?.[0];
       if (toCity) {
         setSelectedToCity(toCity);
+      } else {
+        // If no matching city found, set the code directly for display
+        setSelectedToCity(toParam);
       }
     }
   }, [searchParams, loadDatesFromParams]);
