@@ -632,7 +632,8 @@ export function MobileClassDropdown({
         {classOptions.map((option) => (
           <button
             key={option.value}
-            onClick={() => {
+            onMouseDown={(e) => {
+              e.preventDefault();
               onSelectClass(option.value);
               onClose();
             }}
