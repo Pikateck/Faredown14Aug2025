@@ -1541,8 +1541,8 @@ export default function FlightResults() {
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
                       <span className="text-base font-semibold text-gray-900">
-                        {selectedFromCity && selectedToCity
-                          ? `${cityData[selectedFromCity]?.code || ""} → ${cityData[selectedToCity]?.code || ""}`
+                        {fromCode && toCode
+                          ? `${fromCode} → ${toCode}`
                           : "Flight Search"}
                       </span>
                       <div className="flex items-center gap-1">
