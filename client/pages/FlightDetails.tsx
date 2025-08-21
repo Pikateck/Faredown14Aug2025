@@ -136,28 +136,51 @@ export default function FlightDetails({
     providedFlight || fallbackFlight,
   );
 
+  // Create segments from flight data if not present
+  const createSegments = (flight: any) => {
+    if (flight.segments?.length) return flight.segments;
+
+    return [{
+      carrierCode: flight.airlineCode || "6E",
+      flightNumber: flight.flightNumber || "1407",
+      origin: {
+        code: flight.departure?.code || fromCode,
+        name: flight.departure?.name || airportData[fromCode]?.name || "Unknown Airport",
+        time: flight.departureTime || "14:30"
+      },
+      destination: {
+        code: flight.arrival?.code || toCode,
+        name: flight.arrival?.name || airportData[toCode]?.name || "Unknown Airport",
+        time: flight.arrivalTime || "16:00"
+      },
+      durationMinutes: 210
+    }];
+  };
+
   // Orient flight segments to match URL route
-  const flight = baseFlight ? {
+  const orientedItinerary = baseFlight ? orientSegmentsToRoute({
+    id: baseFlight.id,
+    segments: createSegments(baseFlight)
+  }, fromCode, toCode) : null;
+
+  // Create properly oriented flight object
+  const flight = baseFlight && orientedItinerary ? {
     ...baseFlight,
-    ...orientSegmentsToRoute({
-      id: baseFlight.id,
-      segments: baseFlight.segments || [{
-        carrierCode: baseFlight.airlineCode || "6E",
-        flightNumber: baseFlight.flightNumber || "1407",
-        origin: {
-          code: baseFlight.departure?.code || fromCode,
-          name: baseFlight.departure?.name || airportData[fromCode]?.name || "Unknown Airport",
-          time: baseFlight.departureTime || "14:30"
-        },
-        destination: {
-          code: baseFlight.arrival?.code || toCode,
-          name: baseFlight.arrival?.name || airportData[toCode]?.name || "Unknown Airport",
-          time: baseFlight.arrivalTime || "16:00"
-        },
-        durationMinutes: 210
-      }]
-    }, fromCode, toCode)
-  } : null;
+    segments: orientedItinerary.segments,
+    // Update departure/arrival to match oriented segments
+    departure: {
+      ...baseFlight.departure,
+      code: orientedItinerary.segments[0]?.origin?.code || fromCode,
+      name: orientedItinerary.segments[0]?.origin?.name || airportData[fromCode]?.name || "Unknown Airport",
+      city: airportData[orientedItinerary.segments[0]?.origin?.code || fromCode]?.city || "Unknown"
+    },
+    arrival: {
+      ...baseFlight.arrival,
+      code: orientedItinerary.segments[orientedItinerary.segments.length - 1]?.destination?.code || toCode,
+      name: orientedItinerary.segments[orientedItinerary.segments.length - 1]?.destination?.name || airportData[toCode]?.name || "Unknown Airport",
+      city: airportData[orientedItinerary.segments[orientedItinerary.segments.length - 1]?.destination?.code || toCode]?.city || "Unknown"
+    }
+  } : baseFlight;
 
   // Get oriented route ends
   const { from: orientedFrom, to: orientedTo } = flight?.segments ? getRouteEnds(flight.segments) : { from: fromCode, to: toCode };
