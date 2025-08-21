@@ -1689,7 +1689,7 @@ export default function FlightResults() {
                       { code: "fr", name: "Français", flag: "🇫������" },
                       { code: "de", name: "Deutsch", flag: "🇩🇪" },
                       { code: "it", name: "Italiano", flag: "🇮🇹" },
-                      { code: "pt", name: "Portugu��s", flag: "🇵🇹" },
+                      { code: "pt", name: "Portugu��s", flag: "🇵���" },
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
                       { code: "hi", name: "हिन्दी", flag: "�������" },
                       { code: "ja", name: "日本語", flag: "🇯🇵" },
@@ -2888,10 +2888,10 @@ export default function FlightResults() {
                                 {flight.arrivalTime}
                               </div>
                               <div className="text-sm text-gray-600 font-medium">
-                                {flight.arrivalCode || "DXB"}
+                                {toCode || flight.arrivalCode || "DXB"}
                               </div>
                               <div className="text-xs text-gray-500">
-                                {flight.arrival?.city || "Dubai"}
+                                {toCityName || flight.arrival?.city || "Dubai"}
                               </div>
                             </div>
                           </div>
