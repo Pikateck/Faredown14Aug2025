@@ -3,6 +3,7 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useDateContext } from "@/contexts/DateContext";
 import "../styles/filter-inputs.css";
+import "../styles/bargain-button.css";
 import { flightsService, Flight } from "@/services/flightsService";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,6 +12,8 @@ import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { MobileNavigation } from "@/components/mobile/MobileNavigation";
 import EnhancedBargainModal from "@/components/EnhancedBargainModal";
+import ConversationalBargainModal from "@/components/ConversationalBargainModal";
+import { BargainButton } from "@/components/ui/BargainButton";
 import {
   Dialog,
   DialogContent,
@@ -408,6 +411,7 @@ export default function FlightResults() {
   const [showEnhancedBargain, setShowEnhancedBargain] = useState(false);
   const [selectedBargainFlight, setSelectedBargainFlight] = useState<(typeof flightData)[0] | null>(null);
   const [selectedBargainFareType, setSelectedBargainFareType] = useState<any>(null);
+  const [showConversationalBargain, setShowConversationalBargain] = useState(false);
 
   // Load dates and city selections from URL parameters when component mounts
   useEffect(() => {
