@@ -5744,12 +5744,7 @@ export default function FlightResults() {
         }}
         onRetry={() => {
           console.log("🔄 Retry requested - incrementing attempt");
-          if (bargainCtx) {
-            setBargainCtx({
-              ...bargainCtx,
-              attempt: Math.min(bargainCtx.attempt + 1, 3),
-            });
-          }
+          // Removed old bargain logic
         }}
         attempt={bargainCtx?.attempt || 1}
         moduleType="flights"
