@@ -1968,7 +1968,8 @@ export default function Index() {
                         Travel dates
                       </label>
                       <button
-                        onClick={() => {
+                        onMouseDown={(e) => {
+                          e.preventDefault();
                           if (!showCalendar) {
                             setSelectingDeparture(true);
                             setCurrentMonth(new Date().getMonth());
