@@ -1159,7 +1159,8 @@ export default function Index() {
                   </div>
 
                   <button
-                    onClick={() => {
+                    onMouseDown={(e) => {
+                      e.preventDefault();
                       const temp = selectedFromCity;
                       setSelectedFromCity(selectedToCity);
                       setSelectedToCity(temp);
@@ -2674,7 +2675,7 @@ export default function Index() {
                 {[
                   {
                     name: "Priya Sharma",
-                    location: "Mumbai • Verified Traveler",
+                    location: "Mumbai �� Verified Traveler",
                     review:
                       "Saved ₹15,000 on my Dubai trip! The bargaining feature is amazing. Got business class for economy price.",
                     rating: 5,
