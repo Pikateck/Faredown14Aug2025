@@ -91,10 +91,18 @@ export const DateProvider: React.FC<DateProviderProps> = ({ children }) => {
       const returnParam = searchParams.get("returnDate");
       const tripTypeParam = searchParams.get("tripType");
 
+      console.log('📅 DateContext loading dates from params:', {
+        departureParam,
+        returnParam,
+        tripTypeParam
+      });
+
       if (departureParam) {
         try {
-          const departureDateObj = new Date(departureParam);
+          // Parse date as local time to avoid timezone issues
+          const departureDateObj = new Date(departureParam + 'T00:00:00');
           if (!isNaN(departureDateObj.getTime())) {
+            console.log('📅 Setting departure date:', departureDateObj.toDateString());
             setDepartureDate(departureDateObj);
           }
         } catch (error) {
@@ -102,10 +110,12 @@ export const DateProvider: React.FC<DateProviderProps> = ({ children }) => {
         }
       }
 
-      if (returnParam && tripType === "round-trip") {
+      if (returnParam && (tripType === "round-trip" || tripTypeParam === "round-trip" || tripTypeParam === "round_trip")) {
         try {
-          const returnDateObj = new Date(returnParam);
+          // Parse date as local time to avoid timezone issues
+          const returnDateObj = new Date(returnParam + 'T00:00:00');
           if (!isNaN(returnDateObj.getTime())) {
+            console.log('📅 Setting return date:', returnDateObj.toDateString());
             setReturnDate(returnDateObj);
           }
         } catch (error) {
@@ -115,9 +125,10 @@ export const DateProvider: React.FC<DateProviderProps> = ({ children }) => {
 
       if (
         tripTypeParam &&
-        ["round-trip", "one-way", "multi-city"].includes(tripTypeParam)
+        ["round-trip", "one-way", "multi-city", "round_trip", "one_way", "multi_city"].includes(tripTypeParam)
       ) {
-        setTripType(tripTypeParam as "round-trip" | "one-way" | "multi-city");
+        const normalizedTripType = tripTypeParam.replace("_", "-") as "round-trip" | "one-way" | "multi-city";
+        setTripType(normalizedTripType);
       }
     },
     [tripType],
