@@ -3030,8 +3030,8 @@ export default function BookingFlow() {
                         {/* Outbound Flight Fare Rules */}
                         <div className="bg-[#f8fafc] rounded-lg p-4 border border-[#e2e8f0]">
                           <h4 className="font-medium text-gray-900 mb-3">
-                            Outbound: {selectedFlight?.from || "Mumbai"} →{" "}
-                            {selectedFlight?.to || "Dubai"}
+                            Outbound: {selectedFlight?.from || fromCity} →{" "}
+                            {selectedFlight?.to || toCity}
                           </h4>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                             <div>
