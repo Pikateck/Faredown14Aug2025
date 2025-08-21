@@ -6509,6 +6509,59 @@ export default function FlightResults() {
       />
 
       <MobileNavigation />
+
+      {/* Enhanced Bargain Modal with Timer System */}
+      <EnhancedBargainModal
+        isOpen={showEnhancedBargain}
+        flight={selectedBargainFlight ? {
+          id: selectedBargainFlight.id.toString(),
+          airline: selectedBargainFlight.airline,
+          flightNumber: selectedBargainFlight.flightNumber || `FL${selectedBargainFlight.id}`,
+          departureCode: selectedBargainFlight.origin || searchParams.get("from") || "BOM",
+          arrivalCode: selectedBargainFlight.destination || searchParams.get("to") || "DXB",
+          departureTime: selectedBargainFlight.departureTime,
+          arrivalTime: selectedBargainFlight.arrivalTime,
+          duration: selectedBargainFlight.duration,
+          aircraft: selectedBargainFlight.aircraft || "Boeing 777",
+          price: selectedBargainFlight.price?.amount || selectedBargainFlight.fareTypes[0]?.price || 0,
+        } : null}
+        selectedFareType={selectedBargainFareType}
+        onClose={() => {
+          setShowEnhancedBargain(false);
+          setSelectedBargainFlight(null);
+          setSelectedBargainFareType(null);
+        }}
+        onAccept={(finalPrice, orderRef) => {
+          console.log("Bargain accepted:", finalPrice, orderRef);
+          if (selectedBargainFlight && selectedBargainFareType) {
+            navigate("/booking-flow", {
+              state: {
+                selectedFlight: selectedBargainFlight,
+                selectedFareType: {
+                  ...selectedBargainFareType,
+                  price: finalPrice,
+                },
+                passengerCount: { adults, children },
+              },
+            });
+          }
+          setShowEnhancedBargain(false);
+        }}
+        onHold={(orderRef) => {
+          console.log("Booking with hold:", orderRef);
+          if (selectedBargainFlight && selectedBargainFareType) {
+            navigate("/booking-flow", {
+              state: {
+                selectedFlight: selectedBargainFlight,
+                selectedFareType: selectedBargainFareType,
+                passengerCount: { adults, children },
+                holdRef: orderRef,
+              },
+            });
+          }
+          setShowEnhancedBargain(false);
+        }}
+      />
     </div>
   );
 }
