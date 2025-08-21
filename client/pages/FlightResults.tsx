@@ -3228,8 +3228,8 @@ export default function FlightResults() {
                                         All taxes and fees included
                                       </p>
                                     </div>
-                                    {/* Tooltip arrow pointing to info icon */}
-                                    <div className="absolute right-full top-1/2 transform -translate-y-1/2 w-0 h-0 border-t-4 border-b-4 border-r-4 border-transparent border-r-white"></div>
+                                    {/* Tooltip arrow pointing to info icon from left */}
+                                    <div className="absolute left-full top-1/2 transform -translate-y-1/2 w-0 h-0 border-t-4 border-b-4 border-l-4 border-transparent border-l-white"></div>
                                   </div>
                                 </div>
                               </div>
@@ -3768,7 +3768,7 @@ export default function FlightResults() {
                                               </p>
                                               <div className="bg-gray-50 rounded-lg p-3 text-xs text-gray-600 space-y-2 leading-relaxed">
                                                 <p>
-                                                  �� Direct flights are usually
+                                                  • Direct flights are usually
                                                   cheaper than refundable
                                                   flights. However, you may have
                                                   to pay a large fee to cancel
