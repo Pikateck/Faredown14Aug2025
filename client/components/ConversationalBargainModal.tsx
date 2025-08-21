@@ -77,8 +77,8 @@ const ConversationalBargainModal: React.FC<Props> = ({
   userName = "traveler",
   module = "flights",
 }) => {
-  // Modal phases: input -> negotiating -> offer -> holding -> expired
-  const [phase, setPhase] = useState<"input" | "negotiating" | "offer" | "holding" | "expired">("input");
+  // Modal phases: input -> negotiating -> offer -> holding -> expired -> max_rounds_reached
+  const [phase, setPhase] = useState<"input" | "negotiating" | "offer" | "holding" | "expired" | "max_rounds_reached">("input");
   const [userPrice, setUserPrice] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [currentStep, setCurrentStep] = useState<"supplier_check" | "agent_offer" | "supplier_counter" | "agent_confirm">("supplier_check");
@@ -90,6 +90,7 @@ const ConversationalBargainModal: React.FC<Props> = ({
   const [showConfirmButtons, setShowConfirmButtons] = useState(false);
   const [isHolding, setIsHolding] = useState(false);
   const [isExpired, setIsExpired] = useState(false);
+  const MAX_ROUNDS = 3;
 
   // Get module-specific copy and icons
   const moduleCopy = copyPacks.modules[module] || copyPacks.modules.flights;
@@ -100,6 +101,13 @@ const ConversationalBargainModal: React.FC<Props> = ({
     transfers: Car,
   };
   const SupplierIcon = supplierIcons[module];
+
+  const moduleIcons = {
+    flights: "✈️",
+    hotels: "🏨",
+    sightseeing: "📍",
+    transfers: "🚖",
+  };
 
   const supplierNames = {
     flights: "Airline",
@@ -295,16 +303,28 @@ const ConversationalBargainModal: React.FC<Props> = ({
   }, [isHolding, isExpired, onHold]);
 
   const handleBargainAgain = useCallback(() => {
-    if (isHolding || round >= 3) return;
+    if (isHolding || round >= MAX_ROUNDS) return;
+    
+    // Check if we've reached max rounds
+    if (round >= MAX_ROUNDS) {
+      setPhase("max_rounds_reached");
+      setTimerActive(false);
+      setShowConfirmButtons(false);
+      
+      addMessage("agent", "Your bargain window has expired. Please search again for fresh deals.");
+      return;
+    }
     
     setTimerActive(false);
     setShowConfirmButtons(false);
     setRound(prev => prev + 1);
-    setPhase("negotiating");
-    
-    // Start new round
-    setTimeout(() => moveToAgentOffer(), 500);
-  }, [isHolding, round, moveToAgentOffer]);
+    setPhase("input"); // Go back to input phase for new price
+    setUserPrice(""); // Clear previous price
+    // Keep messages but reset other states
+    setIsTyping(false);
+    setIsExpired(false);
+    setFinalPrice(0);
+  }, [isHolding, round, MAX_ROUNDS, addMessage]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -316,89 +336,97 @@ const ConversationalBargainModal: React.FC<Props> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-lg mx-auto bg-white rounded-2xl shadow-2xl border-0 p-0 gap-0 max-h-[85vh] overflow-hidden">
-        {/* Elegant Header */}
-        <div className="relative bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-t-2xl border-b border-gray-100">
+      <DialogContent className="max-w-lg mx-auto bg-white rounded-3xl shadow-2xl border-0 p-0 gap-0 max-h-[90vh] overflow-hidden">
+        {/* Premium Header */}
+        <div className="relative bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-6 rounded-t-3xl border-b border-gray-100">
           <Button
             variant="ghost"
             size="sm"
             onClick={onClose}
-            className="absolute top-4 right-4 h-8 w-8 p-0 rounded-full hover:bg-white/50 transition-colors"
+            className="absolute top-4 right-4 h-10 w-10 p-0 rounded-full hover:bg-white/60 transition-all duration-200 backdrop-blur-sm"
           >
-            <X className="h-4 w-4 text-gray-600" />
+            <X className="h-5 w-5 text-gray-600" />
           </Button>
           
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white">
-              <SupplierIcon className="w-5 h-5" />
+          <div className="flex items-center gap-4 mb-2">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-lg">
+              <span className="text-2xl">{moduleIcons[module]}</span>
             </div>
             <div>
-              <h2 className="text-xl font-bold text-gray-900">AI Price Negotiation</h2>
-              <p className="text-sm text-gray-600">
+              <h2 className="text-2xl font-bold text-gray-900 mb-1">AI Price Negotiation</h2>
+              <p className="text-sm text-gray-600 font-medium">
                 {module === "flights" && `${flight.airline} ${flight.flightNumber}`}
                 {module === "hotels" && "Hotel Booking"}
                 {module === "sightseeing" && "Tour Booking"}
                 {module === "transfers" && "Transfer Booking"}
               </p>
+              {round > 1 && (
+                <p className="text-xs text-blue-600 font-semibold mt-1">
+                  Round {round} of {MAX_ROUNDS}
+                </p>
+              )}
             </div>
           </div>
         </div>
 
-        {/* Input Phase - Elegant Design */}
+        {/* Input Phase - Premium Design */}
         {phase === "input" && (
-          <div className="p-8 space-y-6">
+          <div className="p-8 space-y-8">
             <div className="text-center">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center">
-                <span className="text-2xl">💰</span>
+              <div className="w-20 h-20 mx-auto mb-6 rounded-3xl bg-gradient-to-br from-yellow-400 via-orange-400 to-red-500 flex items-center justify-center shadow-xl">
+                <span className="text-3xl">💰</span>
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-3">
-                What's your target price?
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                {round === 1 ? "What's your target price?" : "Enter your new desired price"}
               </h3>
               <p className="text-gray-600 text-lg leading-relaxed">
-                Our AI will negotiate with the {supplierNames[module]} on your behalf
+                {round === 1 
+                  ? `Our AI will negotiate with the ${supplierNames[module]} on your behalf`
+                  : "Let's try a different price for round " + round
+                }
               </p>
             </div>
             
-            <div className="space-y-5">
+            <div className="space-y-6">
               <div className="relative">
-                <label className="block text-base font-semibold text-gray-800 mb-3">
+                <label className="block text-lg font-semibold text-gray-800 mb-4">
                   Enter your desired price
                 </label>
-                <div className="relative">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-xl font-semibold text-gray-700">₹</span>
+                <div className="relative group">
+                  <span className="absolute left-5 top-1/2 -translate-y-1/2 text-2xl font-bold text-gray-700">₹</span>
                   <Input
                     type="number"
                     value={userPrice}
                     onChange={(e) => setUserPrice(e.target.value)}
                     placeholder="25,000"
-                    className="pl-10 text-xl h-14 bg-gray-50 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:bg-white transition-all"
+                    className="pl-12 text-2xl h-16 bg-gray-50 border-3 border-gray-200 rounded-2xl focus:border-blue-500 focus:bg-white transition-all duration-300 group-hover:border-gray-300"
                     min="1"
                   />
                 </div>
               </div>
               
-              <div className="bg-blue-50 rounded-xl p-4 text-center">
-                <p className="text-sm text-blue-700">
-                  <span className="font-semibold">Current price:</span> ₹{(selectedFareType?.price || flight.price).toLocaleString()}
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-5 text-center border border-blue-100">
+                <p className="text-sm text-blue-700 font-medium">
+                  <span className="font-bold">Current price:</span> ₹{(selectedFareType?.price || flight.price).toLocaleString()}
                 </p>
               </div>
               
               <BargainButton
                 onClick={startNegotiation}
                 disabled={!userPrice || parseInt(userPrice) <= 0}
-                className="w-full h-14 text-lg font-bold mt-6"
+                className="w-full h-16 text-xl font-bold mt-8 shadow-xl"
                 size="lg"
               >
-                🤖 Start AI Negotiation
+                🤖 {round === 1 ? "Start AI Negotiation" : `Continue Round ${round}`}
               </BargainButton>
             </div>
           </div>
         )}
 
-        {/* Chat Phase - Elegant Messages */}
+        {/* Chat Phase - Premium Messages */}
         {(phase === "negotiating" || phase === "offer" || phase === "holding") && (
-          <div className="flex flex-col max-h-[60vh]">
-            <div className="flex-1 overflow-y-auto p-6 space-y-4 scroll-smooth">
+          <div className="flex flex-col max-h-[65vh]">
+            <div className="flex-1 overflow-y-auto p-6 space-y-5 scroll-smooth">
               {messages.map((message, index) => {
                 const isLastAgentMessage = message.speaker === "agent" && 
                                          index === messages.length - 1 && 
@@ -407,43 +435,43 @@ const ConversationalBargainModal: React.FC<Props> = ({
                 
                 return (
                   <div key={message.id} className="flex gap-4 items-start">
-                    <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center shadow-sm ${
+                    <div className={`flex-shrink-0 w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg ${
                       message.speaker === "supplier" 
                         ? "bg-gradient-to-br from-blue-500 to-blue-600 text-white" 
                         : "bg-gradient-to-br from-green-500 to-green-600 text-white"
                     }`}>
                       {message.speaker === "supplier" ? (
-                        <SupplierIcon className="w-5 h-5" />
+                        <span className="text-lg">{moduleIcons[module]}</span>
                       ) : (
                         <span className="text-sm font-bold">AI</span>
                       )}
                     </div>
-                    <div className={`flex-1 max-w-sm rounded-2xl px-5 py-4 shadow-sm ${
+                    <div className={`flex-1 max-w-sm rounded-3xl px-6 py-5 shadow-lg border ${
                       message.speaker === "supplier"
-                        ? "bg-blue-50 text-blue-900 border border-blue-100"
-                        : "bg-green-50 text-green-900 border border-green-100"
+                        ? "bg-gradient-to-br from-blue-50 to-blue-100 text-blue-900 border-blue-200"
+                        : "bg-gradient-to-br from-green-50 to-green-100 text-green-900 border-green-200"
                     }`}>
-                      <div className="text-xs font-semibold opacity-70 mb-2 uppercase tracking-wide">
+                      <div className="text-xs font-bold opacity-70 mb-3 uppercase tracking-wider">
                         {message.speaker === "supplier" 
                           ? supplierNames[module]
                           : copyPacks.brand.negotiatorTitle
                         }
                       </div>
-                      <div className="text-sm leading-relaxed">
+                      <div className="text-sm leading-relaxed font-medium">
                         {message.message}
                       </div>
                       
                       {/* Timer and buttons inside the last Agent message */}
                       {isLastAgentMessage && showConfirmButtons && !isHolding && !isExpired && (
-                        <div className="mt-5 pt-4 border-t border-green-200">
-                          <div className="flex items-center justify-between mb-4">
-                            <span className="text-xs font-semibold text-green-700 uppercase tracking-wide">
+                        <div className="mt-6 pt-5 border-t border-green-300">
+                          <div className="flex items-center justify-between mb-5">
+                            <span className="text-xs font-bold text-green-700 uppercase tracking-wider">
                               Valid for:
                             </span>
-                            <div className={`px-3 py-2 rounded-xl font-mono text-sm font-bold shadow-sm ${
+                            <div className={`px-4 py-2 rounded-2xl font-mono text-lg font-bold shadow-lg transition-all duration-300 ${
                               timerSeconds <= 10 
-                                ? 'bg-red-500 text-white animate-pulse shadow-red-200' 
-                                : 'bg-white text-green-700 border border-green-200'
+                                ? 'bg-gradient-to-r from-red-500 to-red-600 text-white animate-pulse shadow-red-300 scale-110' 
+                                : 'bg-white text-green-700 border-2 border-green-300'
                             }`}>
                               {formatTime(timerSeconds)}
                             </div>
@@ -451,15 +479,15 @@ const ConversationalBargainModal: React.FC<Props> = ({
                           <div className="flex gap-3">
                             <Button
                               onClick={handleHold}
-                              className="flex-1 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold py-3 rounded-xl shadow-sm transition-all transform hover:scale-[1.02]"
+                              className="flex-1 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold py-4 rounded-2xl shadow-lg transition-all transform hover:scale-105 text-sm"
                             >
                               🔒 Place 30s Hold
                             </Button>
-                            {round < 3 && (
+                            {round < MAX_ROUNDS && (
                               <Button
                                 variant="outline"
                                 onClick={handleBargainAgain}
-                                className="flex-1 border-2 border-green-600 text-green-700 hover:bg-green-50 font-semibold py-3 rounded-xl transition-all"
+                                className="flex-1 border-3 border-green-600 text-green-700 hover:bg-green-50 font-bold py-4 rounded-2xl transition-all hover:scale-105 text-sm"
                               >
                                 Bargain Again
                               </Button>
@@ -472,16 +500,33 @@ const ConversationalBargainModal: React.FC<Props> = ({
                 );
               })}
               
+              {/* Max rounds reached message */}
+              {phase === "max_rounds_reached" && (
+                <div className="text-center py-8">
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-gray-400 to-gray-500 flex items-center justify-center">
+                    <span className="text-2xl">⏰</span>
+                  </div>
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">Bargain Window Expired</h3>
+                  <p className="text-gray-600 mb-4">You've reached the maximum of {MAX_ROUNDS} bargain attempts.</p>
+                  <Button
+                    onClick={onClose}
+                    className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 rounded-xl font-semibold"
+                  >
+                    Search Again for Fresh Deals
+                  </Button>
+                </div>
+              )}
+              
               {isTyping && (
                 <div className="flex gap-4 items-start">
-                  <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
-                    <div className="w-3 h-3 bg-gray-500 rounded-full animate-pulse" />
+                  <div className="flex-shrink-0 w-12 h-12 rounded-2xl bg-gray-200 flex items-center justify-center shadow-lg">
+                    <div className="w-4 h-4 bg-gray-500 rounded-full animate-pulse" />
                   </div>
-                  <div className="bg-gray-100 rounded-2xl px-5 py-4 border border-gray-200">
+                  <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-3xl px-6 py-5 border border-gray-300 shadow-lg">
                     <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-                      <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-                      <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                      <div className="w-3 h-3 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                      <div className="w-3 h-3 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                      <div className="w-3 h-3 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
                     </div>
                   </div>
                 </div>
