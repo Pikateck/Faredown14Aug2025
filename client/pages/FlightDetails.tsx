@@ -371,7 +371,7 @@ export default function FlightDetails({
                     })} • {displayFlight.arrivalTime}
                   </div>
                   <div className="font-bold text-gray-900 text-lg">
-                    {displayFlight.arrival.code} • {displayFlight.arrival.name}
+                    {lastSegment?.destination?.code || displayFlight.arrival.code} • {lastSegment?.destination?.name || displayFlight.arrival.name}
                   </div>
                 </div>
               </div>
