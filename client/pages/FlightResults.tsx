@@ -3025,21 +3025,6 @@ export default function FlightResults() {
                         >
                           View Details
                         </Button>
-                        <Button
-                          className="min-h-[44px] px-6 py-3 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold text-sm touch-manipulation flex items-center justify-center gap-2"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            console.log(
-                              "📱 Mobile Bargain Now clicked!",
-                              flight.id,
-                            );
-                            handleBargain(flight);
-                          }}
-                        >
-                          <TrendingDown className="w-4 h-4" />
-                          Bargain Now
-                        </Button>
                       </div>
                     </div>
                   </div>
