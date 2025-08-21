@@ -268,7 +268,8 @@ export function MobileCityDropdown({
             {filteredPopularDestinations.map((dest) => (
               <button
                 key={dest.id}
-                onClick={() => {
+                onMouseDown={(e) => {
+                  e.preventDefault();
                   onSelectCity(dest.name);
                   onClose();
                 }}
