@@ -3140,13 +3140,13 @@ export default function FlightResults() {
                                       {flight.returnDepartureTime}
                                     </div>
                                     <div className="text-sm text-gray-600 font-medium">
-                                      {flight.arrivalCode} •{" "}
-                                      {returnDate
-                                        ? formatDisplayDate(returnDate, "MMM d")
+                                      {toCode || flight.arrivalCode} •{" "}
+                                      {actualReturnDate
+                                        ? formatDisplayDate(actualReturnDate, "MMM d")
                                         : "Select return date"}
                                     </div>
                                     <div className="text-xs text-gray-500">
-                                      {flight.arrival?.city || "Dubai"}
+                                      {toCityName || flight.arrival?.city || "Dubai"}
                                     </div>
                                   </div>
                                   <div className="flex flex-col items-center">
