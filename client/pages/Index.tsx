@@ -1894,9 +1894,10 @@ export default function Index() {
                         </button>
                         <div className="relative">
                           <button
-                            onClick={() =>
-                              setShowClassDropdown(!showClassDropdown)
-                            }
+                            onMouseDown={(e) => {
+                              e.preventDefault();
+                              setShowClassDropdown(!showClassDropdown);
+                            }}
                             className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 px-2 py-1 rounded transition-colors"
                           >
                             <div className="w-3 h-3 border-2 border-gray-300 rounded-full"></div>
