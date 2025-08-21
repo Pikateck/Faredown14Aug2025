@@ -2404,7 +2404,7 @@ export default function FlightResults() {
                           value={option.value}
                           checked={selectedStops === option.value}
                           onChange={() => handleStopsFilter(option.value)}
-                          className="w-3 h-3 sm:w-4 sm:h-4 accent-blue-600"
+                          className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
                         />
                       </div>
                       {option.label}
@@ -2442,7 +2442,7 @@ export default function FlightResults() {
                           type="checkbox"
                           checked={selectedAirlines.has(airline)}
                           onChange={() => handleAirlineFilter(airline)}
-                          className="w-3 h-3 sm:w-4 sm:h-4 accent-blue-600"
+                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
                         />
                       </div>
                       <span
@@ -2494,7 +2494,7 @@ export default function FlightResults() {
                           type="checkbox"
                           checked={selectedAircraftTypes.has(aircraftType)}
                           onChange={() => handleAircraftTypeFilter(aircraftType)}
-                          className="w-4 h-4 accent-blue-600"
+                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
                         />
                       </div>
                       <span
@@ -3835,7 +3835,7 @@ export default function FlightResults() {
                                                   or change your flight.
                                                 </p>
                                                 <p>
-                                                  �� Cancellation/Flight change
+                                                  ���� Cancellation/Flight change
                                                   charges are indicated per
                                                   traveller. Clearing will stop
                                                   accepting cancellation/change
