@@ -68,16 +68,6 @@ export default function FlightDetails({
   const fromCode = searchParams.get("from") || "DXB";
   const toCode = searchParams.get("to") || "BOM";
 
-  // Debug logging
-  console.log("🛫 FlightDetails search params:", {
-    from: searchParams.get("from"),
-    to: searchParams.get("to"),
-    fromCode,
-    toCode,
-    departure: departureDate,
-    return: returnDate
-  });
-
   // Airport data mapping
   const airportData: Record<string, {city: string; name: string; terminal?: string}> = {
     "DXB": { city: "Dubai", name: "Dubai International Airport", terminal: "3" },
