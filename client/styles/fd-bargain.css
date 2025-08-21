@@ -528,7 +528,7 @@
   font-size: 1.2rem;
 }
 
-/* Mobile responsive adjustments */
+/* Mobile responsive adjustments for premium experience */
 @media (max-width: 768px) {
   .fd-modal {
     width: 100%;
@@ -537,20 +537,41 @@
     max-height: none;
   }
 
+  .fd-modal__hdr {
+    padding: 24px 20px 20px;
+    border-radius: 0;
+  }
+
+  .fd-body {
+    padding: 24px 20px;
+  }
+
   .fd-chat {
     max-height: 50vh;
+    padding: 20px 16px;
   }
 
   .fd-bubble {
     max-width: 85%;
+    padding: 14px 18px;
   }
 
   .fd-actions {
     flex-direction: column;
+    gap: 12px;
+  }
+
+  .fd-input {
+    margin: 20px 0;
+    padding: 16px 18px;
   }
 
   .fd-offerPrice {
-    font-size: 1.75rem;
+    font-size: 1.875rem;
+  }
+
+  .fd-label {
+    font-size: 1.25rem;
   }
 }
 
