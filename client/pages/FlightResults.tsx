@@ -5314,7 +5314,7 @@ export default function FlightResults() {
             </DialogTitle>
           </DialogHeader>
 
-          {bargainFlight && bargainFareType && (
+          {false && (
             <div className="space-y-4 md:space-y-6 p-3 md:p-6">
               {bargainStep === "input" && (
                 <>
