@@ -107,6 +107,7 @@ export default function SightseeingResults() {
   const [selectedAttraction, setSelectedAttraction] =
     useState<SightseeingAttraction | null>(null);
   const [isBargainModalOpen, setIsBargainModalOpen] = useState(false);
+  const [showConversationalBargain, setShowConversationalBargain] = useState(false);
 
   // Selection state for multiple attractions
   const [selectedAttractions, setSelectedAttractions] = useState<Set<string>>(
