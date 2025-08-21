@@ -29,7 +29,8 @@ export const FaredownButton: React.FC<FaredownButtonProps> = ({
 
   const variantClasses = {
     primary: "bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black",
-    secondary: "border-2 border-[#003580] bg-transparent hover:bg-[#003580] text-[#003580] hover:text-white",
+    secondary:
+      "border-2 border-[#003580] bg-transparent hover:bg-[#003580] text-[#003580] hover:text-white",
   };
 
   return (
@@ -49,16 +50,18 @@ export const FaredownButton: React.FC<FaredownButtonProps> = ({
         "flex items-center justify-center gap-2",
         variantClasses[variant],
         sizeClasses[size],
-        className
+        className,
       )}
     >
       {loading ? (
         <div className="flex items-center gap-2">
-          <div className={`w-4 h-4 border-2 rounded-full animate-spin ${
-            variant === "primary" 
-              ? "border-black/30 border-t-black" 
-              : "border-current/30 border-t-current"
-          }`} />
+          <div
+            className={`w-4 h-4 border-2 rounded-full animate-spin ${
+              variant === "primary"
+                ? "border-black/30 border-t-black"
+                : "border-current/30 border-t-current"
+            }`}
+          />
           <span>Loading...</span>
         </div>
       ) : (

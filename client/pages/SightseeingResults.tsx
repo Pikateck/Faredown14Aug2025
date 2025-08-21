@@ -108,7 +108,8 @@ export default function SightseeingResults() {
   const [selectedAttraction, setSelectedAttraction] =
     useState<SightseeingAttraction | null>(null);
   const [isBargainModalOpen, setIsBargainModalOpen] = useState(false);
-  const [showConversationalBargain, setShowConversationalBargain] = useState(false);
+  const [showConversationalBargain, setShowConversationalBargain] =
+    useState(false);
 
   // Selection state for multiple attractions
   const [selectedAttractions, setSelectedAttractions] = useState<Set<string>>(
@@ -696,12 +697,12 @@ export default function SightseeingResults() {
   };
 
   const handleAcceptBargain = (finalPrice: number, orderRef: string) => {
-    console.log('Sightseeing bargain accepted:', { finalPrice, orderRef });
+    console.log("Sightseeing bargain accepted:", { finalPrice, orderRef });
     setShowConversationalBargain(false);
   };
 
   const handleHoldBargain = (orderRef: string) => {
-    console.log('Sightseeing bargain held:', { orderRef });
+    console.log("Sightseeing bargain held:", { orderRef });
     setShowConversationalBargain(false);
   };
 
@@ -1213,21 +1214,27 @@ export default function SightseeingResults() {
       {/* Conversational Bargain Modal */}
       <ConversationalBargainModal
         isOpen={showConversationalBargain}
-        flight={selectedAttraction ? {
-          id: selectedAttraction.id.toString(),
-          airline: selectedAttraction.name,
-          flightNumber: "TOUR",
-          departureCode: "START",
-          arrivalCode: "END",
-          departureTime: "10:00",
-          arrivalTime: "18:00",
-          duration: "8 hours",
-          aircraft: "Tour Experience",
-          price: selectedAttraction.currentPrice || selectedAttraction.price,
-        } : null}
+        flight={
+          selectedAttraction
+            ? {
+                id: selectedAttraction.id.toString(),
+                airline: selectedAttraction.name,
+                flightNumber: "TOUR",
+                departureCode: "START",
+                arrivalCode: "END",
+                departureTime: "10:00",
+                arrivalTime: "18:00",
+                duration: "8 hours",
+                aircraft: "Tour Experience",
+                price:
+                  selectedAttraction.currentPrice || selectedAttraction.price,
+              }
+            : null
+        }
         selectedFareType={{
           name: "Standard Tour",
-          price: selectedAttraction?.currentPrice || selectedAttraction?.price || 0,
+          price:
+            selectedAttraction?.currentPrice || selectedAttraction?.price || 0,
           features: selectedAttraction?.highlights || [],
           baggage: "Guide included",
           refundability: "Flexible cancellation",

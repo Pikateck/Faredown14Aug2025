@@ -53,9 +53,12 @@ class BargainService {
       return await response.json();
     } catch (error) {
       console.error("Failed to start negotiation:", error);
-      
+
       // Fallback mock response for development
-      const mockOffer = this.generateMockOffer(request.user_price, request.original_price);
+      const mockOffer = this.generateMockOffer(
+        request.user_price,
+        request.original_price,
+      );
       return {
         negotiation_id: `neg_${Date.now()}`,
         round: 1,
@@ -82,7 +85,7 @@ class BargainService {
       return await response.json();
     } catch (error) {
       console.error("Failed to counter offer:", error);
-      
+
       // Fallback mock response
       return {
         negotiation_id: request.negotiation_id,
@@ -116,7 +119,7 @@ class BargainService {
       return await response.json();
     } catch (error) {
       console.error("Failed to place hold:", error);
-      
+
       // Fallback mock response
       return {
         hold_id: `hold_${Date.now()}`,
@@ -143,7 +146,7 @@ class BargainService {
       return await response.json();
     } catch (error) {
       console.error("Failed to refresh offer:", error);
-      
+
       // Fallback mock response
       return {
         negotiation_id: request.negotiation_id,
@@ -159,23 +162,29 @@ class BargainService {
     }
   }
 
-  private generateMockOffer(userPrice: number, originalPrice: number): BargainOffer {
+  private generateMockOffer(
+    userPrice: number,
+    originalPrice: number,
+  ): BargainOffer {
     const discountRequested = (originalPrice - userPrice) / originalPrice;
     let counterPrice: number;
 
     if (discountRequested <= 0.3) {
       // Small discount requested - likely to accept or counter close
-      counterPrice = Math.random() < 0.7 ? userPrice : Math.round(userPrice * 1.1);
+      counterPrice =
+        Math.random() < 0.7 ? userPrice : Math.round(userPrice * 1.1);
     } else if (discountRequested <= 0.5) {
       // Medium discount - counter somewhere in between
       const minOffer = Math.round(originalPrice * 0.7);
       const maxOffer = Math.round(originalPrice * 0.85);
-      counterPrice = Math.floor(Math.random() * (maxOffer - minOffer)) + minOffer;
+      counterPrice =
+        Math.floor(Math.random() * (maxOffer - minOffer)) + minOffer;
     } else {
       // Large discount requested - counter with smaller discount
       const minOffer = Math.round(originalPrice * 0.8);
       const maxOffer = Math.round(originalPrice * 0.9);
-      counterPrice = Math.floor(Math.random() * (maxOffer - minOffer)) + minOffer;
+      counterPrice =
+        Math.floor(Math.random() * (maxOffer - minOffer)) + minOffer;
     }
 
     return {
@@ -189,4 +198,10 @@ class BargainService {
 }
 
 export const bargainService = new BargainService();
-export type { BargainRequest, BargainResponse, BargainOffer, HoldRequest, HoldResponse };
+export type {
+  BargainRequest,
+  BargainResponse,
+  BargainOffer,
+  HoldRequest,
+  HoldResponse,
+};

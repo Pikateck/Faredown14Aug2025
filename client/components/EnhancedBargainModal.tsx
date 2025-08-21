@@ -1,5 +1,10 @@
 import React, { useState, useCallback } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import AgentOfferBubble from "./AgentOfferBubble";
 import { X } from "lucide-react";
@@ -81,33 +86,39 @@ export default function EnhancedBargainModal({
   const handleCounter = useCallback(async () => {
     if (!bargainState) return;
 
-    setBargainState(prev => prev ? { ...prev, phase: "negotiating" } : null);
+    setBargainState((prev) =>
+      prev ? { ...prev, phase: "negotiating" } : null,
+    );
 
     // Simulate API call delay
     setTimeout(() => {
       const newPrice = Math.max(
         parseInt(userPrice),
-        bargainState.offer.price_now - Math.floor(Math.random() * 2000)
+        bargainState.offer.price_now - Math.floor(Math.random() * 2000),
       );
 
-      setBargainState(prev => prev ? {
-        ...prev,
-        round: prev.round + 1,
-        offer: {
-          ...prev.offer,
-          price_now: newPrice,
-          expiry_ts: Date.now() + 30000, // New 30s timer
-        },
-        phase: "offer",
-      } : null);
+      setBargainState((prev) =>
+        prev
+          ? {
+              ...prev,
+              round: prev.round + 1,
+              offer: {
+                ...prev.offer,
+                price_now: newPrice,
+                expiry_ts: Date.now() + 30000, // New 30s timer
+              },
+              phase: "offer",
+            }
+          : null,
+      );
     }, 2000);
   }, [bargainState, userPrice]);
 
   const handleHold = useCallback(async () => {
     if (!bargainState) return;
 
-    setBargainState(prev => prev ? { ...prev, phase: "holding" } : null);
-    
+    setBargainState((prev) => (prev ? { ...prev, phase: "holding" } : null));
+
     // Simulate hold placement
     setTimeout(() => {
       onHold(`hold_${bargainState.negotiation_id}`);
@@ -118,17 +129,22 @@ export default function EnhancedBargainModal({
     if (!bargainState || !selectedFareType) return;
 
     // Generate a new offer after expiry
-    const refreshedPrice = selectedFareType.price - Math.floor(Math.random() * 1000);
-    
-    setBargainState(prev => prev ? {
-      ...prev,
-      offer: {
-        ...prev.offer,
-        price_now: refreshedPrice,
-        expiry_ts: Date.now() + 30000,
-      },
-      phase: "offer",
-    } : null);
+    const refreshedPrice =
+      selectedFareType.price - Math.floor(Math.random() * 1000);
+
+    setBargainState((prev) =>
+      prev
+        ? {
+            ...prev,
+            offer: {
+              ...prev.offer,
+              price_now: refreshedPrice,
+              expiry_ts: Date.now() + 30000,
+            },
+            phase: "offer",
+          }
+        : null,
+    );
   }, [bargainState, selectedFareType]);
 
   const resetModal = () => {
@@ -147,7 +163,9 @@ export default function EnhancedBargainModal({
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader className="flex flex-row items-center justify-between">
-          <DialogTitle className="text-xl font-bold">AI Price Negotiation</DialogTitle>
+          <DialogTitle className="text-xl font-bold">
+            AI Price Negotiation
+          </DialogTitle>
           <Button
             variant="ghost"
             size="sm"
@@ -164,7 +182,9 @@ export default function EnhancedBargainModal({
             <div className="flex justify-between items-start">
               <div>
                 <h3 className="font-semibold text-lg">{flight.airline}</h3>
-                <p className="text-gray-600">{selectedFareType.name} • {flight.flightNumber}</p>
+                <p className="text-gray-600">
+                  {selectedFareType.name} • {flight.flightNumber}
+                </p>
                 <p className="text-sm text-gray-500">
                   {flight.departureCode} → {flight.arrivalCode}
                 </p>
@@ -188,8 +208,8 @@ export default function EnhancedBargainModal({
                     <span className="text-white text-sm font-bold">AI</span>
                   </div>
                   <p className="text-emerald-800">
-                    <strong>Faredown Agent:</strong> I'll negotiate with {flight.airline} for you. 
-                    What price would you like to pay?
+                    <strong>Faredown Agent:</strong> I'll negotiate with{" "}
+                    {flight.airline} for you. What price would you like to pay?
                   </p>
                 </div>
               </div>
@@ -209,7 +229,9 @@ export default function EnhancedBargainModal({
                 />
                 <Button
                   onClick={startNegotiation}
-                  disabled={!userPrice || parseInt(userPrice) >= selectedFareType.price}
+                  disabled={
+                    !userPrice || parseInt(userPrice) >= selectedFareType.price
+                  }
                   className="w-full bg-blue-600 hover:bg-blue-700"
                 >
                   Start AI Negotiation
@@ -226,7 +248,8 @@ export default function EnhancedBargainModal({
                       <span className="text-white text-sm font-bold">AI</span>
                     </div>
                     <p className="text-blue-800">
-                      <strong>Faredown Agent:</strong> Negotiating with {flight.airline}...
+                      <strong>Faredown Agent:</strong> Negotiating with{" "}
+                      {flight.airline}...
                     </p>
                   </div>
                 </div>
@@ -250,7 +273,7 @@ export default function EnhancedBargainModal({
                       <span className="text-white text-sm">🔒</span>
                     </div>
                     <p className="text-green-800">
-                      <strong>Price locked</strong> — completing your booking... 
+                      <strong>Price locked</strong> — completing your booking...
                       (Hold expires in 30s)
                     </p>
                   </div>
@@ -261,9 +284,16 @@ export default function EnhancedBargainModal({
               <div className="bg-gray-50 rounded-lg p-3">
                 <div className="flex justify-between text-sm">
                   <span>Round: {bargainState.round}</span>
-                  <span>Current Offer: ₹{bargainState.offer.price_now.toLocaleString("en-IN")}</span>
                   <span>
-                    Savings: ₹{((bargainState.offer.was || selectedFareType.price) - bargainState.offer.price_now).toLocaleString("en-IN")}
+                    Current Offer: ₹
+                    {bargainState.offer.price_now.toLocaleString("en-IN")}
+                  </span>
+                  <span>
+                    Savings: ₹
+                    {(
+                      (bargainState.offer.was || selectedFareType.price) -
+                      bargainState.offer.price_now
+                    ).toLocaleString("en-IN")}
                   </span>
                 </div>
               </div>

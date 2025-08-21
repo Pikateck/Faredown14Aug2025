@@ -98,7 +98,9 @@ export function ClassyBargainModal({
         flight,
         fareType,
         isOpen,
-        routeInfo: flight ? `${flight.departureCode} → ${flight.arrivalCode}` : "No route data",
+        routeInfo: flight
+          ? `${flight.departureCode} → ${flight.arrivalCode}`
+          : "No route data",
       });
       setStep("input");
       setOffer(null);

@@ -50,7 +50,7 @@ export const BargainButton: React.FC<BargainButtonProps> = ({
         // Add a subtle shimmer effect
         "before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent before:translate-x-[-100%] hover:before:translate-x-[100%] before:transition-transform before:duration-700",
         sizeClasses[size],
-        className
+        className,
       )}
     >
       {loading ? (

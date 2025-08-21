@@ -49,7 +49,7 @@ export const ViewDetailsButton: React.FC<ViewDetailsButtonProps> = ({
         "disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100", // Disabled states
         "relative overflow-hidden", // For consistency
         sizeClasses[size],
-        className
+        className,
       )}
     >
       {loading ? (

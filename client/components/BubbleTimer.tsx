@@ -1,12 +1,16 @@
 import React from "react";
 
 type Props = {
-  expiryTs?: number;            // UTC ms from server
+  expiryTs?: number; // UTC ms from server
   onExpire?: () => void;
-  lowTimeSeconds?: number;      // when to start pulse animation
+  lowTimeSeconds?: number; // when to start pulse animation
 };
 
-export default function BubbleTimer({ expiryTs, onExpire, lowTimeSeconds = 10 }: Props) {
+export default function BubbleTimer({
+  expiryTs,
+  onExpire,
+  lowTimeSeconds = 10,
+}: Props) {
   const [, force] = React.useReducer((x) => x + 1, 0);
 
   React.useEffect(() => {

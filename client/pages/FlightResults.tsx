@@ -409,9 +409,13 @@ export default function FlightResults() {
 
   // Enhanced bargain modal state
   const [showEnhancedBargain, setShowEnhancedBargain] = useState(false);
-  const [selectedBargainFlight, setSelectedBargainFlight] = useState<(typeof flightData)[0] | null>(null);
-  const [selectedBargainFareType, setSelectedBargainFareType] = useState<any>(null);
-  const [showConversationalBargain, setShowConversationalBargain] = useState(false);
+  const [selectedBargainFlight, setSelectedBargainFlight] = useState<
+    (typeof flightData)[0] | null
+  >(null);
+  const [selectedBargainFareType, setSelectedBargainFareType] =
+    useState<any>(null);
+  const [showConversationalBargain, setShowConversationalBargain] =
+    useState(false);
 
   // Load dates and city selections from URL parameters when component mounts
   useEffect(() => {
@@ -545,16 +549,21 @@ export default function FlightResults() {
     [key: string]: "itinerary" | "fare-rules";
   }>({});
 
-
   // Enhanced bargain handler
-  const handleEnhancedBargain = (flight: (typeof flightData)[0], fareType?: any) => {
+  const handleEnhancedBargain = (
+    flight: (typeof flightData)[0],
+    fareType?: any,
+  ) => {
     setSelectedBargainFlight(flight);
     setSelectedBargainFareType(fareType || flight.fareTypes[0]);
     setShowEnhancedBargain(true);
   };
 
   // Conversational bargain handler
-  const handleConversationalBargain = (flight: (typeof flightData)[0], fareType?: any) => {
+  const handleConversationalBargain = (
+    flight: (typeof flightData)[0],
+    fareType?: any,
+  ) => {
     setSelectedBargainFlight(flight);
     setSelectedBargainFareType(fareType || flight.fareTypes[0]);
     setShowConversationalBargain(true);
@@ -567,17 +576,16 @@ export default function FlightResults() {
   };
 
   const handleAcceptBargain = (finalPrice: number, orderRef: string) => {
-    console.log('Bargain accepted:', { finalPrice, orderRef });
+    console.log("Bargain accepted:", { finalPrice, orderRef });
     // Handle the acceptance logic here
     setShowConversationalBargain(false);
   };
 
   const handleHoldBargain = (orderRef: string) => {
-    console.log('Bargain held:', { orderRef });
+    console.log("Bargain held:", { orderRef });
     // Handle the hold logic here
     setShowConversationalBargain(false);
   };
-
 
   const [sortBy, setSortBy] = useState<"cheapest" | "fastest">("cheapest");
   const [expandedTicketOptions, setExpandedTicketOptions] = useState<
@@ -1235,7 +1243,7 @@ export default function FlightResults() {
   // Helper function to get city name from code
   const getCityNameFromCode = (code: string) => {
     const cityEntry = Object.entries(cityData).find(
-      ([_, data]) => data.code === code
+      ([_, data]) => data.code === code,
     );
     return cityEntry ? cityEntry[1].name : code;
   };
@@ -1252,17 +1260,17 @@ export default function FlightResults() {
 
   // Parse dates carefully to avoid timezone issues
   const actualDepartureDate = departureDateParam
-    ? new Date(departureDateParam + 'T00:00:00')
+    ? new Date(departureDateParam + "T00:00:00")
     : departureDate;
   const actualReturnDate = returnDateParam
-    ? new Date(returnDateParam + 'T00:00:00')
+    ? new Date(returnDateParam + "T00:00:00")
     : returnDate;
 
-  console.log('📅 FlightResults URL dates:', {
+  console.log("📅 FlightResults URL dates:", {
     departureDateParam,
     returnDateParam,
     actualDepartureDate: actualDepartureDate?.toDateString(),
-    actualReturnDate: actualReturnDate?.toDateString()
+    actualReturnDate: actualReturnDate?.toDateString(),
   });
 
   const airlineCounts = availableAirlines.reduce(
@@ -1414,7 +1422,6 @@ export default function FlightResults() {
     });
   };
 
-
   const generateAICounterOffer = (userPrice: number, originalPrice: number) => {
     const discountRequested = (originalPrice - userPrice) / originalPrice;
     if (discountRequested <= 0.3) {
@@ -1480,7 +1487,6 @@ export default function FlightResults() {
     setBargainSession(session);
     setShowAINegotiationModal(true);
   };
-
 
   return (
     <div className="min-h-screen bg-gray-50 pb-16 md:pb-0">
@@ -1965,7 +1971,8 @@ export default function FlightResults() {
                           {cityData[selectedFromCity]?.code || selectedFromCity}
                         </div>
                         <span className="text-sm text-gray-700 font-medium truncate">
-                          {cityData[selectedFromCity]?.airport || getCityNameFromCode(selectedFromCity)}
+                          {cityData[selectedFromCity]?.airport ||
+                            getCityNameFromCode(selectedFromCity)}
                         </span>
                       </>
                     ) : (
@@ -2055,7 +2062,8 @@ export default function FlightResults() {
                           {cityData[selectedToCity]?.code || selectedToCity}
                         </div>
                         <span className="text-sm text-gray-700 font-medium truncate">
-                          {cityData[selectedToCity]?.airport || getCityNameFromCode(selectedToCity)}
+                          {cityData[selectedToCity]?.airport ||
+                            getCityNameFromCode(selectedToCity)}
                         </span>
                       </>
                     ) : (
@@ -2155,7 +2163,8 @@ export default function FlightResults() {
                     initialRange={{
                       startDate: actualDepartureDate || new Date(),
                       endDate:
-                        actualReturnDate || addDays(actualDepartureDate || new Date(), 7),
+                        actualReturnDate ||
+                        addDays(actualDepartureDate || new Date(), 7),
                     }}
                     onChange={(range) => {
                       console.log(
@@ -2379,7 +2388,11 @@ export default function FlightResults() {
                           value={option.value}
                           checked={selectedStops === option.value}
                           onChange={() => handleStopsFilter(option.value)}
-                          style={{ width: '16px', height: '16px', accentColor: '#2563eb' }}
+                          style={{
+                            width: "16px",
+                            height: "16px",
+                            accentColor: "#2563eb",
+                          }}
                         />
                       </div>
                       {option.label}
@@ -2417,7 +2430,11 @@ export default function FlightResults() {
                           type="checkbox"
                           checked={selectedAirlines.has(airline)}
                           onChange={() => handleAirlineFilter(airline)}
-                          style={{ width: '16px', height: '16px', accentColor: '#2563eb' }}
+                          style={{
+                            width: "16px",
+                            height: "16px",
+                            accentColor: "#2563eb",
+                          }}
                         />
                       </div>
                       <span
@@ -2468,8 +2485,14 @@ export default function FlightResults() {
                         <input
                           type="checkbox"
                           checked={selectedAircraftTypes.has(aircraftType)}
-                          onChange={() => handleAircraftTypeFilter(aircraftType)}
-                          style={{ width: '16px', height: '16px', accentColor: '#2563eb' }}
+                          onChange={() =>
+                            handleAircraftTypeFilter(aircraftType)
+                          }
+                          style={{
+                            width: "16px",
+                            height: "16px",
+                            accentColor: "#2563eb",
+                          }}
                         />
                       </div>
                       <span
@@ -2532,7 +2555,11 @@ export default function FlightResults() {
                         <div className="w-4 h-4 flex items-center justify-center mr-2">
                           <input
                             type="checkbox"
-                            style={{ width: '16px', height: '16px', accentColor: '#2563eb' }}
+                            style={{
+                              width: "16px",
+                              height: "16px",
+                              accentColor: "#2563eb",
+                            }}
                           />
                         </div>
                         {time.label}
@@ -2571,7 +2598,11 @@ export default function FlightResults() {
                         <div className="w-4 h-4 flex items-center justify-center mr-2">
                           <input
                             type="checkbox"
-                            style={{ width: '16px', height: '16px', accentColor: '#2563eb' }}
+                            style={{
+                              width: "16px",
+                              height: "16px",
+                              accentColor: "#2563eb",
+                            }}
                           />
                         </div>
                         {time.label}
@@ -2839,7 +2870,9 @@ export default function FlightResults() {
                                 {fromCode || flight.departureCode || "BOM"}
                               </div>
                               <div className="text-xs text-gray-500">
-                                {fromCityName || flight.departure?.city || "Mumbai"}
+                                {fromCityName ||
+                                  flight.departure?.city ||
+                                  "Mumbai"}
                               </div>
                             </div>
                             <div className="flex-1 mx-4">
@@ -2924,7 +2957,9 @@ export default function FlightResults() {
                                   {fromCode || flight.departureCode || "BOM"}
                                 </div>
                                 <div className="text-xs text-gray-500">
-                                  {fromCityName || flight.departure?.city || "Mumbai"}
+                                  {fromCityName ||
+                                    flight.departure?.city ||
+                                    "Mumbai"}
                                 </div>
                               </div>
                             </div>
@@ -2988,9 +3023,12 @@ export default function FlightResults() {
                               "View Details clicked for flight:",
                               flight.id,
                             );
-                            navigate(`/flight-details/${flight.id}?${searchParams.toString()}`, {
-                              state: { flight },
-                            });
+                            navigate(
+                              `/flight-details/${flight.id}?${searchParams.toString()}`,
+                              {
+                                state: { flight },
+                              },
+                            );
                           }}
                         >
                           View Details
@@ -3069,7 +3107,9 @@ export default function FlightResults() {
                                       : "Select date"}
                                   </div>
                                   <div className="text-xs text-gray-500">
-                                    {fromCityName || flight.departure?.city || "Mumbai"}
+                                    {fromCityName ||
+                                      flight.departure?.city ||
+                                      "Mumbai"}
                                   </div>
                                 </div>
                                 <div className="flex flex-col items-center">
@@ -3100,7 +3140,9 @@ export default function FlightResults() {
                                       : "Select date"}
                                   </div>
                                   <div className="text-xs text-gray-500">
-                                    {toCityName || flight.arrival?.city || "Dubai"}
+                                    {toCityName ||
+                                      flight.arrival?.city ||
+                                      "Dubai"}
                                   </div>
                                 </div>
                               </div>
@@ -3115,11 +3157,16 @@ export default function FlightResults() {
                                     <div className="text-sm text-gray-600 font-medium">
                                       {toCode || flight.arrivalCode} •{" "}
                                       {actualReturnDate
-                                        ? formatDisplayDate(actualReturnDate, "MMM d")
+                                        ? formatDisplayDate(
+                                            actualReturnDate,
+                                            "MMM d",
+                                          )
                                         : "Select return date"}
                                     </div>
                                     <div className="text-xs text-gray-500">
-                                      {toCityName || flight.arrival?.city || "Dubai"}
+                                      {toCityName ||
+                                        flight.arrival?.city ||
+                                        "Dubai"}
                                     </div>
                                   </div>
                                   <div className="flex flex-col items-center">
@@ -3143,11 +3190,16 @@ export default function FlightResults() {
                                     <div className="text-sm text-gray-600 font-medium">
                                       {fromCode || flight.departureCode} •{" "}
                                       {actualReturnDate
-                                        ? formatDisplayDate(actualReturnDate, "MMM d")
+                                        ? formatDisplayDate(
+                                            actualReturnDate,
+                                            "MMM d",
+                                          )
                                         : "Select return date"}
                                     </div>
                                     <div className="text-xs text-gray-500">
-                                      {fromCityName || flight.departure?.city || "Mumbai"}
+                                      {fromCityName ||
+                                        flight.departure?.city ||
+                                        "Mumbai"}
                                     </div>
                                   </div>
                                 </div>
@@ -3295,9 +3347,12 @@ export default function FlightResults() {
                               "View Details clicked for flight:",
                               flight.id,
                             );
-                            navigate(`/flight-details/${flight.id}?${searchParams.toString()}`, {
-                              state: { flight },
-                            });
+                            navigate(
+                              `/flight-details/${flight.id}?${searchParams.toString()}`,
+                              {
+                                state: { flight },
+                              },
+                            );
                           }}
                         >
                           View Details
@@ -3644,7 +3699,6 @@ export default function FlightResults() {
 
                                       {/* Book Now & Start Bargain Buttons */}
                                       <div className="border-t border-gray-200 pt-4 mt-6 space-y-3">
-
                                         {/* Book Now Button */}
                                         <Button
                                           onClick={() => {
@@ -3901,7 +3955,6 @@ export default function FlightResults() {
 
                                       {/* Book Now & Start Bargain Buttons - Mobile */}
                                       <div className="border-t border-gray-200 pt-4 mt-4 space-y-3">
-
                                         {/* Book Now Button Mobile */}
                                         <Button
                                           onClick={() => {
@@ -4369,10 +4422,10 @@ export default function FlightResults() {
                                       </p>
                                       <div className="text-xs text-gray-700 space-y-1">
                                         <p>
-                                          • Direct flights are usually
-                                          cheaper than refundable flights.
-                                          However, you may have to pay a large
-                                          fee to cancel or change your flight.
+                                          • Direct flights are usually cheaper
+                                          than refundable flights. However, you
+                                          may have to pay a large fee to cancel
+                                          or change your flight.
                                         </p>
                                         <p>
                                           • Cancellation/Flight change charges
@@ -6443,18 +6496,33 @@ export default function FlightResults() {
       {/* Enhanced Bargain Modal with Timer System */}
       <EnhancedBargainModal
         isOpen={showEnhancedBargain}
-        flight={selectedBargainFlight ? {
-          id: selectedBargainFlight.id.toString(),
-          airline: selectedBargainFlight.airline,
-          flightNumber: selectedBargainFlight.flightNumber || `FL${selectedBargainFlight.id}`,
-          departureCode: selectedBargainFlight.origin || searchParams.get("from") || "BOM",
-          arrivalCode: selectedBargainFlight.destination || searchParams.get("to") || "DXB",
-          departureTime: selectedBargainFlight.departureTime,
-          arrivalTime: selectedBargainFlight.arrivalTime,
-          duration: selectedBargainFlight.duration,
-          aircraft: selectedBargainFlight.aircraft || "Boeing 777",
-          price: selectedBargainFlight.price?.amount || selectedBargainFlight.fareTypes[0]?.price || 0,
-        } : null}
+        flight={
+          selectedBargainFlight
+            ? {
+                id: selectedBargainFlight.id.toString(),
+                airline: selectedBargainFlight.airline,
+                flightNumber:
+                  selectedBargainFlight.flightNumber ||
+                  `FL${selectedBargainFlight.id}`,
+                departureCode:
+                  selectedBargainFlight.origin ||
+                  searchParams.get("from") ||
+                  "BOM",
+                arrivalCode:
+                  selectedBargainFlight.destination ||
+                  searchParams.get("to") ||
+                  "DXB",
+                departureTime: selectedBargainFlight.departureTime,
+                arrivalTime: selectedBargainFlight.arrivalTime,
+                duration: selectedBargainFlight.duration,
+                aircraft: selectedBargainFlight.aircraft || "Boeing 777",
+                price:
+                  selectedBargainFlight.price?.amount ||
+                  selectedBargainFlight.fareTypes[0]?.price ||
+                  0,
+              }
+            : null
+        }
         selectedFareType={selectedBargainFareType}
         onClose={() => {
           setShowEnhancedBargain(false);
@@ -6496,18 +6564,33 @@ export default function FlightResults() {
       {/* Conversational Bargain Modal */}
       <ConversationalBargainModal
         isOpen={showConversationalBargain}
-        flight={selectedBargainFlight ? {
-          id: selectedBargainFlight.id.toString(),
-          airline: selectedBargainFlight.airline,
-          flightNumber: selectedBargainFlight.flightNumber || `FL${selectedBargainFlight.id}`,
-          departureCode: selectedBargainFlight.origin || searchParams.get("from") || "BOM",
-          arrivalCode: selectedBargainFlight.destination || searchParams.get("to") || "DXB",
-          departureTime: selectedBargainFlight.departureTime,
-          arrivalTime: selectedBargainFlight.arrivalTime,
-          duration: selectedBargainFlight.duration,
-          aircraft: selectedBargainFlight.aircraft || "Boeing 777",
-          price: selectedBargainFlight.price?.amount || selectedBargainFlight.fareTypes[0]?.price || 0,
-        } : null}
+        flight={
+          selectedBargainFlight
+            ? {
+                id: selectedBargainFlight.id.toString(),
+                airline: selectedBargainFlight.airline,
+                flightNumber:
+                  selectedBargainFlight.flightNumber ||
+                  `FL${selectedBargainFlight.id}`,
+                departureCode:
+                  selectedBargainFlight.origin ||
+                  searchParams.get("from") ||
+                  "BOM",
+                arrivalCode:
+                  selectedBargainFlight.destination ||
+                  searchParams.get("to") ||
+                  "DXB",
+                departureTime: selectedBargainFlight.departureTime,
+                arrivalTime: selectedBargainFlight.arrivalTime,
+                duration: selectedBargainFlight.duration,
+                aircraft: selectedBargainFlight.aircraft || "Boeing 777",
+                price:
+                  selectedBargainFlight.price?.amount ||
+                  selectedBargainFlight.fareTypes[0]?.price ||
+                  0,
+              }
+            : null
+        }
         selectedFareType={selectedBargainFareType}
         onClose={handleCloseConversationalBargain}
         onAccept={handleAcceptBargain}

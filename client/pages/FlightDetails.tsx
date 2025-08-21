@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate, Link, useSearchParams } from "react-router-dom";
+import {
+  useParams,
+  useNavigate,
+  Link,
+  useSearchParams,
+} from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
@@ -30,7 +35,11 @@ import { useCurrency } from "@/contexts/CurrencyContext";
 import { ClassyBargainModal } from "@/components/ClassyBargainModal";
 
 import { useScrollToTop } from "@/hooks/useScrollToTop";
-import { orientSegmentsToRoute, getRouteEnds, normalizeIata } from "@/utils/flight";
+import {
+  orientSegmentsToRoute,
+  getRouteEnds,
+  normalizeIata,
+} from "@/utils/flight";
 
 // Airline Logo Mapping - Professional Logos
 const airlineLogos = {
@@ -70,13 +79,36 @@ export default function FlightDetails({
   const toCode = searchParams.get("to") || "BOM";
 
   // Airport data mapping
-  const airportData: Record<string, {city: string; name: string; terminal?: string}> = {
-    "DXB": { city: "Dubai", name: "Dubai International Airport", terminal: "3" },
-    "BOM": { city: "Mumbai", name: "Chhatrapati Shivaji Maharaj International Airport", terminal: "2" },
-    "DEL": { city: "Delhi", name: "Indira Gandhi International Airport", terminal: "3" },
-    "BLR": { city: "Bangalore", name: "Kempegowda International Airport", terminal: "1" },
-    "MAA": { city: "Chennai", name: "Chennai International Airport", terminal: "1" },
-    "CCU": { city: "Kolkata", name: "Netaji Subhash Chandra Bose International Airport", terminal: "1" }
+  const airportData: Record<
+    string,
+    { city: string; name: string; terminal?: string }
+  > = {
+    DXB: { city: "Dubai", name: "Dubai International Airport", terminal: "3" },
+    BOM: {
+      city: "Mumbai",
+      name: "Chhatrapati Shivaji Maharaj International Airport",
+      terminal: "2",
+    },
+    DEL: {
+      city: "Delhi",
+      name: "Indira Gandhi International Airport",
+      terminal: "3",
+    },
+    BLR: {
+      city: "Bangalore",
+      name: "Kempegowda International Airport",
+      terminal: "1",
+    },
+    MAA: {
+      city: "Chennai",
+      name: "Chennai International Airport",
+      terminal: "1",
+    },
+    CCU: {
+      city: "Kolkata",
+      name: "Netaji Subhash Chandra Bose International Airport",
+      terminal: "1",
+    },
   };
 
   // Dynamic fallback data based on search parameters
@@ -120,16 +152,16 @@ export default function FlightDetails({
         origin: {
           code: fromCode,
           name: airportData[fromCode]?.name || "Unknown Airport",
-          time: "14:30"
+          time: "14:30",
         },
         destination: {
           code: toCode,
           name: airportData[toCode]?.name || "Unknown Airport",
-          time: "16:00"
+          time: "16:00",
         },
-        durationMinutes: 210
-      }
-    ]
+        durationMinutes: 210,
+      },
+    ],
   };
 
   const [baseFlight, setBaseFlight] = useState<Flight | null>(
@@ -140,50 +172,86 @@ export default function FlightDetails({
   const createSegments = (flight: any) => {
     if (flight.segments?.length) return flight.segments;
 
-    return [{
-      carrierCode: flight.airlineCode || "6E",
-      flightNumber: flight.flightNumber || "1407",
-      origin: {
-        code: flight.departure?.code || fromCode,
-        name: flight.departure?.name || airportData[fromCode]?.name || "Unknown Airport",
-        time: flight.departureTime || "14:30"
+    return [
+      {
+        carrierCode: flight.airlineCode || "6E",
+        flightNumber: flight.flightNumber || "1407",
+        origin: {
+          code: flight.departure?.code || fromCode,
+          name:
+            flight.departure?.name ||
+            airportData[fromCode]?.name ||
+            "Unknown Airport",
+          time: flight.departureTime || "14:30",
+        },
+        destination: {
+          code: flight.arrival?.code || toCode,
+          name:
+            flight.arrival?.name ||
+            airportData[toCode]?.name ||
+            "Unknown Airport",
+          time: flight.arrivalTime || "16:00",
+        },
+        durationMinutes: 210,
       },
-      destination: {
-        code: flight.arrival?.code || toCode,
-        name: flight.arrival?.name || airportData[toCode]?.name || "Unknown Airport",
-        time: flight.arrivalTime || "16:00"
-      },
-      durationMinutes: 210
-    }];
+    ];
   };
 
   // Orient flight segments to match URL route
-  const orientedItinerary = baseFlight ? orientSegmentsToRoute({
-    id: baseFlight.id,
-    segments: createSegments(baseFlight)
-  }, fromCode, toCode) : null;
+  const orientedItinerary = baseFlight
+    ? orientSegmentsToRoute(
+        {
+          id: baseFlight.id,
+          segments: createSegments(baseFlight),
+        },
+        fromCode,
+        toCode,
+      )
+    : null;
 
   // Create properly oriented flight object
-  const flight = baseFlight && orientedItinerary ? {
-    ...baseFlight,
-    segments: orientedItinerary.segments,
-    // Update departure/arrival to match oriented segments
-    departure: {
-      ...baseFlight.departure,
-      code: orientedItinerary.segments[0]?.origin?.code || fromCode,
-      name: orientedItinerary.segments[0]?.origin?.name || airportData[fromCode]?.name || "Unknown Airport",
-      city: airportData[orientedItinerary.segments[0]?.origin?.code || fromCode]?.city || "Unknown"
-    },
-    arrival: {
-      ...baseFlight.arrival,
-      code: orientedItinerary.segments[orientedItinerary.segments.length - 1]?.destination?.code || toCode,
-      name: orientedItinerary.segments[orientedItinerary.segments.length - 1]?.destination?.name || airportData[toCode]?.name || "Unknown Airport",
-      city: airportData[orientedItinerary.segments[orientedItinerary.segments.length - 1]?.destination?.code || toCode]?.city || "Unknown"
-    }
-  } : baseFlight;
+  const flight =
+    baseFlight && orientedItinerary
+      ? {
+          ...baseFlight,
+          segments: orientedItinerary.segments,
+          // Update departure/arrival to match oriented segments
+          departure: {
+            ...baseFlight.departure,
+            code: orientedItinerary.segments[0]?.origin?.code || fromCode,
+            name:
+              orientedItinerary.segments[0]?.origin?.name ||
+              airportData[fromCode]?.name ||
+              "Unknown Airport",
+            city:
+              airportData[
+                orientedItinerary.segments[0]?.origin?.code || fromCode
+              ]?.city || "Unknown",
+          },
+          arrival: {
+            ...baseFlight.arrival,
+            code:
+              orientedItinerary.segments[orientedItinerary.segments.length - 1]
+                ?.destination?.code || toCode,
+            name:
+              orientedItinerary.segments[orientedItinerary.segments.length - 1]
+                ?.destination?.name ||
+              airportData[toCode]?.name ||
+              "Unknown Airport",
+            city:
+              airportData[
+                orientedItinerary.segments[
+                  orientedItinerary.segments.length - 1
+                ]?.destination?.code || toCode
+              ]?.city || "Unknown",
+          },
+        }
+      : baseFlight;
 
   // Get oriented route ends
-  const { from: orientedFrom, to: orientedTo } = flight?.segments ? getRouteEnds(flight.segments) : { from: fromCode, to: toCode };
+  const { from: orientedFrom, to: orientedTo } = flight?.segments
+    ? getRouteEnds(flight.segments)
+    : { from: fromCode, to: toCode };
   const [isLoading, setIsLoading] = useState(false); // Start with false for immediate render
   const [error, setError] = useState<string | null>(null);
   const [showBargainModal, setShowBargainModal] = useState(false);
@@ -253,19 +321,30 @@ export default function FlightDetails({
 
   // Use oriented segments for correct route display
   const firstSegment = displayFlight?.segments?.[0];
-  const lastSegment = displayFlight?.segments?.[displayFlight.segments.length - 1];
+  const lastSegment =
+    displayFlight?.segments?.[displayFlight.segments.length - 1];
 
   // Create explicit return flight routing (reverse of oriented route)
   const returnDeparture = {
     code: lastSegment?.destination?.code || orientedTo || toCode,
-    name: lastSegment?.destination?.name || airportData[orientedTo || toCode]?.name || "Unknown Airport",
-    city: airportData[lastSegment?.destination?.code || orientedTo || toCode]?.city || "Unknown"
+    name:
+      lastSegment?.destination?.name ||
+      airportData[orientedTo || toCode]?.name ||
+      "Unknown Airport",
+    city:
+      airportData[lastSegment?.destination?.code || orientedTo || toCode]
+        ?.city || "Unknown",
   };
 
   const returnArrival = {
     code: firstSegment?.origin?.code || orientedFrom || fromCode,
-    name: firstSegment?.origin?.name || airportData[orientedFrom || fromCode]?.name || "Unknown Airport",
-    city: airportData[firstSegment?.origin?.code || orientedFrom || fromCode]?.city || "Unknown"
+    name:
+      firstSegment?.origin?.name ||
+      airportData[orientedFrom || fromCode]?.name ||
+      "Unknown Airport",
+    city:
+      airportData[firstSegment?.origin?.code || orientedFrom || fromCode]
+        ?.city || "Unknown",
   };
 
   // We now always have flight data, so no need for error state
@@ -293,12 +372,16 @@ export default function FlightDetails({
             <Button
               variant="ghost"
               className="text-white hover:bg-white/10 active:bg-white/20 p-3 min-w-[44px] min-h-[44px] rounded-full transition-colors"
-              onClick={() => navigate(`/flights/results?${searchParams.toString()}`)}
+              onClick={() =>
+                navigate(`/flights/results?${searchParams.toString()}`)
+              }
             >
               <ArrowLeft className="w-5 h-5" />
             </Button>
             <div>
-              <h1 className="text-lg font-semibold">Your flight to {airportData[toCode]?.city || "Unknown"}</h1>
+              <h1 className="text-lg font-semibold">
+                Your flight to {airportData[toCode]?.city || "Unknown"}
+              </h1>
             </div>
           </div>
           <div className="flex items-center space-x-3">
@@ -346,11 +429,13 @@ export default function FlightDetails({
                     {new Date(departureDate).toLocaleDateString("en-US", {
                       weekday: "short",
                       month: "short",
-                      day: "numeric"
-                    })} • {displayFlight.departureTime}
+                      day: "numeric",
+                    })}{" "}
+                    • {displayFlight.departureTime}
                   </div>
                   <div className="font-bold text-gray-900 text-lg mb-1">
-                    {firstSegment?.origin?.code || displayFlight.departure.code} •{" "}
+                    {firstSegment?.origin?.code || displayFlight.departure.code}{" "}
+                    •{" "}
                     {firstSegment?.origin?.name || displayFlight.departure.name}
                   </div>
 
@@ -390,11 +475,16 @@ export default function FlightDetails({
                     {new Date(departureDate).toLocaleDateString("en-US", {
                       weekday: "short",
                       month: "short",
-                      day: "numeric"
-                    })} • {displayFlight.arrivalTime}
+                      day: "numeric",
+                    })}{" "}
+                    • {displayFlight.arrivalTime}
                   </div>
                   <div className="font-bold text-gray-900 text-lg">
-                    {lastSegment?.destination?.code || displayFlight.arrival.code} • {lastSegment?.destination?.name || displayFlight.arrival.name}
+                    {lastSegment?.destination?.code ||
+                      displayFlight.arrival.code}{" "}
+                    •{" "}
+                    {lastSegment?.destination?.name ||
+                      displayFlight.arrival.name}
                   </div>
                 </div>
               </div>
@@ -418,8 +508,9 @@ export default function FlightDetails({
                     {new Date(returnDate).toLocaleDateString("en-US", {
                       weekday: "short",
                       month: "short",
-                      day: "numeric"
-                    })} • 20:50
+                      day: "numeric",
+                    })}{" "}
+                    • 20:50
                   </div>
                   <div className="font-bold text-gray-900 text-lg mb-1">
                     {returnDeparture.code} • {returnDeparture.name}
@@ -459,11 +550,14 @@ export default function FlightDetails({
                 <div className="flex-1">
                   <div className="flex items-center space-x-2 mb-1">
                     <span className="text-lg font-semibold text-gray-900">
-                      {new Date(new Date(returnDate).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString("en-US", {
+                      {new Date(
+                        new Date(returnDate).getTime() + 24 * 60 * 60 * 1000,
+                      ).toLocaleDateString("en-US", {
                         weekday: "short",
                         month: "short",
-                        day: "numeric"
-                      })} • 01:35
+                        day: "numeric",
+                      })}{" "}
+                      • 01:35
                     </span>
                     <div className="flex items-center space-x-1 bg-gray-100 px-2 py-1 rounded">
                       <Info className="w-3 h-3 text-gray-600" />
@@ -473,8 +567,7 @@ export default function FlightDetails({
                     </div>
                   </div>
                   <div className="font-bold text-gray-900 text-lg">
-                    {returnArrival.code} •{" "}
-                    {returnArrival.name}
+                    {returnArrival.code} • {returnArrival.name}
                   </div>
                 </div>
               </div>

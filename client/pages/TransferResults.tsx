@@ -123,7 +123,8 @@ export default function TransferResults() {
   const [selectedTransfer, setSelectedTransfer] = useState<Transfer | null>(
     null,
   );
-  const [showConversationalBargain, setShowConversationalBargain] = useState(false);
+  const [showConversationalBargain, setShowConversationalBargain] =
+    useState(false);
 
   // Selection state for mobile
   const [selectedTransfers, setSelectedTransfers] = useState<Set<string>>(
@@ -515,12 +516,12 @@ export default function TransferResults() {
   };
 
   const handleAcceptBargain = (finalPrice: number, orderRef: string) => {
-    console.log('Transfer bargain accepted:', { finalPrice, orderRef });
+    console.log("Transfer bargain accepted:", { finalPrice, orderRef });
     setShowConversationalBargain(false);
   };
 
   const handleHoldBargain = (orderRef: string) => {
-    console.log('Transfer bargain held:', { orderRef });
+    console.log("Transfer bargain held:", { orderRef });
     setShowConversationalBargain(false);
   };
 
@@ -1375,18 +1376,22 @@ export default function TransferResults() {
       {/* Conversational Bargain Modal */}
       <ConversationalBargainModal
         isOpen={showConversationalBargain}
-        flight={selectedTransfer ? {
-          id: selectedTransfer.id.toString(),
-          airline: selectedTransfer.vehicleName,
-          flightNumber: "TRANSFER",
-          departureCode: "PICKUP",
-          arrivalCode: "DROPOFF",
-          departureTime: "As scheduled",
-          arrivalTime: "As scheduled",
-          duration: selectedTransfer.duration || "Varies",
-          aircraft: "Ground Transport",
-          price: selectedTransfer.price || 0,
-        } : null}
+        flight={
+          selectedTransfer
+            ? {
+                id: selectedTransfer.id.toString(),
+                airline: selectedTransfer.vehicleName,
+                flightNumber: "TRANSFER",
+                departureCode: "PICKUP",
+                arrivalCode: "DROPOFF",
+                departureTime: "As scheduled",
+                arrivalTime: "As scheduled",
+                duration: selectedTransfer.duration || "Varies",
+                aircraft: "Ground Transport",
+                price: selectedTransfer.price || 0,
+              }
+            : null
+        }
         selectedFareType={{
           name: "Standard Transfer",
           price: selectedTransfer?.price || 0,

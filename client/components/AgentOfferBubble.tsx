@@ -2,18 +2,18 @@ import React from "react";
 import BubbleTimer from "./BubbleTimer";
 
 type Offer = {
-  price_now: number;      // e.g. 21679
+  price_now: number; // e.g. 21679
   was?: number;
-  expiry_ts?: number;     // server UTC ms (now + 30s)
-  hold_seconds?: number;  // 30
+  expiry_ts?: number; // server UTC ms (now + 30s)
+  hold_seconds?: number; // 30
 };
 
 type Props = {
-  userName: string;                    // "Mr. Zubin"
+  userName: string; // "Mr. Zubin"
   offer: Offer;
   negotiationId: string;
-  onCounter: () => Promise<void>;      // calls /bargain/counter
-  onHold: () => Promise<void>;         // calls /bargain/hold
+  onCounter: () => Promise<void>; // calls /bargain/counter
+  onHold: () => Promise<void>; // calls /bargain/hold
   onRefreshAfterExpiry: () => Promise<void>; // calls /bargain/refresh
 };
 
@@ -39,21 +39,30 @@ export default function AgentOfferBubble({
   const handleHold = async () => {
     if (disableAll) return;
     setBusy("hold");
-    try { await onHold(); } finally { setBusy("none"); }
+    try {
+      await onHold();
+    } finally {
+      setBusy("none");
+    }
   };
 
   const handleCounter = async () => {
     if (disableAll) return;
     setBusy("counter");
-    try { await onCounter(); } finally { setBusy("none"); }
+    try {
+      await onCounter();
+    } finally {
+      setBusy("none");
+    }
   };
 
   return (
     <div className="max-w-[560px] rounded-2xl bg-emerald-700 text-white p-4 shadow">
       <div className="flex items-start justify-between gap-2">
         <p className="text-[15px]/6">
-          <strong>Faredown Agent:</strong>{" "}
-          Perfect, {userName} — <strong>₹{offer.price_now.toLocaleString("en-IN")}</strong> is confirmed.
+          <strong>Faredown Agent:</strong> Perfect, {userName} —{" "}
+          <strong>₹{offer.price_now.toLocaleString("en-IN")}</strong> is
+          confirmed.
           <span className="opacity-90"> Valid for 30s.</span>
         </p>
         {!expired && offer.expiry_ts ? (
@@ -67,10 +76,14 @@ export default function AgentOfferBubble({
             onClick={handleHold}
             disabled={disableAll}
             className={`px-4 py-2 rounded-xl font-medium shadow ${
-              disableAll ? "bg-emerald-900/50 cursor-not-allowed" : "bg-white text-emerald-800 hover:bg-emerald-50"
+              disableAll
+                ? "bg-emerald-900/50 cursor-not-allowed"
+                : "bg-white text-emerald-800 hover:bg-emerald-50"
             }`}
           >
-            {busy === "hold" ? "Placing hold…" : `Place ${offer.hold_seconds ?? 30}s Hold`}
+            {busy === "hold"
+              ? "Placing hold…"
+              : `Place ${offer.hold_seconds ?? 30}s Hold`}
           </button>
 
           <button

@@ -5,7 +5,9 @@
   border: 0;
   border-radius: 24px;
   padding: 0;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.05);
+  box-shadow:
+    0 25px 50px -12px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(0, 0, 0, 0.05);
   max-height: 90vh;
   overflow: hidden;
   display: flex;
@@ -208,7 +210,9 @@
 
 .fd-input:focus-within {
   border-color: #003580;
-  box-shadow: 0 0 0 3px rgba(0, 53, 128, 0.08), 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow:
+    0 0 0 3px rgba(0, 53, 128, 0.08),
+    0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .fd-input input {
@@ -258,7 +262,9 @@
   max-width: 75%;
   padding: 16px 20px;
   border-radius: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.1),
+    0 2px 4px rgba(0, 0, 0, 0.06);
   opacity: 0;
   transform: translateY(8px);
   animation: fd-reveal 300ms cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
@@ -289,19 +295,35 @@
 
 /* Module-specific supplier colors - premium gradients */
 .fd-bubble--supplier.fd-bubble--flights {
-  background: linear-gradient(135deg, #003580 0%, #002a5c 100%); /* Premium Blue */
+  background: linear-gradient(
+    135deg,
+    #003580 0%,
+    #002a5c 100%
+  ); /* Premium Blue */
 }
 
 .fd-bubble--supplier.fd-bubble--hotels {
-  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%); /* Premium Purple */
+  background: linear-gradient(
+    135deg,
+    #7c3aed 0%,
+    #6d28d9 100%
+  ); /* Premium Purple */
 }
 
 .fd-bubble--supplier.fd-bubble--sightseeing {
-  background: linear-gradient(135deg, #ea580c 0%, #dc2626 100%); /* Premium Orange */
+  background: linear-gradient(
+    135deg,
+    #ea580c 0%,
+    #dc2626 100%
+  ); /* Premium Orange */
 }
 
 .fd-bubble--supplier.fd-bubble--transfers {
-  background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%); /* Premium Cyan */
+  background: linear-gradient(
+    135deg,
+    #0891b2 0%,
+    #0e7490 100%
+  ); /* Premium Cyan */
 }
 
 .fd-bubble--system {
@@ -361,7 +383,9 @@
   border-radius: 24px;
   padding: 28px 24px;
   margin-bottom: 20px;
-  box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow:
+    0 8px 25px -5px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
   background: linear-gradient(135deg, #ffffff 0%, #fafbfc 100%);
   text-align: center;
   border: 2px solid transparent;

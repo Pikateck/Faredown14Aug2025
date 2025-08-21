@@ -76,7 +76,8 @@ export default function HotelResults() {
   // Hotel bargain modal state
   const [selectedHotel, setSelectedHotel] = useState<HotelType | null>(null);
   const [isBargainModalOpen, setIsBargainModalOpen] = useState(false);
-  const [showConversationalBargain, setShowConversationalBargain] = useState(false);
+  const [showConversationalBargain, setShowConversationalBargain] =
+    useState(false);
   const [viewMode, setViewMode] = useState<"grid" | "list">("list");
   const [hotels, setHotels] = useState<Hotel[]>([]);
   const [loading, setLoading] = useState(true);
@@ -593,12 +594,12 @@ export default function HotelResults() {
   };
 
   const handleAcceptBargain = (finalPrice: number, orderRef: string) => {
-    console.log('Hotel bargain accepted:', { finalPrice, orderRef });
+    console.log("Hotel bargain accepted:", { finalPrice, orderRef });
     setShowConversationalBargain(false);
   };
 
   const handleHoldBargain = (orderRef: string) => {
-    console.log('Hotel bargain held:', { orderRef });
+    console.log("Hotel bargain held:", { orderRef });
     setShowConversationalBargain(false);
   };
 
@@ -1554,21 +1555,27 @@ export default function HotelResults() {
       {/* Conversational Bargain Modal */}
       <ConversationalBargainModal
         isOpen={showConversationalBargain}
-        flight={selectedHotel ? {
-          id: selectedHotel.id.toString(),
-          airline: selectedHotel.name,
-          flightNumber: "HOTEL",
-          departureCode: "CHECK-IN",
-          arrivalCode: "CHECK-OUT",
-          departureTime: "15:00",
-          arrivalTime: "11:00",
-          duration: "Stay Duration",
-          aircraft: "Hotel Room",
-          price: selectedHotel.currentPrice || selectedHotel.pricePerNight,
-        } : null}
+        flight={
+          selectedHotel
+            ? {
+                id: selectedHotel.id.toString(),
+                airline: selectedHotel.name,
+                flightNumber: "HOTEL",
+                departureCode: "CHECK-IN",
+                arrivalCode: "CHECK-OUT",
+                departureTime: "15:00",
+                arrivalTime: "11:00",
+                duration: "Stay Duration",
+                aircraft: "Hotel Room",
+                price:
+                  selectedHotel.currentPrice || selectedHotel.pricePerNight,
+              }
+            : null
+        }
         selectedFareType={{
           name: "Standard Room",
-          price: selectedHotel?.currentPrice || selectedHotel?.pricePerNight || 0,
+          price:
+            selectedHotel?.currentPrice || selectedHotel?.pricePerNight || 0,
           features: selectedHotel?.features || [],
           baggage: "Free WiFi",
           refundability: "Free cancellation",

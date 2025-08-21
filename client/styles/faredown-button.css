@@ -5,21 +5,21 @@
   --faredown-primary-hover: #e6a602;
   --faredown-primary-active: #d19900;
   --faredown-primary-text: #000000;
-  
+
   --faredown-secondary-border: #003580;
   --faredown-secondary-bg: transparent;
   --faredown-secondary-hover-bg: #003580;
   --faredown-secondary-text: #003580;
   --faredown-secondary-hover-text: #ffffff;
-  
+
   --faredown-radius: 12px;
   --faredown-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  
+
   /* Locked base styles from Transfers design */
   border-radius: var(--faredown-radius) !important;
   box-shadow: var(--faredown-shadow) !important;
   font-weight: 600 !important;
-  
+
   /* Ensure consistent scaling and touch behavior */
   touch-action: manipulation !important;
   user-select: none !important;
@@ -84,7 +84,7 @@
   .faredown-button-locked {
     transition: none !important;
   }
-  
+
   .faredown-button-locked:active:not(:disabled) {
     transform: none !important;
   }

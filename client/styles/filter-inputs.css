@@ -1,5 +1,5 @@
 /* Force filter inputs to be visible */
-input[type="checkbox"], 
+input[type="checkbox"],
 input[type="radio"] {
   appearance: auto !important;
   -webkit-appearance: auto !important;

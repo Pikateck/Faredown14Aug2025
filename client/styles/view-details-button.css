@@ -8,9 +8,11 @@
   --view-details-border-hover: #9ca3af;
   --view-details-text: #111827;
   --view-details-radius: 9999px;
-  --view-details-shadow: 0 10px 25px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.05);
-  --view-details-shadow-hover: 0 20px 40px -4px rgb(0 0 0 / 0.15), 0 8px 16px -4px rgb(0 0 0 / 0.1);
-  
+  --view-details-shadow:
+    0 10px 25px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.05);
+  --view-details-shadow-hover:
+    0 20px 40px -4px rgb(0 0 0 / 0.15), 0 8px 16px -4px rgb(0 0 0 / 0.1);
+
   /* Locked base styles - SAME structure as bargain button */
   background: var(--view-details-bg) !important;
   color: var(--view-details-text) !important;
@@ -18,7 +20,7 @@
   font-weight: 700 !important;
   border: 2px solid var(--view-details-border) !important;
   box-shadow: var(--view-details-shadow) !important;
-  
+
   /* Enhanced typography - SAME as bargain button */
   letter-spacing: 0.025em !important;
   text-shadow: none !important;
@@ -39,7 +41,9 @@
 
 .view-details-button-locked:focus:not(:disabled) {
   outline: none !important;
-  box-shadow: var(--view-details-shadow), 0 0 0 4px rgba(156, 163, 175, 0.3) !important;
+  box-shadow:
+    var(--view-details-shadow),
+    0 0 0 4px rgba(156, 163, 175, 0.3) !important;
 }
 
 .view-details-button-locked:disabled {
@@ -67,7 +71,7 @@
   .view-details-button-locked {
     transition: none !important;
   }
-  
+
   .view-details-button-locked:hover:not(:disabled) {
     transform: none !important;
   }
