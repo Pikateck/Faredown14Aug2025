@@ -5740,16 +5740,7 @@ export default function FlightResults() {
         }}
         onBookOriginal={() => {
           console.log("��� Booking original price");
-          if (bargainCtx?.product) {
-            navigate("/booking-flow", {
-              state: {
-                selectedFlight: bargainCtx.product,
-                selectedFareType: bargainCtx.product.fareTypes[0],
-                passengerCount: { adults, children },
-              },
-            });
-          }
-          setBargainCtx(null);
+          // Removed old bargain logic
         }}
         onRetry={() => {
           console.log("🔄 Retry requested - incrementing attempt");
