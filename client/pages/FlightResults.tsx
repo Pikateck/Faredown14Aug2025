@@ -404,6 +404,11 @@ export default function FlightResults() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
+  // Enhanced bargain modal state
+  const [showEnhancedBargain, setShowEnhancedBargain] = useState(false);
+  const [selectedBargainFlight, setSelectedBargainFlight] = useState<(typeof flightData)[0] | null>(null);
+  const [selectedBargainFareType, setSelectedBargainFareType] = useState<any>(null);
+
   // Load dates and city selections from URL parameters when component mounts
   useEffect(() => {
     loadDatesFromParams(searchParams);
