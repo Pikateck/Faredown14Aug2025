@@ -228,17 +228,21 @@ export default function FlightDetails({
   // Flight should always be available now due to immediate fallback
   const displayFlight = flight;
 
-  // Create explicit return flight routing
+  // Use oriented segments for correct route display
+  const firstSegment = displayFlight?.segments?.[0];
+  const lastSegment = displayFlight?.segments?.[displayFlight.segments.length - 1];
+
+  // Create explicit return flight routing (reverse of oriented route)
   const returnDeparture = {
-    code: displayFlight?.arrival?.code || toCode,
-    name: displayFlight?.arrival?.name || airportData[toCode]?.name || "Unknown Airport",
-    city: displayFlight?.arrival?.city || airportData[toCode]?.city || "Unknown"
+    code: lastSegment?.destination?.code || orientedTo || toCode,
+    name: lastSegment?.destination?.name || airportData[orientedTo || toCode]?.name || "Unknown Airport",
+    city: airportData[lastSegment?.destination?.code || orientedTo || toCode]?.city || "Unknown"
   };
 
   const returnArrival = {
-    code: displayFlight?.departure?.code || fromCode,
-    name: displayFlight?.departure?.name || airportData[fromCode]?.name || "Unknown Airport",
-    city: displayFlight?.departure?.city || airportData[fromCode]?.city || "Unknown"
+    code: firstSegment?.origin?.code || orientedFrom || fromCode,
+    name: firstSegment?.origin?.name || airportData[orientedFrom || fromCode]?.name || "Unknown Airport",
+    city: airportData[firstSegment?.origin?.code || orientedFrom || fromCode]?.city || "Unknown"
   };
 
   // We now always have flight data, so no need for error state
