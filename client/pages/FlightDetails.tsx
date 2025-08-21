@@ -61,23 +61,23 @@ export default function FlightDetails({
   const navigate = useNavigate();
   const { selectedCurrency } = useCurrency();
   const [searchParams] = useSearchParams();
-  // Immediately use fallback data to prevent loading delays
+  // Dynamic fallback data based on search parameters
   const fallbackFlight = {
     id: "fallback",
     flightNumber: "6E 1407",
     airline: "IndiGo",
     airlineCode: "6E",
     departure: {
-      code: "BOM",
-      city: "Mumbai",
-      name: "Chhatrapati Shivaji Maharaj International Airport",
-      terminal: "2",
+      code: fromCode,
+      city: airportData[fromCode]?.city || "Unknown",
+      name: airportData[fromCode]?.name || "Unknown Airport",
+      terminal: airportData[fromCode]?.terminal || "1",
     },
     arrival: {
-      code: "DXB",
-      city: "Dubai",
-      name: "Dubai International Airport",
-      terminal: "2",
+      code: toCode,
+      city: airportData[toCode]?.city || "Unknown",
+      name: airportData[toCode]?.name || "Unknown Airport",
+      terminal: airportData[toCode]?.terminal || "2",
     },
     departureTime: "14:30",
     arrivalTime: "16:00",
