@@ -1674,7 +1674,7 @@ export default function FlightResults() {
                     {[
                       { code: "en", name: "English", flag: "🇬���" },
                       { code: "es", name: "Español", flag: "🇪🇸" },
-                      { code: "fr", name: "Français", flag: "🇫���������" },
+                      { code: "fr", name: "Français", flag: "🇫�������" },
                       { code: "de", name: "Deutsch", flag: "🇩🇪" },
                       { code: "it", name: "Italiano", flag: "🇮🇹" },
                       { code: "pt", name: "Portugu��s", flag: "🇵���" },
@@ -3179,9 +3179,9 @@ export default function FlightResults() {
                                   <Info className="w-4 h-4" />
                                 </button>
 
-                                {/* Fare Breakdown Tooltip - Shows on hover */}
-                                <div className="absolute left-full ml-2 top-1/2 transform -translate-y-1/2 z-50 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                                  <div className="bg-white text-gray-800 text-sm rounded-xl p-4 shadow-xl border border-gray-100 min-w-[220px] backdrop-blur-sm">
+                                {/* Fare Breakdown Tooltip - Shows on hover with better positioning */}
+                                <div className="absolute right-full mr-4 top-1/2 transform -translate-y-1/2 z-50 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                                  <div className="bg-white text-gray-800 text-sm rounded-xl p-4 shadow-xl border border-gray-100 w-[280px] backdrop-blur-sm">
                                     <div className="text-center font-semibold mb-3 text-gray-900 border-b border-gray-100 pb-2">
                                       Fare Breakdown
                                     </div>
@@ -3768,7 +3768,7 @@ export default function FlightResults() {
                                               </p>
                                               <div className="bg-gray-50 rounded-lg p-3 text-xs text-gray-600 space-y-2 leading-relaxed">
                                                 <p>
-                                                  • Direct flights are usually
+                                                  �� Direct flights are usually
                                                   cheaper than refundable
                                                   flights. However, you may have
                                                   to pay a large fee to cancel
