@@ -10,7 +10,6 @@ import { MobileFilters } from "@/components/MobileFilters";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { MobileNavigation } from "@/components/mobile/MobileNavigation";
-import { ClassyBargainModal } from "@/components/ClassyBargainModal";
 import {
   Dialog,
   DialogContent,
