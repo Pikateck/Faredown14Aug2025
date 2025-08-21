@@ -293,7 +293,7 @@ export default function FlightDetails({
             <Button
               variant="ghost"
               className="text-white hover:bg-white/10 active:bg-white/20 p-3 min-w-[44px] min-h-[44px] rounded-full transition-colors"
-              onClick={() => navigate(`/flight-results?${searchParams.toString()}`)}
+              onClick={() => navigate(`/flights/results?${searchParams.toString()}`)}
             >
               <ArrowLeft className="w-5 h-5" />
             </Button>
