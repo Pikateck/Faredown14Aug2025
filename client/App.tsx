@@ -1,5 +1,6 @@
 import React, { useEffect, Suspense, lazy } from "react";
 import { initializeBargainPlatform } from "./services/bargainAppInit";
+import "./styles/performance-optimizations.css";
 import {
   BrowserRouter as Router,
   Routes,
