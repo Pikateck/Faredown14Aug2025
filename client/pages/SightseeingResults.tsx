@@ -683,6 +683,27 @@ export default function SightseeingResults() {
     setIsBargainModalOpen(true);
   };
 
+  // Handle conversational bargain
+  const handleConversationalBargain = (attraction: SightseeingAttraction) => {
+    setSelectedAttraction(attraction);
+    setShowConversationalBargain(true);
+  };
+
+  const handleCloseConversationalBargain = () => {
+    setShowConversationalBargain(false);
+    setSelectedAttraction(null);
+  };
+
+  const handleAcceptBargain = (finalPrice: number, orderRef: string) => {
+    console.log('Sightseeing bargain accepted:', { finalPrice, orderRef });
+    setShowConversationalBargain(false);
+  };
+
+  const handleHoldBargain = (orderRef: string) => {
+    console.log('Sightseeing bargain held:', { orderRef });
+    setShowConversationalBargain(false);
+  };
+
   // Handle attraction selection
   const handleAttractionSelect = (attraction: SightseeingAttraction) => {
     const newSelected = new Set(selectedAttractions);
