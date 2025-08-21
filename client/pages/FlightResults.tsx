@@ -5728,7 +5728,7 @@ export default function FlightResults() {
 
       {/* Single Classy Bargain Modal - Only one modal path */}
       <ClassyBargainModal
-        isOpen={!!bargainCtx?.open}
+        isOpen={false}
         flight={
           bargainCtx?.product
             ? {
