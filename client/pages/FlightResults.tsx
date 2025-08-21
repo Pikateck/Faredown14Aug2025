@@ -1691,7 +1691,7 @@ export default function FlightResults() {
                       { code: "it", name: "Italiano", flag: "🇮🇹" },
                       { code: "pt", name: "Portugu��s", flag: "🇵���" },
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
-                      { code: "hi", name: "हिन्दी", flag: "�������" },
+                      { code: "hi", name: "ह��न्दी", flag: "�������" },
                       { code: "ja", name: "日本語", flag: "🇯🇵" },
                       { code: "ko", name: "한국어", flag: "🇰����" },
                       { code: "zh", name: "中文", flag: "🇨🇳" },
@@ -2488,7 +2488,7 @@ export default function FlightResults() {
                               e.target.checked,
                             )
                           }
-                          className={`w-4 h-4 ${selectedAircraftTypes.has(aircraftType) ? "bg-blue-600" : "bg-white border border-gray-400"}`}
+                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
                         />
                       </div>
                       <span
