@@ -65,10 +65,8 @@ export default function FlightDetails({
   // Extract search parameters for dynamic content
   const departureDate = searchParams.get("departure") || "2024-08-22";
   const returnDate = searchParams.get("return") || "2024-08-25";
-
-  // Temporary hard-code for testing - should show DXB → BOM correctly
-  const fromCode = "DXB"; // searchParams.get("from") || "DXB";
-  const toCode = "BOM"; // searchParams.get("to") || "BOM";
+  const fromCode = searchParams.get("from") || "DXB";
+  const toCode = searchParams.get("to") || "BOM";
 
   // Debug logging
   console.log("🛫 FlightDetails search params:", {
