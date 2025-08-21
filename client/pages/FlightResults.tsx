@@ -2940,7 +2940,7 @@ export default function FlightResults() {
                           <span className="text-xs text-gray-700">Baggage</span>
                           {/* Mobile Baggage Tooltip */}
                           <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none">
-                            <div className="bg-white text-gray-800 text-xs rounded-lg p-3 shadow-lg border border-gray-200 w-[220px]">
+                            <div className="bg-white text-gray-800 text-xs rounded-lg p-3 shadow-lg border border-gray-200 w-[180px] sm:w-[200px]">
                               <div className="font-semibold mb-2 text-gray-900">
                                 Baggage Allowance
                               </div>
@@ -4404,7 +4404,7 @@ export default function FlightResults() {
                                     passenger
                                   </li>
                                   <li>
-                                    • Name changes not allowed after booking
+                                    ��� Name changes not allowed after booking
                                   </li>
                                   <li>• Infant fares have different rules</li>
                                   <li>
