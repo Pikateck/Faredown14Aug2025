@@ -2812,8 +2812,8 @@ export default function BookingFlow() {
                                 <div>
                                   <p className="text-sm text-[#666]">Route</p>
                                   <p className="font-medium">
-                                    {selectedFlight?.from || "Mumbai"} →{" "}
-                                    {selectedFlight?.to || "Dubai"}
+                                    {selectedFlight?.from || fromCity} →{" "}
+                                    {selectedFlight?.to || toCity}
                                   </p>
                                 </div>
                               </div>
