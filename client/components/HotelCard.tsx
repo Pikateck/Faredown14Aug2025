@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { BargainButton } from "@/components/ui/BargainButton";
-import { ViewDetailsButton } from "@/components/ui/ViewDetailsButton";
+import { FaredownButton } from "@/components/ui/FaredownButton";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import type { Hotel as HotelType } from "@/services/hotelsService";
