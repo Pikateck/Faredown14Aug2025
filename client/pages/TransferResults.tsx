@@ -1370,6 +1370,35 @@ export default function TransferResults() {
           navigate(`/transfer-booking?${bookingParams.toString()}`);
         }}
       />
+
+      {/* Conversational Bargain Modal */}
+      <ConversationalBargainModal
+        isOpen={showConversationalBargain}
+        flight={selectedTransfer ? {
+          id: selectedTransfer.id.toString(),
+          airline: selectedTransfer.vehicleName,
+          flightNumber: "TRANSFER",
+          departureCode: "PICKUP",
+          arrivalCode: "DROPOFF",
+          departureTime: "As scheduled",
+          arrivalTime: "As scheduled",
+          duration: selectedTransfer.duration || "Varies",
+          aircraft: "Ground Transport",
+          price: selectedTransfer.price || 0,
+        } : null}
+        selectedFareType={{
+          name: "Standard Transfer",
+          price: selectedTransfer?.price || 0,
+          features: selectedTransfer?.features || [],
+          baggage: "Luggage included",
+          refundability: "Flexible booking",
+        }}
+        onClose={handleCloseConversationalBargain}
+        onAccept={handleAcceptBargain}
+        onHold={handleHoldBargain}
+        userName="traveler"
+        module="transfers"
+      />
     </div>
   );
 }
