@@ -1203,7 +1203,10 @@ export default function Index() {
               {/* Dates */}
               <div className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200">
                 <button
-                  onClick={() => setShowCalendar(true)}
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    setShowCalendar(true);
+                  }}
                   className="w-full text-left p-5 hover:bg-gray-50 rounded-xl transition-colors duration-200"
                 >
                   <div className="text-xs font-medium text-gray-600 mb-2 uppercase tracking-wide">
