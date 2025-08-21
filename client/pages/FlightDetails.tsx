@@ -226,7 +226,7 @@ export default function FlightDetails({
               <ArrowLeft className="w-5 h-5" />
             </Button>
             <div>
-              <h1 className="text-lg font-semibold">Your flight to Dubai</h1>
+              <h1 className="text-lg font-semibold">Your flight to {airportData[toCode]?.city || "Unknown"}</h1>
             </div>
           </div>
           <div className="flex items-center space-x-3">
