@@ -357,13 +357,15 @@
 }
 
 .fd-offerCard {
-  border: 2px solid #e5e7eb;
-  border-radius: 16px;
-  padding: 20px;
-  margin-bottom: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  background: linear-gradient(135deg, #fff 0%, #f8fafc 100%);
+  border: 1px solid #e5e7eb;
+  border-radius: 24px;
+  padding: 28px 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  background: linear-gradient(135deg, #ffffff 0%, #fafbfc 100%);
   text-align: center;
+  border: 2px solid transparent;
+  background-clip: padding-box;
 }
 
 .fd-offerPrice {
