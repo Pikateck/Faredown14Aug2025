@@ -639,13 +639,12 @@ export function MobileClassDropdown({
         {classOptions.map((option) => (
           <button
             key={option.value}
-            onMouseDown={(e) => {
-              e.preventDefault();
+            onClick={() => {
               onSelectClass(option.value);
               onClose();
             }}
             className={cn(
-              "w-full text-left px-4 py-4 hover:bg-gray-50 rounded-lg border touch-manipulation",
+              "w-full text-left px-4 py-4 hover:bg-gray-50 active:bg-gray-100 rounded-lg border touch-manipulation transition-colors",
               selectedClass === option.value
                 ? "border-blue-500 bg-blue-50"
                 : "border-gray-100",
