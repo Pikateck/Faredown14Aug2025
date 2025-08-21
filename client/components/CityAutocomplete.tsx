@@ -28,6 +28,7 @@ export function CityAutocomplete({
   const [airports, setAirports] = useState<Airport[]>([]);
   const [activeIndex, setActiveIndex] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
