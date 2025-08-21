@@ -1678,7 +1678,7 @@ export default function FlightResults() {
                       { code: "de", name: "Deutsch", flag: "🇩🇪" },
                       { code: "it", name: "Italiano", flag: "🇮🇹" },
                       { code: "pt", name: "Portugu��s", flag: "🇵���" },
-                      { code: "ar", name: "العربية", flag: "🇸��" },
+                      { code: "ar", name: "العربية", flag: "🇸🇦" },
                       { code: "hi", name: "हिन्दी", flag: "�������" },
                       { code: "ja", name: "日本語", flag: "🇯🇵" },
                       { code: "ko", name: "한국어", flag: "🇰����" },
@@ -2979,8 +2979,9 @@ export default function FlightResults() {
 
                       {/* Action Buttons - Hotel Section Style Mobile */}
                       <div className="w-full grid grid-cols-2 gap-2 mt-3 relative z-50 pointer-events-auto">
-                        <ViewDetailsButton
-                          className="flex items-center justify-center relative z-50"
+                        <FaredownButton
+                          variant="secondary"
+                          className="relative z-50"
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
@@ -2994,7 +2995,7 @@ export default function FlightResults() {
                           }}
                         >
                           View Details
-                        </ViewDetailsButton>
+                        </FaredownButton>
                         <BargainButton
                           onClick={(e) => {
                             e.preventDefault();
