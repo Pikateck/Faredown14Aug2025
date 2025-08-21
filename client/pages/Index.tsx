@@ -1300,7 +1300,8 @@ export default function Index() {
 
               {/* Search Button */}
               <Button
-                onClick={() => {
+                onMouseDown={(e) => {
+                  e.preventDefault();
                   // Validate required fields
                   if (!validateSearchForm()) {
                     return;
