@@ -322,7 +322,8 @@ export function MobileCityDropdown({
           {filteredCities.map(([city, data]) => (
             <button
               key={city}
-              onClick={() => {
+              onMouseDown={(e) => {
+                e.preventDefault();
                 onSelectCity(city);
                 onClose();
               }}
