@@ -681,7 +681,8 @@ export default function Index() {
                         {currencies.map((currency) => (
                           <button
                             key={currency.code}
-                            onClick={() => {
+                            onMouseDown={(e) => {
+                              e.preventDefault();
                               setCurrency(currency);
                             }}
                             className={`w-full text-left px-3 py-2 hover:bg-gray-100 rounded-lg flex items-center justify-between transition-colors duration-150 ${
