@@ -1170,11 +1170,8 @@ export default function Index() {
                   <div className="flex-1">
                     <button
                       ref={toCityButtonRef}
-                      onMouseDown={(e) => {
-                        e.preventDefault();
-                        handleToCityClick(e);
-                      }}
-                      className="w-full text-left touch-manipulation"
+                      onClick={handleToCityClick}
+                      className="w-full text-left touch-manipulation active:bg-gray-50 transition-colors"
                       style={{ WebkitTapHighlightColor: "transparent" }}
                     >
                       <div className="text-xs text-gray-500 mb-1">To</div>
