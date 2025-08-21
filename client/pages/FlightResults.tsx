@@ -1743,7 +1743,7 @@ export default function FlightResults() {
                       INR: { symbol: "₹", name: "Indian Rupee" },
                       AED: { symbol: "د.إ", name: "UAE Dirham" },
                       SAR: { symbol: "ر.س", name: "Saudi Riyal" },
-                      JPY: { symbol: "¥", name: "Japanese Yen" },
+                      JPY: { symbol: "��", name: "Japanese Yen" },
                       CNY: { symbol: "¥", name: "Chinese Yuan" },
                       SGD: { symbol: "S$", name: "Singapore Dollar" },
                       AUD: { symbol: "A$", name: "Australian Dollar" },
@@ -2404,7 +2404,7 @@ export default function FlightResults() {
                           value={option.value}
                           checked={selectedStops === option.value}
                           onChange={() => handleStopsFilter(option.value)}
-                          className={`w-3 h-3 sm:w-4 sm:h-4 ${selectedStops === option.value ? "bg-blue-600" : "bg-white border border-gray-400"}`}
+                          className="w-3 h-3 sm:w-4 sm:h-4 accent-blue-600"
                         />
                       </div>
                       {option.label}
@@ -2442,7 +2442,7 @@ export default function FlightResults() {
                           type="checkbox"
                           checked={selectedAirlines.has(airline)}
                           onChange={() => handleAirlineFilter(airline)}
-                          className={`w-3 h-3 sm:w-4 sm:h-4 ${selectedAirlines.has(airline) ? "bg-blue-600" : "bg-white border border-gray-400"}`}
+                          className="w-3 h-3 sm:w-4 sm:h-4 accent-blue-600"
                         />
                       </div>
                       <span
@@ -2494,7 +2494,7 @@ export default function FlightResults() {
                           type="checkbox"
                           checked={selectedAircraftTypes.has(aircraftType)}
                           onChange={() => handleAircraftTypeFilter(aircraftType)}
-                          className={`w-4 h-4 ${selectedAircraftTypes.has(aircraftType) ? "bg-blue-600" : "bg-white border border-gray-400"}`}
+                          className="w-4 h-4 accent-blue-600"
                         />
                       </div>
                       <span
