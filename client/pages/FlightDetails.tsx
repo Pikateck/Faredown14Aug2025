@@ -440,10 +440,10 @@ export default function FlightDetails({
                         {displayFlight.airline}
                       </div>
                       <div className="text-sm text-gray-600">
-                        Flight {displayFlight.flightNumber || "6E1456"}
+                        Flight 6E 1456
                       </div>
                       <div className="text-sm text-gray-600">
-                        Flight time {displayFlight.duration || "3h 15m"}
+                        Flight time 3h 15m
                       </div>
                     </div>
                   </div>
