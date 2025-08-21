@@ -1634,7 +1634,8 @@ export default function Index() {
                         {currencies.map((currency) => (
                           <button
                             key={currency.code}
-                            onClick={() => {
+                            onMouseDown={(e) => {
+                              e.preventDefault();
                               setCurrency(currency);
                               setShowCurrencyDropdown(false);
                             }}
