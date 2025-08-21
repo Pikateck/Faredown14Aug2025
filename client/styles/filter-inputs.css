@@ -1,0 +1,30 @@
+/* Force filter inputs to be visible */
+input[type="checkbox"], 
+input[type="radio"] {
+  appearance: auto !important;
+  -webkit-appearance: auto !important;
+  -moz-appearance: auto !important;
+  display: inline-block !important;
+  width: 16px !important;
+  height: 16px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 1px solid #d1d5db !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+input[type="radio"] {
+  border-radius: 50% !important;
+}
+
+input[type="checkbox"] {
+  border-radius: 3px !important;
+}
+
+input[type="checkbox"]:checked,
+input[type="radio"]:checked {
+  accent-color: #2563eb !important;
+  background-color: #2563eb !important;
+}
