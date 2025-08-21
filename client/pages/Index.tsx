@@ -1156,13 +1156,12 @@ export default function Index() {
                   </div>
 
                   <button
-                    onMouseDown={(e) => {
-                      e.preventDefault();
+                    onClick={() => {
                       const temp = selectedFromCity;
                       setSelectedFromCity(selectedToCity);
                       setSelectedToCity(temp);
                     }}
-                    className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
+                    className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 active:bg-gray-300 transition-colors touch-manipulation"
                   >
                     <ArrowRight className="w-4 h-4 text-gray-500" />
                   </button>
@@ -2499,7 +2498,7 @@ export default function Index() {
                     />
                   </svg>
                   <span className="font-medium text-lg">
-                    24���7 Customer Support | Live Chat & Call Available
+                    24��7 Customer Support | Live Chat & Call Available
                   </span>
                 </div>
 
