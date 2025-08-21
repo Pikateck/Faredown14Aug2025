@@ -2404,7 +2404,7 @@ export default function FlightResults() {
                           value={option.value}
                           checked={selectedStops === option.value}
                           onChange={() => handleStopsFilter(option.value)}
-                          className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                          style={{ width: '16px', height: '16px', accentColor: '#2563eb' }}
                         />
                       </div>
                       {option.label}
@@ -2442,7 +2442,7 @@ export default function FlightResults() {
                           type="checkbox"
                           checked={selectedAirlines.has(airline)}
                           onChange={() => handleAirlineFilter(airline)}
-                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                          style={{ width: '16px', height: '16px', accentColor: '#2563eb' }}
                         />
                       </div>
                       <span
@@ -2494,7 +2494,7 @@ export default function FlightResults() {
                           type="checkbox"
                           checked={selectedAircraftTypes.has(aircraftType)}
                           onChange={() => handleAircraftTypeFilter(aircraftType)}
-                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                          style={{ width: '16px', height: '16px', accentColor: '#2563eb' }}
                         />
                       </div>
                       <span
@@ -3907,7 +3907,7 @@ export default function FlightResults() {
                                                     Faredown Fee:
                                                   </span>
                                                   <span className="text-gray-900 font-medium">
-                                                    ���500
+                                                    ₹500
                                                   </span>
                                                 </div>
                                               </div>
