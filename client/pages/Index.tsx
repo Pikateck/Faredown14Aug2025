@@ -1826,7 +1826,10 @@ export default function Index() {
                           </span>
                         </button>
                         <button
-                          onClick={() => setTripType("one-way")}
+                          onMouseDown={(e) => {
+                            e.preventDefault();
+                            setTripType("one-way");
+                          }}
                           className="flex items-center space-x-2"
                         >
                           <div
