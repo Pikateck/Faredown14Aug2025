@@ -5,6 +5,8 @@ import { Header } from "@/components/Header";
 import { HotelCard } from "@/components/HotelCard";
 import { BookingSearchForm } from "@/components/BookingSearchForm";
 import { FlightStyleBargainModal } from "@/components/FlightStyleBargainModal";
+import ConversationalBargainModal from "@/components/ConversationalBargainModal";
+import "../styles/bargain-button.css";
 import { ComprehensiveFilters } from "@/components/ComprehensiveFilters";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -73,6 +75,7 @@ export default function HotelResults() {
   // Hotel bargain modal state
   const [selectedHotel, setSelectedHotel] = useState<HotelType | null>(null);
   const [isBargainModalOpen, setIsBargainModalOpen] = useState(false);
+  const [showConversationalBargain, setShowConversationalBargain] = useState(false);
   const [viewMode, setViewMode] = useState<"grid" | "list">("list");
   const [hotels, setHotels] = useState<Hotel[]>([]);
   const [loading, setLoading] = useState(true);
