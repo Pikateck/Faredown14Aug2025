@@ -173,17 +173,19 @@
 .fd-label {
   display: block;
   margin-bottom: 12px;
-  font-weight: 600;
-  color: #1e293b;
+  font-weight: 700;
+  color: #1f2937;
   text-align: center;
-  font-size: 1.25rem;
+  font-size: 1.375rem;
+  letter-spacing: -0.025em;
 }
 
 .fd-sublabel {
   text-align: center;
-  color: #64748b;
-  margin-bottom: 20px;
-  font-size: 0.95rem;
+  color: #6b7280;
+  margin-bottom: 24px;
+  font-size: 1rem;
+  line-height: 1.5;
 }
 
 .fd-input {
