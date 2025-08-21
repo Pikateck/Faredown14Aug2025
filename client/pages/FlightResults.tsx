@@ -3654,29 +3654,6 @@ export default function FlightResults() {
 
                                       {/* Book Now & Start Bargain Buttons */}
                                       <div className="border-t border-gray-200 pt-4 mt-6 space-y-3">
-                                        {/* Start Bargain Button - Phase 1 */}
-                                        <Button
-                                          onClick={() => {
-                                            const [flightId, fareTypeId] =
-                                              detailKey.split("-");
-                                            const fareType =
-                                              flight.fareTypes.find(
-                                                (ft) => ft.id === fareTypeId,
-                                              ) || flight.fareTypes[0];
-
-                                            console.log(
-                                              "🚀 Opening unified bargain modal (desktop):",
-                                              flight,
-                                              fareType,
-                                            );
-
-                                            handleBargain(flight, fareType);
-                                          }}
-                                          className="w-full bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black py-3 text-lg font-semibold rounded-lg shadow-md transition-all duration-200 transform hover:scale-[1.01] flex items-center justify-center gap-2"
-                                        >
-                                          <TrendingDown className="w-4 h-4" />
-                                          Bargain Now
-                                        </Button>
 
                                         {/* Book Now Button */}
                                         <Button
