@@ -5835,8 +5835,8 @@ export default function FlightResults() {
                 flightNumber:
                   bargainCtx.product.flightNumber ||
                   `FL${bargainCtx.product.id}`,
-                departureCode: bargainCtx.product.departureCode || "BOM",
-                arrivalCode: bargainCtx.product.arrivalCode || "DXB",
+                departureCode: bargainCtx.product.departureCode || bargainCtx.product.origin || "BOM",
+                arrivalCode: bargainCtx.product.arrivalCode || bargainCtx.product.destination || "DXB",
                 departureTime: bargainCtx.product.departureTime,
                 arrivalTime: bargainCtx.product.arrivalTime,
                 duration: bargainCtx.product.duration,
