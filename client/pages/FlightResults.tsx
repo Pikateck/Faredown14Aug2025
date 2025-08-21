@@ -2596,7 +2596,7 @@ export default function FlightResults() {
                         <div className="w-4 h-4 flex items-center justify-center mr-2">
                           <input
                             type="checkbox"
-                            className="w-4 h-4 bg-white border border-gray-400"
+                            className="w-4 h-4 accent-blue-600"
                           />
                         </div>
                         {time.label}
