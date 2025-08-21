@@ -627,7 +627,7 @@ const SeatMap = ({
                                 title={`Seat ${seat.id} - ₹${seat.price} ${seat.available ? "(Click to select)" : "(Unavailable)"}`}
                               >
                                 {selectedSeats[flightLeg][seat.id]
-                                  ? "✓"
+                                  ? "��"
                                   : seat.available
                                     ? ""
                                     : "×"}
@@ -772,7 +772,7 @@ const SeatMap = ({
         {/* Dubai-Mumbai Summary */}
         <div>
           <h5 className="text-sm font-medium text-gray-900 mb-2">
-            Dubai → Mumbai
+            Dubai �� Mumbai
           </h5>
           <div className="space-y-2 text-sm">
             {travellers.map((traveller) => {
@@ -867,6 +867,7 @@ export default function BookingFlow() {
   `;
   const location = useLocation();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const {
     departureDate,
     returnDate,
@@ -874,6 +875,25 @@ export default function BookingFlow() {
     formatDisplayDate,
     loadDatesFromParams,
   } = useDateContext();
+
+  // Get route information from URL parameters
+  const fromCode = searchParams.get("from") || "DXB";
+  const toCode = searchParams.get("to") || "BOM";
+
+  // Airport data mapping
+  const airportData: Record<string, {city: string; name: string}> = {
+    "DXB": { city: "Dubai", name: "Dubai International Airport" },
+    "BOM": { city: "Mumbai", name: "Chhatrapati Shivaji Maharaj International Airport" },
+    "DEL": { city: "Delhi", name: "Indira Gandhi International Airport" },
+    "BLR": { city: "Bangalore", name: "Kempegowda International Airport" },
+    "MAA": { city: "Chennai", name: "Chennai International Airport" },
+    "CCU": { city: "Kolkata", name: "Netaji Subhash Chandra Bose International Airport" }
+  };
+
+  // Create route display based on URL parameters
+  const fromCity = airportData[fromCode]?.city || fromCode;
+  const toCity = airportData[toCode]?.city || toCode;
+  const routeDisplay = `${fromCity} to ${toCity}`;
 
   // Get passenger data and flight data from navigation state
   const passengersFromState = location.state?.passengers || {
