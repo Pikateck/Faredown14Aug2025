@@ -5736,23 +5736,7 @@ export default function FlightResults() {
         }}
         onAccept={(finalPrice: number, orderRef: string) => {
           console.log("�� Bargain accepted:", finalPrice, orderRef);
-          if (bargainCtx?.product) {
-            const updatedFareType = {
-              ...bargainCtx.product.fareTypes[0],
-              price: finalPrice,
-            };
-            navigate("/booking-flow", {
-              state: {
-                selectedFlight: bargainCtx.product,
-                selectedFareType: updatedFareType,
-                passengerCount: { adults, children },
-                isBargainAccepted: true,
-                finalBargainPrice: finalPrice,
-                orderRef,
-              },
-            });
-          }
-          setBargainCtx(null);
+          // Removed old bargain logic
         }}
         onBookOriginal={() => {
           console.log("��� Booking original price");
