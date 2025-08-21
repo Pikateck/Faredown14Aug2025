@@ -247,7 +247,11 @@ export default function FlightDetails({
                 <div className="w-3 h-3 border-2 border-gray-900 rounded-full bg-white mt-2"></div>
                 <div className="flex-1">
                   <div className="text-lg font-semibold text-gray-900 mb-1">
-                    Sat, Sep 6 • {displayFlight.departureTime}
+                    {new Date(departureDate).toLocaleDateString("en-US", {
+                      weekday: "short",
+                      month: "short",
+                      day: "numeric"
+                    })} • {displayFlight.departureTime}
                   </div>
                   <div className="font-bold text-gray-900 text-lg mb-1">
                     {displayFlight.departure.code} •{" "}
