@@ -568,7 +568,8 @@ export function BookingCalendar({
             Clear
           </button>
           <button
-            onClick={() => {
+            onMouseDown={(e) => {
+              e.preventDefault();
               // Apply the selected dates before closing
               if (onChange && selection[0].startDate) {
                 onChange({
