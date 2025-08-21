@@ -2940,10 +2940,10 @@ export default function FlightResults() {
                                   {flight.returnArrivalTime}
                                 </div>
                                 <div className="text-sm text-gray-600 font-medium">
-                                  {toCode || flight.arrivalCode || "DXB"}
+                                  {fromCode || flight.departureCode || "BOM"}
                                 </div>
                                 <div className="text-xs text-gray-500">
-                                  {toCityName || flight.arrival?.city || "Dubai"}
+                                  {fromCityName || flight.departure?.city || "Mumbai"}
                                 </div>
                               </div>
                             </div>
@@ -6405,7 +6405,7 @@ export default function FlightResults() {
                             Airline fee:
                           </span>
                           <p className="text-yellow-600">
-                            ��2,314 per passenger
+                            ���2,314 per passenger
                           </p>
                         </div>
                         <div>
