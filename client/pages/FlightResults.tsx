@@ -2070,7 +2070,7 @@ export default function FlightResults() {
               <div className="relative">
                 <button
                   onClick={() => setShowToCities(!showToCities)}
-                  className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-10 w-full hover:border-blue-500 touch-manipulation pr-10"
+                  className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-12 w-full hover:border-blue-600 touch-manipulation pr-10"
                 >
                   <Plane className="w-4 h-4 text-gray-500 mr-2" />
                   <div className="flex items-center space-x-2 min-w-0">
