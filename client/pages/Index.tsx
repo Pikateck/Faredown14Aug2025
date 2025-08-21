@@ -2211,7 +2211,8 @@ export default function Index() {
 
                     <div className="lg:max-w-[100px] w-full lg:w-auto">
                       <Button
-                        onClick={() => {
+                        onMouseDown={(e) => {
+                          e.preventDefault();
                           // Validate required fields
                           if (!validateSearchForm()) {
                             return;
