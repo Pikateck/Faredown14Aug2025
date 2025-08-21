@@ -1075,7 +1075,10 @@ export default function Index() {
             {/* Mobile Trip Type Selector */}
             <div className="flex space-x-1 mb-6 bg-gray-100 rounded-lg p-1">
               <button
-                onClick={() => setTripType("round-trip")}
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  setTripType("round-trip");
+                }}
                 className={cn(
                   "flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors",
                   tripType === "round-trip"
