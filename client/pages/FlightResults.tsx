@@ -1665,7 +1665,7 @@ export default function FlightResults() {
                       { code: "it", name: "Italiano", flag: "🇮🇹" },
                       { code: "pt", name: "Portugu��s", flag: "🇵🇹" },
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
-                      { code: "hi", name: "हिन्दी", flag: "🇮����" },
+                      { code: "hi", name: "हिन्दी", flag: "�������" },
                       { code: "ja", name: "日本語", flag: "🇯🇵" },
                       { code: "ko", name: "한국어", flag: "🇰����" },
                       { code: "zh", name: "中文", flag: "🇨🇳" },
@@ -5835,8 +5835,8 @@ export default function FlightResults() {
                 flightNumber:
                   bargainCtx.product.flightNumber ||
                   `FL${bargainCtx.product.id}`,
-                departureCode: bargainCtx.product.departureCode || bargainCtx.product.origin || "BOM",
-                arrivalCode: bargainCtx.product.arrivalCode || bargainCtx.product.destination || "DXB",
+                departureCode: bargainCtx.product.departureCode || bargainCtx.product.origin || searchParams.get("from") || "BOM",
+                arrivalCode: bargainCtx.product.arrivalCode || bargainCtx.product.destination || searchParams.get("to") || "DXB",
                 departureTime: bargainCtx.product.departureTime,
                 arrivalTime: bargainCtx.product.arrivalTime,
                 duration: bargainCtx.product.duration,
