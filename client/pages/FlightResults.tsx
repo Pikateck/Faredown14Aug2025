@@ -2471,19 +2471,6 @@ export default function FlightResults() {
                     onMouseLeave={() => setHoveredAircraftType(null)}
                   >
                     <label className="text-sm text-gray-700 cursor-pointer flex-1 leading-tight flex items-center">
-                      <div className="w-4 h-4 flex items-center justify-center mr-2">
-                        <input
-                          type="checkbox"
-                          checked={selectedAircraftTypes.has(aircraftType)}
-                          onChange={(e) =>
-                            handleAircraftTypeFilter(
-                              aircraftType,
-                              e.target.checked,
-                            )
-                          }
-                          className={`w-4 h-4 ${selectedAircraftTypes.has(aircraftType) ? "bg-blue-600" : "bg-white border border-gray-400"}`}
-                        />
-                      </div>
                       <span
                         className={`transition-colors ${hoveredAircraftType === aircraftType ? "text-blue-600 font-medium" : "text-gray-700"}`}
                       >
