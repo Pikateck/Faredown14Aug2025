@@ -1550,6 +1550,35 @@ export default function HotelResults() {
         setRooms={setEditRooms}
       />
 
+      {/* Conversational Bargain Modal */}
+      <ConversationalBargainModal
+        isOpen={showConversationalBargain}
+        flight={selectedHotel ? {
+          id: selectedHotel.id.toString(),
+          airline: selectedHotel.name,
+          flightNumber: "HOTEL",
+          departureCode: "CHECK-IN",
+          arrivalCode: "CHECK-OUT",
+          departureTime: "15:00",
+          arrivalTime: "11:00",
+          duration: "Stay Duration",
+          aircraft: "Hotel Room",
+          price: selectedHotel.currentPrice || selectedHotel.pricePerNight,
+        } : null}
+        selectedFareType={{
+          name: "Standard Room",
+          price: selectedHotel?.currentPrice || selectedHotel?.pricePerNight || 0,
+          features: selectedHotel?.features || [],
+          baggage: "Free WiFi",
+          refundability: "Free cancellation",
+        }}
+        onClose={handleCloseConversationalBargain}
+        onAccept={handleAcceptBargain}
+        onHold={handleHoldBargain}
+        userName="traveler"
+        module="hotels"
+      />
+
       {/* Mobile Navigation */}
       <MobileNavigation />
     </div>
