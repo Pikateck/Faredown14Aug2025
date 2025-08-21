@@ -748,13 +748,14 @@ export function HotelCard({
               </div>
             </div>
             <div className="flex gap-3 ml-3">
-              <ViewDetailsButton
+              <FaredownButton
+                variant="secondary"
                 className="text-sm"
                 size="md"
                 onClick={handleViewDetails}
               >
                 View Details
-              </ViewDetailsButton>
+              </FaredownButton>
               <BargainButton
                 onClick={() => onBargainClick(hotel, searchParams)}
                 className="flex items-center gap-2"
