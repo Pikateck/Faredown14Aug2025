@@ -4,6 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useDateContext } from "@/contexts/DateContext";
 import "../styles/filter-inputs.css";
 import "../styles/bargain-button.css";
+import "../styles/view-details-button.css";
 import { flightsService, Flight } from "@/services/flightsService";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -14,6 +15,7 @@ import { MobileNavigation } from "@/components/mobile/MobileNavigation";
 import EnhancedBargainModal from "@/components/EnhancedBargainModal";
 import ConversationalBargainModal from "@/components/ConversationalBargainModal";
 import { BargainButton } from "@/components/ui/BargainButton";
+import { ViewDetailsButton } from "@/components/ui/ViewDetailsButton";
 import {
   Dialog,
   DialogContent,
@@ -2979,9 +2981,8 @@ export default function FlightResults() {
 
                       {/* Action Buttons - Hotel Section Style Mobile */}
                       <div className="w-full grid grid-cols-2 gap-2 mt-3 relative z-50 pointer-events-auto">
-                        <Button
-                          variant="outline"
-                          className="min-h-[44px] px-6 py-3 font-semibold text-sm touch-manipulation flex items-center justify-center relative z-50"
+                        <ViewDetailsButton
+                          className="flex items-center justify-center relative z-50"
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
@@ -2993,12 +2994,9 @@ export default function FlightResults() {
                               state: { flight },
                             });
                           }}
-                          onTouchStart={(e) => {
-                            e.stopPropagation();
-                          }}
                         >
                           View Details
-                        </Button>
+                        </ViewDetailsButton>
                         <BargainButton
                           onClick={(e) => {
                             e.preventDefault();
