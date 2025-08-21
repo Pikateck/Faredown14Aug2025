@@ -2759,9 +2759,9 @@ export default function FlightResults() {
                               <button className="text-gray-400 hover:text-gray-600 transition-colors cursor-help">
                                 <Info className="w-3 h-3" />
                               </button>
-                              {/* Mobile Fare Breakdown Tooltip - Compact and right-aligned */}
-                              <div className="absolute right-0 bottom-full mb-2 z-50 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                                <div className="bg-white text-gray-800 text-xs rounded-lg p-3 shadow-lg border border-gray-100 w-[200px] sm:w-[220px] backdrop-blur-sm">
+                              {/* Mobile Fare Breakdown Tooltip - Positioned to avoid cut-off */}
+                              <div className="absolute right-0 top-full mt-2 z-50 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                                <div className="bg-white text-gray-800 text-xs rounded-lg p-3 shadow-lg border border-gray-100 w-[200px] backdrop-blur-sm">
                                   <div className="text-center font-semibold mb-3 text-gray-900 border-b border-gray-100 pb-2">
                                     Fare Breakdown
                                   </div>
