@@ -2208,9 +2208,7 @@ export default function Index() {
                               selectedFromCity,
                             to:
                               cityData[selectedToCity]?.code || selectedToCity,
-                            departureDate: departureDate
-                              .toISOString()
-                              .split("T")[0],
+                            departureDate: getUrlDateString(departureDate),
                             adults: travelers.adults.toString(),
                             children: travelers.children.toString(),
                             tripType: tripType.replace("-", "_"),
@@ -2222,7 +2220,7 @@ export default function Index() {
                           if (returnDate && tripType === "round-trip") {
                             params.set(
                               "returnDate",
-                              returnDate.toISOString().split("T")[0],
+                              getUrlDateString(returnDate),
                             );
                           }
 
