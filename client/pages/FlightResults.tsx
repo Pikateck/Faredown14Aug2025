@@ -3303,17 +3303,17 @@ export default function FlightResults() {
                         >
                           View Details
                         </FaredownButton>
-                        <BargainButton
+                        <FaredownButton
+                          variant="primary"
+                          size="sm"
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
                             handleConversationalBargain(flight);
                           }}
-                          size="sm"
-                          className="flex items-center gap-2"
                         >
                           🎯 Bargain Now
-                        </BargainButton>
+                        </FaredownButton>
                       </div>
                     </div>
                   </div>
