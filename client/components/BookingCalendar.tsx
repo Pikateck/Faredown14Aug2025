@@ -547,8 +547,7 @@ export function BookingCalendar({
         {/* Footer with action buttons */}
         <div className="flex justify-between items-center p-4 border-t border-gray-200">
           <button
-            onMouseDown={(e) => {
-              e.preventDefault();
+            onClick={() => {
               const today = new Date();
               const defaultEnd = addDays(today, 1);
               setSelection([
