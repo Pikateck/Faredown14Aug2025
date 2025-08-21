@@ -469,7 +469,10 @@ export function MobileDatePicker({
         {bookingType === "flights" && (
           <div className="flex space-x-4 mb-6">
             <button
-              onClick={() => setTripType("round-trip")}
+              onMouseDown={(e) => {
+                e.preventDefault();
+                setTripType("round-trip");
+              }}
               className={cn(
                 "flex-1 py-3 px-4 rounded-lg border-2 text-sm font-medium touch-manipulation",
                 tripType === "round-trip"
