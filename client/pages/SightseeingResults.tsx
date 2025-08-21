@@ -9,6 +9,8 @@ import { ErrorBanner } from "@/components/ErrorBanner";
 import { SightseeingCard } from "@/components/SightseeingCard";
 import { SightseeingCardSimple } from "@/components/SightseeingCardSimple";
 import { FlightStyleBargainModal } from "@/components/FlightStyleBargainModal";
+import ConversationalBargainModal from "@/components/ConversationalBargainModal";
+import "../styles/bargain-button.css";
 import { SightseeingSearchForm } from "@/components/SightseeingSearchForm";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { sightseeingService } from "@/services/sightseeingService";
