@@ -466,13 +466,14 @@ export function HotelCard({
 
               {/* Action Buttons - Native App Optimized */}
               <div className="flex space-x-3">
-                <ViewDetailsButton
+                <FaredownButton
+                  variant="secondary"
                   className="flex-1"
                   size="lg"
                   onClick={handleViewDetails}
                 >
                   View Details
-                </ViewDetailsButton>
+                </FaredownButton>
                 <BargainButton
                   onClick={() => onBargainClick(hotel, searchParams)}
                   className="flex-1 flex items-center justify-center gap-2"
@@ -605,13 +606,14 @@ export function HotelCard({
 
               {/* Action Buttons - Native App Optimized */}
               <div className="flex space-x-3">
-                <ViewDetailsButton
+                <FaredownButton
+                  variant="secondary"
                   className="flex-1"
                   size="lg"
                   onClick={handleViewDetails}
                 >
                   View Details
-                </ViewDetailsButton>
+                </FaredownButton>
                 <BargainButton
                   onClick={() => onBargainClick(hotel, searchParams)}
                   className="flex-1 flex items-center justify-center gap-2"
