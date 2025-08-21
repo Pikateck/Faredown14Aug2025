@@ -191,6 +191,12 @@ export default function FlightDetails({
   // Flight should always be available now due to immediate fallback
   const displayFlight = flight;
 
+  console.log("🛫 DisplayFlight Debug:", {
+    departure: `${displayFlight?.departure?.code} (${displayFlight?.departure?.city})`,
+    arrival: `${displayFlight?.arrival?.code} (${displayFlight?.arrival?.city})`,
+    actualRoute: `${displayFlight?.departure?.code} → ${displayFlight?.arrival?.code}`
+  });
+
   // We now always have flight data, so no need for error state
   if (!displayFlight) {
     return (
