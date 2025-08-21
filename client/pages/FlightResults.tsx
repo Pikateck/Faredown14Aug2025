@@ -72,7 +72,6 @@ import {
   Headphones,
   Calendar,
   TrendingUp,
-  TrendingDown,
   Search,
   Camera,
   Navigation,
