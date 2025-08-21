@@ -1399,26 +1399,6 @@ export default function FlightResults() {
     });
   };
 
-  // Single bargain handler - simplified
-  function handleBargain(flight: (typeof flightData)[0]) {
-    console.log("🎯 handleBargain called with flight:", flight.id);
-
-    if (!flight) {
-      console.error("❌ Invalid flight data:", flight);
-      return;
-    }
-
-    // Use Promise.resolve to guarantee state update
-    Promise.resolve().then(() => {
-      setBargainCtx({
-        open: true,
-        module: "flights",
-        product: flight,
-        attempt: 1,
-      });
-      console.log("🎯 Modal context set for flight:", flight.id);
-    });
-  }
 
   const generateAICounterOffer = (userPrice: number, originalPrice: number) => {
     const discountRequested = (originalPrice - userPrice) / originalPrice;
