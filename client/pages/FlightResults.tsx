@@ -3141,7 +3141,7 @@ export default function FlightResults() {
                                       {flight.returnArrivalTime}
                                     </div>
                                     <div className="text-sm text-gray-600 font-medium">
-                                      {fromCode || flight.departureCode} ���{" "}
+                                      {fromCode || flight.departureCode} •{" "}
                                       {actualReturnDate
                                         ? formatDisplayDate(actualReturnDate, "MMM d")
                                         : "Select return date"}
