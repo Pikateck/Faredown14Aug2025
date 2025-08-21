@@ -2939,8 +2939,8 @@ export default function FlightResults() {
                           <Info className="w-3 h-3 text-gray-400 animate-pulse cursor-help" />
                           <span className="text-xs text-gray-700">Baggage</span>
                           {/* Mobile Baggage Tooltip */}
-                          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none">
-                            <div className="bg-white text-gray-800 text-xs rounded-lg p-3 shadow-lg border border-gray-200 w-[180px] sm:w-[200px]">
+                          <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none">
+                            <div className="bg-white text-gray-800 text-xs rounded-lg p-3 shadow-lg border border-gray-200 w-[180px]">
                               <div className="font-semibold mb-2 text-gray-900">
                                 Baggage Allowance
                               </div>
@@ -6214,7 +6214,7 @@ export default function FlightResults() {
                             Airline fee:
                           </span>
                           <p className="text-red-600">
-                            ����3,500 per passenger
+                            �����3,500 per passenger
                           </p>
                         </div>
                         <div>
