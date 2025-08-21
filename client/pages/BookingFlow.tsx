@@ -902,10 +902,36 @@ export default function BookingFlow() {
   };
 
   // Get flight booking data from navigation state
-  const selectedFlight = location.state?.selectedFlight;
+  const rawSelectedFlight = location.state?.selectedFlight;
   const selectedFareType = location.state?.selectedFareType;
   const negotiatedPrice =
     location.state?.negotiatedPrice || selectedFareType?.price || 32168; // fallback price
+
+  // Ensure flight data uses correct route orientation
+  const selectedFlight = rawSelectedFlight ? {
+    ...rawSelectedFlight,
+    from: fromCity,
+    to: toCity,
+    // Ensure departure and arrival match URL route
+    departure: {
+      ...rawSelectedFlight.departure,
+      code: fromCode,
+      city: fromCity,
+      name: airportData[fromCode]?.name || rawSelectedFlight.departure?.name || "Unknown Airport"
+    },
+    arrival: {
+      ...rawSelectedFlight.arrival,
+      code: toCode,
+      city: toCity,
+      name: airportData[toCode]?.name || rawSelectedFlight.arrival?.name || "Unknown Airport"
+    }
+  } : null;
+
+  console.log("🛫 BookingFlow Route Debug:", {
+    urlParams: { fromCode, toCode, fromCity, toCity },
+    rawFlight: rawSelectedFlight,
+    correctedFlight: selectedFlight
+  });
 
   // Define renderFlightSegment function after selectedFlight is available
 
@@ -1093,7 +1119,7 @@ export default function BookingFlow() {
   };
 
   const countries = [
-    { name: "Guernsey", code: "+44", flag: "🇬🇬" },
+    { name: "Guernsey", code: "+44", flag: "🇬��" },
     { name: "Guinea", code: "+224", flag: "🇬🇳" },
     { name: "Guinea-Bissau", code: "+245", flag: "🇬🇼" },
     { name: "Guyana", code: "+592", flag: "���🇾" },
