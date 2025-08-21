@@ -1208,7 +1208,7 @@ export default function Index() {
                           : "Select departure"}
                         {tripType === "round-trip" && (
                           <>
-                            <span className="mx-2 text-gray-400">—</span>
+                            <span className="mx-2 text-gray-400">��</span>
                             {returnDate
                               ? formatDisplayDate(returnDate, "dd MMM")
                               : "Select return"}
@@ -1878,7 +1878,8 @@ export default function Index() {
                               ].map((classType) => (
                                 <button
                                   key={classType}
-                                  onClick={() => {
+                                  onMouseDown={(e) => {
+                                    e.preventDefault();
                                     setSelectedClass(classType);
                                     setShowClassDropdown(false);
                                   }}
