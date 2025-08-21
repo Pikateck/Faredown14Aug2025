@@ -16,6 +16,7 @@ export function CityAutocomplete({
   placeholder = "Type a city or code…",
   value,
   onChange,
+  onSelectAsync,
   autoFocus,
   className = "",
 }: Props) {
