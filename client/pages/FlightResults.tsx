@@ -542,6 +542,13 @@ export default function FlightResults() {
   }>({});
 
 
+  // Enhanced bargain handler
+  const handleEnhancedBargain = (flight: (typeof flightData)[0], fareType?: any) => {
+    setSelectedBargainFlight(flight);
+    setSelectedBargainFareType(fareType || flight.fareTypes[0]);
+    setShowEnhancedBargain(true);
+  };
+
   // Legacy functions - should be removed when old UI is cleaned up
   const handleCloseBargain = () => {
     setBargainSession(null);
