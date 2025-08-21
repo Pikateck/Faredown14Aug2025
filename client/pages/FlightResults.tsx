@@ -2444,7 +2444,7 @@ export default function FlightResults() {
                           onChange={(e) =>
                             handleAirlineFilter(airline, e.target.checked)
                           }
-                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                          className={`w-3 h-3 sm:w-4 sm:h-4 ${selectedAirlines.has(airline) ? "bg-blue-600" : "bg-white border border-gray-400"}`}
                         />
                       </div>
                       <span
@@ -5600,7 +5600,7 @@ export default function FlightResults() {
                     </div>
 
                     <div className="text-sm text-gray-600">
-                      {bargainFlight?.airline} {bargainFlight?.flightNumber} ��{" "}
+                      {bargainFlight?.airline} {bargainFlight?.flightNumber} •{" "}
                       {bargainFareType?.name}
                     </div>
                   </div>
@@ -6480,7 +6480,7 @@ export default function FlightResults() {
                       </li>
                       <li>• Valid government-issued photo ID required</li>
                       <li>
-                        • All fees are per passenger and include applicable
+                        ��� All fees are per passenger and include applicable
                         taxes
                       </li>
                       <li>
