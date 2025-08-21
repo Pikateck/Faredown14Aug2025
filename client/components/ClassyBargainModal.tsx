@@ -449,9 +449,9 @@ export function ClassyBargainModal({
               <input
                 type="number"
                 inputMode="numeric"
-                placeholder="Enter your target price"
+                placeholder="Enter amount"
                 onChange={handleOfferChange}
-                value={offer || ""}
+                value={offer === null ? "" : offer}
               />
             </div>
 
