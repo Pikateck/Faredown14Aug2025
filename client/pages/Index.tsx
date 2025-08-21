@@ -1981,8 +1981,7 @@ export default function Index() {
                         Travel dates
                       </label>
                       <button
-                        onMouseDown={(e) => {
-                          e.preventDefault();
+                        onClick={() => {
                           if (!showCalendar) {
                             setSelectingDeparture(true);
                             setCurrentMonth(new Date().getMonth());
@@ -1990,7 +1989,7 @@ export default function Index() {
                           }
                           setShowCalendar(!showCalendar);
                         }}
-                        className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full min-w-[220px] hover:border-blue-500 touch-manipulation"
+                        className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full min-w-[220px] hover:border-blue-500 active:bg-gray-50 touch-manipulation transition-colors"
                       >
                         <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
                           <svg
