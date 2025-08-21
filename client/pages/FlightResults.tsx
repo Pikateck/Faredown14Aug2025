@@ -3118,16 +3118,16 @@ export default function FlightResults() {
                                     {flight.arrivalTime}
                                   </div>
                                   <div className="text-sm text-gray-600">
-                                    {flight.arrivalCode} •{" "}
-                                    {departureDate
+                                    {toCode || flight.arrivalCode} •{" "}
+                                    {actualDepartureDate
                                       ? formatDisplayDate(
-                                          departureDate,
+                                          actualDepartureDate,
                                           "MMM d",
                                         )
                                       : "Select date"}
                                   </div>
                                   <div className="text-xs text-gray-500">
-                                    {flight.arrival?.city || "Dubai"}
+                                    {toCityName || flight.arrival?.city || "Dubai"}
                                   </div>
                                 </div>
                               </div>
