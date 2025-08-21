@@ -473,14 +473,17 @@
 }
 
 .fd-btn--outline {
-  background: #fff;
-  color: #3b82f6;
-  border-color: #c7d2fe;
+  background: #ffffff;
+  color: #003580;
+  border-color: #003580;
+  font-weight: 600;
 }
 
 .fd-btn--outline:hover:not(:disabled) {
-  background: #f1f5f9;
-  border-color: #3b82f6;
+  background: #003580;
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0, 53, 128, 0.3);
 }
 
 .fd-fomo {
