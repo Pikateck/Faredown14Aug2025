@@ -2189,8 +2189,7 @@ export default function Index() {
 
                     <div className="lg:max-w-[100px] w-full lg:w-auto">
                       <Button
-                        onMouseDown={(e) => {
-                          e.preventDefault();
+                        onClick={() => {
                           // Validate required fields
                           if (!validateSearchForm()) {
                             return;
@@ -2500,7 +2499,7 @@ export default function Index() {
                     />
                   </svg>
                   <span className="font-medium text-lg">
-                    24��7 Customer Support | Live Chat & Call Available
+                    24���7 Customer Support | Live Chat & Call Available
                   </span>
                 </div>
 
