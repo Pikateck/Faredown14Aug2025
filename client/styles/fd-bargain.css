@@ -508,14 +508,19 @@
 }
 
 .fd-lock {
-  font-weight: 600;
-  margin-bottom: 16px;
-  font-size: 1.1rem;
-  color: #059669;
+  font-weight: 700;
+  margin-bottom: 20px;
+  font-size: 1.125rem;
+  color: #065f46;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+  border-radius: 16px;
+  border: 1px solid #bbf7d0;
+  letter-spacing: -0.025em;
 }
 
 .fd-lock::before {
