@@ -588,7 +588,7 @@ export function ClassyBargainModal({
         {step === "hold" && counter && (
           <section className="fd-hold">
             <div className="fd-lock">
-              Price locked �� completing your booking...
+              Price locked • completing your booking...
             </div>
             <div className="fd-bar" />
             <div
