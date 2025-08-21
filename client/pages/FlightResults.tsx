@@ -1691,7 +1691,7 @@ export default function FlightResults() {
                       { code: "it", name: "Italiano", flag: "🇮🇹" },
                       { code: "pt", name: "Portugu��s", flag: "🇵���" },
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
-                      { code: "hi", name: "ह��न्दी", flag: "�������" },
+                      { code: "hi", name: "हिन्दी", flag: "�������" },
                       { code: "ja", name: "日本語", flag: "🇯🇵" },
                       { code: "ko", name: "한국어", flag: "🇰����" },
                       { code: "zh", name: "中文", flag: "🇨🇳" },
@@ -2391,7 +2391,7 @@ export default function FlightResults() {
                           value={option.value}
                           checked={selectedStops === option.value}
                           onChange={() => handleStopsFilter(option.value)}
-                          className={`w-3 h-3 sm:w-4 sm:h-4 ${selectedStops === option.value ? "bg-blue-600" : "bg-white border border-gray-400"}`}
+                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2"
                         />
                       </div>
                       {option.label}
@@ -3168,7 +3168,7 @@ export default function FlightResults() {
                                       {flight.returnArrivalTime}
                                     </div>
                                     <div className="text-sm text-gray-600 font-medium">
-                                      {fromCode || flight.departureCode} •{" "}
+                                      {fromCode || flight.departureCode} ���{" "}
                                       {actualReturnDate
                                         ? formatDisplayDate(actualReturnDate, "MMM d")
                                         : "Select return date"}
@@ -4126,7 +4126,7 @@ export default function FlightResults() {
                                           Faredown Fee:
                                         </span>
                                         <span className="text-gray-900 font-medium">
-                                          ���500
+                                          ����500
                                         </span>
                                       </div>
                                     </div>
