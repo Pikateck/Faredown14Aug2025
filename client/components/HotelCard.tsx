@@ -474,14 +474,15 @@ export function HotelCard({
                 >
                   View Details
                 </FaredownButton>
-                <BargainButton
+                <FaredownButton
+                  variant="primary"
                   onClick={() => onBargainClick(hotel, searchParams)}
-                  className="flex-1 flex items-center justify-center gap-2"
+                  className="flex-1"
                   size="lg"
                 >
                   <TrendingDown className="w-4 h-4" />
                   Bargain Now
-                </BargainButton>
+                </FaredownButton>
               </div>
             </div>
           </CardContent>
@@ -614,14 +615,15 @@ export function HotelCard({
                 >
                   View Details
                 </FaredownButton>
-                <BargainButton
+                <FaredownButton
+                  variant="primary"
                   onClick={() => onBargainClick(hotel, searchParams)}
-                  className="flex-1 flex items-center justify-center gap-2"
+                  className="flex-1"
                   size="lg"
                 >
                   <TrendingDown className="w-4 h-4" />
                   Bargain Now
-                </BargainButton>
+                </FaredownButton>
               </div>
             </div>
           </CardContent>
