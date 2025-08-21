@@ -1668,7 +1668,7 @@ export default function FlightResults() {
                 <DropdownMenu style={{ display: "none" }}>
                   <DropdownMenuContent className="w-56 max-h-60 overflow-y-auto">
                     {[
-                      { code: "en", name: "English", flag: "🇬🇧" },
+                      { code: "en", name: "English", flag: "🇬���" },
                       { code: "es", name: "Español", flag: "🇪🇸" },
                       { code: "fr", name: "Français", flag: "🇫������" },
                       { code: "de", name: "Deutsch", flag: "🇩🇪" },
@@ -3303,6 +3303,18 @@ export default function FlightResults() {
                           }}
                         >
                           View Details
+                        </Button>
+                        <Button
+                          type="button"
+                          className="px-4 py-2 rounded-lg bg-[#febb02] text-black hover:bg-[#e6a602] font-medium text-sm flex items-center gap-2"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            console.log("🎯 Enhanced Bargain clicked (desktop):", flight.id);
+                            handleEnhancedBargain(flight);
+                          }}
+                        >
+                          🎯 Bargain Now
                         </Button>
                       </div>
                     </div>
