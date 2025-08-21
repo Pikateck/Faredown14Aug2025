@@ -2979,7 +2979,7 @@ export default function FlightResults() {
                       </div>
 
                       {/* Action Buttons - Hotel Section Style Mobile */}
-                      <div className="w-full grid grid-cols-2 gap-2 mt-3 relative z-50 pointer-events-auto">
+                      <div className="flex space-x-3">
                         <FaredownButton
                           variant="secondary"
                           className="flex-1"
