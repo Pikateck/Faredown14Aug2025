@@ -1209,6 +1209,35 @@ export default function SightseeingResults() {
         }}
       />
 
+      {/* Conversational Bargain Modal */}
+      <ConversationalBargainModal
+        isOpen={showConversationalBargain}
+        flight={selectedAttraction ? {
+          id: selectedAttraction.id.toString(),
+          airline: selectedAttraction.name,
+          flightNumber: "TOUR",
+          departureCode: "START",
+          arrivalCode: "END",
+          departureTime: "10:00",
+          arrivalTime: "18:00",
+          duration: "8 hours",
+          aircraft: "Tour Experience",
+          price: selectedAttraction.currentPrice || selectedAttraction.price,
+        } : null}
+        selectedFareType={{
+          name: "Standard Tour",
+          price: selectedAttraction?.currentPrice || selectedAttraction?.price || 0,
+          features: selectedAttraction?.highlights || [],
+          baggage: "Guide included",
+          refundability: "Flexible cancellation",
+        }}
+        onClose={handleCloseConversationalBargain}
+        onAccept={handleAcceptBargain}
+        onHold={handleHoldBargain}
+        userName="traveler"
+        module="sightseeing"
+      />
+
       {/* Hotel-Style Bottom Panel */}
       {showBottomBar && selectedAttractions.size > 0 && (
         <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-[60]">
