@@ -106,10 +106,18 @@ export function CityAutocomplete({
   }
 
   function selectAirport(airport: Airport) {
+    // 1) INSTANT UI update - no waiting for async operations
     onChange(airport);
     setQuery(formatAirportDisplay(airport));
     setIsOpen(false);
     setActiveIndex(-1);
+
+    // 2) Run any async side-effects after UI updates
+    if (onSelectAsync) {
+      startTransition(() => {
+        onSelectAsync(airport).catch(console.error);
+      });
+    }
   }
 
   function clearSelection() {
