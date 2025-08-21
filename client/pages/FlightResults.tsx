@@ -3087,16 +3087,16 @@ export default function FlightResults() {
                                     {flight.departureTime}
                                   </div>
                                   <div className="text-sm text-gray-600 font-medium">
-                                    {flight.departureCode} •{" "}
-                                    {departureDate
+                                    {fromCode || flight.departureCode} •{" "}
+                                    {actualDepartureDate
                                       ? formatDisplayDate(
-                                          departureDate,
+                                          actualDepartureDate,
                                           "MMM d",
                                         )
                                       : "Select date"}
                                   </div>
                                   <div className="text-xs text-gray-500">
-                                    {flight.departure?.city || "Mumbai"}
+                                    {fromCityName || flight.departure?.city || "Mumbai"}
                                   </div>
                                 </div>
                                 <div className="flex flex-col items-center">
