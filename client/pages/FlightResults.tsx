@@ -2806,8 +2806,8 @@ export default function FlightResults() {
                                   <p className="text-xs text-gray-500 text-center">
                                     All taxes and fees included
                                   </p>
-                                  {/* Tooltip arrow pointing upward - centered */}
-                                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-white"></div>
+                                  {/* Tooltip arrow pointing upward - right aligned */}
+                                  <div className="absolute top-full right-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-white"></div>
                                 </div>
                               </div>
                             </div>
