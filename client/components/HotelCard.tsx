@@ -475,7 +475,8 @@ export function HotelCard({
                 </Button>
                 <Button
                   onClick={() => onBargainClick(hotel, searchParams)}
-                  className="flex-1 py-4 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold text-sm flex items-center justify-center gap-2 min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
+                  className="flex-1 flex items-center justify-center gap-2"
+                  size="lg"
                 >
                   <TrendingDown className="w-4 h-4" />
                   Bargain Now
@@ -613,7 +614,8 @@ export function HotelCard({
                 </Button>
                 <Button
                   onClick={() => onBargainClick(hotel, searchParams)}
-                  className="flex-1 py-4 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold text-sm flex items-center justify-center gap-2 min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
+                  className="flex-1 flex items-center justify-center gap-2"
+                  size="lg"
                 >
                   <TrendingDown className="w-4 h-4" />
                   Bargain Now
