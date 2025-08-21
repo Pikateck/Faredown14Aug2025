@@ -306,10 +306,10 @@ export default function FlightDetails({
 
       <div className="bg-gray-50 min-h-screen pb-32">
         <div className="max-w-md mx-auto bg-white">
-          {/* Flight to Dubai */}
+          {/* Outbound Flight */}
           <div className="p-3">
             <h2 className="text-lg font-bold text-gray-900 mb-1">
-              Your flight {fromCode} → {toCode}
+              Your flight {orientedFrom || fromCode} → {orientedTo || toCode}
             </h2>
             <p className="text-gray-600 text-sm mb-3">Direct • 3h • Economy</p>
 
