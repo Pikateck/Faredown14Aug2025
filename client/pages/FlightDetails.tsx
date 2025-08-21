@@ -183,12 +183,6 @@ export default function FlightDetails({
   // Flight should always be available now due to immediate fallback
   const displayFlight = flight;
 
-  console.log("🛫 DisplayFlight Debug:", {
-    departure: `${displayFlight?.departure?.code} (${displayFlight?.departure?.city})`,
-    arrival: `${displayFlight?.arrival?.code} (${displayFlight?.arrival?.city})`,
-    actualRoute: `${displayFlight?.departure?.code} → ${displayFlight?.arrival?.code}`
-  });
-
   // Create explicit return flight routing
   const returnDeparture = {
     code: displayFlight?.arrival?.code || toCode,
