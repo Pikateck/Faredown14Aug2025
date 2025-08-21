@@ -230,7 +230,10 @@ export function CityAutocomplete({
                 id={`${listboxId}-option-${index}`}
                 role="option"
                 aria-selected={index === activeIndex}
-                onClick={() => selectAirport(airport)}
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  selectAirport(airport);
+                }}
                 onMouseEnter={() => setActiveIndex(index)}
                 className={`px-3 py-2 cursor-pointer text-sm ${
                   index === activeIndex
