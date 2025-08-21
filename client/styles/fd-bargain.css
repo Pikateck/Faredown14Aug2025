@@ -447,14 +447,16 @@
 }
 
 .fd-btn--primary {
-  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-  color: #fff;
-  border-color: #3b82f6;
+  background: linear-gradient(135deg, #febb02 0%, #e6a602 100%);
+  color: #1f2937;
+  border-color: #febb02;
+  font-weight: 700;
 }
 
 .fd-btn--primary:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 4px 16px rgba(254, 187, 2, 0.4);
+  background: linear-gradient(135deg, #e6a602 0%, #d19900 100%);
 }
 
 .fd-btn--success {
