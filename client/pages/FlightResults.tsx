@@ -2977,12 +2977,10 @@ export default function FlightResults() {
                         </div>
                       </div>
 
-                      {/* Action Buttons - Hotel Section Style Mobile */}
-                      <div className="flex space-x-3">
-                        <FaredownButton
-                          variant="secondary"
-                          className="flex-1"
-                          size="lg"
+                      {/* Action Buttons - FlightDetails Style with right alignment */}
+                      <div className="flex justify-end gap-3 mt-4">
+                        <Button
+                          className="min-h-[52px] px-6 py-4 border-2 border-[#003580] bg-transparent hover:bg-[#003580] text-[#003580] hover:text-white font-semibold text-sm flex items-center justify-center gap-2 rounded-xl shadow-lg active:shadow-md transition-all touch-manipulation"
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
@@ -2996,11 +2994,9 @@ export default function FlightResults() {
                           }}
                         >
                           View Details
-                        </FaredownButton>
-                        <FaredownButton
-                          variant="primary"
-                          className="flex-1"
-                          size="lg"
+                        </Button>
+                        <Button
+                          className="min-h-[52px] px-6 py-4 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d4950b] text-black font-semibold text-sm flex items-center justify-center gap-2 rounded-xl shadow-lg active:shadow-md transition-all touch-manipulation"
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
@@ -3009,7 +3005,7 @@ export default function FlightResults() {
                         >
                           <TrendingDown className="w-4 h-4" />
                           Bargain Now
-                        </FaredownButton>
+                        </Button>
                       </div>
                     </div>
                   </div>
