@@ -2855,10 +2855,10 @@ export default function FlightResults() {
                                 {flight.departureTime}
                               </div>
                               <div className="text-sm text-gray-600 font-medium">
-                                {flight.departureCode || "BOM"}
+                                {fromCode || flight.departureCode || "BOM"}
                               </div>
                               <div className="text-xs text-gray-500">
-                                {flight.departure?.city || "Mumbai"}
+                                {fromCityName || flight.departure?.city || "Mumbai"}
                               </div>
                             </div>
                             <div className="flex-1 mx-4">
