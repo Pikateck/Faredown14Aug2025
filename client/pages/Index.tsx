@@ -1593,7 +1593,8 @@ export default function Index() {
               {/* Centered Navigation */}
               <nav className="flex items-center space-x-6 lg:space-x-8 text-sm font-medium absolute left-1/2 transform -translate-x-1/2">
                 <button
-                  onClick={() => {
+                  onMouseDown={(e) => {
+                    e.preventDefault();
                     setActiveTab("flights");
                     window.history.pushState({}, "", "/?tab=flights");
                   }}
