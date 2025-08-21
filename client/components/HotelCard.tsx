@@ -469,7 +469,8 @@ export function HotelCard({
               <div className="flex space-x-3">
                 <Button
                   variant="outline"
-                  className="flex-1 py-4 text-sm font-semibold border-2 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white transition-all duration-200 min-h-[48px] rounded-xl active:scale-95 touch-manipulation"
+                  className="flex-1"
+                  size="lg"
                   onClick={handleViewDetails}
                 >
                   View Details
@@ -608,7 +609,8 @@ export function HotelCard({
               <div className="flex space-x-3">
                 <Button
                   variant="outline"
-                  className="flex-1 py-4 text-sm font-semibold border-2 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white transition-all duration-200 min-h-[48px] rounded-xl active:scale-95 touch-manipulation"
+                  className="flex-1"
+                  size="lg"
                   onClick={handleViewDetails}
                 >
                   View Details
