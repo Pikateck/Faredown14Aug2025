@@ -503,6 +503,26 @@ export default function TransferResults() {
     setShowBargainModal(true);
   };
 
+  const handleConversationalBargain = (transfer: Transfer) => {
+    setSelectedTransfer(transfer);
+    setShowConversationalBargain(true);
+  };
+
+  const handleCloseConversationalBargain = () => {
+    setShowConversationalBargain(false);
+    setSelectedTransfer(null);
+  };
+
+  const handleAcceptBargain = (finalPrice: number, orderRef: string) => {
+    console.log('Transfer bargain accepted:', { finalPrice, orderRef });
+    setShowConversationalBargain(false);
+  };
+
+  const handleHoldBargain = (orderRef: string) => {
+    console.log('Transfer bargain held:', { orderRef });
+    setShowConversationalBargain(false);
+  };
+
   // Handle transfer selection
   const handleTransferSelect = (transfer: Transfer) => {
     const newSelected = new Set(selectedTransfers);
