@@ -1286,8 +1286,7 @@ export default function Index() {
 
               {/* Search Button */}
               <Button
-                onMouseDown={(e) => {
-                  e.preventDefault();
+                onClick={() => {
                   // Validate required fields
                   if (!validateSearchForm()) {
                     return;
