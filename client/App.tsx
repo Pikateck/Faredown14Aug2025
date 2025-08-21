@@ -122,6 +122,11 @@ function App() {
                         path="/flights/results"
                         element={<FlightResults />}
                       />
+                      {/* Redirect old route to new route */}
+                      <Route
+                        path="/flight-results"
+                        element={<Navigate to="/flights/results" replace />}
+                      />
                       <Route
                         path="/flight-details/:flightId"
                         element={<FlightDetails />}
