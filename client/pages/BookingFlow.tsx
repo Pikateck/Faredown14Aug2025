@@ -1660,7 +1660,7 @@ export default function BookingFlow() {
                           name: "US Dollar",
                           flag: "🇺🇸",
                         },
-                        { code: "EUR", symbol: "€", name: "Euro", flag: "🇪🇺" },
+                        { code: "EUR", symbol: "€", name: "Euro", flag: "🇪���" },
                         {
                           code: "GBP",
                           symbol: "£",
@@ -2903,8 +2903,8 @@ export default function BookingFlow() {
                                   <div>
                                     <p className="text-sm text-[#666]">Route</p>
                                     <p className="font-medium">
-                                      {selectedFlight?.to || "Dubai"} →{" "}
-                                      {selectedFlight?.from || "Mumbai"}
+                                      {selectedFlight?.to || toCity} →{" "}
+                                      {selectedFlight?.from || fromCity}
                                     </p>
                                   </div>
                                 </div>
