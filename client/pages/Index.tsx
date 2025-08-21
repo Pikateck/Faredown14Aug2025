@@ -1250,7 +1250,10 @@ export default function Index() {
               <div className="grid grid-cols-2 gap-3">
                 <div className="bg-white rounded-xl p-4 shadow-sm">
                   <button
-                    onClick={() => setShowTravelers(true)}
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      setShowTravelers(true);
+                    }}
                     className="w-full text-left"
                   >
                     <div className="text-xs text-gray-500 mb-1">Travelers</div>
