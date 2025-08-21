@@ -2999,17 +2999,16 @@ export default function FlightResults() {
                         >
                           View Details
                         </Button>
-                        <Button
-                          className="min-h-[44px] px-6 py-3 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold text-sm touch-manipulation flex items-center justify-center gap-2"
+                        <BargainButton
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            console.log("📱 Enhanced Bargain clicked:", flight.id);
-                            handleEnhancedBargain(flight);
+                            handleConversationalBargain(flight);
                           }}
+                          className="flex items-center justify-center gap-2"
                         >
                           🎯 Bargain Now
-                        </Button>
+                        </BargainButton>
                       </div>
                     </div>
                   </div>
@@ -4037,7 +4036,7 @@ export default function FlightResults() {
                                           Faredown Fee:
                                         </span>
                                         <span className="text-gray-900 font-medium">
-                                          ����500
+                                          ������500
                                         </span>
                                       </div>
                                     </div>
