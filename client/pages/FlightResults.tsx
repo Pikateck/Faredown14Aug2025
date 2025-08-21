@@ -549,11 +549,6 @@ export default function FlightResults() {
     setShowEnhancedBargain(true);
   };
 
-  // Legacy functions - should be removed when old UI is cleaned up
-  const handleCloseBargain = () => {
-    setBargainSession(null);
-    setShowAINegotiationModal(false);
-  };
 
   const [sortBy, setSortBy] = useState<"cheapest" | "fastest">("cheapest");
   const [expandedTicketOptions, setExpandedTicketOptions] = useState<
@@ -1657,7 +1652,7 @@ export default function FlightResults() {
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
                       { code: "hi", name: "हिन्दी", flag: "�������" },
                       { code: "ja", name: "日本語", flag: "🇯🇵" },
-                      { code: "ko", name: "한국어", flag: "🇰������" },
+                      { code: "ko", name: "한국어", flag: "🇰����" },
                       { code: "zh", name: "中文", flag: "🇨🇳" },
                     ].map((language) => (
                       <DropdownMenuItem
@@ -5777,7 +5772,7 @@ export default function FlightResults() {
           setBargainCtx(null);
         }}
         onAccept={(finalPrice: number, orderRef: string) => {
-          console.log("🎯 Bargain accepted:", finalPrice, orderRef);
+          console.log("�� Bargain accepted:", finalPrice, orderRef);
           if (bargainCtx?.product) {
             const updatedFareType = {
               ...bargainCtx.product.fareTypes[0],
