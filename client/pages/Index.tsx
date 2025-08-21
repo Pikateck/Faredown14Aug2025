@@ -1605,7 +1605,8 @@ export default function Index() {
                   <span>Flights</span>
                 </button>
                 <button
-                  onClick={() => {
+                  onMouseDown={(e) => {
+                    e.preventDefault();
                     setActiveTab("hotels");
                     window.history.pushState({}, "", "/?tab=hotels");
                   }}
@@ -2517,7 +2518,7 @@ export default function Index() {
                     />
                   </svg>
                   <span className="font-medium text-lg">
-                    24×7 Customer Support | Live Chat & Call Available
+                    24��7 Customer Support | Live Chat & Call Available
                   </span>
                 </div>
 
