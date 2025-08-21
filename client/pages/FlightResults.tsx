@@ -3298,7 +3298,7 @@ export default function FlightResults() {
                               "View Details clicked for flight:",
                               flight.id,
                             );
-                            navigate(`/flight-details/${flight.id}`, {
+                            navigate(`/flight-details/${flight.id}?${searchParams.toString()}`, {
                               state: { flight },
                             });
                           }}
@@ -5779,7 +5779,7 @@ export default function FlightResults() {
                             : aiOfferPrice
                               ? convertPrice(aiOfferPrice).toLocaleString()
                               : parseInt(bargainPrice).toLocaleString()}{" "}
-                          �� 30s to book
+                          — 30s to book
                         </Button>
 
                         <Button
