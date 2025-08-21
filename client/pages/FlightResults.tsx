@@ -2383,7 +2383,7 @@ export default function FlightResults() {
                   },
                   {
                     value: "1-stop",
-                    label: "1 stop max",
+                    label: "1 stop",
                     count: flightData.filter((f) => f.stops === 1).length,
                   },
                   {
@@ -2392,23 +2392,27 @@ export default function FlightResults() {
                     count: flightData.filter((f) => f.stops >= 2).length,
                   },
                 ].map((option) => (
-                  <label
+                  <div
                     key={option.value}
-                    className="flex items-center justify-between cursor-pointer"
+                    className="flex items-center justify-between py-0.5 min-h-[24px] pr-1"
                   >
-                    <div className="flex items-center space-x-3">
-                      <input
-                        type="radio"
-                        name="stops"
-                        value={option.value}
-                        checked={selectedStops === option.value}
-                        onChange={() => handleStopsFilter(option.value)}
-                        className="w-4 h-4 text-blue-600"
-                      />
-                      <span className="text-sm text-gray-700">{option.label}</span>
-                    </div>
-                    <span className="text-sm text-gray-500">{option.count}</span>
-                  </label>
+                    <label className="text-sm text-gray-700 cursor-pointer flex-1 leading-tight flex items-center">
+                      <div className="w-4 h-4 flex items-center justify-center mr-2">
+                        <input
+                          type="radio"
+                          name="stops"
+                          value={option.value}
+                          checked={selectedStops === option.value}
+                          onChange={() => handleStopsFilter(option.value)}
+                          className={`w-3 h-3 sm:w-4 sm:h-4 ${selectedStops === option.value ? "bg-blue-600" : "bg-white border border-gray-400"}`}
+                        />
+                      </div>
+                      {option.label}
+                    </label>
+                    <span className="text-xs text-gray-500 ml-2 mr-1">
+                      {option.count}
+                    </span>
+                  </div>
                 ))}
               </div>
 
