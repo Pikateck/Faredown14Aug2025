@@ -2159,9 +2159,9 @@ export default function FlightResults() {
                   <BookingCalendar
                     bookingType="flight"
                     initialRange={{
-                      startDate: departureDate || new Date(),
+                      startDate: actualDepartureDate || new Date(),
                       endDate:
-                        returnDate || addDays(departureDate || new Date(), 7),
+                        actualReturnDate || addDays(actualDepartureDate || new Date(), 7),
                     }}
                     onChange={(range) => {
                       console.log(
