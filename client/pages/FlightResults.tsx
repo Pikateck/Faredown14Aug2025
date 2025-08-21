@@ -5730,20 +5730,7 @@ export default function FlightResults() {
       <ClassyBargainModal
         isOpen={false}
         flight={null}
-        fareType={
-          bargainCtx?.product
-            ? {
-                type: bargainCtx.product.fareTypes?.[0]?.name || "Economy",
-                price: bargainCtx.product.fareTypes?.[0]?.price || 0,
-                currency: "INR",
-                features: bargainCtx.product.fareTypes?.[0]?.features || [
-                  "Seat Selection",
-                  "Meal",
-                  "Personal Entertainment",
-                ],
-              }
-            : null
-        }
+        fareType={null}
         onClose={() => {
           console.log("🎯 Closing bargain modal");
           setBargainCtx(null);
