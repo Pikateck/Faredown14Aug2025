@@ -2557,7 +2557,7 @@ export default function FlightResults() {
                         <div className="w-4 h-4 flex items-center justify-center mr-2">
                           <input
                             type="checkbox"
-                            className="w-4 h-4 accent-blue-600"
+                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
                           />
                         </div>
                         {time.label}
@@ -3835,7 +3835,7 @@ export default function FlightResults() {
                                                   or change your flight.
                                                 </p>
                                                 <p>
-                                                  ���� Cancellation/Flight change
+                                                  �� Cancellation/Flight change
                                                   charges are indicated per
                                                   traveller. Clearing will stop
                                                   accepting cancellation/change
@@ -5929,7 +5929,7 @@ export default function FlightResults() {
           setBargainCtx(null);
         }}
         onRetry={() => {
-          console.log("🔄 Retry requested - incrementing attempt");
+          console.log("���� Retry requested - incrementing attempt");
           if (bargainCtx) {
             setBargainCtx({
               ...bargainCtx,
