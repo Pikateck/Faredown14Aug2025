@@ -2982,7 +2982,8 @@ export default function FlightResults() {
                       <div className="w-full grid grid-cols-2 gap-2 mt-3 relative z-50 pointer-events-auto">
                         <FaredownButton
                           variant="secondary"
-                          className="relative z-50"
+                          className="flex-1"
+                          size="lg"
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
@@ -2999,13 +3000,16 @@ export default function FlightResults() {
                         </FaredownButton>
                         <FaredownButton
                           variant="primary"
+                          className="flex-1"
+                          size="lg"
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
                             handleConversationalBargain(flight);
                           }}
                         >
-                          🎯 Bargain Now
+                          <TrendingDown className="w-4 h-4" />
+                          Bargain Now
                         </FaredownButton>
                       </div>
                     </div>
@@ -3880,7 +3884,7 @@ export default function FlightResults() {
                                               </p>
                                               <div className="bg-gray-50 rounded-lg p-3 text-xs text-gray-600 space-y-2 leading-relaxed">
                                                 <p>
-                                                  • Direct flights are usually
+                                                  ��� Direct flights are usually
                                                   cheaper than refundable
                                                   flights. However, you may have
                                                   to pay a large fee to cancel
