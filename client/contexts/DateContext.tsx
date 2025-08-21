@@ -82,7 +82,16 @@ export const DateProvider: React.FC<DateProviderProps> = ({ children }) => {
 
   const getUrlDateString = useCallback((date: Date | null) => {
     if (!date) return "";
-    return format(date, "yyyy-MM-dd");
+    try {
+      // Use local date parts to avoid timezone issues
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    } catch (error) {
+      console.error("Date URL formatting error:", error);
+      return format(date, "yyyy-MM-dd");
+    }
   }, []);
 
   const loadDatesFromParams = useCallback(
