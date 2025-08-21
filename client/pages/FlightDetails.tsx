@@ -61,6 +61,23 @@ export default function FlightDetails({
   const navigate = useNavigate();
   const { selectedCurrency } = useCurrency();
   const [searchParams] = useSearchParams();
+
+  // Extract search parameters for dynamic content
+  const departureDate = searchParams.get("departure") || "2024-08-22";
+  const returnDate = searchParams.get("return") || "2024-08-25";
+  const fromCode = searchParams.get("from") || "DXB";
+  const toCode = searchParams.get("to") || "BOM";
+
+  // Airport data mapping
+  const airportData: Record<string, {city: string; name: string; terminal?: string}> = {
+    "DXB": { city: "Dubai", name: "Dubai International Airport", terminal: "3" },
+    "BOM": { city: "Mumbai", name: "Chhatrapati Shivaji Maharaj International Airport", terminal: "2" },
+    "DEL": { city: "Delhi", name: "Indira Gandhi International Airport", terminal: "3" },
+    "BLR": { city: "Bangalore", name: "Kempegowda International Airport", terminal: "1" },
+    "MAA": { city: "Chennai", name: "Chennai International Airport", terminal: "1" },
+    "CCU": { city: "Kolkata", name: "Netaji Subhash Chandra Bose International Airport", terminal: "1" }
+  };
+
   // Dynamic fallback data based on search parameters
   const fallbackFlight = {
     id: "fallback",
