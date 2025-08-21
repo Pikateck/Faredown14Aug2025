@@ -2430,43 +2430,28 @@ export default function FlightResults() {
                   </button>
                 </div>
                 {availableAirlines.map((airline) => (
-                  <div
+                  <label
                     key={airline}
-                    className="flex items-center justify-between py-0.5 min-h-[24px] group relative pr-1"
-                    onMouseEnter={() => setHoveredAirline(airline)}
-                    onMouseLeave={() => setHoveredAirline(null)}
+                    className="flex items-center justify-between cursor-pointer group"
                   >
-                    <label className="text-sm text-gray-700 cursor-pointer flex-1 leading-tight flex items-center">
-                      <div className="w-4 h-4 flex items-center justify-center mr-2">
-                        <input
-                          type="checkbox"
-                          checked={selectedAirlines.has(airline)}
-                          onChange={(e) =>
-                            handleAirlineFilter(airline, e.target.checked)
-                          }
-                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
-                        />
-                      </div>
-                      <span
-                        className={`transition-colors ${hoveredAirline === airline ? "text-blue-600 font-medium" : "text-gray-700"}`}
-                      >
+                    <div className="flex items-center space-x-3">
+                      <input
+                        type="checkbox"
+                        checked={selectedAirlines.has(airline)}
+                        onChange={(e) =>
+                          handleAirlineFilter(airline, e.target.checked)
+                        }
+                        className="w-4 h-4 text-blue-600"
+                      />
+                      <span className="text-sm text-gray-700 relative">
                         {airline}
-                      </span>
-                    </label>
-                    <div className="flex items-center space-x-2">
-                      <span className="text-xs text-gray-500 ml-2 mr-1">
-                        {airlineCounts[airline]}
-                      </span>
-                      {hoveredAirline === airline && (
-                        <button
-                          onClick={() => handleOnlyThisAirline(airline)}
-                          className="text-xs text-blue-600 font-medium whitespace-nowrap hover:text-blue-800 transition-colors"
-                        >
+                        <div className="absolute left-0 top-6 bg-blue-600 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
                           Only this airline
-                        </button>
-                      )}
+                        </div>
+                      </span>
                     </div>
-                  </div>
+                    <span className="text-sm text-gray-500">{airlineCounts[airline]}</span>
+                  </label>
                 ))}
               </div>
 
