@@ -2444,7 +2444,7 @@ export default function FlightResults() {
                           onChange={(e) =>
                             handleAirlineFilter(airline, e.target.checked)
                           }
-                          className={`w-3 h-3 sm:w-4 sm:h-4 ${selectedAirlines.has(airline) ? "bg-blue-600" : "bg-white border border-gray-400"}`}
+                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
                         />
                       </div>
                       <span
@@ -4854,7 +4854,7 @@ export default function FlightResults() {
                 {/* Quick Time Slots */}
                 <div className="grid grid-cols-2 gap-2 mb-3">
                   {[
-                    { label: "Morning", range: [6, 12], icon: "���️" },
+                    { label: "Morning", range: [6, 12], icon: "☀️" },
                     { label: "Afternoon", range: [12, 18], icon: "���️" },
                     { label: "Evening", range: [18, 24], icon: "🌙" },
                     { label: "Night", range: [0, 6], icon: "🌅" },
