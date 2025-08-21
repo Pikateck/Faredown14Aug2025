@@ -2145,11 +2145,11 @@ export default function FlightResults() {
                     <div className="flex items-center space-x-2 min-w-0">
                       <span className="text-sm text-gray-700 font-medium truncate">
                         {tripType === "one-way"
-                          ? departureDate
-                            ? formatDisplayDate(departureDate)
+                          ? actualDepartureDate
+                            ? formatDisplayDate(actualDepartureDate)
                             : "Select date"
-                          : departureDate
-                            ? `${formatDisplayDate(departureDate)}${returnDate ? ` - ${formatDisplayDate(returnDate)}` : " - Return"}`
+                          : actualDepartureDate
+                            ? `${formatDisplayDate(actualDepartureDate)}${actualReturnDate ? ` - ${formatDisplayDate(actualReturnDate)}` : " - Return"}`
                             : "Select dates"}
                       </span>
                     </div>
