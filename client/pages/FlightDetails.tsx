@@ -132,9 +132,35 @@ export default function FlightDetails({
     ]
   };
 
-  const [flight, setFlight] = useState<Flight | null>(
+  const [baseFlight, setBaseFlight] = useState<Flight | null>(
     providedFlight || fallbackFlight,
   );
+
+  // Orient flight segments to match URL route
+  const flight = baseFlight ? {
+    ...baseFlight,
+    ...orientSegmentsToRoute({
+      id: baseFlight.id,
+      segments: baseFlight.segments || [{
+        carrierCode: baseFlight.airlineCode || "6E",
+        flightNumber: baseFlight.flightNumber || "1407",
+        origin: {
+          code: baseFlight.departure?.code || fromCode,
+          name: baseFlight.departure?.name || airportData[fromCode]?.name || "Unknown Airport",
+          time: baseFlight.departureTime || "14:30"
+        },
+        destination: {
+          code: baseFlight.arrival?.code || toCode,
+          name: baseFlight.arrival?.name || airportData[toCode]?.name || "Unknown Airport",
+          time: baseFlight.arrivalTime || "16:00"
+        },
+        durationMinutes: 210
+      }]
+    }, fromCode, toCode)
+  } : null;
+
+  // Get oriented route ends
+  const { from: orientedFrom, to: orientedTo } = flight?.segments ? getRouteEnds(flight.segments) : { from: fromCode, to: toCode };
   const [isLoading, setIsLoading] = useState(false); // Start with false for immediate render
   const [error, setError] = useState<string | null>(null);
   const [showBargainModal, setShowBargainModal] = useState(false);
@@ -490,7 +516,7 @@ export default function FlightDetails({
                     <span className="text-sm text-gray-700">Taxes</span>
                     <div className="text-right">
                       <div className="text-sm font-medium text-gray-900">
-                        ₹{" "}
+                        ���{" "}
                         {displayFlight.price.breakdown.taxes.toLocaleString(
                           "en-IN",
                         )}
