@@ -108,6 +108,12 @@ export default function FlightDetails({
 
   const finalFlightId = flightId || params.flightId;
 
+  // Extract search parameters for dynamic content
+  const departureDate = searchParams.get("departure") || "2024-08-22";
+  const returnDate = searchParams.get("return") || "2024-08-25";
+  const fromCode = searchParams.get("from") || "DXB";
+  const toCode = searchParams.get("to") || "BOM";
+
   useEffect(() => {
     // Only load if we have a specific flight ID and no provided flight
     if (!providedFlight && finalFlightId && finalFlightId !== "fallback") {
