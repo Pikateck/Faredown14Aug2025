@@ -3287,10 +3287,9 @@ export default function FlightResults() {
 
                       {/* Card Footer - Buttons at bottom-right */}
                       <div className="mt-4 border-t pt-4 flex items-center justify-end gap-3">
-                        <Button
-                          type="button"
-                          variant="outline"
-                          className="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 font-medium text-sm"
+                        <ViewDetailsButton
+                          size="sm"
+                          className="flex items-center gap-2"
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
@@ -3304,7 +3303,7 @@ export default function FlightResults() {
                           }}
                         >
                           View Details
-                        </Button>
+                        </ViewDetailsButton>
                         <BargainButton
                           onClick={(e) => {
                             e.preventDefault();
@@ -4751,7 +4750,7 @@ export default function FlightResults() {
                     { label: "Morning", range: [6, 12], icon: "☀️" },
                     { label: "Afternoon", range: [12, 18], icon: "���️" },
                     { label: "Evening", range: [18, 24], icon: "🌙" },
-                    { label: "Night", range: [0, 6], icon: "🌅" },
+                    { label: "Night", range: [0, 6], icon: "��" },
                   ].map((timeSlot) => (
                     <button
                       key={timeSlot.label}
