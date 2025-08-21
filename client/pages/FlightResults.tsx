@@ -10,6 +10,7 @@ import { MobileFilters } from "@/components/MobileFilters";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { MobileNavigation } from "@/components/mobile/MobileNavigation";
+import EnhancedBargainModal from "@/components/EnhancedBargainModal";
 import {
   Dialog,
   DialogContent,
@@ -3782,7 +3783,7 @@ export default function FlightResults() {
                                                     Faredown Fee:
                                                   </span>
                                                   <span className="text-gray-900 font-medium">
-                                                    ����500
+                                                    ��500
                                                   </span>
                                                 </div>
                                               </div>
@@ -4713,7 +4714,7 @@ export default function FlightResults() {
                 <div className="grid grid-cols-2 gap-2 mb-3">
                   {[
                     { label: "Morning", range: [6, 12], icon: "☀️" },
-                    { label: "Afternoon", range: [12, 18], icon: "����️" },
+                    { label: "Afternoon", range: [12, 18], icon: "���️" },
                     { label: "Evening", range: [18, 24], icon: "🌙" },
                     { label: "Night", range: [0, 6], icon: "🌅" },
                   ].map((timeSlot) => (
