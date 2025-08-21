@@ -1,0 +1,74 @@
+/* Performance optimizations for better UI responsiveness */
+
+/* Enable hardware acceleration for better touch performance */
+.touch-manipulation {
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+/* Optimize button interactions */
+button, .button {
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Fast transitions for immediate feedback */
+.fast-transition {
+  transition: background-color 0.1s ease-out, border-color 0.1s ease-out, transform 0.1s ease-out;
+}
+
+/* Active states for immediate feedback */
+.active\:scale-95:active {
+  transform: scale(0.95);
+}
+
+/* Optimize dropdown and modal animations */
+.dropdown-enter {
+  opacity: 0;
+  transform: scale(0.95) translateY(-5px);
+}
+
+.dropdown-enter-active {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  transition: opacity 0.15s ease-out, transform 0.15s ease-out;
+}
+
+/* Remove default mobile webkit behaviors */
+input, textarea, button, select {
+  -webkit-appearance: none;
+  -webkit-border-radius: 0;
+  border-radius: 0;
+}
+
+/* Optimize list rendering */
+.optimized-list {
+  contain: layout style;
+  will-change: scroll-position;
+}
+
+.optimized-list-item {
+  contain: layout;
+  will-change: auto;
+}
+
+/* Better touch targets */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Reduce repaints during scroll */
+.scroll-optimized {
+  -webkit-overflow-scrolling: touch;
+  overflow-scrolling: touch;
+  transform: translateZ(0);
+}
