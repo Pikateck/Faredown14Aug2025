@@ -2077,7 +2077,10 @@ export default function Index() {
                         Travelers
                       </label>
                       <button
-                        onClick={() => setShowTravelers(!showTravelers)}
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          setShowTravelers(!showTravelers);
+                        }}
                         className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full min-w-[120px] hover:border-blue-500 touch-manipulation"
                       >
                         <svg
