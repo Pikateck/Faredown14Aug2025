@@ -1,8 +1,7 @@
 import React, { useEffect, Suspense, lazy } from "react";
 import { initializeBargainPlatform } from "./services/bargainAppInit";
 import "./styles/performance-optimizations.css";
-import "./styles/bargain-button.css";
-import "./styles/view-details-button.css";
+import "./styles/faredown-button.css";
 import {
   BrowserRouter as Router,
   Routes,
