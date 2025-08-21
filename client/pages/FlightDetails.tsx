@@ -30,6 +30,7 @@ import { useCurrency } from "@/contexts/CurrencyContext";
 import { ClassyBargainModal } from "@/components/ClassyBargainModal";
 
 import { useScrollToTop } from "@/hooks/useScrollToTop";
+import { orientSegmentsToRoute, getRouteEnds, normalizeIata } from "@/utils/flight";
 
 // Airline Logo Mapping - Professional Logos
 const airlineLogos = {
