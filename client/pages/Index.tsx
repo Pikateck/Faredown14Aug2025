@@ -1629,7 +1629,8 @@ export default function Index() {
                   <span>Sightseeing</span>
                 </button>
                 <button
-                  onClick={() => {
+                  onMouseDown={(e) => {
+                    e.preventDefault();
                     setActiveTab("transfers");
                     window.history.pushState({}, "", "/?tab=transfers");
                   }}
