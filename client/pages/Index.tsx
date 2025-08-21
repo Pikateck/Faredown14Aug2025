@@ -1276,7 +1276,10 @@ export default function Index() {
 
                 <div className="bg-white rounded-xl p-4 shadow-sm">
                   <button
-                    onClick={() => setShowClassDropdown(true)}
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      setShowClassDropdown(true);
+                    }}
                     className="w-full text-left"
                   >
                     <div className="text-xs text-gray-500 mb-1">Class</div>
