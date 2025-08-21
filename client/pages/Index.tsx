@@ -1945,11 +1945,8 @@ export default function Index() {
                       </label>
                       <button
                         ref={desktopFromButtonRef}
-                        onMouseDown={(e) => {
-                          e.preventDefault();
-                          handleFromCityClick(e);
-                        }}
-                        className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full hover:border-blue-500 touch-manipulation"
+                        onClick={handleFromCityClick}
+                        className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full hover:border-blue-500 active:bg-gray-50 touch-manipulation transition-colors"
                       >
                         <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
                           <Building2 className="w-4 h-4 text-blue-600" />
