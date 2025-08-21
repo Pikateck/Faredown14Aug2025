@@ -2556,19 +2556,23 @@ export default function FlightResults() {
                       count: 145,
                     },
                   ].map((time, index) => (
-                    <label
+                    <div
                       key={index}
-                      className="flex items-center justify-between cursor-pointer"
+                      className="flex items-center justify-between py-0.5 min-h-[24px] pr-1"
                     >
-                      <div className="flex items-center space-x-3">
-                        <input
-                          type="checkbox"
-                          className="w-4 h-4 text-blue-600"
-                        />
-                        <span className="text-sm text-gray-700">{time.label}</span>
-                      </div>
-                      <span className="text-sm text-gray-500">{time.count}</span>
-                    </label>
+                      <label className="text-sm text-gray-700 cursor-pointer flex-1 leading-tight flex items-center">
+                        <div className="w-4 h-4 flex items-center justify-center mr-2">
+                          <input
+                            type="checkbox"
+                            className="w-4 h-4 bg-white border border-gray-400"
+                          />
+                        </div>
+                        {time.label}
+                      </label>
+                      <span className="text-xs text-gray-500 ml-2 mr-1">
+                        {time.count}
+                      </span>
+                    </div>
                   ))}
                 </div>
 
