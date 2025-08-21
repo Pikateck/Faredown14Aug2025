@@ -3286,9 +3286,8 @@ export default function FlightResults() {
 
                       {/* Card Footer - Buttons at bottom-right */}
                       <div className="mt-4 border-t pt-4 flex items-center justify-end gap-3">
-                        <FaredownButton
-                          variant="secondary"
-                          size="lg"
+                        <Button
+                          className="min-h-[52px] px-6 py-4 border-2 border-[#003580] bg-transparent hover:bg-[#003580] text-[#003580] hover:text-white font-semibold text-sm flex items-center justify-center gap-2 rounded-xl shadow-lg active:shadow-md transition-all touch-manipulation"
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
@@ -3302,10 +3301,9 @@ export default function FlightResults() {
                           }}
                         >
                           View Details
-                        </FaredownButton>
-                        <FaredownButton
-                          variant="primary"
-                          size="lg"
+                        </Button>
+                        <Button
+                          className="min-h-[52px] px-6 py-4 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d4950b] text-black font-semibold text-sm flex items-center justify-center gap-2 rounded-xl shadow-lg active:shadow-md transition-all touch-manipulation"
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
@@ -3314,7 +3312,7 @@ export default function FlightResults() {
                         >
                           <TrendingDown className="w-4 h-4" />
                           Bargain Now
-                        </FaredownButton>
+                        </Button>
                       </div>
                     </div>
                   </div>
