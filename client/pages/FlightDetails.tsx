@@ -371,7 +371,11 @@ export default function FlightDetails({
                 <div className="flex-1">
                   <div className="flex items-center space-x-2 mb-1">
                     <span className="text-lg font-semibold text-gray-900">
-                      Sun, Sep 14 • 01:35
+                      {new Date(new Date(returnDate).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString("en-US", {
+                        weekday: "short",
+                        month: "short",
+                        day: "numeric"
+                      })} • 01:35
                     </span>
                     <div className="flex items-center space-x-1 bg-gray-100 px-2 py-1 rounded">
                       <Info className="w-3 h-3 text-gray-600" />
