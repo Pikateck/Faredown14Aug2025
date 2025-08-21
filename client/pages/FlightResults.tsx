@@ -1457,26 +1457,6 @@ export default function FlightResults() {
     setShowAINegotiationModal(true);
   };
 
-  const handleBargainAccept = (finalPrice: number, orderRef: string) => {
-    console.log("Bargain accepted:", finalPrice, orderRef);
-
-    // Navigate to booking with accepted price
-    if (bargainSession && bargainFlight && bargainFareType) {
-      const updatedFareType = { ...bargainFareType, price: finalPrice };
-      navigate("/booking-flow", {
-        state: {
-          selectedFlight: bargainFlight,
-          selectedFareType: updatedFareType,
-          negotiatedPrice: finalPrice,
-          orderRef,
-          passengers: { adults, children },
-        },
-      });
-    }
-
-    // Close bargain UI
-    handleCloseBargain();
-  };
 
   return (
     <div className="min-h-screen bg-gray-50 pb-16 md:pb-0">
@@ -1677,7 +1657,7 @@ export default function FlightResults() {
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
                       { code: "hi", name: "हिन्दी", flag: "�������" },
                       { code: "ja", name: "日本語", flag: "🇯🇵" },
-                      { code: "ko", name: "한국어", flag: "🇰����" },
+                      { code: "ko", name: "한국어", flag: "🇰������" },
                       { code: "zh", name: "中文", flag: "🇨🇳" },
                     ].map((language) => (
                       <DropdownMenuItem
