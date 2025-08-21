@@ -751,13 +751,14 @@ export function HotelCard({
               >
                 View Details
               </Button>
-              <Button
+              <BargainButton
                 onClick={() => onBargainClick(hotel, searchParams)}
-                className="text-sm px-5 py-3 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold flex items-center gap-2 min-h-[44px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
+                className="flex items-center gap-2"
+                size="md"
               >
                 <TrendingDown className="w-4 h-4" />
                 Bargain Now
-              </Button>
+              </BargainButton>
             </div>
           </div>
         </CardContent>
