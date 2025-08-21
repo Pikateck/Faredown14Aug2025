@@ -1103,7 +1103,10 @@ export default function Index() {
                 One way
               </button>
               <button
-                onClick={() => setTripType("multi-city")}
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  setTripType("multi-city");
+                }}
                 className={cn(
                   "flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors",
                   tripType === "multi-city"
