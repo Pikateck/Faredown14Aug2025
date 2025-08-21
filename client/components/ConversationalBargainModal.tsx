@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { X, Plane, Building, MapPin, Car } from "lucide-react";
@@ -316,64 +316,78 @@ const ConversationalBargainModal: React.FC<Props> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-md mx-auto bg-white rounded-lg shadow-xl border-0 p-0 gap-0">
-        <DialogHeader className="p-4 pb-2 border-b border-gray-100">
-          <div className="flex items-center justify-between">
-            <DialogTitle className="text-lg font-semibold text-gray-900">
-              AI Price Negotiation
-            </DialogTitle>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onClose}
-              className="h-8 w-8 p-0 rounded-full hover:bg-gray-100"
-            >
-              <X className="h-4 w-4" />
-            </Button>
+      <DialogContent className="max-w-lg mx-auto bg-white rounded-2xl shadow-2xl border-0 p-0 gap-0 max-h-[85vh] overflow-hidden">
+        {/* Elegant Header */}
+        <div className="relative bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-t-2xl border-b border-gray-100">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onClose}
+            className="absolute top-4 right-4 h-8 w-8 p-0 rounded-full hover:bg-white/50 transition-colors"
+          >
+            <X className="h-4 w-4 text-gray-600" />
+          </Button>
+          
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white">
+              <SupplierIcon className="w-5 h-5" />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-gray-900">AI Price Negotiation</h2>
+              <p className="text-sm text-gray-600">
+                {module === "flights" && `${flight.airline} ${flight.flightNumber}`}
+                {module === "hotels" && "Hotel Booking"}
+                {module === "sightseeing" && "Tour Booking"}
+                {module === "transfers" && "Transfer Booking"}
+              </p>
+            </div>
           </div>
-          <div className="text-sm text-gray-600">
-            {module === "flights" && `${flight.airline} ${flight.flightNumber}`}
-            {module === "hotels" && "Hotel Booking"}
-            {module === "sightseeing" && "Tour Booking"}
-            {module === "transfers" && "Transfer Booking"}
-          </div>
-        </DialogHeader>
+        </div>
 
-        {/* Input Phase */}
+        {/* Input Phase - Elegant Design */}
         {phase === "input" && (
-          <div className="p-6 space-y-4">
+          <div className="p-8 space-y-6">
             <div className="text-center">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center">
+                <span className="text-2xl">💰</span>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">
                 What's your target price?
               </h3>
-              <p className="text-sm text-gray-600 mb-4">
+              <p className="text-gray-600 text-lg leading-relaxed">
                 Our AI will negotiate with the {supplierNames[module]} on your behalf
               </p>
             </div>
             
-            <div className="space-y-3">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Enter your desired price (₹)
+            <div className="space-y-5">
+              <div className="relative">
+                <label className="block text-base font-semibold text-gray-800 mb-3">
+                  Enter your desired price
                 </label>
-                <Input
-                  type="number"
-                  value={userPrice}
-                  onChange={(e) => setUserPrice(e.target.value)}
-                  placeholder="e.g. 25000"
-                  className="text-lg text-center"
-                  min="1"
-                />
+                <div className="relative">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-xl font-semibold text-gray-700">₹</span>
+                  <Input
+                    type="number"
+                    value={userPrice}
+                    onChange={(e) => setUserPrice(e.target.value)}
+                    placeholder="25,000"
+                    className="pl-10 text-xl h-14 bg-gray-50 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:bg-white transition-all"
+                    min="1"
+                  />
+                </div>
               </div>
               
-              <div className="text-xs text-gray-500 text-center">
-                Current price: ₹{(selectedFareType?.price || flight.price).toLocaleString()}
+              <div className="bg-blue-50 rounded-xl p-4 text-center">
+                <p className="text-sm text-blue-700">
+                  <span className="font-semibold">Current price:</span> ₹{(selectedFareType?.price || flight.price).toLocaleString()}
+                </p>
               </div>
               
               <BargainButton
                 onClick={startNegotiation}
                 disabled={!userPrice || parseInt(userPrice) <= 0}
-                className="w-full mt-4"
+                className="w-full h-14 text-lg font-bold mt-6"
+                size="lg"
               >
                 🤖 Start AI Negotiation
               </BargainButton>
@@ -381,94 +395,98 @@ const ConversationalBargainModal: React.FC<Props> = ({
           </div>
         )}
 
-        {/* Chat Phase */}
+        {/* Chat Phase - Elegant Messages */}
         {(phase === "negotiating" || phase === "offer" || phase === "holding") && (
-          <div className="h-80 overflow-y-auto p-4 space-y-3">
-            {messages.map((message, index) => {
-              const isLastAgentMessage = message.speaker === "agent" && 
-                                       index === messages.length - 1 && 
-                                       phase === "offer" && 
-                                       currentStep === "agent_confirm";
-              
-              return (
-                <div key={message.id} className="flex gap-3">
-                  <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
-                    message.speaker === "supplier" 
-                      ? "bg-blue-100 text-blue-600" 
-                      : "bg-green-100 text-green-600"
-                  }`}>
-                    {message.speaker === "supplier" ? (
-                      <SupplierIcon className="w-4 h-4" />
-                    ) : (
-                      <span className="text-xs font-bold">AI</span>
-                    )}
-                  </div>
-                  <div className={`flex-1 max-w-xs rounded-2xl px-4 py-2 text-sm ${
-                    message.speaker === "supplier"
-                      ? "bg-blue-50 text-blue-900"
-                      : "bg-green-50 text-green-900"
-                  }`}>
-                    <div className="text-xs opacity-70 mb-1">
-                      {message.speaker === "supplier" 
-                        ? supplierNames[module]
-                        : copyPacks.brand.negotiatorTitle
-                      }
+          <div className="flex flex-col max-h-[60vh]">
+            <div className="flex-1 overflow-y-auto p-6 space-y-4 scroll-smooth">
+              {messages.map((message, index) => {
+                const isLastAgentMessage = message.speaker === "agent" && 
+                                         index === messages.length - 1 && 
+                                         phase === "offer" && 
+                                         currentStep === "agent_confirm";
+                
+                return (
+                  <div key={message.id} className="flex gap-4 items-start">
+                    <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center shadow-sm ${
+                      message.speaker === "supplier" 
+                        ? "bg-gradient-to-br from-blue-500 to-blue-600 text-white" 
+                        : "bg-gradient-to-br from-green-500 to-green-600 text-white"
+                    }`}>
+                      {message.speaker === "supplier" ? (
+                        <SupplierIcon className="w-5 h-5" />
+                      ) : (
+                        <span className="text-sm font-bold">AI</span>
+                      )}
                     </div>
-                    {message.message}
-                    
-                    {/* Timer and buttons inside the last Agent message */}
-                    {isLastAgentMessage && showConfirmButtons && !isHolding && !isExpired && (
-                      <div className="mt-3 pt-3 border-t border-green-200">
-                        <div className="flex items-center justify-between mb-3">
-                          <span className="text-xs text-green-700 font-medium">Valid for:</span>
-                          <span className={`text-sm font-mono px-2 py-1 rounded-md ${
-                            timerSeconds <= 10 
-                              ? 'bg-red-100 text-red-700 font-bold animate-pulse' 
-                              : 'bg-green-100 text-green-700'
-                          }`}>
-                            {formatTime(timerSeconds)}
-                          </span>
-                        </div>
-                        <div className="flex gap-2">
-                          <BargainButton
-                            size="sm"
-                            onClick={handleHold}
-                            className="flex-1 bg-green-600 hover:bg-green-700 text-white"
-                          >
-                            🔒 Place 30s Hold
-                          </BargainButton>
-                          {round < 3 && (
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={handleBargainAgain}
-                              className="flex-1 border-green-600 text-green-600 hover:bg-green-50"
-                            >
-                              Bargain Again
-                            </Button>
-                          )}
-                        </div>
+                    <div className={`flex-1 max-w-sm rounded-2xl px-5 py-4 shadow-sm ${
+                      message.speaker === "supplier"
+                        ? "bg-blue-50 text-blue-900 border border-blue-100"
+                        : "bg-green-50 text-green-900 border border-green-100"
+                    }`}>
+                      <div className="text-xs font-semibold opacity-70 mb-2 uppercase tracking-wide">
+                        {message.speaker === "supplier" 
+                          ? supplierNames[module]
+                          : copyPacks.brand.negotiatorTitle
+                        }
                       </div>
-                    )}
+                      <div className="text-sm leading-relaxed">
+                        {message.message}
+                      </div>
+                      
+                      {/* Timer and buttons inside the last Agent message */}
+                      {isLastAgentMessage && showConfirmButtons && !isHolding && !isExpired && (
+                        <div className="mt-5 pt-4 border-t border-green-200">
+                          <div className="flex items-center justify-between mb-4">
+                            <span className="text-xs font-semibold text-green-700 uppercase tracking-wide">
+                              Valid for:
+                            </span>
+                            <div className={`px-3 py-2 rounded-xl font-mono text-sm font-bold shadow-sm ${
+                              timerSeconds <= 10 
+                                ? 'bg-red-500 text-white animate-pulse shadow-red-200' 
+                                : 'bg-white text-green-700 border border-green-200'
+                            }`}>
+                              {formatTime(timerSeconds)}
+                            </div>
+                          </div>
+                          <div className="flex gap-3">
+                            <Button
+                              onClick={handleHold}
+                              className="flex-1 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold py-3 rounded-xl shadow-sm transition-all transform hover:scale-[1.02]"
+                            >
+                              🔒 Place 30s Hold
+                            </Button>
+                            {round < 3 && (
+                              <Button
+                                variant="outline"
+                                onClick={handleBargainAgain}
+                                className="flex-1 border-2 border-green-600 text-green-700 hover:bg-green-50 font-semibold py-3 rounded-xl transition-all"
+                              >
+                                Bargain Again
+                              </Button>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+              
+              {isTyping && (
+                <div className="flex gap-4 items-start">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
+                    <div className="w-3 h-3 bg-gray-500 rounded-full animate-pulse" />
+                  </div>
+                  <div className="bg-gray-100 rounded-2xl px-5 py-4 border border-gray-200">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                      <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                      <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                    </div>
                   </div>
                 </div>
-              );
-            })}
-            
-            {isTyping && (
-              <div className="flex gap-3">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse" />
-                </div>
-                <div className="bg-gray-50 rounded-2xl px-4 py-2 text-sm text-gray-600">
-                  <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
-                  </div>
-                </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         )}
       </DialogContent>
