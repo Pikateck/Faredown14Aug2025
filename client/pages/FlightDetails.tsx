@@ -327,8 +327,8 @@ export default function FlightDetails({
                     })} • {displayFlight.departureTime}
                   </div>
                   <div className="font-bold text-gray-900 text-lg mb-1">
-                    {displayFlight.departure.code} •{" "}
-                    {displayFlight.departure.name}
+                    {firstSegment?.origin?.code || displayFlight.departure.code} •{" "}
+                    {firstSegment?.origin?.name || displayFlight.departure.name}
                   </div>
 
                   {/* Airline Info */}
