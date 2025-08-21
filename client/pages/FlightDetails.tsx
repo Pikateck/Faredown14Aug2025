@@ -197,6 +197,19 @@ export default function FlightDetails({
     actualRoute: `${displayFlight?.departure?.code} → ${displayFlight?.arrival?.code}`
   });
 
+  // Create explicit return flight routing
+  const returnDeparture = {
+    code: displayFlight?.arrival?.code || toCode,
+    name: displayFlight?.arrival?.name || airportData[toCode]?.name || "Unknown Airport",
+    city: displayFlight?.arrival?.city || airportData[toCode]?.city || "Unknown"
+  };
+
+  const returnArrival = {
+    code: displayFlight?.departure?.code || fromCode,
+    name: displayFlight?.departure?.name || airportData[fromCode]?.name || "Unknown Airport",
+    city: displayFlight?.departure?.city || airportData[fromCode]?.city || "Unknown"
+  };
+
   // We now always have flight data, so no need for error state
   if (!displayFlight) {
     return (
