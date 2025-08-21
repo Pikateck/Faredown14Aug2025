@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { X, Plane, Building, MapPin, Car } from "lucide-react";
-import copyPacks from "@/data/copy_packs.json";
+import copyPacks from "../../api/data/copy_packs.json";
 
 // Import the BargainButton
 import { BargainButton } from "./ui/BargainButton";
