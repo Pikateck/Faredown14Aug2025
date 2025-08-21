@@ -5746,7 +5746,7 @@ export default function FlightResults() {
           console.log("🔄 Retry requested - incrementing attempt");
           // Removed old bargain logic
         }}
-        attempt={bargainCtx?.attempt || 1}
+        attempt={1}
         moduleType="flights"
       />
 
