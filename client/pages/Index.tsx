@@ -1852,7 +1852,10 @@ export default function Index() {
                           </span>
                         </button>
                         <button
-                          onClick={() => setTripType("multi-city")}
+                          onMouseDown={(e) => {
+                            e.preventDefault();
+                            setTripType("multi-city");
+                          }}
                           className="flex items-center space-x-2"
                         >
                           <div
