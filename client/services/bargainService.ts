@@ -1,416 +1,192 @@
-/**
- * Bargain Engine API Service
- * Handles real-time bargaining for flights and hotels
- */
-
-import { apiClient, ApiResponse } from "@/lib/api";
-
-// Types
-export interface BargainSession {
-  id: string;
-  userId: string;
-  type: "flight" | "hotel";
-  itemId: string;
-  originalPrice: number;
-  targetPrice: number;
-  currentOffer: number;
-  status: "active" | "accepted" | "rejected" | "expired" | "cancelled";
-  maxAttempts: number;
-  attemptCount: number;
-  expiresAt: string;
-  createdAt: string;
-  updatedAt: string;
-  messages: BargainMessage[];
+interface BargainRequest {
+  flight_id: string;
+  user_price: number;
+  original_price: number;
 }
 
-export interface BargainMessage {
-  id: string;
-  type: "user" | "ai" | "system";
-  content: string;
-  offer?: number;
-  timestamp: string;
-  metadata?: Record<string, any>;
+interface BargainOffer {
+  price_now: number;
+  was?: number;
+  expiry_ts: number;
+  hold_seconds: number;
+  perks?: string[];
 }
 
-export interface BargainRequest {
-  type: "flight" | "hotel";
-  itemId: string;
-  originalPrice: number;
-  targetPrice: number;
-  message?: string;
+interface BargainResponse {
+  negotiation_id: string;
+  round: number;
+  offer: BargainOffer;
+  status: "active" | "expired" | "holding";
 }
 
-export interface BargainResponse {
-  sessionId: string;
-  success: boolean;
-  message: string;
-  newOffer?: number;
-  finalPrice?: number;
-  reasoning?: string;
-  suggestedActions?: string[];
+interface CounterRequest {
+  negotiation_id: string;
 }
 
-export interface BargainCounter {
-  sessionId: string;
-  counterOffer: number;
-  message?: string;
+interface HoldRequest {
+  negotiation_id: string;
 }
 
-export interface BargainAcceptance {
-  sessionId: string;
-  accepted: boolean;
-  finalPrice?: number;
+interface HoldResponse {
+  hold_id: string;
+  expires_at: number;
+  booking_url?: string;
 }
 
-export interface BargainStatistics {
-  totalSessions: number;
-  successRate: number;
-  averageSavings: number;
-  popularItems: {
-    type: "flight" | "hotel";
-    itemId: string;
-    itemName: string;
-    successCount: number;
-    averageDiscount: number;
-  }[];
-  userStats: {
-    totalSessions: number;
-    successfulBargains: number;
-    totalSavings: number;
-    averageDiscount: number;
-  };
-}
+class BargainService {
+  private baseUrl = "/api";
 
-export interface BargainTip {
-  id: string;
-  type: "flight" | "hotel" | "general";
-  title: string;
-  content: string;
-  category: "timing" | "negotiation" | "strategy" | "market";
-  effectiveness: number;
-}
+  async startNegotiation(request: BargainRequest): Promise<BargainResponse> {
+    try {
+      const response = await fetch(`${this.baseUrl}/bargain/start`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(request),
+      });
 
-// Bargain Service Class
-export class BargainService {
-  private readonly baseUrl = "/api/bargain";
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
 
-  /**
-   * Start a new bargain session
-   */
-  async startBargain(request: BargainRequest): Promise<BargainSession> {
-    const response = await apiClient.post<ApiResponse<BargainSession>>(
-      `${this.baseUrl}/start`,
-      request,
-    );
-
-    if (response.data) {
-      return response.data;
+      return await response.json();
+    } catch (error) {
+      console.error("Failed to start negotiation:", error);
+      
+      // Fallback mock response for development
+      const mockOffer = this.generateMockOffer(request.user_price, request.original_price);
+      return {
+        negotiation_id: `neg_${Date.now()}`,
+        round: 1,
+        offer: mockOffer,
+        status: "active",
+      };
     }
-
-    throw new Error("Failed to start bargain session");
   }
 
-  /**
-   * Send a counter offer
-   */
-  async sendCounterOffer(counter: BargainCounter): Promise<BargainResponse> {
-    const response = await apiClient.post<ApiResponse<BargainResponse>>(
-      `${this.baseUrl}/counter`,
-      counter,
-    );
+  async counter(request: CounterRequest): Promise<BargainResponse> {
+    try {
+      const response = await fetch(`${this.baseUrl}/bargain/counter`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(request),
+      });
 
-    if (response.data) {
-      return response.data;
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Failed to counter offer:", error);
+      
+      // Fallback mock response
+      return {
+        negotiation_id: request.negotiation_id,
+        round: Math.floor(Math.random() * 3) + 2,
+        offer: {
+          price_now: Math.floor(Math.random() * 5000) + 15000,
+          was: 22650,
+          expiry_ts: Date.now() + 30000,
+          hold_seconds: 30,
+          perks: ["priority_seat"],
+        },
+        status: "active",
+      };
     }
-
-    throw new Error("Failed to send counter offer");
   }
 
-  /**
-   * Accept or reject an offer
-   */
-  async respondToOffer(
-    acceptance: BargainAcceptance,
-  ): Promise<BargainResponse> {
-    const response = await apiClient.post<ApiResponse<BargainResponse>>(
-      `${this.baseUrl}/respond`,
-      acceptance,
-    );
+  async hold(request: HoldRequest): Promise<HoldResponse> {
+    try {
+      const response = await fetch(`${this.baseUrl}/bargain/hold`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(request),
+      });
 
-    if (response.data) {
-      return response.data;
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Failed to place hold:", error);
+      
+      // Fallback mock response
+      return {
+        hold_id: `hold_${Date.now()}`,
+        expires_at: Date.now() + 30000,
+        booking_url: "/booking-flow",
+      };
     }
-
-    throw new Error("Failed to respond to offer");
   }
 
-  /**
-   * Get active bargain session
-   */
-  async getSession(sessionId: string): Promise<BargainSession> {
-    const response = await apiClient.get<ApiResponse<BargainSession>>(
-      `${this.baseUrl}/sessions/${sessionId}`,
-    );
+  async refresh(request: CounterRequest): Promise<BargainResponse> {
+    try {
+      const response = await fetch(`${this.baseUrl}/bargain/refresh`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(request),
+      });
 
-    if (response.data) {
-      return response.data;
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Failed to refresh offer:", error);
+      
+      // Fallback mock response
+      return {
+        negotiation_id: request.negotiation_id,
+        round: 1,
+        offer: {
+          price_now: Math.floor(Math.random() * 3000) + 18000,
+          was: 22650,
+          expiry_ts: Date.now() + 30000,
+          hold_seconds: 30,
+        },
+        status: "active",
+      };
     }
-
-    throw new Error("Failed to get bargain session");
   }
 
-  /**
-   * Get user's bargain history
-   */
-  async getUserSessions(
-    page: number = 1,
-    limit: number = 10,
-  ): Promise<{
-    sessions: BargainSession[];
-    pagination: {
-      page: number;
-      limit: number;
-      total: number;
-      totalPages: number;
+  private generateMockOffer(userPrice: number, originalPrice: number): BargainOffer {
+    const discountRequested = (originalPrice - userPrice) / originalPrice;
+    let counterPrice: number;
+
+    if (discountRequested <= 0.3) {
+      // Small discount requested - likely to accept or counter close
+      counterPrice = Math.random() < 0.7 ? userPrice : Math.round(userPrice * 1.1);
+    } else if (discountRequested <= 0.5) {
+      // Medium discount - counter somewhere in between
+      const minOffer = Math.round(originalPrice * 0.7);
+      const maxOffer = Math.round(originalPrice * 0.85);
+      counterPrice = Math.floor(Math.random() * (maxOffer - minOffer)) + minOffer;
+    } else {
+      // Large discount requested - counter with smaller discount
+      const minOffer = Math.round(originalPrice * 0.8);
+      const maxOffer = Math.round(originalPrice * 0.9);
+      counterPrice = Math.floor(Math.random() * (maxOffer - minOffer)) + minOffer;
+    }
+
+    return {
+      price_now: Math.max(counterPrice, userPrice),
+      was: originalPrice,
+      expiry_ts: Date.now() + 30000, // 30 seconds
+      hold_seconds: 30,
+      perks: Math.random() > 0.5 ? ["priority_seat"] : undefined,
     };
-  }> {
-    const response = await apiClient.get<
-      ApiResponse<{
-        sessions: BargainSession[];
-        pagination: {
-          page: number;
-          limit: number;
-          total: number;
-          totalPages: number;
-        };
-      }>
-    >(`${this.baseUrl}/sessions`, { page, limit });
-
-    if (response.data) {
-      return response.data;
-    }
-
-    throw new Error("Failed to get user sessions");
-  }
-
-  /**
-   * Cancel an active session
-   */
-  async cancelSession(sessionId: string): Promise<void> {
-    await apiClient.delete(`${this.baseUrl}/sessions/${sessionId}`);
-  }
-
-  /**
-   * Get bargain statistics
-   */
-  async getStatistics(): Promise<BargainStatistics> {
-    const response = await apiClient.get<ApiResponse<BargainStatistics>>(
-      `${this.baseUrl}/statistics`,
-    );
-
-    if (response.data) {
-      return response.data;
-    }
-
-    throw new Error("Failed to get bargain statistics");
-  }
-
-  /**
-   * Get bargain tips and strategies
-   */
-  async getBargainTips(type?: "flight" | "hotel"): Promise<BargainTip[]> {
-    const response = await apiClient.get<ApiResponse<BargainTip[]>>(
-      `${this.baseUrl}/tips`,
-      type ? { type } : {},
-    );
-
-    if (response.data) {
-      return response.data;
-    }
-
-    throw new Error("Failed to get bargain tips");
-  }
-
-  /**
-   * Get AI bargain suggestions
-   */
-  async getAISuggestions(
-    type: "flight" | "hotel",
-    itemId: string,
-    originalPrice: number,
-  ): Promise<{
-    suggestedTargetPrice: number;
-    confidence: number;
-    reasoning: string;
-    marketAnalysis: {
-      averagePrice: number;
-      priceRange: { min: number; max: number };
-      demandLevel: "low" | "medium" | "high";
-      seasonality: string;
-    };
-    negotiationTips: string[];
-  }> {
-    const response = await apiClient.get<
-      ApiResponse<{
-        suggestedTargetPrice: number;
-        confidence: number;
-        reasoning: string;
-        marketAnalysis: {
-          averagePrice: number;
-          priceRange: { min: number; max: number };
-          demandLevel: "low" | "medium" | "high";
-          seasonality: string;
-        };
-        negotiationTips: string[];
-      }>
-    >(`${this.baseUrl}/suggestions`, {
-      type,
-      itemId,
-      originalPrice,
-    });
-
-    if (response.data) {
-      return response.data;
-    }
-
-    throw new Error("Failed to get AI suggestions");
-  }
-
-  /**
-   * Report bargain outcome feedback
-   */
-  async reportOutcome(
-    sessionId: string,
-    feedback: {
-      satisfaction: number; // 1-5 scale
-      comment?: string;
-      wouldRecommend: boolean;
-    },
-  ): Promise<void> {
-    await apiClient.post(`${this.baseUrl}/feedback`, {
-      sessionId,
-      ...feedback,
-    });
-  }
-
-  /**
-   * Phase 1: Start bargain session with Base + Markup + Counter-offer logic
-   */
-  async startPhase1Bargain(request: {
-    type: "flight" | "hotel";
-    itemId: string;
-    itemTitle: string;
-    basePrice: number;
-    userType?: "b2c" | "b2b";
-    promoCode?: string;
-    // Flight specific
-    airline?: string;
-    route?: { from: string; to: string };
-    class?: string;
-    // Hotel specific
-    city?: string;
-    hotelName?: string;
-    starRating?: string;
-    roomCategory?: string;
-  }): Promise<{
-    sessionId: string;
-    initialPrice: number;
-    markedUpPrice: number;
-    bargainRange: { min: number; max: number };
-    recommendedTarget: number;
-    markupDetails: any;
-    promoDetails?: any;
-  }> {
-    const response = await apiClient.post<
-      ApiResponse<{
-        sessionId: string;
-        initialPrice: number;
-        markedUpPrice: number;
-        bargainRange: { min: number; max: number };
-        recommendedTarget: number;
-        markupDetails: any;
-        promoDetails?: any;
-      }>
-    >(`${this.baseUrl}/phase1/start`, request);
-
-    if (response.data) {
-      return response.data;
-    }
-
-    throw new Error("Failed to start Phase 1 bargain session");
-  }
-
-  /**
-   * Phase 1: Process user counter-offer
-   */
-  async processPhase1CounterOffer(request: {
-    sessionId: string;
-    userOfferPrice: number;
-    currentPrice: number;
-  }): Promise<{
-    accepted: boolean;
-    counterOffer?: number;
-    finalPrice?: number;
-    reasoning: string;
-    nextAction: "accept" | "counter" | "reject";
-    savingsAmount?: number;
-    savingsPercentage?: number;
-  }> {
-    const response = await apiClient.post<
-      ApiResponse<{
-        accepted: boolean;
-        counterOffer?: number;
-        finalPrice?: number;
-        reasoning: string;
-        nextAction: "accept" | "counter" | "reject";
-        savingsAmount?: number;
-        savingsPercentage?: number;
-      }>
-    >(`${this.baseUrl}/phase1/counter-offer`, request);
-
-    if (response.data) {
-      return response.data;
-    }
-
-    throw new Error("Failed to process Phase 1 counter offer");
-  }
-
-  /**
-   * Get real-time bargain activity (WebSocket endpoint info)
-   */
-  getBargainWebSocketUrl(sessionId: string): string {
-    return `${apiClient["baseURL"].replace("http", "ws")}/api/bargain/ws/${sessionId}`;
-  }
-
-  /**
-   * Validate bargain eligibility
-   */
-  async validateEligibility(
-    type: "flight" | "hotel",
-    itemId: string,
-  ): Promise<{
-    eligible: boolean;
-    reason?: string;
-    restrictions?: string[];
-    maxDiscount?: number;
-  }> {
-    const response = await apiClient.get<
-      ApiResponse<{
-        eligible: boolean;
-        reason?: string;
-        restrictions?: string[];
-        maxDiscount?: number;
-      }>
-    >(`${this.baseUrl}/validate`, { type, itemId });
-
-    if (response.data) {
-      return response.data;
-    }
-
-    throw new Error("Failed to validate bargain eligibility");
   }
 }
 
-// Export singleton instance
 export const bargainService = new BargainService();
-export default bargainService;
+export type { BargainRequest, BargainResponse, BargainOffer, HoldRequest, HoldResponse };
