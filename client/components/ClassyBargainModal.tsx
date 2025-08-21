@@ -432,7 +432,7 @@ export function ClassyBargainModal({
             {formatCurrency(fareType.price, selectedCurrency.symbol)}
           </div>
           <button className="fd-close" onClick={onClose} aria-label="Close">
-            ×
+            <X size={20} />
           </button>
         </header>
 
