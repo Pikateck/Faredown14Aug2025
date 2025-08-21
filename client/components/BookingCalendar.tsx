@@ -577,7 +577,7 @@ export function BookingCalendar({
               }
               onClose?.();
             }}
-            className="px-8 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700 transition-colors"
+            className="px-8 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700 active:bg-blue-800 transition-colors touch-manipulation"
             disabled={!selection[0].startDate}
           >
             Apply
