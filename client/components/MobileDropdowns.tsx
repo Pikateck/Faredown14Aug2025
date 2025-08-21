@@ -268,12 +268,11 @@ export function MobileCityDropdown({
             {filteredPopularDestinations.map((dest) => (
               <button
                 key={dest.id}
-                onMouseDown={(e) => {
-                  e.preventDefault();
+                onClick={() => {
                   onSelectCity(dest.name);
                   onClose();
                 }}
-                className="w-full text-left px-4 py-4 hover:bg-blue-50 rounded-lg border border-gray-100 touch-manipulation"
+                className="w-full text-left px-4 py-4 hover:bg-blue-50 active:bg-blue-100 rounded-lg border border-gray-100 touch-manipulation transition-colors"
               >
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center">
