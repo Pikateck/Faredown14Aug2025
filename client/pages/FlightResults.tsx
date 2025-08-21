@@ -2555,23 +2555,19 @@ export default function FlightResults() {
                       count: 145,
                     },
                   ].map((time, index) => (
-                    <div
+                    <label
                       key={index}
-                      className="flex items-center justify-between py-0.5 min-h-[24px] pr-1"
+                      className="flex items-center justify-between cursor-pointer"
                     >
-                      <label className="text-sm text-gray-700 cursor-pointer flex-1 leading-tight flex items-center">
-                        <div className="w-4 h-4 flex items-center justify-center mr-2">
-                          <input
-                            type="checkbox"
-                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
-                          />
-                        </div>
-                        {time.label}
-                      </label>
-                      <span className="text-xs text-gray-500 ml-2 mr-1">
-                        {time.count}
-                      </span>
-                    </div>
+                      <div className="flex items-center space-x-3">
+                        <input
+                          type="checkbox"
+                          className="w-4 h-4 text-blue-600"
+                        />
+                        <span className="text-sm text-gray-700">{time.label}</span>
+                      </div>
+                      <span className="text-sm text-gray-500">{time.count}</span>
+                    </label>
                   ))}
                 </div>
 
@@ -2787,7 +2783,7 @@ export default function FlightResults() {
                                           Total:
                                         </span>
                                         <span className="text-blue-600">
-                                          ��
+                                          ₹
                                           {flight.price.breakdown.total.toLocaleString(
                                             "en-IN",
                                           )}
