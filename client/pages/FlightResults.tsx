@@ -1501,11 +1501,11 @@ export default function FlightResults() {
               </button>
               <div className="flex-1 text-center">
                 <h1 className="text-white font-semibold text-lg">
-                  Flight Results
+                  {fromCityName} to {toCityName}
                 </h1>
                 <p className="text-blue-200 text-xs">
-                  {selectedFromCity && selectedToCity
-                    ? `${cityData[selectedFromCity]?.code || ""} → ${cityData[selectedToCity]?.code || ""} • `
+                  {fromCode && toCode
+                    ? `${fromCode} → ${toCode} • `
                     : "Search Results • "}
                   {tripType === "one-way"
                     ? "One way"
