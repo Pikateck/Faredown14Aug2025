@@ -420,7 +420,7 @@ export function HotelCard({
                     {hotel.availableRoom.type}
                   </div>
                   <div className="text-xs text-gray-600 mb-1">
-                    {hotel.availableRoom.bedType} •{" "}
+                    {hotel.availableRoom.bedType} ��{" "}
                     {hotel.availableRoom.rateType}
                   </div>
                   <div className="flex flex-wrap gap-1">
@@ -467,14 +467,13 @@ export function HotelCard({
 
               {/* Action Buttons - Native App Optimized */}
               <div className="flex space-x-3">
-                <Button
-                  variant="outline"
+                <ViewDetailsButton
                   className="flex-1"
                   size="lg"
                   onClick={handleViewDetails}
                 >
                   View Details
-                </Button>
+                </ViewDetailsButton>
                 <BargainButton
                   onClick={() => onBargainClick(hotel, searchParams)}
                   className="flex-1 flex items-center justify-center gap-2"
@@ -607,14 +606,13 @@ export function HotelCard({
 
               {/* Action Buttons - Native App Optimized */}
               <div className="flex space-x-3">
-                <Button
-                  variant="outline"
+                <ViewDetailsButton
                   className="flex-1"
                   size="lg"
                   onClick={handleViewDetails}
                 >
                   View Details
-                </Button>
+                </ViewDetailsButton>
                 <BargainButton
                   onClick={() => onBargainClick(hotel, searchParams)}
                   className="flex-1 flex items-center justify-center gap-2"
