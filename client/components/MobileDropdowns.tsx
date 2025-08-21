@@ -483,7 +483,10 @@ export function MobileDatePicker({
               Round trip
             </button>
             <button
-              onClick={() => setTripType("one-way")}
+              onMouseDown={(e) => {
+                e.preventDefault();
+                setTripType("one-way");
+              }}
               className={cn(
                 "flex-1 py-3 px-4 rounded-lg border-2 text-sm font-medium touch-manipulation",
                 tripType === "one-way"
