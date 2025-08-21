@@ -3286,9 +3286,9 @@ export default function FlightResults() {
 
                       {/* Card Footer - Buttons at bottom-right */}
                       <div className="mt-4 border-t pt-4 flex items-center justify-end gap-3">
-                        <ViewDetailsButton
+                        <FaredownButton
+                          variant="secondary"
                           size="sm"
-                          className="flex items-center gap-2"
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
@@ -3302,7 +3302,7 @@ export default function FlightResults() {
                           }}
                         >
                           View Details
-                        </ViewDetailsButton>
+                        </FaredownButton>
                         <BargainButton
                           onClick={(e) => {
                             e.preventDefault();
