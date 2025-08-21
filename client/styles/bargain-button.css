@@ -1,49 +1,113 @@
-/* Bargain Button Locked Styles - DO NOT MODIFY */
+/* Elegant Bargain Button Locked Styles - DO NOT MODIFY */
 .bargain-button-locked {
   /* CSS Variables for consistency */
-  --bargain-bg: #febb02;
-  --bargain-hover: #e6a602;
-  --bargain-active: #d19502;
+  --bargain-bg-start: #febb02;
+  --bargain-bg-end: #f4a902;
+  --bargain-hover-start: #e6a602;
+  --bargain-hover-end: #d19502;
+  --bargain-active-start: #d19502;
+  --bargain-active-end: #c08902;
   --bargain-text: #000000;
   --bargain-radius: 9999px;
+  --bargain-shadow: 0 10px 25px -3px rgb(254 187 2 / 0.3), 0 4px 6px -2px rgb(254 187 2 / 0.05);
+  --bargain-shadow-hover: 0 20px 40px -4px rgb(254 187 2 / 0.4), 0 8px 16px -4px rgb(254 187 2 / 0.1);
   
   /* Locked base styles */
-  background-color: var(--bargain-bg) !important;
+  background: linear-gradient(135deg, var(--bargain-bg-start), var(--bargain-bg-end)) !important;
   color: var(--bargain-text) !important;
   border-radius: var(--bargain-radius) !important;
-  font-weight: 600 !important;
+  font-weight: 700 !important;
   border: none !important;
+  box-shadow: var(--bargain-shadow) !important;
   
   /* Prevent any inline style overrides */
-  background-image: none !important;
-  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05) !important;
+  background-image: linear-gradient(135deg, var(--bargain-bg-start), var(--bargain-bg-end)) !important;
+  
+  /* Enhanced typography */
+  letter-spacing: 0.025em !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
 }
 
 .bargain-button-locked:hover:not(:disabled) {
-  background-color: var(--bargain-hover) !important;
-  transform: translateY(-1px) !important;
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1) !important;
+  background: linear-gradient(135deg, var(--bargain-hover-start), var(--bargain-hover-end)) !important;
+  background-image: linear-gradient(135deg, var(--bargain-hover-start), var(--bargain-hover-end)) !important;
+  box-shadow: var(--bargain-shadow-hover) !important;
+  transform: translateY(-2px) scale(1.02) !important;
 }
 
 .bargain-button-locked:active:not(:disabled) {
-  background-color: var(--bargain-active) !important;
-  transform: translateY(0) !important;
-  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05) !important;
+  background: linear-gradient(135deg, var(--bargain-active-start), var(--bargain-active-end)) !important;
+  background-image: linear-gradient(135deg, var(--bargain-active-start), var(--bargain-active-end)) !important;
+  transform: translateY(0) scale(0.98) !important;
+  box-shadow: var(--bargain-shadow) !important;
 }
 
 .bargain-button-locked:focus:not(:disabled) {
-  outline: 2px solid var(--bargain-bg) !important;
-  outline-offset: 2px !important;
+  outline: none !important;
+  box-shadow: var(--bargain-shadow), 0 0 0 4px rgba(254, 187, 2, 0.3) !important;
 }
 
 .bargain-button-locked:disabled {
   opacity: 0.5 !important;
   cursor: not-allowed !important;
   transform: none !important;
+  box-shadow: var(--bargain-shadow) !important;
 }
 
-/* Prevent any Tailwind overrides */
+/* Prevent any Tailwind or inline overrides */
 .bargain-button-locked[style] {
-  background-color: var(--bargain-bg) !important;
+  background: linear-gradient(135deg, var(--bargain-bg-start), var(--bargain-bg-end)) !important;
+  background-image: linear-gradient(135deg, var(--bargain-bg-start), var(--bargain-bg-end)) !important;
   color: var(--bargain-text) !important;
+}
+
+/* Shimmer effect enhancement */
+.bargain-button-locked::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  transform: translateX(-100%);
+  transition: transform 0.7s ease-out;
+  z-index: 1;
+}
+
+.bargain-button-locked:hover::before {
+  transform: translateX(100%);
+}
+
+/* Ensure text stays above shimmer */
+.bargain-button-locked > * {
+  position: relative;
+  z-index: 10;
+}
+
+/* Additional responsiveness and accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .bargain-button-locked {
+    transition: none !important;
+  }
+  
+  .bargain-button-locked::before {
+    display: none !important;
+  }
+  
+  .bargain-button-locked:hover:not(:disabled) {
+    transform: none !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .bargain-button-locked {
+    border: 2px solid var(--bargain-text) !important;
+  }
 }
