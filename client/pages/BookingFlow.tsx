@@ -1701,7 +1701,7 @@ export default function BookingFlow() {
                           code: "KRW",
                           symbol: "₩",
                           name: "South Korean Won",
-                          flag: "🇰🇷",
+                          flag: "🇰����",
                         },
                         {
                           code: "SGD",
@@ -3085,8 +3085,8 @@ export default function BookingFlow() {
                         {tripType === "round-trip" && returnDate && (
                           <div className="bg-[#f8fafc] rounded-lg p-4 border border-[#e2e8f0]">
                             <h4 className="font-medium text-gray-900 mb-3">
-                              Return: {selectedFlight?.to || "Dubai"} →{" "}
-                              {selectedFlight?.from || "Mumbai"}
+                              Return: {selectedFlight?.to || toCity} →{" "}
+                              {selectedFlight?.from || fromCity}
                             </h4>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                               <div>
