@@ -1177,7 +1177,7 @@ export default function FlightResults() {
   // Add calendar year state
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
 
-  // City data mapping (from landing page)
+  // City data mapping (extended for better coverage)
   const cityData = {
     Mumbai: {
       code: "BOM",
@@ -1210,6 +1210,26 @@ export default function FlightResults() {
       fullName: "Singapore, Singapore",
     },
   };
+
+  // Helper function to get city name from code
+  const getCityNameFromCode = (code: string) => {
+    const cityEntry = Object.entries(cityData).find(
+      ([_, data]) => data.code === code
+    );
+    return cityEntry ? cityEntry[1].name : code;
+  };
+
+  // Get current route information from URL params
+  const fromCode = searchParams.get("from") || "";
+  const toCode = searchParams.get("to") || "";
+  const fromCityName = getCityNameFromCode(fromCode);
+  const toCityName = getCityNameFromCode(toCode);
+
+  // Get the actual dates from URL params for display consistency
+  const departureDateParam = searchParams.get("departureDate");
+  const returnDateParam = searchParams.get("returnDate");
+  const actualDepartureDate = departureDateParam ? new Date(departureDateParam) : departureDate;
+  const actualReturnDate = returnDateParam ? new Date(returnDateParam) : returnDate;
 
   const airlineCounts = availableAirlines.reduce(
     (acc, airline) => {
