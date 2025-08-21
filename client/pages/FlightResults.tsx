@@ -5729,24 +5729,7 @@ export default function FlightResults() {
       {/* Single Classy Bargain Modal - Only one modal path */}
       <ClassyBargainModal
         isOpen={false}
-        flight={
-          bargainCtx?.product
-            ? {
-                id: bargainCtx.product.id.toString(),
-                airline: bargainCtx.product.airline,
-                flightNumber:
-                  bargainCtx.product.flightNumber ||
-                  `FL${bargainCtx.product.id}`,
-                departureCode: bargainCtx.product.departureCode || bargainCtx.product.origin || searchParams.get("from") || "BOM",
-                arrivalCode: bargainCtx.product.arrivalCode || bargainCtx.product.destination || searchParams.get("to") || "DXB",
-                departureTime: bargainCtx.product.departureTime,
-                arrivalTime: bargainCtx.product.arrivalTime,
-                duration: bargainCtx.product.duration,
-                aircraft: bargainCtx.product.aircraft || "Boeing 777",
-                price: bargainCtx.product.fareTypes?.[0]?.price || 0,
-              }
-            : null
-        }
+        flight={null}
         fareType={
           bargainCtx?.product
             ? {
