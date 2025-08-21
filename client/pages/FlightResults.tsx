@@ -3293,7 +3293,7 @@ export default function FlightResults() {
                       <div className="mt-4 border-t pt-4 flex items-center justify-end gap-3">
                         <FaredownButton
                           variant="secondary"
-                          size="sm"
+                          size="lg"
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
@@ -3310,14 +3310,15 @@ export default function FlightResults() {
                         </FaredownButton>
                         <FaredownButton
                           variant="primary"
-                          size="sm"
+                          size="lg"
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
                             handleConversationalBargain(flight);
                           }}
                         >
-                          🎯 Bargain Now
+                          <TrendingDown className="w-4 h-4" />
+                          Bargain Now
                         </FaredownButton>
                       </div>
                     </div>
