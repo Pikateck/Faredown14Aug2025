@@ -13,8 +13,7 @@ import { Progress } from "@/components/ui/progress";
 import { MobileNavigation } from "@/components/mobile/MobileNavigation";
 import EnhancedBargainModal from "@/components/EnhancedBargainModal";
 import ConversationalBargainModal from "@/components/ConversationalBargainModal";
-import { BargainButton } from "@/components/ui/BargainButton";
-import { ViewDetailsButton } from "@/components/ui/ViewDetailsButton";
+import { FaredownButton } from "@/components/ui/FaredownButton";
 import {
   Dialog,
   DialogContent,
@@ -1679,7 +1678,7 @@ export default function FlightResults() {
                       { code: "de", name: "Deutsch", flag: "🇩🇪" },
                       { code: "it", name: "Italiano", flag: "🇮🇹" },
                       { code: "pt", name: "Portugu��s", flag: "🇵���" },
-                      { code: "ar", name: "العربية", flag: "🇸🇦" },
+                      { code: "ar", name: "العربية", flag: "🇸��" },
                       { code: "hi", name: "हिन्दी", flag: "�������" },
                       { code: "ja", name: "日本語", flag: "🇯🇵" },
                       { code: "ko", name: "한국어", flag: "🇰����" },
