@@ -1265,11 +1265,8 @@ export default function Index() {
 
                 <div className="bg-white rounded-xl p-4 shadow-sm">
                   <button
-                    onMouseDown={(e) => {
-                      e.preventDefault();
-                      setShowClassDropdown(true);
-                    }}
-                    className="w-full text-left"
+                    onClick={() => setShowClassDropdown(true)}
+                    className="w-full text-left active:bg-gray-50 transition-colors touch-manipulation"
                   >
                     <div className="text-xs text-gray-500 mb-1">Class</div>
                     <div className="flex items-center space-x-2">
