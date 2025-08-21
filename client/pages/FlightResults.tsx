@@ -2427,16 +2427,6 @@ export default function FlightResults() {
                     onMouseLeave={() => setHoveredAirline(null)}
                   >
                     <label className="text-sm text-gray-700 cursor-pointer flex-1 leading-tight flex items-center">
-                      <div className="w-4 h-4 flex items-center justify-center mr-2">
-                        <input
-                          type="checkbox"
-                          checked={selectedAirlines.has(airline)}
-                          onChange={(e) =>
-                            handleAirlineFilter(airline, e.target.checked)
-                          }
-                          className={`w-3 h-3 sm:w-4 sm:h-4 ${selectedAirlines.has(airline) ? "bg-blue-600" : "bg-white border border-gray-400"}`}
-                        />
-                      </div>
                       <span
                         className={`transition-colors ${hoveredAirline === airline ? "text-blue-600 font-medium" : "text-gray-700"}`}
                       >
