@@ -3878,7 +3878,7 @@ export default function FlightResults() {
                                               </p>
                                               <div className="bg-gray-50 rounded-lg p-3 text-xs text-gray-600 space-y-2 leading-relaxed">
                                                 <p>
-                                                  ��� Direct flights are usually
+                                                  • Direct flights are usually
                                                   cheaper than refundable
                                                   flights. However, you may have
                                                   to pay a large fee to cancel
@@ -6300,7 +6300,7 @@ export default function FlightResults() {
                         �� Passenger names cannot be changed after booking
                       </li>
                       <li>
-                        �� Check-in must be completed 2 hours before departure
+                        ���� Check-in must be completed 2 hours before departure
                       </li>
                       <li>• Valid government-issued photo ID required</li>
                       <li>
