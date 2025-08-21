@@ -2397,6 +2397,16 @@ export default function FlightResults() {
                     className="flex items-center justify-between py-0.5 min-h-[24px] pr-1"
                   >
                     <label className="text-sm text-gray-700 cursor-pointer flex-1 leading-tight flex items-center">
+                      <div className="w-3 h-3 sm:w-4 sm:h-4 flex items-center justify-center mr-2">
+                        <input
+                          type="radio"
+                          name="stops"
+                          value={option.value}
+                          checked={selectedStops === option.value}
+                          onChange={() => handleStopsFilter(option.value)}
+                          className={`w-3 h-3 sm:w-4 sm:h-4 ${selectedStops === option.value ? "bg-blue-600" : "bg-white border border-gray-400"}`}
+                        />
+                      </div>
                       {option.label}
                     </label>
                     <span className="text-xs text-gray-500 ml-2 mr-1">
@@ -2427,6 +2437,14 @@ export default function FlightResults() {
                     onMouseLeave={() => setHoveredAirline(null)}
                   >
                     <label className="text-sm text-gray-700 cursor-pointer flex-1 leading-tight flex items-center">
+                      <div className="w-3 h-3 sm:w-4 sm:h-4 flex items-center justify-center mr-2">
+                        <input
+                          type="checkbox"
+                          checked={selectedAirlines.has(airline)}
+                          onChange={() => handleAirlineFilter(airline)}
+                          className={`w-3 h-3 sm:w-4 sm:h-4 ${selectedAirlines.has(airline) ? "bg-blue-600" : "bg-white border border-gray-400"}`}
+                        />
+                      </div>
                       <span
                         className={`transition-colors ${hoveredAirline === airline ? "text-blue-600 font-medium" : "text-gray-700"}`}
                       >
@@ -2471,6 +2489,14 @@ export default function FlightResults() {
                     onMouseLeave={() => setHoveredAircraftType(null)}
                   >
                     <label className="text-sm text-gray-700 cursor-pointer flex-1 leading-tight flex items-center">
+                      <div className="w-4 h-4 flex items-center justify-center mr-2">
+                        <input
+                          type="checkbox"
+                          checked={selectedAircraftTypes.has(aircraftType)}
+                          onChange={() => handleAircraftTypeFilter(aircraftType)}
+                          className={`w-4 h-4 ${selectedAircraftTypes.has(aircraftType) ? "bg-blue-600" : "bg-white border border-gray-400"}`}
+                        />
+                      </div>
                       <span
                         className={`transition-colors ${hoveredAircraftType === aircraftType ? "text-blue-600 font-medium" : "text-gray-700"}`}
                       >
