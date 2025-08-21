@@ -112,6 +112,24 @@ export default function FlightDetails({
         total: 22650,
       },
     },
+    // Add segments for route orientation
+    segments: [
+      {
+        carrierCode: "6E",
+        flightNumber: "1407",
+        origin: {
+          code: fromCode,
+          name: airportData[fromCode]?.name || "Unknown Airport",
+          time: "14:30"
+        },
+        destination: {
+          code: toCode,
+          name: airportData[toCode]?.name || "Unknown Airport",
+          time: "16:00"
+        },
+        durationMinutes: 210
+      }
+    ]
   };
 
   const [flight, setFlight] = useState<Flight | null>(
