@@ -377,9 +377,9 @@ export default function FlightDetails({
               </div>
             </div>
 
-            {/* Flight to Mumbai */}
+            {/* Return Flight */}
             <h2 className="text-lg font-bold text-gray-900 mb-1 mt-4">
-              Return flight {toCode} → {fromCode}
+              Return flight {orientedTo || toCode} → {orientedFrom || fromCode}
             </h2>
             <p className="text-gray-600 text-sm mb-3">
               Direct • 3h 15m • Economy
