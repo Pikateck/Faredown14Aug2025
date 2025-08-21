@@ -627,7 +627,7 @@ const SeatMap = ({
                                 title={`Seat ${seat.id} - ₹${seat.price} ${seat.available ? "(Click to select)" : "(Unavailable)"}`}
                               >
                                 {selectedSeats[flightLeg][seat.id]
-                                  ? "��"
+                                  ? "✓"
                                   : seat.available
                                     ? ""
                                     : "×"}
@@ -772,7 +772,7 @@ const SeatMap = ({
         {/* Dubai-Mumbai Summary */}
         <div>
           <h5 className="text-sm font-medium text-gray-900 mb-2">
-            Dubai �� Mumbai
+            Dubai → Mumbai
           </h5>
           <div className="space-y-2 text-sm">
             {travellers.map((traveller) => {
@@ -1109,7 +1109,7 @@ export default function BookingFlow() {
     { name: "Ireland", code: "+353", flag: "🇮🇪" },
     { name: "Isle of Man", code: "+44", flag: "🇮🇲" },
     { name: "Israel", code: "+972", flag: "🇮🇱" },
-    { name: "Italy", code: "+39", flag: "🇮🇹" },
+    { name: "Italy", code: "+39", flag: "��🇹" },
     { name: "Ivory Coast", code: "+225", flag: "🇨🇮" },
     { name: "Jamaica", code: "+1", flag: "🇯🇲" },
     { name: "Japan", code: "+81", flag: "🇯🇵" },
@@ -1913,7 +1913,7 @@ export default function BookingFlow() {
                   : "Select dates"}
               </div>
               <h1 className="text-xl md:text-2xl font-bold text-gray-900 mb-4 md:mb-6">
-                Mumbai to Dubai
+                {routeDisplay}
               </h1>
             </div>
 
