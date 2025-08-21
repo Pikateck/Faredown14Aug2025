@@ -113,13 +113,6 @@ export default function FlightDetails({
     },
   };
 
-  // Debug logging for fallback flight
-  console.log("🛫 Fallback flight created:", {
-    departure: `${fallbackFlight.departure.code} (${fallbackFlight.departure.city})`,
-    arrival: `${fallbackFlight.arrival.code} (${fallbackFlight.arrival.city})`,
-    route: `${fallbackFlight.departure.code} → ${fallbackFlight.arrival.code}`
-  });
-
   const [flight, setFlight] = useState<Flight | null>(
     providedFlight || fallbackFlight,
   );
