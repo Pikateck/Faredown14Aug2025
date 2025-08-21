@@ -3228,8 +3228,8 @@ export default function FlightResults() {
                                         All taxes and fees included
                                       </p>
                                     </div>
-                                    {/* Tooltip arrow pointing to info icon */}
-                                    <div className="absolute right-full top-1/2 transform -translate-y-1/2 w-0 h-0 border-t-4 border-b-4 border-r-4 border-transparent border-r-white"></div>
+                                    {/* Tooltip arrow pointing upward */}
+                                    <div className="absolute top-full right-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-white"></div>
                                   </div>
                                 </div>
                               </div>
