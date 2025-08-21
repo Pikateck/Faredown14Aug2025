@@ -273,7 +273,8 @@ export function CityAutocomplete({
                 )}
               </li>
             ))}
-        </ul>
+        </ul>,
+        document.body
       )}
     </div>
   );
