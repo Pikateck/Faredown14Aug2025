@@ -1,0 +1,81 @@
+/* View Details Button Locked Styles - CONSISTENT with Bargain Button */
+.view-details-button-locked {
+  /* CSS Variables for consistency */
+  --view-details-bg: #ffffff;
+  --view-details-hover: #f9fafb;
+  --view-details-active: #f3f4f6;
+  --view-details-border: #d1d5db;
+  --view-details-border-hover: #9ca3af;
+  --view-details-text: #111827;
+  --view-details-radius: 9999px;
+  --view-details-shadow: 0 10px 25px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.05);
+  --view-details-shadow-hover: 0 20px 40px -4px rgb(0 0 0 / 0.15), 0 8px 16px -4px rgb(0 0 0 / 0.1);
+  
+  /* Locked base styles - SAME structure as bargain button */
+  background: var(--view-details-bg) !important;
+  color: var(--view-details-text) !important;
+  border-radius: var(--view-details-radius) !important;
+  font-weight: 700 !important;
+  border: 2px solid var(--view-details-border) !important;
+  box-shadow: var(--view-details-shadow) !important;
+  
+  /* Enhanced typography - SAME as bargain button */
+  letter-spacing: 0.025em !important;
+  text-shadow: none !important;
+}
+
+.view-details-button-locked:hover:not(:disabled) {
+  background: var(--view-details-hover) !important;
+  border-color: var(--view-details-border-hover) !important;
+  box-shadow: var(--view-details-shadow-hover) !important;
+  transform: translateY(-2px) scale(1.02) !important;
+}
+
+.view-details-button-locked:active:not(:disabled) {
+  background: var(--view-details-active) !important;
+  transform: translateY(0) scale(0.98) !important;
+  box-shadow: var(--view-details-shadow) !important;
+}
+
+.view-details-button-locked:focus:not(:disabled) {
+  outline: none !important;
+  box-shadow: var(--view-details-shadow), 0 0 0 4px rgba(156, 163, 175, 0.3) !important;
+}
+
+.view-details-button-locked:disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+  box-shadow: var(--view-details-shadow) !important;
+}
+
+/* Prevent any Tailwind or inline overrides */
+.view-details-button-locked[style] {
+  background: var(--view-details-bg) !important;
+  color: var(--view-details-text) !important;
+  border-color: var(--view-details-border) !important;
+}
+
+/* Ensure text stays properly positioned */
+.view-details-button-locked > * {
+  position: relative;
+  z-index: 10;
+}
+
+/* Additional responsiveness and accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .view-details-button-locked {
+    transition: none !important;
+  }
+  
+  .view-details-button-locked:hover:not(:disabled) {
+    transform: none !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .view-details-button-locked {
+    border-width: 3px !important;
+  }
+}
