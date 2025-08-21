@@ -1,0 +1,98 @@
+/* Faredown Standard Button Styles - Based on Transfers Design */
+.faredown-button-locked {
+  /* CSS Variables for consistency */
+  --faredown-primary-bg: #febb02;
+  --faredown-primary-hover: #e6a602;
+  --faredown-primary-active: #d19900;
+  --faredown-primary-text: #000000;
+  
+  --faredown-secondary-border: #003580;
+  --faredown-secondary-bg: transparent;
+  --faredown-secondary-hover-bg: #003580;
+  --faredown-secondary-text: #003580;
+  --faredown-secondary-hover-text: #ffffff;
+  
+  --faredown-radius: 12px;
+  --faredown-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  
+  /* Locked base styles from Transfers design */
+  border-radius: var(--faredown-radius) !important;
+  box-shadow: var(--faredown-shadow) !important;
+  font-weight: 600 !important;
+  
+  /* Ensure consistent scaling and touch behavior */
+  touch-action: manipulation !important;
+  user-select: none !important;
+}
+
+/* Primary button (Bargain) styles */
+.faredown-button-locked.faredown-primary {
+  background-color: var(--faredown-primary-bg) !important;
+  color: var(--faredown-primary-text) !important;
+  border: none !important;
+}
+
+.faredown-button-locked.faredown-primary:hover:not(:disabled) {
+  background-color: var(--faredown-primary-hover) !important;
+}
+
+.faredown-button-locked.faredown-primary:active:not(:disabled) {
+  background-color: var(--faredown-primary-active) !important;
+  transform: scale(0.95) !important;
+}
+
+/* Secondary button (View Details) styles */
+.faredown-button-locked.faredown-secondary {
+  background-color: var(--faredown-secondary-bg) !important;
+  color: var(--faredown-secondary-text) !important;
+  border: 2px solid var(--faredown-secondary-border) !important;
+}
+
+.faredown-button-locked.faredown-secondary:hover:not(:disabled) {
+  background-color: var(--faredown-secondary-hover-bg) !important;
+  color: var(--faredown-secondary-hover-text) !important;
+}
+
+.faredown-button-locked.faredown-secondary:active:not(:disabled) {
+  transform: scale(0.95) !important;
+}
+
+/* Focus states */
+.faredown-button-locked:focus:not(:disabled) {
+  outline: 2px solid var(--faredown-primary-bg) !important;
+  outline-offset: 2px !important;
+}
+
+/* Disabled states */
+.faredown-button-locked:disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}
+
+/* Prevent any inline style overrides */
+.faredown-button-locked[style*="background"] {
+  background-color: var(--faredown-primary-bg) !important;
+}
+
+.faredown-button-locked.faredown-secondary[style*="background"] {
+  background-color: var(--faredown-secondary-bg) !important;
+}
+
+/* Accessibility and responsiveness */
+@media (prefers-reduced-motion: reduce) {
+  .faredown-button-locked {
+    transition: none !important;
+  }
+  
+  .faredown-button-locked:active:not(:disabled) {
+    transform: none !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .faredown-button-locked.faredown-secondary {
+    border-width: 3px !important;
+  }
+}
