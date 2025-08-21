@@ -1183,7 +1183,7 @@ export default function TransferResults() {
                               `/transfer-details/${transfer.id}?${detailParams.toString()}`,
                             );
                           }}
-                          className="w-full py-3 border-2 border-[#003580] bg-transparent hover:bg-[#003580] text-[#003580] hover:text-white font-semibold text-sm min-h-[44px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
+                          variant="secondary"
                         >
                           View Details
                         </Button>
