@@ -93,7 +93,7 @@ const SeatMap = ({
   const setSelectedSeats = setSeatSelections;
   const [selectedTraveller, setSelectedTraveller] = useState(null);
   const [expandedFlight, setExpandedFlight] = useState(null);
-  const [currentFlight, setCurrentFlight] = useState("Mumbai-Dubai");
+  const [currentFlight, setCurrentFlight] = useState(`${fromCity}-${toCity}`);
 
   // Generate seat layout for aircraft (Economy classes only)
   const generateSeatLayout = () => {
@@ -1109,7 +1109,7 @@ export default function BookingFlow() {
     { name: "Ireland", code: "+353", flag: "🇮🇪" },
     { name: "Isle of Man", code: "+44", flag: "🇮🇲" },
     { name: "Israel", code: "+972", flag: "🇮🇱" },
-    { name: "Italy", code: "+39", flag: "��🇹" },
+    { name: "Italy", code: "+39", flag: "🇮🇹" },
     { name: "Ivory Coast", code: "+225", flag: "🇨🇮" },
     { name: "Jamaica", code: "+1", flag: "🇯🇲" },
     { name: "Japan", code: "+81", flag: "🇯🇵" },
