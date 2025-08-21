@@ -60,6 +60,7 @@ export default function FlightDetails({
   const params = useParams();
   const navigate = useNavigate();
   const { selectedCurrency } = useCurrency();
+  const [searchParams] = useSearchParams();
   // Immediately use fallback data to prevent loading delays
   const fallbackFlight = {
     id: "fallback",
