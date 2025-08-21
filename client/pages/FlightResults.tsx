@@ -553,6 +553,31 @@ export default function FlightResults() {
     setShowEnhancedBargain(true);
   };
 
+  // Conversational bargain handler
+  const handleConversationalBargain = (flight: (typeof flightData)[0], fareType?: any) => {
+    setSelectedBargainFlight(flight);
+    setSelectedBargainFareType(fareType || flight.fareTypes[0]);
+    setShowConversationalBargain(true);
+  };
+
+  const handleCloseConversationalBargain = () => {
+    setShowConversationalBargain(false);
+    setSelectedBargainFlight(null);
+    setSelectedBargainFareType(null);
+  };
+
+  const handleAcceptBargain = (finalPrice: number, orderRef: string) => {
+    console.log('Bargain accepted:', { finalPrice, orderRef });
+    // Handle the acceptance logic here
+    setShowConversationalBargain(false);
+  };
+
+  const handleHoldBargain = (orderRef: string) => {
+    console.log('Bargain held:', { orderRef });
+    // Handle the hold logic here
+    setShowConversationalBargain(false);
+  };
+
 
   const [sortBy, setSortBy] = useState<"cheapest" | "fastest">("cheapest");
   const [expandedTicketOptions, setExpandedTicketOptions] = useState<
@@ -3385,7 +3410,7 @@ export default function FlightResults() {
                                         <div className="flex items-center mb-6">
                                           <Plane className="w-5 h-5 mr-2 text-gray-700" />
                                           <h4 className="text-lg font-semibold text-gray-900">
-                                            Outbound •{" "}
+                                            Outbound ���{" "}
                                             {departureDate
                                               ? formatDisplayDate(
                                                   departureDate,
