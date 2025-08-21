@@ -185,7 +185,7 @@ export default function FlightDetails({
       setError(null);
       const flightDetails =
         await flightsService.getFlightDetails(finalFlightId);
-      setFlight(flightDetails);
+      setBaseFlight(flightDetails);
     } catch (err) {
       console.error("Failed to load flight details:", err);
       // Keep fallback data instead of showing error
@@ -516,7 +516,7 @@ export default function FlightDetails({
                     <span className="text-sm text-gray-700">Taxes</span>
                     <div className="text-right">
                       <div className="text-sm font-medium text-gray-900">
-                        ���{" "}
+                        ₹{" "}
                         {displayFlight.price.breakdown.taxes.toLocaleString(
                           "en-IN",
                         )}
