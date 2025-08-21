@@ -2940,10 +2940,10 @@ export default function FlightResults() {
                                   {flight.returnArrivalTime}
                                 </div>
                                 <div className="text-sm text-gray-600 font-medium">
-                                  {flight.departureCode || "BOM"}
+                                  {toCode || flight.arrivalCode || "DXB"}
                                 </div>
                                 <div className="text-xs text-gray-500">
-                                  {flight.departure?.city || "Mumbai"}
+                                  {toCityName || flight.arrival?.city || "Dubai"}
                                 </div>
                               </div>
                             </div>
