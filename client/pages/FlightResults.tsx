@@ -1234,8 +1234,21 @@ export default function FlightResults() {
   // Get the actual dates from URL params for display consistency
   const departureDateParam = searchParams.get("departureDate");
   const returnDateParam = searchParams.get("returnDate");
-  const actualDepartureDate = departureDateParam ? new Date(departureDateParam) : departureDate;
-  const actualReturnDate = returnDateParam ? new Date(returnDateParam) : returnDate;
+
+  // Parse dates carefully to avoid timezone issues
+  const actualDepartureDate = departureDateParam
+    ? new Date(departureDateParam + 'T00:00:00')
+    : departureDate;
+  const actualReturnDate = returnDateParam
+    ? new Date(returnDateParam + 'T00:00:00')
+    : returnDate;
+
+  console.log('📅 FlightResults URL dates:', {
+    departureDateParam,
+    returnDateParam,
+    actualDepartureDate: actualDepartureDate?.toDateString(),
+    actualReturnDate: actualReturnDate?.toDateString()
+  });
 
   const airlineCounts = availableAirlines.reduce(
     (acc, airline) => {
