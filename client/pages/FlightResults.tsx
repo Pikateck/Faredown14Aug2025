@@ -2996,16 +2996,16 @@ export default function FlightResults() {
                         >
                           View Details
                         </FaredownButton>
-                        <BargainButton
+                        <FaredownButton
+                          variant="primary"
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
                             handleConversationalBargain(flight);
                           }}
-                          className="flex items-center justify-center gap-2"
                         >
                           🎯 Bargain Now
-                        </BargainButton>
+                        </FaredownButton>
                       </div>
                     </div>
                   </div>
