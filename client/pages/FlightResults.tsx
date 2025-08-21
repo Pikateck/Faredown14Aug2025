@@ -535,28 +535,6 @@ export default function FlightResults() {
     [key: string]: "itinerary" | "fare-rules";
   }>({});
 
-  // Simplified bargain modal state
-  const [bargainCtx, setBargainCtx] = useState<null | {
-    open: boolean;
-    module: "flights";
-    product: (typeof flightData)[0];
-    attempt: number;
-  }>(null);
-  // Temporary variables for legacy UI compatibility (should be removed when old UI is cleaned up)
-  const [bargainStep, setBargainStep] = useState<
-    "input" | "progress" | "result"
-  >("input");
-  const [bargainPrice, setBargainPrice] = useState("");
-  const [bargainProgress, setBargainProgress] = useState(0);
-  const [bargainResult, setBargainResult] = useState<
-    "accepted" | "rejected" | "counter" | null
-  >(null);
-  const [bargainSession, setBargainSession] = useState<any>(null);
-  const [showAINegotiationModal, setShowAINegotiationModal] = useState(false);
-
-  // Legacy variables that reference bargainCtx data when available
-  const bargainFlight = bargainCtx?.product || null;
-  const bargainFareType = bargainCtx?.product?.fareTypes?.[0] || null;
 
   // Legacy functions - should be removed when old UI is cleaned up
   const handleCloseBargain = () => {
@@ -3804,7 +3782,7 @@ export default function FlightResults() {
                                                     Faredown Fee:
                                                   </span>
                                                   <span className="text-gray-900 font-medium">
-                                                    ��500
+                                                    ����500
                                                   </span>
                                                 </div>
                                               </div>
@@ -4735,7 +4713,7 @@ export default function FlightResults() {
                 <div className="grid grid-cols-2 gap-2 mb-3">
                   {[
                     { label: "Morning", range: [6, 12], icon: "☀️" },
-                    { label: "Afternoon", range: [12, 18], icon: "���️" },
+                    { label: "Afternoon", range: [12, 18], icon: "����️" },
                     { label: "Evening", range: [18, 24], icon: "🌙" },
                     { label: "Night", range: [0, 6], icon: "🌅" },
                   ].map((timeSlot) => (
