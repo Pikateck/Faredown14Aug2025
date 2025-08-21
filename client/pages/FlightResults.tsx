@@ -5726,8 +5726,8 @@ export default function FlightResults() {
         </DialogContent>
       </Dialog>
 
-      {/* Single Classy Bargain Modal - Only one modal path */}
-      <ClassyBargainModal
+      {/* ClassyBargainModal removed - using EnhancedBargainModal instead */}
+      {/* <ClassyBargainModal
         isOpen={false}
         flight={null}
         fareType={null}
