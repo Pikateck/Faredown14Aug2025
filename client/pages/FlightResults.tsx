@@ -2064,10 +2064,10 @@ export default function FlightResults() {
                     {selectedToCity ? (
                       <>
                         <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
-                          {cityData[selectedToCity]?.code}
+                          {cityData[selectedToCity]?.code || selectedToCity}
                         </div>
                         <span className="text-sm text-gray-700 font-medium truncate">
-                          {cityData[selectedToCity]?.airport}
+                          {cityData[selectedToCity]?.airport || getCityNameFromCode(selectedToCity)}
                         </span>
                       </>
                     ) : (
