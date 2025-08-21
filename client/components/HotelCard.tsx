@@ -745,13 +745,13 @@ export function HotelCard({
               </div>
             </div>
             <div className="flex gap-3 ml-3">
-              <Button
-                variant="outline"
-                className="text-sm px-5 py-3 border-2 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white transition-all duration-200 font-semibold min-h-[44px] rounded-xl active:scale-95 touch-manipulation"
+              <ViewDetailsButton
+                className="text-sm"
+                size="md"
                 onClick={handleViewDetails}
               >
                 View Details
-              </Button>
+              </ViewDetailsButton>
               <BargainButton
                 onClick={() => onBargainClick(hotel, searchParams)}
                 className="flex items-center gap-2"
