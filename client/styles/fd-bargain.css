@@ -284,21 +284,21 @@
   letter-spacing: -0.01em;
 }
 
-/* Module-specific supplier colors */
+/* Module-specific supplier colors - premium gradients */
 .fd-bubble--supplier.fd-bubble--flights {
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); /* Blue */
+  background: linear-gradient(135deg, #003580 0%, #002a5c 100%); /* Premium Blue */
 }
 
 .fd-bubble--supplier.fd-bubble--hotels {
-  background: linear-gradient(135deg, #9333ea 0%, #7c3aed 100%); /* Purple */
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%); /* Premium Purple */
 }
 
 .fd-bubble--supplier.fd-bubble--sightseeing {
-  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); /* Orange */
+  background: linear-gradient(135deg, #ea580c 0%, #dc2626 100%); /* Premium Orange */
 }
 
 .fd-bubble--supplier.fd-bubble--transfers {
-  background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%); /* Cyan */
+  background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%); /* Premium Cyan */
 }
 
 .fd-bubble--system {
