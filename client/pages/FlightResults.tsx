@@ -5670,13 +5670,7 @@ export default function FlightResults() {
                       <div className="space-y-4">
                         <Button
                           onClick={() => {
-                            setBargainCtx(null);
-                            if (bargainCtx?.product) {
-                              handleBooking(bargainCtx.product, {
-                                ...bargainCtx.product.fareTypes[0],
-                                price: 0, // This old UI section should be removed anyway
-                              });
-                            }
+                            // Removed old bargain logic
                           }}
                           disabled={!isOfferValid}
                           className="w-full bg-green-600 hover:bg-green-700 text-white py-5 text-lg font-bold rounded-xl shadow-lg"
@@ -5792,7 +5786,7 @@ export default function FlightResults() {
           setBargainCtx(null);
         }}
         onBookOriginal={() => {
-          console.log("🎯 Booking original price");
+          console.log("��� Booking original price");
           if (bargainCtx?.product) {
             navigate("/booking-flow", {
               state: {
