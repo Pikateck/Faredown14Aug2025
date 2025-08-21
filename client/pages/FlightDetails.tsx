@@ -413,8 +413,8 @@ export default function FlightDetails({
                     </div>
                   </div>
                   <div className="font-bold text-gray-900 text-lg">
-                    {displayFlight.departure.code} •{" "}
-                    {displayFlight.departure.name}
+                    {returnArrival.code} •{" "}
+                    {returnArrival.name}
                   </div>
                 </div>
               </div>
