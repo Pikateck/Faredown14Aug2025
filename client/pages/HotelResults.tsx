@@ -581,6 +581,26 @@ export default function HotelResults() {
     setIsBargainModalOpen(true);
   };
 
+  const handleConversationalBargain = (hotel: Hotel) => {
+    setSelectedHotel(hotel);
+    setShowConversationalBargain(true);
+  };
+
+  const handleCloseConversationalBargain = () => {
+    setShowConversationalBargain(false);
+    setSelectedHotel(null);
+  };
+
+  const handleAcceptBargain = (finalPrice: number, orderRef: string) => {
+    console.log('Hotel bargain accepted:', { finalPrice, orderRef });
+    setShowConversationalBargain(false);
+  };
+
+  const handleHoldBargain = (orderRef: string) => {
+    console.log('Hotel bargain held:', { orderRef });
+    setShowConversationalBargain(false);
+  };
+
   const handleClearFilters = () => {
     setPriceRange([0, 25000]); // Appropriate range for INR (₹0 - ₹25,000)
     setSelectedFilters({});
