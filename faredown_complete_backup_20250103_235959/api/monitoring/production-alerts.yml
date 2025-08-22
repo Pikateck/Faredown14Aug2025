@@ -1,0 +1,265 @@
+# Production Prometheus Alerts for AI Bargaining Platform
+# Must exist: p95 latency <300ms, Redis miss rate <10%, inventory flip <2%, profit guard
+
+groups:
+  - name: bargain_api_critical
+    interval: 30s
+    rules:
+      # P95 latency < 300ms (CRITICAL)
+      - alert: BargainAPI_HighLatency_Critical
+        expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job="bargain-api", path=~"/api/bargain/v1/session.*"}[5m])) > 0.3
+        for: 5m
+        labels:
+          severity: critical
+          component: bargain-api
+          priority: P1
+        annotations:
+          summary: "Bargain API P95 latency above 300ms"
+          description: "P95 latency for bargain API endpoints has been above 300ms for 5 minutes. Current value: {{ $value | humanizeDuration }}. SLA violation detected."
+          runbook_url: "https://docs.faredown.ai/runbooks/high-latency"
+          dashboard_url: "https://grafana.faredown.ai/d/bargain-performance"
+
+      # Error rate monitoring
+      - alert: BargainAPI_HighErrorRate_Critical
+        expr: rate(http_requests_total{job="bargain-api", path=~"/api/bargain/v1/session.*", code!~"2.."}[5m]) / rate(http_requests_total{job="bargain-api", path=~"/api/bargain/v1/session.*"}[5m]) > 0.005
+        for: 2m
+        labels:
+          severity: critical
+          component: bargain-api
+          priority: P1
+        annotations:
+          summary: "Bargain API error rate above 0.5%"
+          description: "Error rate has been above 0.5% for 2 minutes. Current rate: {{ $value | humanizePercentage }}. Immediate investigation required."
+          runbook_url: "https://docs.faredown.ai/runbooks/high-error-rate"
+
+      # Never-loss violations (ZERO TOLERANCE)
+      - alert: NeverLoss_Violation_Emergency
+        expr: increase(bargain_never_loss_violations_total[1h]) > 0
+        for: 0m
+        labels:
+          severity: emergency
+          component: never-loss-guard
+          priority: P0
+        annotations:
+          summary: "EMERGENCY: Never-loss violation detected"
+          description: "{{ $value }} never-loss violations in the last hour. IMMEDIATE ESCALATION REQUIRED. Auto-rollback may be triggered."
+          runbook_url: "https://docs.faredown.ai/runbooks/never-loss-violation"
+          escalation: "immediate"
+
+  - name: redis_cache_monitoring
+    interval: 60s
+    rules:
+      # Redis miss rate < 10%
+      - alert: Redis_HighMissRate_Warning
+        expr: rate(redis_keyspace_misses_total[10m]) / (rate(redis_keyspace_hits_total[10m]) + rate(redis_keyspace_misses_total[10m])) > 0.1
+        for: 10m
+        labels:
+          severity: warning
+          component: redis
+          priority: P2
+        annotations:
+          summary: "Redis cache miss rate above 10%"
+          description: "Redis miss rate has been above 10% for 10 minutes. Current rate: {{ $value | humanizePercentage }}. Consider cache warming or capacity increase."
+          runbook_url: "https://docs.faredown.ai/runbooks/redis-miss-rate"
+
+      # Redis connection failures
+      - alert: Redis_ConnectionDown_Critical
+        expr: redis_up == 0
+        for: 1m
+        labels:
+          severity: critical
+          component: redis
+          priority: P1
+        annotations:
+          summary: "Redis instance is down"
+          description: "Redis instance {{ $labels.instance }} has been down for 1 minute. Fallback mode should be active. Check Redis health."
+          runbook_url: "https://docs.faredown.ai/runbooks/redis-down"
+
+  - name: business_metrics_alerts
+    interval: 300s
+    rules:
+      # Inventory flip rate < 2%
+      - alert: Inventory_HighFlipRate_Warning
+        expr: rate(bargain_inventory_changes_total[15m]) / rate(bargain_sessions_total[15m]) > 0.02
+        for: 15m
+        labels:
+          severity: warning
+          component: inventory
+          priority: P2
+        annotations:
+          summary: "High inventory flip rate detected"
+          description: "Inventory changes are affecting more than 2% of sessions. Current rate: {{ $value | humanizePercentage }}. Check supplier refresh rates and API stability."
+          runbook_url: "https://docs.faredown.ai/runbooks/inventory-flips"
+
+      # Profit margin guard (auto-rollback trigger)
+      - alert: Profit_MarginDrop_AutoRollback
+        expr: avg_over_time(bargain_profit_margin_pct[6h]) < on() scalar(avg_over_time(bargain_profit_margin_pct[6h] offset 6h)) - 3
+        for: 6h
+        labels:
+          severity: critical
+          component: profit-guard
+          priority: P1
+          auto_rollback: "true"
+        annotations:
+          summary: "Profit margin dropped by more than 3% - AUTO-ROLLBACK TRIGGERED"
+          description: "Profit margin has dropped by more than 3% compared to previous 6h period. Auto-rollback to control group initiated. Current margin: {{ $value }}%"
+          runbook_url: "https://docs.faredown.ai/runbooks/profit-rollback"
+          action: "auto_rollback_initiated"
+
+      # Session acceptance rate monitoring
+      - alert: Acceptance_RateDrop_Warning
+        expr: rate(bargain_sessions_accepted_total[1h]) / rate(bargain_sessions_total[1h]) < 0.15
+        for: 1h
+        labels:
+          severity: warning
+          component: acceptance
+          priority: P2
+        annotations:
+          summary: "Session acceptance rate below 15%"
+          description: "Acceptance rate has been below 15% for 1 hour. Current rate: {{ $value | humanizePercentage }}. Review pricing strategy."
+
+  - name: supplier_fabric_alerts
+    interval: 300s
+    rules:
+      # Supplier API failures
+      - alert: Supplier_API_Degraded
+        expr: rate(supplier_api_requests_failed_total[15m]) / rate(supplier_api_requests_total[15m]) > 0.1
+        for: 15m
+        labels:
+          severity: warning
+          component: supplier-fabric
+          priority: P2
+        annotations:
+          summary: "Supplier API failure rate above 10%"
+          description: "{{ $labels.supplier }} API failure rate: {{ $value | humanizePercentage }}. Circuit breaker may be triggered."
+
+      # Rate refresh lag
+      - alert: Rate_RefreshLag_Warning
+        expr: time() - max(bargain_rate_snapshot_timestamp) > 900
+        for: 5m
+        labels:
+          severity: warning
+          component: rate-refresh
+          priority: P2
+        annotations:
+          summary: "Rate snapshots are stale"
+          description: "Rate snapshots are more than 15 minutes old. Check supplier fabric worker health."
+
+  - name: system_health_monitoring
+    interval: 60s
+    rules:
+      # Database connection pool
+      - alert: Database_ConnectionPool_Warning
+        expr: db_connections_active / db_connections_max > 0.8
+        for: 5m
+        labels:
+          severity: warning
+          component: database
+          priority: P2
+        annotations:
+          summary: "Database connection pool utilization high"
+          description: "Connection pool is {{ $value | humanizePercentage }} full. Consider scaling database connections."
+
+      # API request volume spike
+      - alert: API_RequestVolume_Spike
+        expr: rate(http_requests_total{job="bargain-api"}[5m]) > scalar(avg_over_time(rate(http_requests_total{job="bargain-api"}[5m])[1h:5m])) * 3
+        for: 5m
+        labels:
+          severity: warning
+          component: api-volume
+          priority: P2
+        annotations:
+          summary: "API request volume spike detected"
+          description: "Request volume is 3x higher than average. Current: {{ $value | humanize }} req/s"
+
+  - name: ai_model_alerts
+    interval: 300s
+    rules:
+      # Model inference failures
+      - alert: AI_Model_InferenceFailures
+        expr: rate(ai_model_inference_failures_total[15m]) > 0.01
+        for: 15m
+        labels:
+          severity: warning
+          component: ai-models
+          priority: P2
+        annotations:
+          summary: "AI model inference failures detected"
+          description: "Model inference failure rate: {{ $value | humanize }} failures/sec. Check model service health."
+
+      # Model accuracy drift
+      - alert: AI_Model_AccuracyDrift
+        expr: ai_model_accuracy_score < 0.8
+        for: 1h
+        labels:
+          severity: warning
+          component: ai-models
+          priority: P2
+        annotations:
+          summary: "AI model accuracy below threshold"
+          description: "Model accuracy: {{ $value }}. Consider model retraining."
+
+# Notification routing rules
+route:
+  group_by: ["alertname", "severity"]
+  group_wait: 10s
+  group_interval: 5m
+  repeat_interval: 12h
+  receiver: "default"
+  routes:
+    - match:
+        severity: emergency
+      receiver: "pager-duty-emergency"
+      group_wait: 0s
+      repeat_interval: 5m
+
+    - match:
+        severity: critical
+      receiver: "pager-duty-critical"
+      group_wait: 30s
+      repeat_interval: 30m
+
+    - match:
+        auto_rollback: "true"
+      receiver: "auto-rollback-webhook"
+      group_wait: 0s
+
+# Receivers configuration
+receivers:
+  - name: "default"
+    slack_configs:
+      - api_url: '{{ env "SLACK_WEBHOOK_URL" }}'
+        channel: "#bargain-alerts"
+        title: "Bargain Platform Alert"
+        text: '{{ range .Alerts }}{{ .Annotations.summary }}\n{{ .Annotations.description }}{{ end }}'
+
+  - name: "pager-duty-emergency"
+    pagerduty_configs:
+      - routing_key: '{{ env "PAGERDUTY_EMERGENCY_KEY" }}'
+        description: "{{ range .Alerts }}{{ .Annotations.summary }}{{ end }}"
+
+  - name: "pager-duty-critical"
+    pagerduty_configs:
+      - routing_key: '{{ env "PAGERDUTY_CRITICAL_KEY" }}'
+        description: "{{ range .Alerts }}{{ .Annotations.summary }}{{ end }}"
+
+  - name: "auto-rollback-webhook"
+    webhook_configs:
+      - url: "https://api.faredown.ai/api/admin/auto-rollback"
+        send_resolved: false
+        http_config:
+          bearer_token: '{{ env "AUTO_ROLLBACK_TOKEN" }}'
+
+# Inhibition rules
+inhibit_rules:
+  - source_match:
+      severity: "critical"
+    target_match:
+      severity: "warning"
+    equal: ["alertname", "component"]
+
+  - source_match:
+      alertname: "BargainAPI_HighLatency_Critical"
+    target_match:
+      alertname: "BargainAPI_HighErrorRate_Critical"
+    equal: ["component"]
