@@ -119,7 +119,7 @@ const ConversationalBargainModal: React.FC<Props> = ({
     transfers: "Transfer Provider",
   };
 
-  // Reset state when modal opens
+  // Reset state when modal opens with mobile optimizations
   useEffect(() => {
     if (isOpen && flight) {
       setCurrentPrice("");
@@ -141,12 +141,30 @@ const ConversationalBargainModal: React.FC<Props> = ({
       setIsComplete(false);
       setTimerExpired(false);
 
-      // Auto-focus input after a short delay
-      setTimeout(() => {
-        if (inputRef.current) {
-          inputRef.current.focus();
-        }
-      }, 500);
+      // Mobile-specific optimizations
+      if (isMobileDevice()) {
+        // Light haptic feedback when modal opens
+        hapticFeedback('light');
+
+        // Auto-focus input with mobile considerations
+        setTimeout(() => {
+          if (inputRef.current) {
+            preventZoomOnInput(inputRef.current);
+            addMobileTouchOptimizations(inputRef.current);
+            // Only focus on mobile if no virtual keyboard would interfere
+            if (window.innerHeight > 500) {
+              inputRef.current.focus();
+            }
+          }
+        }, 600);
+      } else {
+        // Desktop auto-focus
+        setTimeout(() => {
+          if (inputRef.current) {
+            inputRef.current.focus();
+          }
+        }, 500);
+      }
     }
   }, [isOpen, flight, userName, module]);
 
