@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 import { useDateContext } from "@/contexts/DateContext";
 import { Header } from "@/components/Header";
 import { HotelCard } from "@/components/HotelCard";
@@ -1583,8 +1584,12 @@ export default function HotelResults() {
         onClose={handleCloseConversationalBargain}
         onAccept={handleAcceptBargain}
         onHold={handleHoldBargain}
-        userName="traveler"
+        userName={user?.firstName || "traveler"}
         module="hotels"
+        onBackToResults={() => {
+          setShowConversationalBargain(false);
+          setSelectedHotel(null);
+        }}
       />
 
       {/* Mobile Navigation */}
