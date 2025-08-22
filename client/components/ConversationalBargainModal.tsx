@@ -326,6 +326,10 @@ const ConversationalBargainModal: React.FC<Props> = ({
 
   const handleBookNow = () => {
     if (finalOffer) {
+      // Mobile haptic feedback for successful action
+      if (isMobileDevice()) {
+        hapticFeedback('medium');
+      }
       onAccept(finalOffer, `NEGOTIATED-${Date.now()}`);
     }
   };
