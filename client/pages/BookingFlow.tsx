@@ -94,7 +94,9 @@ const SeatMap = ({
   const [selectedTraveller, setSelectedTraveller] = useState(null);
   const [expandedFlight, setExpandedFlight] = useState(null);
   const [currentFlight, setCurrentFlight] = useState(
-    selectedFlight ? `${selectedFlight.from || selectedFlight.departure?.code || 'DEP'}-${selectedFlight.to || selectedFlight.arrival?.code || 'ARR'}` : 'DEP-ARR'
+    selectedFlight
+      ? `${selectedFlight.from || selectedFlight.departure?.code || "DEP"}-${selectedFlight.to || selectedFlight.arrival?.code || "ARR"}`
+      : "DEP-ARR",
   );
 
   // Generate seat layout for aircraft (Economy classes only)
@@ -883,13 +885,19 @@ export default function BookingFlow() {
   const toCode = searchParams.get("to") || "BOM";
 
   // Airport data mapping
-  const airportData: Record<string, {city: string; name: string}> = {
-    "DXB": { city: "Dubai", name: "Dubai International Airport" },
-    "BOM": { city: "Mumbai", name: "Chhatrapati Shivaji Maharaj International Airport" },
-    "DEL": { city: "Delhi", name: "Indira Gandhi International Airport" },
-    "BLR": { city: "Bangalore", name: "Kempegowda International Airport" },
-    "MAA": { city: "Chennai", name: "Chennai International Airport" },
-    "CCU": { city: "Kolkata", name: "Netaji Subhash Chandra Bose International Airport" }
+  const airportData: Record<string, { city: string; name: string }> = {
+    DXB: { city: "Dubai", name: "Dubai International Airport" },
+    BOM: {
+      city: "Mumbai",
+      name: "Chhatrapati Shivaji Maharaj International Airport",
+    },
+    DEL: { city: "Delhi", name: "Indira Gandhi International Airport" },
+    BLR: { city: "Bangalore", name: "Kempegowda International Airport" },
+    MAA: { city: "Chennai", name: "Chennai International Airport" },
+    CCU: {
+      city: "Kolkata",
+      name: "Netaji Subhash Chandra Bose International Airport",
+    },
   };
 
   // Create route display based on URL parameters
@@ -910,29 +918,37 @@ export default function BookingFlow() {
     location.state?.negotiatedPrice || selectedFareType?.price || 32168; // fallback price
 
   // Ensure flight data uses correct route orientation
-  const selectedFlight = rawSelectedFlight ? {
-    ...rawSelectedFlight,
-    from: fromCity,
-    to: toCity,
-    // Ensure departure and arrival match URL route
-    departure: {
-      ...rawSelectedFlight.departure,
-      code: fromCode,
-      city: fromCity,
-      name: airportData[fromCode]?.name || rawSelectedFlight.departure?.name || "Unknown Airport"
-    },
-    arrival: {
-      ...rawSelectedFlight.arrival,
-      code: toCode,
-      city: toCity,
-      name: airportData[toCode]?.name || rawSelectedFlight.arrival?.name || "Unknown Airport"
-    }
-  } : null;
+  const selectedFlight = rawSelectedFlight
+    ? {
+        ...rawSelectedFlight,
+        from: fromCity,
+        to: toCity,
+        // Ensure departure and arrival match URL route
+        departure: {
+          ...rawSelectedFlight.departure,
+          code: fromCode,
+          city: fromCity,
+          name:
+            airportData[fromCode]?.name ||
+            rawSelectedFlight.departure?.name ||
+            "Unknown Airport",
+        },
+        arrival: {
+          ...rawSelectedFlight.arrival,
+          code: toCode,
+          city: toCity,
+          name:
+            airportData[toCode]?.name ||
+            rawSelectedFlight.arrival?.name ||
+            "Unknown Airport",
+        },
+      }
+    : null;
 
   console.log("🛫 BookingFlow Route Debug:", {
     urlParams: { fromCode, toCode, fromCity, toCity },
     rawFlight: rawSelectedFlight,
-    correctedFlight: selectedFlight
+    correctedFlight: selectedFlight,
   });
 
   // Define renderFlightSegment function after selectedFlight is available
@@ -1688,7 +1704,12 @@ export default function BookingFlow() {
                           name: "US Dollar",
                           flag: "🇺🇸",
                         },
-                        { code: "EUR", symbol: "€", name: "Euro", flag: "🇪���" },
+                        {
+                          code: "EUR",
+                          symbol: "€",
+                          name: "Euro",
+                          flag: "🇪���",
+                        },
                         {
                           code: "GBP",
                           symbol: "£",

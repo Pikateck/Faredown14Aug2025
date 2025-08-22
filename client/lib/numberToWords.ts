@@ -1,59 +1,53 @@
 const ones = [
-  '',
-  'one',
-  'two',
-  'three',
-  'four',
-  'five',
-  'six',
-  'seven',
-  'eight',
-  'nine',
-  'ten',
-  'eleven',
-  'twelve',
-  'thirteen',
-  'fourteen',
-  'fifteen',
-  'sixteen',
-  'seventeen',
-  'eighteen',
-  'nineteen',
+  "",
+  "one",
+  "two",
+  "three",
+  "four",
+  "five",
+  "six",
+  "seven",
+  "eight",
+  "nine",
+  "ten",
+  "eleven",
+  "twelve",
+  "thirteen",
+  "fourteen",
+  "fifteen",
+  "sixteen",
+  "seventeen",
+  "eighteen",
+  "nineteen",
 ];
 
 const tens = [
-  '',
-  '',
-  'twenty',
-  'thirty',
-  'forty',
-  'fifty',
-  'sixty',
-  'seventy',
-  'eighty',
-  'ninety',
+  "",
+  "",
+  "twenty",
+  "thirty",
+  "forty",
+  "fifty",
+  "sixty",
+  "seventy",
+  "eighty",
+  "ninety",
 ];
 
-const scales = [
-  '',
-  'thousand',
-  'million',
-  'billion',
-  'trillion',
-];
+const scales = ["", "thousand", "million", "billion", "trillion"];
 
 function convertHundreds(num: number): string {
-  let result = '';
+  let result = "";
 
   if (num >= 100) {
-    result += ones[Math.floor(num / 100)] + ' hundred ';
+    result += ones[Math.floor(num / 100)] + " hundred ";
     num %= 100;
   }
 
   if (num >= 20) {
     result += tens[Math.floor(num / 10)];
     if (num % 10 !== 0) {
-      result += '-' + ones[num % 10];
+      result += "-" + ones[num % 10];
     }
   } else if (num > 0) {
     result += ones[num];
@@ -63,10 +57,10 @@ function convertHundreds(num: number): string {
 }
 
 export function numberToWords(num: number): string {
-  if (num === 0) return 'zero';
-  if (num < 0) return 'negative ' + numberToWords(-num);
+  if (num === 0) return "zero";
+  if (num < 0) return "negative " + numberToWords(-num);
 
-  let result = '';
+  let result = "";
   let scaleIndex = 0;
 
   while (num > 0) {
@@ -74,8 +68,8 @@ export function numberToWords(num: number): string {
       const chunk = convertHundreds(num % 1000);
       result =
         chunk +
-        (scales[scaleIndex] ? ' ' + scales[scaleIndex] : '') +
-        (result ? ' ' + result : '');
+        (scales[scaleIndex] ? " " + scales[scaleIndex] : "") +
+        (result ? " " + result : "");
     }
     num = Math.floor(num / 1000);
     scaleIndex++;
@@ -85,8 +79,8 @@ export function numberToWords(num: number): string {
 }
 
 export function formatNumberWithCommas(num: number | string): string {
-  const numStr = typeof num === 'string' ? num : num.toString();
-  return numStr.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  const numStr = typeof num === "string" ? num : num.toString();
+  return numStr.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 // Format amount in Indian numbering system (lakhs, crores)

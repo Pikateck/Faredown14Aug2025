@@ -37,7 +37,7 @@ export const FaredownButton: React.FC<FaredownButtonProps> = ({
   const handleClick = (e?: React.MouseEvent) => {
     // Add haptic feedback for mobile devices
     if (isMobileDevice()) {
-      hapticFeedback('light');
+      hapticFeedback("light");
     }
     onClick?.(e);
   };
