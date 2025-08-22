@@ -420,7 +420,7 @@ const ConversationalBargainModal: React.FC<Props> = ({
                     {message.message}
                     {message.price && (
                       <div className="mt-2 text-xs font-semibold">
-                        {selectedCurrency.symbol}{message.price.toLocaleString()}
+                        {selectedCurrency.symbol}{formatNumberWithCommas(message.price)}
                       </div>
                     )}
                   </div>
