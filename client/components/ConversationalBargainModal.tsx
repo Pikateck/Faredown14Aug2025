@@ -6,6 +6,7 @@ import { X, Plane, Building, MapPin, Car, Clock, Shield, Target, Zap, Star, Tren
 import copyPacks from "../../api/data/copy_packs.json";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { numberToWords, formatNumberWithCommas } from "@/lib/numberToWords";
+import "../styles/mobile-bargain-optimizations.css";
 
 interface ChatMessage {
   id: string;
