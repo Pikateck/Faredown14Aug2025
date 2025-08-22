@@ -429,7 +429,7 @@ const ConversationalBargainModal: React.FC<Props> = ({
                     type="number"
                     value={userPrice}
                     onChange={(e) => setUserPrice(e.target.value)}
-                    placeholder="25,000"
+                    placeholder=""
                     className="pl-12 text-xl h-14 bg-white border-2 border-gray-300 rounded-xl focus:border-[#0071c2] focus:ring-2 focus:ring-[#0071c2]/20 transition-all font-semibold text-gray-900"
                     min="1"
                   />
