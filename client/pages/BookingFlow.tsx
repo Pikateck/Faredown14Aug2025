@@ -93,7 +93,9 @@ const SeatMap = ({
   const setSelectedSeats = setSeatSelections;
   const [selectedTraveller, setSelectedTraveller] = useState(null);
   const [expandedFlight, setExpandedFlight] = useState(null);
-  const [currentFlight, setCurrentFlight] = useState(`${fromCity}-${toCity}`);
+  const [currentFlight, setCurrentFlight] = useState(
+    selectedFlight ? `${selectedFlight.from || selectedFlight.departure?.code || 'DEP'}-${selectedFlight.to || selectedFlight.arrival?.code || 'ARR'}` : 'DEP-ARR'
+  );
 
   // Generate seat layout for aircraft (Economy classes only)
   const generateSeatLayout = () => {
@@ -1138,7 +1140,7 @@ export default function BookingFlow() {
     { name: "Italy", code: "+39", flag: "🇮🇹" },
     { name: "Ivory Coast", code: "+225", flag: "🇨🇮" },
     { name: "Jamaica", code: "+1", flag: "🇯🇲" },
-    { name: "Japan", code: "+81", flag: "🇯🇵" },
+    { name: "Japan", code: "+81", flag: "��🇵" },
   ];
 
   const [showAdultFare, setShowAdultFare] = useState(true);
@@ -3770,7 +3772,7 @@ export default function BookingFlow() {
                       )}
                       {calculateSeatTotal("Dubai-Mumbai") > 0 && (
                         <div className="flex justify-between">
-                          <span>Dubai → Mumbai</span>
+                          <span>Dubai �� Mumbai</span>
                           <span>
                             {formatCurrency(calculateSeatTotal("Dubai-Mumbai"))}
                           </span>
