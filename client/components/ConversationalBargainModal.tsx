@@ -43,6 +43,7 @@ interface Props {
   onHold: (orderRef: string) => void;
   userName?: string;
   module?: "flights" | "hotels" | "sightseeing" | "transfers";
+  onBackToResults?: () => void;
 }
 
 // Weighted random selection helper
@@ -75,8 +76,9 @@ const ConversationalBargainModal: React.FC<Props> = ({
   onHold,
   userName = "traveler",
   module = "flights",
+  onBackToResults,
 }) => {
-  // Modal phases: input -> negotiating -> offer -> holding -> expired -> max_rounds_reached
+  // Modal phases: input -> negotiating -> offer -> holding -> expired -> max_rounds_reached -> timer_expired
   const [phase, setPhase] = useState<
     | "input"
     | "negotiating"
@@ -84,6 +86,7 @@ const ConversationalBargainModal: React.FC<Props> = ({
     | "holding"
     | "expired"
     | "max_rounds_reached"
+    | "timer_expired"
   >("input");
   const [userPrice, setUserPrice] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -145,6 +148,7 @@ const ConversationalBargainModal: React.FC<Props> = ({
             setTimerActive(false);
             setIsExpired(true);
             setShowConfirmButtons(false);
+            setPhase("timer_expired");
             // Add expired message
             setTimeout(() => {
               const expiredText = selectWeightedRandom(
@@ -323,18 +327,13 @@ const ConversationalBargainModal: React.FC<Props> = ({
   }, [isHolding, isExpired, onHold]);
 
   const handleBargainAgain = useCallback(() => {
-    if (isHolding || round >= MAX_ROUNDS) return;
+    if (isHolding) return;
 
     // Check if we've reached max rounds
     if (round >= MAX_ROUNDS) {
       setPhase("max_rounds_reached");
       setTimerActive(false);
       setShowConfirmButtons(false);
-
-      addMessage(
-        "agent",
-        "Your bargain window has expired. Please search again for fresh deals.",
-      );
       return;
     }
 
@@ -347,7 +346,7 @@ const ConversationalBargainModal: React.FC<Props> = ({
     setIsTyping(false);
     setIsExpired(false);
     setFinalPrice(0);
-  }, [isHolding, round, MAX_ROUNDS, addMessage]);
+  }, [isHolding, round, MAX_ROUNDS]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -413,8 +412,8 @@ const ConversationalBargainModal: React.FC<Props> = ({
               </h3>
               <p className="text-gray-600 leading-relaxed">
                 {round === 1
-                  ? `Our AI will negotiate with the ${supplierNames[module]} on your behalf`
-                  : "Let's try a different price for round " + round}
+                  ? `Our AI will negotiate with the ${supplierNames[module]} on your behalf, ${userName}`
+                  : `Let's try a different price for round ${round}, ${userName}`}
               </p>
             </div>
 
@@ -461,6 +460,13 @@ const ConversationalBargainModal: React.FC<Props> = ({
               >
                 Book Original Price
               </Button>
+
+              {/* Round indicator */}
+              {round > 1 && (
+                <div className="text-center text-sm text-gray-500">
+                  Attempt {round} of {MAX_ROUNDS}
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -533,13 +539,10 @@ const ConversationalBargainModal: React.FC<Props> = ({
                             </div>
                             <div className="flex gap-2">
                               <Button
-                                onClick={handleHold}
+                                onClick={() => onAccept(finalPrice, `ACCEPTED-${Date.now()}`)}
                                 className="flex-1 bg-gradient-to-r from-[#003580] to-[#0071c2] hover:from-[#002a5c] hover:to-[#005a9c] text-white font-semibold py-3 rounded-full transition-all text-sm"
                               >
-                                <div className="flex items-center gap-1">
-                                  <Shield className="h-4 w-4" />
-                                  Place Hold
-                                </div>
+                                Book Now
                               </Button>
                               {round < MAX_ROUNDS && (
                                 <Button
@@ -558,6 +561,38 @@ const ConversationalBargainModal: React.FC<Props> = ({
                 );
               })}
 
+              {/* Timer expired message */}
+              {phase === "timer_expired" && (
+                <div className="text-center py-6">
+                  <div className="w-14 h-14 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-orange-400 to-orange-500 flex items-center justify-center shadow-lg">
+                    <Clock className="h-7 w-7 text-white" />
+                  </div>
+                  <h3 className="text-lg font-bold text-[#003580] mb-2">
+                    Offer Expired
+                  </h3>
+                  <p className="text-gray-600 mb-6">
+                    The negotiated price offer has expired, {userName}.
+                  </p>
+                  <div className="flex gap-3">
+                    <Button
+                      onClick={() => onAccept(selectedFareType?.price || flight?.price || 0, `ORIGINAL-${Date.now()}`)}
+                      className="flex-1 bg-gradient-to-r from-[#003580] to-[#0071c2] hover:from-[#002a5c] hover:to-[#005a9c] text-white py-3 rounded-full font-semibold transition-all"
+                    >
+                      Book Original Price
+                    </Button>
+                    {round < MAX_ROUNDS && (
+                      <Button
+                        variant="outline"
+                        onClick={handleBargainAgain}
+                        className="flex-1 border-2 border-[#003580] text-[#003580] hover:bg-blue-50 py-3 rounded-full font-semibold transition-all"
+                      >
+                        Bargain Again
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              )}
+
               {/* Max rounds reached message */}
               {phase === "max_rounds_reached" && (
                 <div className="text-center py-8">
@@ -565,17 +600,32 @@ const ConversationalBargainModal: React.FC<Props> = ({
                     <Clock className="h-8 w-8 text-white" />
                   </div>
                   <h3 className="text-lg font-bold text-[#003580] mb-2">
-                    Bargain Window Expired
+                    Bargain Limit Reached
                   </h3>
-                  <p className="text-gray-600 mb-6">
-                    You've reached the maximum of {MAX_ROUNDS} bargain attempts.
+                  <p className="text-gray-600 mb-4">
+                    You've reached the maximum of {MAX_ROUNDS} bargain attempts, {userName}.
                   </p>
-                  <Button
-                    onClick={onClose}
-                    className="bg-gradient-to-r from-[#003580] to-[#0071c2] hover:from-[#002a5c] hover:to-[#005a9c] text-white px-6 py-3 rounded-full font-semibold transition-all"
-                  >
-                    Search Again for Fresh Deals
-                  </Button>
+                  <p className="text-sm text-gray-500 mb-6">
+                    You can still book at the original price or search for new deals.
+                  </p>
+                  <div className="flex gap-3">
+                    <Button
+                      onClick={() => onAccept(selectedFareType?.price || flight?.price || 0, `ORIGINAL-${Date.now()}`)}
+                      className="flex-1 bg-gradient-to-r from-[#003580] to-[#0071c2] hover:from-[#002a5c] hover:to-[#005a9c] text-white py-3 rounded-full font-semibold transition-all"
+                    >
+                      Book Original Price
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        onClose();
+                        if (onBackToResults) onBackToResults();
+                      }}
+                      className="flex-1 border-2 border-[#003580] text-[#003580] hover:bg-blue-50 py-3 rounded-full font-semibold transition-all"
+                    >
+                      Back to Results
+                    </Button>
+                  </div>
                 </div>
               )}
 
