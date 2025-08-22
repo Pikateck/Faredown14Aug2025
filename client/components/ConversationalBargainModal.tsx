@@ -541,7 +541,8 @@ const ConversationalBargainModal: React.FC<Props> = ({
                 )}
               </div>
               <div className="mt-2 text-xs text-gray-500 text-center">
-                {window.innerWidth >= 640 ? "Press Enter to book now or click Try Again for another round" : "Tap to book or try again"}
+                <span className="hidden sm:inline">Press Enter to book now or click Try Again for another round</span>
+                <span className="sm:hidden">Tap to book or try again</span>
               </div>
             </div>
           )}
