@@ -398,7 +398,7 @@ export function FlightStyleBargainModal({
             body: JSON.stringify({
               sessionId: bargainState.sessionId || "temp_session",
               userOffer: proposedPrice,
-              message: `I'd like to pay ₹${proposedPrice} for this transfer.`,
+              message: `I'd like to pay ${selectedCurrency.symbol}${proposedPrice} for this transfer.`,
             }),
           },
         );
