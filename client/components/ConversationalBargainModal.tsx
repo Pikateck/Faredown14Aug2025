@@ -332,11 +332,11 @@ const ConversationalBargainModal: React.FC<Props> = ({
       e.preventDefault();
       if (showOfferActions && finalOffer) {
         handleBookNow();
-      } else if (!showOfferActions && !isComplete && !isNegotiating && currentPrice && parseInt(currentPrice) > 0) {
+      } else if (!showOfferActions && !isComplete && !isNegotiating && !timerExpired && currentPrice && parseInt(currentPrice) > 0) {
         startNegotiation();
       }
     }
-  }, [showOfferActions, finalOffer, isComplete, isNegotiating, currentPrice]);
+  }, [showOfferActions, finalOffer, isComplete, isNegotiating, timerExpired, currentPrice, handleBookNow, startNegotiation]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
