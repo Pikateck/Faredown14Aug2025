@@ -156,9 +156,10 @@ const ConversationalBargainModal: React.FC<Props> = ({
           if (prev <= 1) {
             setTimerActive(false);
             setShowOfferActions(false);
-            // Add expired message
+            setTimerExpired(true);
+            // Add expired message with intuitive options
             setTimeout(() => {
-              addMessage("agent", "⏰ Time's up! Would you like to try again or book at the original price?");
+              addMessage("agent", "⏰ Time's up! Your negotiated price has expired. You can go back to results to search for new deals or try negotiating again.");
               setIsNegotiating(false);
             }, 500);
             return 0;
@@ -168,7 +169,7 @@ const ConversationalBargainModal: React.FC<Props> = ({
       }, 1000);
     }
     return () => clearInterval(interval);
-  }, [timerActive, timerSeconds]);
+  }, [timerActive, timerSeconds, addMessage]);
 
   const addMessage = useCallback((speaker: "supplier" | "agent" | "user", text: string, price?: number) => {
     const messageId = `msg-${Date.now()}-${Math.random()}`;
