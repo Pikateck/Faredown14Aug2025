@@ -542,22 +542,22 @@ const ConversationalBargainModal: React.FC<Props> = ({
             </div>
           )}
 
-          {/* Completion State */}
+          {/* Mobile-Optimized Completion State */}
           {isComplete && (
-            <div className="p-4 bg-gray-50 border-t border-gray-200">
+            <div className="p-3 sm:p-4 bg-gray-50 border-t border-gray-200">
               <div className="text-center mb-4">
-                <Clock className="h-8 w-8 mx-auto text-gray-500 mb-2" />
-                <h3 className="text-lg font-bold text-gray-900">Negotiation Complete</h3>
-                <p className="text-sm text-gray-600">
+                <Clock className="h-6 w-6 sm:h-8 sm:w-8 mx-auto text-gray-500 mb-2" />
+                <h3 className="text-base sm:text-lg font-bold text-gray-900">Negotiation Complete</h3>
+                <p className="text-xs sm:text-sm text-gray-600">
                   You can book at the original price or search for new deals.
                 </p>
               </div>
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row gap-2">
                 <Button
                   onClick={() => onAccept(selectedFareType?.price || flight.price, `ORIGINAL-${Date.now()}`)}
-                  className="flex-1 bg-gradient-to-r from-[#003580] to-[#0071c2] text-white font-semibold py-3 rounded-full shadow-lg"
+                  className="w-full sm:flex-1 bg-gradient-to-r from-[#003580] to-[#0071c2] text-white font-semibold py-3 rounded-full shadow-lg min-h-[48px] touch-manipulation active:scale-95"
                 >
-                  <CheckCircle className="h-4 w-4 mr-1" />
+                  <CheckCircle className="h-4 w-4 mr-2" />
                   Book Original Price
                 </Button>
                 <Button
@@ -566,24 +566,24 @@ const ConversationalBargainModal: React.FC<Props> = ({
                     onClose();
                     if (onBackToResults) onBackToResults();
                   }}
-                  className="flex-1 border-2 border-[#003580] text-[#003580] hover:bg-blue-50 font-semibold py-3 rounded-full shadow-lg"
+                  className="w-full sm:flex-1 border-2 border-[#003580] text-[#003580] hover:bg-blue-50 active:scale-95 font-semibold py-3 rounded-full shadow-lg min-h-[48px] touch-manipulation"
                 >
-                  <ArrowLeft className="h-4 w-4 mr-1" />
+                  <ArrowLeft className="h-4 w-4 mr-2" />
                   Back to Results
                 </Button>
               </div>
             </div>
           )}
 
-          {/* Input Area */}
+          {/* Mobile-Optimized Input Area */}
           {!showOfferActions && !isComplete && !timerExpired && (
-            <div className="p-4 bg-white border-t border-gray-200" onKeyDown={handleKeyPress}>
+            <div className="p-3 sm:p-4 bg-white border-t border-gray-200" onKeyDown={handleKeyPress}>
               <div className="mb-3">
-                <div className="text-xs font-bold text-gray-700 mb-2">
+                <div className="text-xs sm:text-xs font-bold text-gray-700 mb-2">
                   <strong>Current Price:</strong> {selectedCurrency.symbol}{formatNumberWithCommas(selectedFareType?.price || flight.price)}
                 </div>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-lg font-bold text-[#003580]">{selectedCurrency.symbol}</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-base sm:text-lg font-bold text-[#003580]">{selectedCurrency.symbol}</span>
                   <Input
                     ref={inputRef}
                     type="number"
@@ -596,36 +596,37 @@ const ConversationalBargainModal: React.FC<Props> = ({
                     }}
                     onKeyDown={handleKeyPress}
                     placeholder="Enter your target price"
-                    className="pl-8 pr-12 h-12 bg-white border-2 border-gray-300 rounded-xl focus:border-[#0071c2] focus:ring-2 focus:ring-[#0071c2]/20 transition-all font-semibold text-gray-900"
+                    className="pl-8 sm:pl-8 pr-12 sm:pr-12 h-12 sm:h-12 bg-white border-2 border-gray-300 rounded-xl focus:border-[#0071c2] focus:ring-2 focus:ring-[#0071c2]/20 transition-all font-semibold text-gray-900 text-base touch-manipulation"
                     min="1"
                     disabled={isNegotiating}
                     autoComplete="off"
+                    inputMode="numeric"
                   />
                   <Button
                     onClick={startNegotiation}
                     disabled={!currentPrice || parseInt(currentPrice) <= 0 || isNegotiating}
                     size="sm"
-                    className="absolute right-1 top-1/2 -translate-y-1/2 h-10 w-10 p-0 bg-gradient-to-r from-[#003580] to-[#0071c2] hover:from-[#002a5c] hover:to-[#005a9c] rounded-lg shadow-lg"
+                    className="absolute right-1 top-1/2 -translate-y-1/2 h-10 w-10 sm:h-10 sm:w-10 p-0 bg-gradient-to-r from-[#003580] to-[#0071c2] hover:from-[#002a5c] hover:to-[#005a9c] active:scale-95 rounded-lg shadow-lg touch-manipulation"
                   >
                     <Sparkles className="h-4 w-4" />
                   </Button>
                 </div>
 
-                {/* Amount in words display */}
+                {/* Mobile-Optimized Amount in words display */}
                 {currentPrice && parseInt(currentPrice) > 0 && (
                   <div className="mt-2 p-2 bg-blue-50 rounded-lg border border-blue-200">
                     <div className="text-xs text-blue-600 font-medium">
                       Amount in words:
                     </div>
-                    <div className="text-sm text-blue-800 font-semibold">
+                    <div className="text-xs sm:text-sm text-blue-800 font-semibold break-words">
                       {selectedCurrency.symbol}{formatNumberWithCommas(parseInt(currentPrice))} ({numberToWords(parseInt(currentPrice))})
                     </div>
                   </div>
                 )}
 
-                {/* Instructions */}
+                {/* Mobile-Optimized Instructions */}
                 <div className="mt-2 text-xs text-gray-500 text-center">
-                  Enter your target price and press Enter or click the sparkle button
+                  {window.innerWidth >= 640 ? "Enter your target price and press Enter or click the sparkle button" : "Enter price and tap ✨ to start"}
                 </div>
               </div>
             </div>
