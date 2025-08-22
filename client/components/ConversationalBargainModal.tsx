@@ -348,41 +348,41 @@ const ConversationalBargainModal: React.FC<Props> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-lg mx-auto bg-white rounded-2xl shadow-xl border border-gray-200 p-0 gap-0 max-h-[95vh] flex flex-col">
+      <DialogContent className="w-full max-w-[95vw] sm:max-w-lg mx-auto bg-white rounded-t-3xl sm:rounded-2xl shadow-xl border border-gray-200 p-0 gap-0 max-h-[95vh] sm:max-h-[90vh] flex flex-col fixed bottom-0 sm:relative sm:bottom-auto">
         <DialogTitle className="sr-only">AI Price Negotiation</DialogTitle>
-        
-        {/* Elegant Header */}
-        <div className="relative bg-gradient-to-r from-[#003580] to-[#0071c2] p-5 rounded-t-2xl border-b border-white/10">
+
+        {/* Mobile-Optimized Header */}
+        <div className="relative bg-gradient-to-r from-[#003580] to-[#0071c2] p-4 sm:p-5 rounded-t-3xl sm:rounded-t-2xl border-b border-white/10">
           <Button
             variant="ghost"
             size="sm"
             onClick={onClose}
-            className="absolute top-3 right-3 h-8 w-8 p-0 rounded-lg hover:bg-white/10 transition-colors z-10"
+            className="absolute top-2 sm:top-3 right-2 sm:right-3 h-10 w-10 sm:h-8 sm:w-8 p-0 rounded-lg hover:bg-white/10 active:bg-white/20 transition-colors z-10 touch-manipulation"
           >
-            <X className="h-4 w-4 text-white" />
+            <X className="h-5 w-5 sm:h-4 sm:w-4 text-white" />
           </Button>
 
-          <div className="flex items-center gap-3 pr-12">
-            <div className="w-12 h-12 rounded-xl bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/20 shadow-lg relative">
+          <div className="flex items-center gap-3 pr-12 sm:pr-12">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/20 shadow-lg relative flex-shrink-0">
               {React.createElement(moduleIcons[module], {
-                className: "h-6 w-6 text-white"
+                className: "h-5 w-5 sm:h-6 sm:w-6 text-white"
               })}
-              <Sparkles className="h-3 w-3 absolute -top-1 -right-1 text-yellow-300" />
+              <Sparkles className="h-2 w-2 sm:h-3 sm:w-3 absolute -top-1 -right-1 text-yellow-300" />
             </div>
-            <div className="flex-1">
-              <h2 className="text-lg font-bold text-white">
+            <div className="flex-1 min-w-0">
+              <h2 className="text-base sm:text-lg font-bold text-white truncate">
                 AI Price Negotiation
               </h2>
-              <p className="text-sm text-blue-100">
+              <p className="text-xs sm:text-sm text-blue-100 truncate">
                 {module === "flights" && `${flight.airline} ${flight.flightNumber}`}
                 {module === "hotels" && "Hotel Booking"}
                 {module === "sightseeing" && "Tour Booking"}
                 {module === "transfers" && "Transfer Booking"}
               </p>
             </div>
-            <div className="text-right">
+            <div className="text-right flex-shrink-0">
               <div className="text-xs text-white/80 font-bold">Round</div>
-              <div className="text-lg font-bold text-white">{round}/{MAX_ROUNDS}</div>
+              <div className="text-base sm:text-lg font-bold text-white">{round}/{MAX_ROUNDS}</div>
             </div>
           </div>
         </div>
