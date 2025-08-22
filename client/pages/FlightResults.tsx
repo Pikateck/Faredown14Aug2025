@@ -6563,6 +6563,8 @@ export default function FlightResults() {
                   price: finalPrice,
                 },
                 passengerCount: { adults, children },
+                orderRef: orderRef,
+                negotiatedPrice: finalPrice, // For BookingFlow compatibility
               },
             });
           }
