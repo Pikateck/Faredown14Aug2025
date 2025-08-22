@@ -58,6 +58,7 @@ interface Hotel extends HotelType {
 
 export default function HotelResults() {
   useScrollToTop();
+  const { user } = useAuth();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { selectedCurrency } = useCurrency();
