@@ -90,3 +90,87 @@ export function formatNumberWithCommas(num: number | string): string {
   const numStr = typeof num === 'string' ? num : num.toString();
   return numStr.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
+
+// Format amount in Indian numbering system (lakhs, crores)
+export function formatPriceInWords(amount: number): string {
+  if (amount === 0) return "zero rupees";
+
+  let result = "";
+
+  // Handle crores (10,000,000)
+  if (amount >= 10000000) {
+    const crores = Math.floor(amount / 10000000);
+    result += numberToWords(crores) + " crore";
+    if (crores > 1) result += "s";
+    amount %= 10000000;
+    if (amount > 0) result += " ";
+  }
+
+  // Handle lakhs (100,000)
+  if (amount >= 100000) {
+    const lakhs = Math.floor(amount / 100000);
+    result += numberToWords(lakhs) + " lakh";
+    if (lakhs > 1) result += "s";
+    amount %= 100000;
+    if (amount > 0) result += " ";
+  }
+
+  // Handle thousands
+  if (amount >= 1000) {
+    const thousands = Math.floor(amount / 1000);
+    result += numberToWords(thousands) + " thousand";
+    amount %= 1000;
+    if (amount > 0) result += " ";
+  }
+
+  // Handle remaining amount
+  if (amount > 0) {
+    result += numberToWords(amount);
+  }
+
+  return result.trim() + " rupees";
+}
+
+// Short format for display (e.g., "40 thousand", "2 lakh")
+export function formatPriceInWordsShort(amount: number): string {
+  if (amount === 0) return "zero";
+  if (amount < 1000) return numberToWords(amount);
+
+  if (amount >= 10000000) {
+    const crores = amount / 10000000;
+    if (crores >= 1) {
+      return crores % 1 === 0
+        ? `${Math.floor(crores)} crore${Math.floor(crores) > 1 ? "s" : ""}`
+        : `${Math.floor(crores)} crore${crores > 1 ? "s" : ""}`;
+    }
+  }
+
+  if (amount >= 100000) {
+    const lakhs = amount / 100000;
+    if (lakhs >= 1) {
+      return lakhs % 1 === 0
+        ? `${Math.floor(lakhs)} lakh${Math.floor(lakhs) > 1 ? "s" : ""}`
+        : `${Math.floor(lakhs)} lakh${lakhs > 1 ? "s" : ""}`;
+    }
+  }
+
+  if (amount >= 1000) {
+    const thousands = amount / 1000;
+    if (thousands >= 1) {
+      return thousands % 1 === 0
+        ? `${Math.floor(thousands)} thousand`
+        : `${Math.floor(thousands)} thousand`;
+    }
+  }
+
+  return numberToWords(amount);
+}
+
+// Format with currency symbol and remove decimals
+export function formatPriceWithoutDecimals(
+  amount: number,
+  symbol: string = "₹",
+): string {
+  const roundedAmount = Math.round(amount);
+  return `${symbol}${roundedAmount.toLocaleString()}`;
+}
