@@ -78,6 +78,7 @@ interface Transfer {
 }
 
 export default function TransferResults() {
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { formatPrice } = useCurrency();
