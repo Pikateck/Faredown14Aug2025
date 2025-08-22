@@ -193,7 +193,7 @@ export default function EnhancedBargainModal({
               </div>
               <div className="text-right">
                 <p className="text-2xl font-bold text-blue-600">
-                  ₹{selectedFareType.price.toLocaleString("en-IN")}
+                  {selectedCurrency.symbol}{selectedFareType.price.toLocaleString("en-IN")}
                 </p>
                 <p className="text-xs text-gray-500">Original Price</p>
               </div>
