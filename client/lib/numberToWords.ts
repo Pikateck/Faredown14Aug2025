@@ -63,26 +63,24 @@ function convertHundreds(num: number): string {
 }
 
 export function numberToWords(num: number): string {
-  if (num === 0) return 'Zero';
-  if (num < 0) return 'Negative ' + numberToWords(Math.abs(num));
-  
+  if (num === 0) return 'zero';
+  if (num < 0) return 'negative ' + numberToWords(-num);
+
   let result = '';
   let scaleIndex = 0;
-  
+
   while (num > 0) {
-    const chunk = num % 1000;
-    if (chunk > 0) {
-      const chunkWords = convertHundreds(chunk);
-      if (scaleIndex > 0) {
-        result = chunkWords + ' ' + scales[scaleIndex] + (result ? ' ' + result : '');
-      } else {
-        result = chunkWords;
-      }
+    if (num % 1000 !== 0) {
+      const chunk = convertHundreds(num % 1000);
+      result =
+        chunk +
+        (scales[scaleIndex] ? ' ' + scales[scaleIndex] : '') +
+        (result ? ' ' + result : '');
     }
     num = Math.floor(num / 1000);
     scaleIndex++;
   }
-  
+
   return result.trim();
 }
 
