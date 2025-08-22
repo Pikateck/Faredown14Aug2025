@@ -8,6 +8,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogTitle,
 } from "@/components/ui/dialog";
 import {
   Plane,
@@ -544,6 +545,7 @@ export function UnifiedBargainModal({
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="w-full h-full max-w-none m-0 rounded-none md:max-w-2xl md:h-auto md:rounded-lg bg-gradient-to-br from-blue-50 to-white overflow-y-auto">
+        <DialogTitle className="sr-only">Unified Bargain</DialogTitle>
         {/* Header */}
         <DialogHeader className="px-6 py-4 border-b bg-gradient-to-r from-blue-50 to-purple-50">
           <div className="flex items-center justify-between">
