@@ -80,6 +80,9 @@ const ConversationalBargainModal: React.FC<Props> = ({
   module = "flights",
   onBackToResults,
 }) => {
+  // Get currency context
+  const { selectedCurrency, formatPrice } = useCurrency();
+
   // Unified state management
   const [currentPrice, setCurrentPrice] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
