@@ -9,7 +9,15 @@ import { useChatBeats } from "@/hooks/useChatBeats";
 import { chooseVariant, formatCurrency } from "@/lib/copySelector";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { useAuth } from "@/contexts/AuthContext";
-import { Sparkles, Clock, Shield, X, Zap, TrendingUp, Star } from "lucide-react";
+import {
+  Sparkles,
+  Clock,
+  Shield,
+  X,
+  Zap,
+  TrendingUp,
+  Star,
+} from "lucide-react";
 import copyPack from "../../api/data/copy_packs.json";
 import DecisionCard from "./DecisionCard";
 import { PriceChip, formatChatTextWithPrices } from "./PriceChip";
@@ -405,7 +413,7 @@ export function ClassyBargainModal({
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value;
       const numValue = parseFloat(value);
-      setOffer(value === "" ? null : (isNaN(numValue) ? null : numValue));
+      setOffer(value === "" ? null : isNaN(numValue) ? null : numValue);
       setError(null);
     },
     [],
@@ -431,20 +439,27 @@ export function ClassyBargainModal({
                   <span>AI Price Negotiator</span>
                   <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
                 </div>
-                <div className="text-xs text-blue-600 font-medium mt-0.5">Premium Service</div>
+                <div className="text-xs text-blue-600 font-medium mt-0.5">
+                  Premium Service
+                </div>
               </div>
             </div>
             <div className="fd-sub flex items-center gap-2 mt-2">
               <div className="w-6 h-6 rounded-md bg-white border border-gray-200 flex items-center justify-center shadow-sm">
                 {moduleConfig.icon}
               </div>
-              <span>{flight.airline} {flight.flightNumber} • {flight.departureCode} → {flight.arrivalCode}</span>
+              <span>
+                {flight.airline} {flight.flightNumber} • {flight.departureCode}{" "}
+                → {flight.arrivalCode}
+              </span>
             </div>
           </div>
           <div className="fd-hdr__right">
             <div className="text-right">
               <div className="text-xs text-gray-500 mb-1">Current Price</div>
-              <div className="text-xl font-bold">{formatCurrency(fareType.price, selectedCurrency.symbol)}</div>
+              <div className="text-xl font-bold">
+                {formatCurrency(fareType.price, selectedCurrency.symbol)}
+              </div>
             </div>
           </div>
           <button className="fd-close" onClick={onClose} aria-label="Close">
