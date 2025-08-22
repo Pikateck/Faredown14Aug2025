@@ -72,6 +72,7 @@ interface SightseeingAttraction {
 }
 
 export default function SightseeingResults() {
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { formatPrice } = useCurrency();
