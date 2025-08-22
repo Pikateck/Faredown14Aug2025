@@ -349,7 +349,7 @@ const ConversationalBargainModal: React.FC<Props> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="w-full max-w-[95vw] sm:max-w-lg mx-auto bg-white rounded-t-3xl sm:rounded-2xl shadow-xl border border-gray-200 p-0 gap-0 max-h-[95vh] sm:max-h-[90vh] flex flex-col fixed bottom-0 sm:relative sm:bottom-auto">
+      <DialogContent className="mobile-bargain-modal mobile-modal mobile-optimized w-full max-w-[95vw] sm:max-w-lg mx-auto bg-white rounded-t-3xl sm:rounded-2xl shadow-xl border border-gray-200 p-0 gap-0 max-h-[95vh] sm:max-h-[90vh] flex flex-col fixed bottom-0 sm:relative sm:bottom-auto">
         <DialogTitle className="sr-only">AI Price Negotiation</DialogTitle>
 
         {/* Mobile-Optimized Header */}
