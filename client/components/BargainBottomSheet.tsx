@@ -7,6 +7,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogTitle,
 } from "@/components/ui/dialog";
 import {
   Plane,
@@ -358,6 +359,7 @@ export function BargainBottomSheet({
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="w-full h-[80vh] max-w-none m-0 rounded-t-xl rounded-b-none bg-white overflow-hidden flex flex-col">
+        <DialogTitle className="sr-only">Bargain Bottom Sheet</DialogTitle>
         {/* Header */}
         <DialogHeader className="px-6 py-4 border-b bg-gradient-to-r from-blue-50 to-purple-50 flex-shrink-0">
           <div className="flex items-center justify-between">
