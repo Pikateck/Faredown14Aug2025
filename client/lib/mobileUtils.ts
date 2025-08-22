@@ -1,128 +1,153 @@
-// Mobile responsiveness utilities
+// Mobile utility functions for better mobile experience
 
-export const breakpoints = {
-  sm: 640,
-  md: 768,
-  lg: 1024,
-  xl: 1280,
-  "2xl": 1536,
-} as const;
-
-export const isMobile = (): boolean => {
-  if (typeof window === "undefined") return false;
-  return window.innerWidth < breakpoints.md;
+export const isMobileDevice = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent
+  ) || window.innerWidth <= 768;
 };
 
-export const isTablet = (): boolean => {
-  if (typeof window === "undefined") return false;
-  return (
-    window.innerWidth >= breakpoints.md && window.innerWidth < breakpoints.lg
-  );
+export const isIOS = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  
+  return /iPad|iPhone|iPod/.test(navigator.userAgent);
 };
 
-export const isDesktop = (): boolean => {
-  if (typeof window === "undefined") return false;
-  return window.innerWidth >= breakpoints.lg;
+export const isAndroid = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  
+  return /Android/.test(navigator.userAgent);
 };
 
-export const getDeviceType = (): "mobile" | "tablet" | "desktop" => {
-  if (isMobile()) return "mobile";
-  if (isTablet()) return "tablet";
-  return "desktop";
+export const isTouchDevice = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  
+  return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 };
 
-// Responsive grid configurations
-export const getGridCols = (
-  items: number,
-  options?: {
-    mobile?: number;
-    tablet?: number;
-    desktop?: number;
-  },
-): string => {
-  const mobile = options?.mobile || 1;
-  const tablet = options?.tablet || 2;
-  const desktop = options?.desktop || Math.min(items, 3);
-
-  return `grid-cols-${mobile} md:grid-cols-${tablet} lg:grid-cols-${desktop}`;
+export const getViewportHeight = (): number => {
+  if (typeof window === 'undefined') return 0;
+  
+  // Use visual viewport API if available (better for mobile keyboards)
+  if (window.visualViewport) {
+    return window.visualViewport.height;
+  }
+  
+  return window.innerHeight;
 };
 
-// Responsive spacing
-export const getResponsiveSpacing = (
-  size: "xs" | "sm" | "md" | "lg" | "xl",
-): string => {
-  const spacings = {
-    xs: "p-2 sm:p-3",
-    sm: "p-3 sm:p-4",
-    md: "p-4 sm:p-6",
-    lg: "p-6 sm:p-8",
-    xl: "p-8 sm:p-12",
-  };
-  return spacings[size];
+export const preventZoomOnInput = (element: HTMLInputElement): void => {
+  if (!isIOS()) return;
+  
+  // Prevent zoom on iOS by ensuring font-size is at least 16px
+  element.style.fontSize = '16px';
 };
 
-// Responsive text sizes
-export const getResponsiveText = (
-  size: "xs" | "sm" | "base" | "lg" | "xl" | "2xl" | "3xl",
-): string => {
-  const sizes = {
-    xs: "text-xs",
-    sm: "text-xs sm:text-sm",
-    base: "text-sm sm:text-base",
-    lg: "text-base sm:text-lg",
-    xl: "text-lg sm:text-xl",
-    "2xl": "text-xl sm:text-2xl",
-    "3xl": "text-2xl sm:text-3xl",
-  };
-  return sizes[size];
+export const addMobileTouchOptimizations = (element: HTMLElement): void => {
+  if (!isTouchDevice()) return;
+  
+  // Add touch optimizations
+  element.style.touchAction = 'manipulation';
+  element.style.webkitTapHighlightColor = 'transparent';
+  element.style.webkitTouchCallout = 'none';
+  element.style.webkitUserSelect = 'none';
+  element.style.userSelect = 'none';
 };
 
-// Responsive gap
-export const getResponsiveGap = (size: "sm" | "md" | "lg"): string => {
-  const gaps = {
-    sm: "gap-2 sm:gap-3",
-    md: "gap-3 sm:gap-4 lg:gap-6",
-    lg: "gap-4 sm:gap-6 lg:gap-8",
-  };
-  return gaps[size];
+export const getMobileKeyboardHeight = (): number => {
+  if (typeof window === 'undefined') return 0;
+  
+  const initialHeight = window.innerHeight;
+  const currentHeight = getViewportHeight();
+  
+  // If viewport height is significantly smaller, keyboard is likely open
+  const keyboardHeight = initialHeight - currentHeight;
+  return keyboardHeight > 150 ? keyboardHeight : 0;
 };
 
-// Touch-friendly button sizing
-export const getTouchFriendlySize = (): string => {
-  return "min-h-[44px] min-w-[44px] touch-manipulation";
+export const addMobileScrollOptimizations = (element: HTMLElement): void => {
+  element.style.webkitOverflowScrolling = 'touch';
+  element.style.overscrollBehavior = 'contain';
+  element.style.scrollBehavior = 'smooth';
 };
 
-// Mobile-first container
-export const getResponsiveContainer = (): string => {
-  return "w-full max-w-7xl mx-auto px-3 sm:px-4 lg:px-8";
+export const vibrate = (pattern: number | number[] = 50): void => {
+  if (typeof navigator === 'undefined' || !navigator.vibrate) return;
+  
+  try {
+    navigator.vibrate(pattern);
+  } catch (error) {
+    // Silently fail if vibration is not supported
+  }
 };
 
-// Responsive flex direction
-export const getResponsiveFlex = (direction: "col" | "row" = "col"): string => {
-  return direction === "col" ? "flex flex-col md:flex-row" : "flex flex-row";
+export const hapticFeedback = (type: 'light' | 'medium' | 'heavy' = 'light'): void => {
+  // For iOS devices with haptic feedback
+  if (isIOS() && 'navigator' in window && 'vibrate' in navigator) {
+    const patterns = {
+      light: 50,
+      medium: 100,
+      heavy: 200,
+    };
+    vibrate(patterns[type]);
+  }
 };
 
-// Hide/show on different screen sizes
-export const hideOnMobile = "hidden md:block";
-export const hideOnDesktop = "block md:hidden";
-export const showOnMobileOnly = "block sm:hidden";
-export const showOnTabletUp = "hidden sm:block";
-
-export default {
-  breakpoints,
-  isMobile,
-  isTablet,
-  isDesktop,
-  getDeviceType,
-  getGridCols,
-  getResponsiveSpacing,
-  getResponsiveText,
-  getResponsiveGap,
-  getTouchFriendlySize,
-  getResponsiveContainer,
-  getResponsiveFlex,
-  hideOnMobile,
-  hideOnDesktop,
-  showOnMobileOnly,
-  showOnTabletUp,
+export const getMobileCSS = (): string => {
+  return `
+    /* Mobile-specific CSS optimizations */
+    .mobile-optimized * {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    .mobile-no-select {
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+    
+    .mobile-touch-action {
+      touch-action: manipulation;
+    }
+    
+    .mobile-tap-transparent {
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    /* Prevent zoom on form inputs for iOS */
+    @supports (-webkit-touch-callout: none) {
+      input, textarea, select {
+        font-size: 16px !important;
+      }
+    }
+    
+    /* Safe area support */
+    .mobile-safe-area {
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: env(safe-area-inset-bottom);
+      padding-left: env(safe-area-inset-left);
+      padding-right: env(safe-area-inset-right);
+    }
+  `;
 };
+
+export const injectMobileCSS = (): void => {
+  if (typeof document === 'undefined') return;
+  
+  const existingStyle = document.getElementById('mobile-optimizations');
+  if (existingStyle) return;
+  
+  const style = document.createElement('style');
+  style.id = 'mobile-optimizations';
+  style.textContent = getMobileCSS();
+  document.head.appendChild(style);
+};
+
+// Initialize mobile optimizations when module loads
+if (typeof window !== 'undefined' && isMobileDevice()) {
+  injectMobileCSS();
+}
