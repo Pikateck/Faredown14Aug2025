@@ -415,14 +415,14 @@ const ConversationalBargainModal: React.FC<Props> = ({
             {/* Typing indicator */}
             {isTyping && (
               <div className="flex gap-3">
-                <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-gray-200 flex items-center justify-center">
-                  <div className="w-3 h-3 bg-gray-500 rounded-full animate-pulse" />
+                <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-gradient-to-br from-gray-300 to-gray-400 flex items-center justify-center shadow-md">
+                  <Sparkles className="w-3 h-3 text-white animate-pulse" />
                 </div>
-                <div className="bg-gray-100 rounded-2xl px-4 py-3 border border-gray-200">
+                <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl px-4 py-3 border border-gray-300 shadow-sm">
                   <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-                    <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-                    <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                    <div className="w-2 h-2 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                    <div className="w-2 h-2 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                    <div className="w-2 h-2 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
                   </div>
                 </div>
               </div>
