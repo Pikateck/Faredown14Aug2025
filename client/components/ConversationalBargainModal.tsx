@@ -560,20 +560,30 @@ const ConversationalBargainModal: React.FC<Props> = ({
           )}
 
           {/* Input Area */}
-          {!showOfferActions && !isComplete && (
-            <div className="p-4 bg-white border-t border-gray-200">
+          {!showOfferActions && !isComplete && !timerExpired && (
+            <div className="p-4 bg-white border-t border-gray-200" onKeyDown={handleKeyPress}>
               <div className="mb-3">
-                <div className="text-xs font-semibold text-gray-600 mb-2">Current price: {selectedCurrency.symbol}{(selectedFareType?.price || flight.price).toLocaleString()}</div>
+                <div className="text-xs font-bold text-gray-700 mb-2">
+                  <strong>Current Price:</strong> {selectedCurrency.symbol}{formatNumberWithCommas(selectedFareType?.price || flight.price)}
+                </div>
                 <div className="relative">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-lg font-bold text-[#003580]">{selectedCurrency.symbol}</span>
                   <Input
+                    ref={inputRef}
                     type="number"
                     value={currentPrice}
-                    onChange={(e) => setCurrentPrice(e.target.value)}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      // Remove any non-digit characters except decimal point
+                      const cleanValue = value.replace(/[^\d]/g, '');
+                      setCurrentPrice(cleanValue);
+                    }}
+                    onKeyDown={handleKeyPress}
                     placeholder="Enter your target price"
                     className="pl-8 pr-12 h-12 bg-white border-2 border-gray-300 rounded-xl focus:border-[#0071c2] focus:ring-2 focus:ring-[#0071c2]/20 transition-all font-semibold text-gray-900"
                     min="1"
                     disabled={isNegotiating}
+                    autoComplete="off"
                   />
                   <Button
                     onClick={startNegotiation}
@@ -584,8 +594,24 @@ const ConversationalBargainModal: React.FC<Props> = ({
                     <Sparkles className="h-4 w-4" />
                   </Button>
                 </div>
+
+                {/* Amount in words display */}
+                {currentPrice && parseInt(currentPrice) > 0 && (
+                  <div className="mt-2 p-2 bg-blue-50 rounded-lg border border-blue-200">
+                    <div className="text-xs text-blue-600 font-medium">
+                      Amount in words:
+                    </div>
+                    <div className="text-sm text-blue-800 font-semibold">
+                      {selectedCurrency.symbol}{formatNumberWithCommas(parseInt(currentPrice))} ({numberToWords(parseInt(currentPrice))})
+                    </div>
+                  </div>
+                )}
+
+                {/* Instructions */}
+                <div className="mt-2 text-xs text-gray-500 text-center">
+                  Enter your target price and press Enter or click the sparkle button
+                </div>
               </div>
-              
             </div>
           )}
         </div>
