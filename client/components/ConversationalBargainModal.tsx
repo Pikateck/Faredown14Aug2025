@@ -138,6 +138,13 @@ const ConversationalBargainModal: React.FC<Props> = ({
       setShowOfferActions(false);
       setIsComplete(false);
       setTimerExpired(false);
+
+      // Auto-focus input after a short delay
+      setTimeout(() => {
+        if (inputRef.current) {
+          inputRef.current.focus();
+        }
+      }, 500);
     }
   }, [isOpen, flight, userName, module]);
 
