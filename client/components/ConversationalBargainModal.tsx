@@ -389,8 +389,8 @@ const ConversationalBargainModal: React.FC<Props> = ({
         </div>
 
         {/* Mobile-Optimized Chat Area */}
-        <div className="flex-1 flex flex-col min-h-0">
-          <div ref={chatRef} className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3 sm:space-y-3 max-h-[50vh] sm:max-h-[400px] scroll-smooth overscroll-contain">
+        <div className="flex-1 flex flex-col min-h-0 mobile-modal-content">
+          <div ref={chatRef} className="mobile-chat-scroll flex-1 overflow-y-auto p-3 sm:p-4 space-y-3 sm:space-y-3 max-h-[50vh] sm:max-h-[400px] scroll-smooth overscroll-contain">
             {messages.map((message) => (
               <div key={message.id} className={`flex gap-2 sm:gap-3 ${message.speaker === "user" ? "justify-end" : "justify-start"}`}>
                 {message.speaker !== "user" && (
