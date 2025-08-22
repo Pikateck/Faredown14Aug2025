@@ -287,11 +287,11 @@ export default function EnhancedBargainModal({
                 <div className="flex justify-between text-sm">
                   <span>Round: {bargainState.round}</span>
                   <span>
-                    Current Offer: ₹
+                    Current Offer: {selectedCurrency.symbol}
                     {bargainState.offer.price_now.toLocaleString("en-IN")}
                   </span>
                   <span>
-                    Savings: ₹
+                    Savings: {selectedCurrency.symbol}
                     {(
                       (bargainState.offer.was || selectedFareType.price) -
                       bargainState.offer.price_now
