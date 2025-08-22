@@ -576,14 +576,36 @@ export default function FlightResults() {
   };
 
   const handleAcceptBargain = (finalPrice: number, orderRef: string) => {
-    console.log("Bargain accepted:", { finalPrice, orderRef });
-    // Handle the acceptance logic here
+    console.log("Bargain accepted:", finalPrice, orderRef);
+    if (selectedBargainFlight && selectedBargainFareType) {
+      navigate("/booking-flow", {
+        state: {
+          selectedFlight: selectedBargainFlight,
+          selectedFareType: {
+            ...selectedBargainFareType,
+            price: finalPrice, // Use the negotiated price
+          },
+          passengerCount: { adults, children },
+          orderRef: orderRef,
+          bargainedPrice: finalPrice, // Additional flag to indicate this was bargained
+        },
+      });
+    }
     setShowConversationalBargain(false);
   };
 
   const handleHoldBargain = (orderRef: string) => {
-    console.log("Bargain held:", { orderRef });
-    // Handle the hold logic here
+    console.log("Booking with hold:", orderRef);
+    if (selectedBargainFlight && selectedBargainFareType) {
+      navigate("/booking-flow", {
+        state: {
+          selectedFlight: selectedBargainFlight,
+          selectedFareType: selectedBargainFareType,
+          passengerCount: { adults, children },
+          holdRef: orderRef,
+        },
+      });
+    }
     setShowConversationalBargain(false);
   };
 
