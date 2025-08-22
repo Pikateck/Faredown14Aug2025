@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { X, Plane, Building, MapPin, Car, Clock, Shield, Target, Send, Zap, Star, TrendingUp, CheckCircle } from "lucide-react";
+import { X, Plane, Building, MapPin, Car, Clock, Shield, Target, Zap, Star, TrendingUp, CheckCircle, Sparkles, Crown } from "lucide-react";
 import copyPacks from "../../api/data/copy_packs.json";
 
 interface ChatMessage {
@@ -91,6 +91,7 @@ const ConversationalBargainModal: React.FC<Props> = ({
   const [showOfferActions, setShowOfferActions] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
   const MAX_ROUNDS = 3;
+  const chatRef = React.useRef<HTMLDivElement>(null);
 
   // Get module-specific copy and icons
   const moduleCopy = copyPacks.modules[module] || copyPacks.modules.flights;
@@ -131,6 +132,13 @@ const ConversationalBargainModal: React.FC<Props> = ({
       setIsComplete(false);
     }
   }, [isOpen, flight, userName, module]);
+
+  // Auto-scroll to last message
+  useEffect(() => {
+    if (chatRef.current) {
+      chatRef.current.scrollTop = chatRef.current.scrollHeight;
+    }
+  }, [messages, isTyping]);
 
   // Timer countdown effect
   useEffect(() => {
@@ -326,10 +334,11 @@ const ConversationalBargainModal: React.FC<Props> = ({
           </Button>
 
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/20">
+            <div className="w-12 h-12 rounded-xl bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/20 shadow-lg relative">
               {React.createElement(moduleIcons[module], {
                 className: "h-6 w-6 text-white"
               })}
+              <Sparkles className="h-3 w-3 absolute -top-1 -right-1 text-yellow-300" />
             </div>
             <div>
               <h2 className="text-lg font-bold text-white">
@@ -351,7 +360,7 @@ const ConversationalBargainModal: React.FC<Props> = ({
 
         {/* Chat Area */}
         <div className="flex-1 flex flex-col min-h-0">
-          <div className="flex-1 overflow-y-auto p-4 space-y-3 max-h-[400px]">
+          <div ref={chatRef} className="flex-1 overflow-y-auto p-4 space-y-3 max-h-[400px] scroll-smooth">
             {messages.map((message) => (
               <div key={message.id} className={`flex gap-3 ${message.speaker === "user" ? "justify-end" : "justify-start"}`}>
                 {message.speaker !== "user" && (
@@ -505,22 +514,13 @@ const ConversationalBargainModal: React.FC<Props> = ({
                     onClick={startNegotiation}
                     disabled={!currentPrice || parseInt(currentPrice) <= 0 || isNegotiating}
                     size="sm"
-                    className="absolute right-1 top-1/2 -translate-y-1/2 h-10 w-10 p-0 bg-[#003580] hover:bg-[#002a5c] rounded-lg"
+                    className="absolute right-1 top-1/2 -translate-y-1/2 h-10 w-10 p-0 bg-gradient-to-r from-[#003580] to-[#0071c2] hover:from-[#002a5c] hover:to-[#005a9c] rounded-lg shadow-lg"
                   >
-                    <Send className="h-4 w-4" />
+                    <Sparkles className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
               
-              {round === 1 && (
-                <Button
-                  variant="outline"
-                  onClick={() => onAccept(selectedFareType?.price || flight.price, `ORIGINAL-${Date.now()}`)}
-                  className="w-full border-2 border-gray-300 text-gray-700 hover:bg-gray-50 font-semibold py-3 rounded-xl text-sm"
-                >
-                  Book Original Price
-                </Button>
-              )}
             </div>
           )}
         </div>
