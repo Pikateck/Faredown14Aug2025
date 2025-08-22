@@ -34,13 +34,24 @@ export const FaredownButton: React.FC<FaredownButtonProps> = ({
       "border-2 border-[#003580] bg-transparent hover:bg-[#003580] text-[#003580] hover:text-white",
   };
 
+  const handleClick = (e?: React.MouseEvent) => {
+    // Add haptic feedback for mobile devices
+    if (isMobileDevice()) {
+      hapticFeedback('light');
+    }
+    onClick?.(e);
+  };
+
   return (
     <Button
-      onClick={onClick}
+      onClick={handleClick}
       disabled={disabled || loading}
       className={cn(
         // Base standardized styles from Transfers page
         "faredown-button-locked",
+        "mobile-button",
+        "mobile-touch-target",
+        "mobile-smooth-animation",
         "w-full",
         "font-semibold",
         "rounded-xl",
@@ -49,6 +60,7 @@ export const FaredownButton: React.FC<FaredownButtonProps> = ({
         "touch-manipulation",
         "transition-all duration-200",
         "flex items-center justify-center gap-2",
+        "-webkit-tap-highlight-color: transparent",
         variantClasses[variant],
         sizeClasses[size],
         className,
