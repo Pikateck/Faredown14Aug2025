@@ -4,6 +4,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -596,6 +597,7 @@ export function AINegotiationChat({
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-md mx-auto h-[600px] flex flex-col p-0 overflow-hidden">
+        <DialogTitle className="sr-only">AI Negotiation Chat</DialogTitle>
         {/* Header */}
         <DialogHeader className="px-6 py-4 border-b bg-gradient-to-r from-blue-50 to-purple-50">
           <div className="flex items-center justify-between">
