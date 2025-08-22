@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "./button";
 import { cn } from "@/lib/utils";
+import { isMobileDevice, hapticFeedback } from "@/lib/mobileUtils";
 
 interface FaredownButtonProps {
   children: React.ReactNode;
