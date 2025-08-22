@@ -666,7 +666,8 @@ const ConversationalBargainModal: React.FC<Props> = ({
 
                 {/* Mobile-Optimized Instructions */}
                 <div className="mt-2 text-xs text-gray-500 text-center">
-                  {window.innerWidth >= 640 ? "Enter your target price and press Enter or click the sparkle button" : "Enter price and tap ✨ to start"}
+                  <span className="hidden sm:inline">Enter your target price and press Enter or click the sparkle button</span>
+                  <span className="sm:hidden">Enter price and tap ✨ to start</span>
                 </div>
               </div>
             </div>
