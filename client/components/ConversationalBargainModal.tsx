@@ -364,25 +364,31 @@ const ConversationalBargainModal: React.FC<Props> = ({
             {messages.map((message) => (
               <div key={message.id} className={`flex gap-3 ${message.speaker === "user" ? "justify-end" : "justify-start"}`}>
                 {message.speaker !== "user" && (
-                  <div className={`flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center ${
+                  <div className={`flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center shadow-md ${
                     message.speaker === "supplier"
-                      ? "bg-gradient-to-br from-[#003580] to-[#0071c2] text-white"
-                      : "bg-gradient-to-br from-emerald-500 to-emerald-600 text-white"
+                      ? "bg-gradient-to-br from-[#003580] to-[#0071c2] text-white border border-white/20"
+                      : "bg-gradient-to-br from-emerald-500 to-emerald-600 text-white border border-white/20"
                   }`}>
                     {message.speaker === "supplier" ? (
-                      React.createElement(moduleIcons[module], { className: "h-4 w-4" })
+                      <div className="relative">
+                        {React.createElement(moduleIcons[module], { className: "h-4 w-4" })}
+                        <Crown className="h-2 w-2 absolute -top-1 -right-1 text-yellow-300" />
+                      </div>
                     ) : (
-                      <Star className="h-4 w-4" />
+                      <div className="relative">
+                        <Sparkles className="h-4 w-4" />
+                        <Star className="h-2 w-2 absolute -top-1 -right-1 text-yellow-300" />
+                      </div>
                     )}
                   </div>
                 )}
                 
-                <div className={`max-w-xs rounded-2xl px-4 py-3 ${
+                <div className={`max-w-xs rounded-2xl px-4 py-3 shadow-sm ${
                   message.speaker === "user"
-                    ? "bg-[#003580] text-white ml-auto"
+                    ? "bg-gradient-to-br from-[#003580] to-[#0071c2] text-white ml-auto"
                     : message.speaker === "supplier"
-                    ? "bg-blue-50 text-gray-800 border border-blue-200"
-                    : "bg-emerald-50 text-gray-800 border border-emerald-200"
+                    ? "bg-gradient-to-br from-blue-50 to-blue-100 text-gray-800 border border-blue-200"
+                    : "bg-gradient-to-br from-emerald-50 to-emerald-100 text-gray-800 border border-emerald-200"
                 }`}>
                   <div className="text-xs font-semibold opacity-70 mb-1 uppercase tracking-wide">
                     {message.speaker === "supplier" ? supplierNames[module] : 
@@ -399,7 +405,7 @@ const ConversationalBargainModal: React.FC<Props> = ({
                 </div>
 
                 {message.speaker === "user" && (
-                  <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-[#003580] flex items-center justify-center text-white">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-gradient-to-br from-[#003580] to-[#0071c2] flex items-center justify-center text-white shadow-md border border-white/20">
                     <div className="text-xs font-bold">{userName.charAt(0)}</div>
                   </div>
                 )}
@@ -444,16 +450,16 @@ const ConversationalBargainModal: React.FC<Props> = ({
               <div className="flex gap-2">
                 <Button
                   onClick={handleBookNow}
-                  className="flex-1 bg-gradient-to-r from-[#003580] to-[#0071c2] hover:from-[#002a5c] hover:to-[#005a9c] text-white font-semibold py-3 rounded-full text-sm"
+                  className="flex-1 bg-gradient-to-r from-[#003580] to-[#0071c2] hover:from-[#002a5c] hover:to-[#005a9c] text-white font-semibold py-3 rounded-full text-sm shadow-lg"
                 >
-                  <Zap className="h-4 w-4 mr-1" />
+                  <CheckCircle className="h-4 w-4 mr-1" />
                   Book Now
                 </Button>
                 {round < MAX_ROUNDS && (
                   <Button
                     variant="outline"
                     onClick={handleTryAgain}
-                    className="flex-1 border-2 border-[#003580] text-[#003580] hover:bg-blue-50 font-semibold py-3 rounded-full text-sm"
+                    className="flex-1 border-2 border-[#003580] text-[#003580] hover:bg-blue-50 font-semibold py-3 rounded-full text-sm shadow-lg"
                   >
                     <TrendingUp className="h-4 w-4 mr-1" />
                     Try Again
@@ -476,8 +482,9 @@ const ConversationalBargainModal: React.FC<Props> = ({
               <div className="flex gap-2">
                 <Button
                   onClick={() => onAccept(selectedFareType?.price || flight.price, `ORIGINAL-${Date.now()}`)}
-                  className="flex-1 bg-gradient-to-r from-[#003580] to-[#0071c2] text-white font-semibold py-3 rounded-full"
+                  className="flex-1 bg-gradient-to-r from-[#003580] to-[#0071c2] text-white font-semibold py-3 rounded-full shadow-lg"
                 >
+                  <CheckCircle className="h-4 w-4 mr-1" />
                   Book Original Price
                 </Button>
                 <Button
@@ -486,8 +493,9 @@ const ConversationalBargainModal: React.FC<Props> = ({
                     onClose();
                     if (onBackToResults) onBackToResults();
                   }}
-                  className="flex-1 border-2 border-[#003580] text-[#003580] hover:bg-blue-50 font-semibold py-3 rounded-full"
+                  className="flex-1 border-2 border-[#003580] text-[#003580] hover:bg-blue-50 font-semibold py-3 rounded-full shadow-lg"
                 >
+                  <Target className="h-4 w-4 mr-1" />
                   Back to Results
                 </Button>
               </div>
