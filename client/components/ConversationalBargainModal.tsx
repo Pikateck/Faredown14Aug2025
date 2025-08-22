@@ -507,23 +507,23 @@ const ConversationalBargainModal: React.FC<Props> = ({
             </div>
           )}
 
-          {/* Timer Expired State */}
+          {/* Mobile-Optimized Timer Expired State */}
           {timerExpired && !isComplete && (
-            <div className="p-4 bg-gradient-to-r from-orange-50 to-red-50 border-t border-orange-200">
+            <div className="p-3 sm:p-4 bg-gradient-to-r from-orange-50 to-red-50 border-t border-orange-200">
               <div className="text-center mb-4">
-                <Clock className="h-8 w-8 mx-auto text-orange-500 mb-2" />
-                <h3 className="text-lg font-bold text-gray-900">Offer Expired</h3>
-                <p className="text-sm text-gray-600">
+                <Clock className="h-6 w-6 sm:h-8 sm:w-8 mx-auto text-orange-500 mb-2" />
+                <h3 className="text-base sm:text-lg font-bold text-gray-900">Offer Expired</h3>
+                <p className="text-xs sm:text-sm text-gray-600">
                   Your negotiated price has expired. Try again or go back to find new deals.
                 </p>
               </div>
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row gap-2">
                 {round < MAX_ROUNDS && (
                   <Button
                     onClick={handleTryAgain}
-                    className="flex-1 bg-gradient-to-r from-[#003580] to-[#0071c2] text-white font-semibold py-3 rounded-full shadow-lg"
+                    className="w-full sm:flex-1 bg-gradient-to-r from-[#003580] to-[#0071c2] text-white font-semibold py-3 rounded-full shadow-lg min-h-[48px] touch-manipulation active:scale-95"
                   >
-                    <TrendingUp className="h-4 w-4 mr-1" />
+                    <TrendingUp className="h-4 w-4 mr-2" />
                     Try Again
                   </Button>
                 )}
@@ -533,9 +533,9 @@ const ConversationalBargainModal: React.FC<Props> = ({
                     onClose();
                     if (onBackToResults) onBackToResults();
                   }}
-                  className="flex-1 border-2 border-[#003580] text-[#003580] hover:bg-blue-50 font-semibold py-3 rounded-full shadow-lg"
+                  className="w-full sm:flex-1 border-2 border-[#003580] text-[#003580] hover:bg-blue-50 active:scale-95 font-semibold py-3 rounded-full shadow-lg min-h-[48px] touch-manipulation"
                 >
-                  <ArrowLeft className="h-4 w-4 mr-1" />
+                  <ArrowLeft className="h-4 w-4 mr-2" />
                   Back to Results
                 </Button>
               </div>
