@@ -485,7 +485,7 @@ const ConversationalBargainModal: React.FC<Props> = ({
               <div className="flex flex-col sm:flex-row gap-2 sm:gap-2">
                 <Button
                   onClick={handleBookNow}
-                  className="w-full sm:flex-1 bg-gradient-to-r from-[#003580] to-[#0071c2] hover:from-[#002a5c] hover:to-[#005a9c] active:scale-95 text-white font-semibold py-3 sm:py-3 rounded-full text-sm sm:text-sm shadow-lg min-h-[48px] touch-manipulation"
+                  className="mobile-button mobile-touch-target mobile-smooth-animation w-full sm:flex-1 bg-gradient-to-r from-[#003580] to-[#0071c2] hover:from-[#002a5c] hover:to-[#005a9c] active:scale-95 text-white font-semibold py-3 sm:py-3 rounded-full text-sm sm:text-sm shadow-lg min-h-[48px] touch-manipulation"
                   autoFocus
                 >
                   <CheckCircle className="h-4 w-4 mr-2" />
