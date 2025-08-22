@@ -155,6 +155,20 @@ const ConversationalBargainModal: React.FC<Props> = ({
     }
   }, [messages, isTyping]);
 
+  const addMessage = useCallback((speaker: "supplier" | "agent" | "user", text: string, price?: number) => {
+    const messageId = `msg-${Date.now()}-${Math.random()}`;
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: messageId,
+        speaker,
+        message: text,
+        timestamp: Date.now(),
+        price,
+      },
+    ]);
+  }, []);
+
   // Timer countdown effect
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -177,21 +191,7 @@ const ConversationalBargainModal: React.FC<Props> = ({
       }, 1000);
     }
     return () => clearInterval(interval);
-  }, [timerActive, timerSeconds, addMessage]);
-
-  const addMessage = useCallback((speaker: "supplier" | "agent" | "user", text: string, price?: number) => {
-    const messageId = `msg-${Date.now()}-${Math.random()}`;
-    setMessages((prev) => [
-      ...prev,
-      {
-        id: messageId,
-        speaker,
-        message: text,
-        timestamp: Date.now(),
-        price,
-      },
-    ]);
-  }, []);
+  }, [timerActive, timerSeconds]);
 
   const startNegotiation = async () => {
     if (!currentPrice || !flight || isNegotiating) return;
