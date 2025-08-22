@@ -2,6 +2,7 @@ import React, { useEffect, Suspense, lazy } from "react";
 import { initializeBargainPlatform } from "./services/bargainAppInit";
 import "./styles/performance-optimizations.css";
 import "./styles/faredown-button.css";
+import "./styles/mobile-bargain-optimizations.css";
 import {
   BrowserRouter as Router,
   Routes,
