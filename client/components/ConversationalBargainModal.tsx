@@ -312,11 +312,24 @@ const ConversationalBargainModal: React.FC<Props> = ({
 
     setTimerActive(false);
     setShowOfferActions(false);
+    setTimerExpired(false);
     setRound(prev => prev + 1);
     setCurrentPrice("");
     setFinalOffer(null);
     addMessage("agent", `Let's try round ${round + 1}! What's your new target price, ${userName}?`);
   };
+
+  // Handle enter key press
+  const handleKeyPress = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (showOfferActions && finalOffer) {
+        handleBookNow();
+      } else if (!showOfferActions && !isComplete && !isNegotiating && currentPrice && parseInt(currentPrice) > 0) {
+        startNegotiation();
+      }
+    }
+  }, [showOfferActions, finalOffer, isComplete, isNegotiating, currentPrice]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
