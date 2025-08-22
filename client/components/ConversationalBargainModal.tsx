@@ -390,8 +390,13 @@ const ConversationalBargainModal: React.FC<Props> = ({
           <Button
             variant="ghost"
             size="sm"
-            onClick={onClose}
-            className="absolute top-2 sm:top-3 right-2 sm:right-3 h-10 w-10 sm:h-8 sm:w-8 p-0 rounded-lg hover:bg-white/10 active:bg-white/20 transition-colors z-10 touch-manipulation"
+            onClick={() => {
+              if (isMobileDevice()) {
+                hapticFeedback('light');
+              }
+              onClose();
+            }}
+            className="mobile-button mobile-touch-target mobile-smooth-animation absolute top-2 sm:top-3 right-2 sm:right-3 h-10 w-10 sm:h-8 sm:w-8 p-0 rounded-lg hover:bg-white/10 active:bg-white/20 transition-colors z-10 touch-manipulation"
           >
             <X className="h-5 w-5 sm:h-4 sm:w-4 text-white" />
           </Button>
