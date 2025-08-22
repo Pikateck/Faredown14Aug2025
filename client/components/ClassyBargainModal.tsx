@@ -403,8 +403,9 @@ export function ClassyBargainModal({
   // Stable input handler
   const handleOfferChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = parseInt(e.target.value.replace(/\D/g, "")) || null;
-      setOffer(value);
+      const value = e.target.value;
+      const numValue = parseFloat(value);
+      setOffer(value === "" ? null : (isNaN(numValue) ? null : numValue));
       setError(null);
     },
     [],
