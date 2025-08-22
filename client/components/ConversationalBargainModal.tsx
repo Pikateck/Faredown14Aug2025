@@ -91,7 +91,7 @@ const ConversationalBargainModal: React.FC<Props> = ({
   const [showOfferActions, setShowOfferActions] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
   const MAX_ROUNDS = 3;
-  const chatRef = React.useRef<HTMLDivElement>(null);
+  const chatRef = useRef<HTMLDivElement>(null);
 
   // Get module-specific copy and icons
   const moduleCopy = copyPacks.modules[module] || copyPacks.modules.flights;
