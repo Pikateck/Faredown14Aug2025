@@ -587,6 +587,7 @@ export default function FlightResults() {
           },
           passengerCount: { adults, children },
           orderRef: orderRef,
+          negotiatedPrice: finalPrice, // For BookingFlow compatibility
           bargainedPrice: finalPrice, // Additional flag to indicate this was bargained
         },
       });
@@ -2353,7 +2354,7 @@ export default function FlightResults() {
           `}
         </style>
 
-        {/* Desktop Sidebar Filters (≥1024px) - Hotel Style Applied */}
+        {/* Desktop Sidebar Filters (���1024px) - Hotel Style Applied */}
         <div className="hidden lg:block w-80 flex-shrink-0 desktop-filter">
           <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200 sticky top-24">
             {/* Filter Header */}
