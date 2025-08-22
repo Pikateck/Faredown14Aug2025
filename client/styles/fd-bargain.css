@@ -217,8 +217,8 @@
   flex: 1;
   border: 0;
   outline: 0;
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-size: 1.75rem;
+  font-weight: 700;
   text-align: center;
   background: transparent;
   color: #1f2937;
@@ -227,15 +227,15 @@
 
 .fd-input input::placeholder {
   color: #9ca3af;
-  font-weight: 400;
-  font-size: 1.125rem;
+  font-weight: 500;
+  font-size: 1.25rem;
 }
 
 .fd-currency {
-  opacity: 0.8;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #003580;
+  opacity: 0.9;
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #ffffff;
   letter-spacing: -0.025em;
 }
 
