@@ -512,7 +512,7 @@ const ConversationalBargainModal: React.FC<Props> = ({
               <div className="mb-3">
                 <div className="text-xs font-semibold text-gray-600 mb-2">Current price: {selectedCurrency.symbol}{(selectedFareType?.price || flight.price).toLocaleString()}</div>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-lg font-bold text-[#003580]">₹</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-lg font-bold text-[#003580]">{selectedCurrency.symbol}</span>
                   <Input
                     type="number"
                     value={currentPrice}
