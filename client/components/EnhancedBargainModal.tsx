@@ -8,6 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import AgentOfferBubble from "./AgentOfferBubble";
 import { X } from "lucide-react";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 interface Flight {
   id: string;
