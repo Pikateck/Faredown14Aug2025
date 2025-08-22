@@ -440,7 +440,7 @@ const ConversationalBargainModal: React.FC<Props> = ({
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-emerald-600" />
                   <span className="text-sm font-semibold text-emerald-800">
-                    Negotiated Price: ₹{finalOffer.toLocaleString()}
+                    Negotiated Price: {selectedCurrency.symbol}{finalOffer.toLocaleString()}
                   </span>
                 </div>
                 <div className={`px-2 py-1 rounded-lg text-xs font-mono font-bold ${
