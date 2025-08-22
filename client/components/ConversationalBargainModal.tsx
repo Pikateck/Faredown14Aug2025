@@ -137,6 +137,7 @@ const ConversationalBargainModal: React.FC<Props> = ({
       setTimerActive(false);
       setShowOfferActions(false);
       setIsComplete(false);
+      setTimerExpired(false);
     }
   }, [isOpen, flight, userName, module]);
 
