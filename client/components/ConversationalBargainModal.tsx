@@ -597,7 +597,7 @@ const ConversationalBargainModal: React.FC<Props> = ({
                     }}
                     onKeyDown={handleKeyPress}
                     placeholder="Enter your target price"
-                    className="pl-8 sm:pl-8 pr-12 sm:pr-12 h-12 sm:h-12 bg-white border-2 border-gray-300 rounded-xl focus:border-[#0071c2] focus:ring-2 focus:ring-[#0071c2]/20 transition-all font-semibold text-gray-900 text-base touch-manipulation"
+                    className="mobile-input mobile-touch-target pl-8 sm:pl-8 pr-12 sm:pr-12 h-12 sm:h-12 bg-white border-2 border-gray-300 rounded-xl focus:border-[#0071c2] focus:ring-2 focus:ring-[#0071c2]/20 transition-all font-semibold text-gray-900 text-base touch-manipulation"
                     min="1"
                     disabled={isNegotiating}
                     autoComplete="off"
