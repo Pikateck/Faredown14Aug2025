@@ -191,7 +191,7 @@ const ConversationalBargainModal: React.FC<Props> = ({
     setIsTyping(true);
 
     // Add user message
-    addMessage("user", `I'd like to pay ₹${userPriceNum.toLocaleString()}`, userPriceNum);
+    addMessage("user", `I'd like to pay ${selectedCurrency.symbol}${userPriceNum.toLocaleString()}`, userPriceNum);
 
     // Simulate negotiation flow
     setTimeout(() => {
