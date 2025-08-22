@@ -23,9 +23,9 @@ export const FaredownButton: React.FC<FaredownButtonProps> = ({
   size = "md",
 }) => {
   const sizeClasses = {
-    sm: "min-h-[40px] py-2.5 text-sm",
-    md: "min-h-[44px] py-3 text-sm",
-    lg: "min-h-[48px] py-4 text-base",
+    sm: "min-h-[40px] sm:min-h-[40px] py-2.5 text-sm",
+    md: "min-h-[44px] sm:min-h-[44px] py-3 text-sm sm:text-sm",
+    lg: "min-h-[48px] sm:min-h-[48px] py-4 text-base sm:text-base",
   };
 
   const variantClasses = {
