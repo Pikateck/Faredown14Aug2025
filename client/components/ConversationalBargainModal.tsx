@@ -458,17 +458,22 @@ const ConversationalBargainModal: React.FC<Props> = ({
             )}
           </div>
 
-          {/* Offer Actions */}
+          {/* Mobile-Optimized Offer Actions */}
           {showOfferActions && timerActive && finalOffer && (
-            <div className="p-4 bg-gradient-to-r from-emerald-50 to-green-50 border-t border-emerald-200" onKeyDown={handleKeyPress}>
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-emerald-600" />
-                  <span className="text-sm font-semibold text-emerald-800">
-                    Negotiated Price: {selectedCurrency.symbol}{formatNumberWithCommas(finalOffer)}
-                  </span>
+            <div className="p-3 sm:p-4 bg-gradient-to-r from-emerald-50 to-green-50 border-t border-emerald-200" onKeyDown={handleKeyPress}>
+              <div className="flex items-start sm:items-center justify-between mb-3 gap-2">
+                <div className="flex items-start sm:items-center gap-2 min-w-0 flex-1">
+                  <CheckCircle className="h-4 w-4 text-emerald-600 flex-shrink-0 mt-0.5 sm:mt-0" />
+                  <div className="min-w-0">
+                    <span className="text-xs sm:text-sm font-semibold text-emerald-800 block">
+                      Negotiated Price:
+                    </span>
+                    <span className="text-sm sm:text-base font-bold text-emerald-900">
+                      {selectedCurrency.symbol}{formatNumberWithCommas(finalOffer)}
+                    </span>
+                  </div>
                 </div>
-                <div className={`px-3 py-1 rounded-lg text-sm font-mono font-bold shadow-sm ${
+                <div className={`px-2 sm:px-3 py-1 rounded-lg text-xs sm:text-sm font-mono font-bold shadow-sm flex-shrink-0 ${
                   timerSeconds <= 10
                     ? "bg-red-100 text-red-600 border border-red-200 animate-pulse"
                     : "bg-emerald-100 text-emerald-700 border border-emerald-200"
@@ -476,28 +481,28 @@ const ConversationalBargainModal: React.FC<Props> = ({
                   {formatTime(timerSeconds)}
                 </div>
               </div>
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-2">
                 <Button
                   onClick={handleBookNow}
-                  className="flex-1 bg-gradient-to-r from-[#003580] to-[#0071c2] hover:from-[#002a5c] hover:to-[#005a9c] text-white font-semibold py-3 rounded-full text-sm shadow-lg"
+                  className="w-full sm:flex-1 bg-gradient-to-r from-[#003580] to-[#0071c2] hover:from-[#002a5c] hover:to-[#005a9c] active:scale-95 text-white font-semibold py-3 sm:py-3 rounded-full text-sm sm:text-sm shadow-lg min-h-[48px] touch-manipulation"
                   autoFocus
                 >
-                  <CheckCircle className="h-4 w-4 mr-1" />
-                  Book Now (Enter)
+                  <CheckCircle className="h-4 w-4 mr-2" />
+                  Book Now {window.innerWidth >= 640 && "(Enter)"}
                 </Button>
                 {round < MAX_ROUNDS && (
                   <Button
                     variant="outline"
                     onClick={handleTryAgain}
-                    className="flex-1 border-2 border-[#003580] text-[#003580] hover:bg-blue-50 font-semibold py-3 rounded-full text-sm shadow-lg"
+                    className="w-full sm:flex-1 border-2 border-[#003580] text-[#003580] hover:bg-blue-50 active:scale-95 font-semibold py-3 sm:py-3 rounded-full text-sm sm:text-sm shadow-lg min-h-[48px] touch-manipulation"
                   >
-                    <TrendingUp className="h-4 w-4 mr-1" />
+                    <TrendingUp className="h-4 w-4 mr-2" />
                     Try Again
                   </Button>
                 )}
               </div>
               <div className="mt-2 text-xs text-gray-500 text-center">
-                Press Enter to book now or click Try Again for another round
+                {window.innerWidth >= 640 ? "Press Enter to book now or click Try Again for another round" : "Tap to book or try again"}
               </div>
             </div>
           )}
