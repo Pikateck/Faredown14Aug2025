@@ -44,22 +44,22 @@ const scales = [
 
 function convertHundreds(num: number): string {
   let result = '';
-  
+
   if (num >= 100) {
-    result += ones[Math.floor(num / 100)] + ' Hundred';
+    result += ones[Math.floor(num / 100)] + ' hundred ';
     num %= 100;
-    if (num > 0) result += ' ';
   }
-  
+
   if (num >= 20) {
     result += tens[Math.floor(num / 10)];
-    num %= 10;
-    if (num > 0) result += ' ' + ones[num];
+    if (num % 10 !== 0) {
+      result += '-' + ones[num % 10];
+    }
   } else if (num > 0) {
     result += ones[num];
   }
-  
-  return result;
+
+  return result.trim();
 }
 
 export function numberToWords(num: number): string {
