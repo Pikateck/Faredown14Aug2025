@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { X, Plane, Building, MapPin, Car } from "lucide-react";
+import { X, Plane, Building, MapPin, Car, Sparkles, Crown, Zap, Clock, Shield, Star, ArrowUpCircle, ArrowDownCircle, TrendingUp, Gem, Award } from "lucide-react";
 import copyPacks from "../../api/data/copy_packs.json";
 import { BargainButton } from "./ui/BargainButton";
 
@@ -117,6 +117,15 @@ const ConversationalBargainModal: React.FC<Props> = ({
     sightseeing: "📍",
     transfers: "🚖",
   };
+
+  const classyIcons = {
+    flights: Plane,
+    hotels: Building,
+    sightseeing: MapPin,
+    transfers: Car,
+  };
+
+  const ClassyIcon = classyIcons[module];
 
   const supplierNames = {
     flights: "Airline",
@@ -369,26 +378,38 @@ const ConversationalBargainModal: React.FC<Props> = ({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-lg mx-auto bg-white rounded-3xl shadow-2xl border-0 p-0 gap-0 max-h-[90vh] overflow-hidden">
         <DialogTitle className="sr-only">AI Price Negotiation</DialogTitle>
-        {/* Premium Header */}
-        <div className="relative bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-6 rounded-t-3xl border-b border-gray-100">
+        {/* Ultra Premium Header */}
+        <div className="relative bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 p-6 rounded-t-3xl border-b border-white/20 overflow-hidden">
+          {/* Animated background elements */}
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 via-purple-500/10 to-pink-500/20 animate-pulse"></div>
+          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-white/10 to-transparent rounded-full blur-xl"></div>
           <Button
             variant="ghost"
             size="sm"
             onClick={onClose}
-            className="absolute top-4 right-4 h-10 w-10 p-0 rounded-full hover:bg-white/60 transition-all duration-200 backdrop-blur-sm"
+            className="absolute top-4 right-4 h-10 w-10 p-0 rounded-full hover:bg-white/20 transition-all duration-300 backdrop-blur-sm z-10 border border-white/30"
           >
-            <X className="h-5 w-5 text-gray-600" />
+            <X className="h-5 w-5 text-white" />
           </Button>
 
-          <div className="flex items-center gap-4 mb-2">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-lg">
-              <span className="text-2xl">{moduleIcons[module]}</span>
+          <div className="flex items-center gap-4 mb-2 relative z-10">
+            <div className="w-16 h-16 rounded-3xl bg-gradient-to-br from-yellow-400 via-yellow-500 to-amber-600 flex items-center justify-center text-white shadow-2xl border-2 border-white/30 relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"></div>
+              <div className="relative flex items-center justify-center">
+                <Crown className="h-6 w-6 text-white drop-shadow-lg" />
+                <ClassyIcon className="h-4 w-4 text-white/80 absolute -bottom-1 -right-1" />
+              </div>
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-1">
-                AI Price Negotiation
-              </h2>
-              <p className="text-sm text-gray-600 font-medium">
+              <div className="flex items-center gap-2 mb-1">
+                <Sparkles className="h-6 w-6 text-yellow-400 animate-pulse" />
+                <h2 className="text-2xl font-bold text-white drop-shadow-lg">
+                  AI Price Negotiation
+                </h2>
+                <Gem className="h-5 w-5 text-purple-300 animate-bounce" />
+              </div>
+              <p className="text-sm text-blue-100 font-medium flex items-center gap-1">
+                <Star className="h-3 w-3 text-yellow-400" />
                 {module === "flights" &&
                   `${flight.airline} ${flight.flightNumber}`}
                 {module === "hotels" && "Hotel Booking"}
@@ -396,9 +417,12 @@ const ConversationalBargainModal: React.FC<Props> = ({
                 {module === "transfers" && "Transfer Booking"}
               </p>
               {round > 1 && (
-                <p className="text-xs text-blue-600 font-semibold mt-1">
-                  Round {round} of {MAX_ROUNDS}
-                </p>
+                <div className="flex items-center gap-1 mt-1">
+                  <Award className="h-3 w-3 text-orange-400" />
+                  <p className="text-xs text-orange-200 font-semibold">
+                    Round {round} of {MAX_ROUNDS}
+                  </p>
+                </div>
               )}
             </div>
           </div>
@@ -408,8 +432,12 @@ const ConversationalBargainModal: React.FC<Props> = ({
         {phase === "input" && (
           <div className="p-8 space-y-8">
             <div className="text-center">
-              <div className="w-20 h-20 mx-auto mb-6 rounded-3xl bg-gradient-to-br from-yellow-400 via-orange-400 to-red-500 flex items-center justify-center shadow-xl">
-                <span className="text-3xl">💰</span>
+              <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-emerald-400 via-teal-500 to-cyan-600 flex items-center justify-center shadow-2xl border-4 border-white/20 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-transparent animate-pulse"></div>
+                <div className="relative flex items-center justify-center">
+                  <TrendingUp className="h-8 w-8 text-white drop-shadow-lg" />
+                  <Sparkles className="h-4 w-4 text-yellow-200 absolute -top-1 -right-1 animate-pulse" />
+                </div>
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">
                 {round === 1
@@ -429,37 +457,48 @@ const ConversationalBargainModal: React.FC<Props> = ({
                   Enter your desired price
                 </label>
                 <div className="relative group">
-                  <span className="absolute left-5 top-1/2 -translate-y-1/2 text-2xl font-bold text-gray-700">
-                    ₹
-                  </span>
+                  <div className="absolute left-5 top-1/2 -translate-y-1/2 flex items-center gap-1">
+                    <span className="text-2xl font-bold text-emerald-600">₹</span>
+                    <Zap className="h-4 w-4 text-yellow-500 animate-pulse" />
+                  </div>
                   <Input
                     type="number"
                     value={userPrice}
                     onChange={(e) => setUserPrice(e.target.value)}
                     placeholder="25,000"
-                    className="pl-12 text-2xl h-16 bg-gray-50 border-3 border-gray-200 rounded-2xl focus:border-blue-500 focus:bg-white transition-all duration-300 group-hover:border-gray-300"
+                    className="pl-16 text-2xl h-16 bg-gradient-to-br from-gray-50 to-blue-50 border-3 border-blue-200 rounded-2xl focus:border-purple-500 focus:bg-white focus:shadow-xl transition-all duration-300 group-hover:border-blue-300 font-bold text-gray-800"
                     min="1"
                   />
                 </div>
               </div>
 
-              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-5 text-center border border-blue-100">
-                <p className="text-sm text-blue-700 font-medium">
-                  <span className="font-bold">Current price:</span> ₹
-                  {(selectedFareType?.price || flight.price).toLocaleString()}
-                </p>
+              <div className="bg-gradient-to-r from-slate-100 via-blue-50 to-indigo-100 rounded-2xl p-5 text-center border-2 border-blue-200 shadow-lg relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-12 h-12 bg-gradient-to-br from-blue-400/20 to-transparent rounded-full"></div>
+                <div className="flex items-center justify-center gap-2 relative z-10">
+                  <ArrowUpCircle className="h-4 w-4 text-red-500" />
+                  <p className="text-sm text-slate-700 font-medium">
+                    <span className="font-bold">Current price:</span> ₹
+                    {(selectedFareType?.price || flight.price).toLocaleString()}
+                  </p>
+                  <TrendingUp className="h-4 w-4 text-green-500" />
+                </div>
               </div>
 
               <BargainButton
                 onClick={startNegotiation}
                 disabled={!userPrice || parseInt(userPrice) <= 0}
-                className="w-full h-16 text-xl font-bold mt-8 shadow-xl"
+                className="w-full h-16 text-xl font-bold mt-8 shadow-2xl bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-700 hover:from-purple-700 hover:via-blue-700 hover:to-indigo-800 border-0 rounded-2xl transform hover:scale-105 transition-all duration-300"
                 size="lg"
               >
-                🤖{" "}
-                {round === 1
-                  ? "Start AI Negotiation"
-                  : `Continue Round ${round}`}
+                <div className="flex items-center gap-2">
+                  <Zap className="h-6 w-6 text-yellow-300 animate-pulse" />
+                  <span>
+                    {round === 1
+                      ? "Start AI Negotiation"
+                      : `Continue Round ${round}`}
+                  </span>
+                  <Sparkles className="h-5 w-5 text-blue-200" />
+                </div>
               </BargainButton>
             </div>
           </div>
@@ -481,29 +520,44 @@ const ConversationalBargainModal: React.FC<Props> = ({
                 return (
                   <div key={message.id} className="flex gap-4 items-start">
                     <div
-                      className={`flex-shrink-0 w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg ${
+                      className={`flex-shrink-0 w-14 h-14 rounded-2xl flex items-center justify-center shadow-xl border-2 relative overflow-hidden ${
                         message.speaker === "supplier"
-                          ? "bg-gradient-to-br from-blue-500 to-blue-600 text-white"
-                          : "bg-gradient-to-br from-green-500 to-green-600 text-white"
+                          ? "bg-gradient-to-br from-slate-700 via-slate-800 to-gray-900 text-white border-white/20"
+                          : "bg-gradient-to-br from-emerald-500 via-teal-600 to-cyan-700 text-white border-white/30"
                       }`}
                     >
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"></div>
                       {message.speaker === "supplier" ? (
-                        <span className="text-lg">{moduleIcons[module]}</span>
+                        <div className="relative flex items-center justify-center">
+                          <ClassyIcon className="h-6 w-6 text-white drop-shadow" />
+                          <Crown className="h-3 w-3 text-yellow-400 absolute -top-1 -right-1" />
+                        </div>
                       ) : (
-                        <span className="text-sm font-bold">AI</span>
+                        <div className="relative flex items-center justify-center">
+                          <Sparkles className="h-6 w-6 text-white drop-shadow" />
+                          <Zap className="h-3 w-3 text-yellow-300 absolute -bottom-1 -right-1 animate-pulse" />
+                        </div>
                       )}
                     </div>
                     <div
-                      className={`flex-1 max-w-sm rounded-3xl px-6 py-5 shadow-lg border ${
+                      className={`flex-1 max-w-sm rounded-3xl px-6 py-5 shadow-xl border-2 relative overflow-hidden backdrop-blur-sm ${
                         message.speaker === "supplier"
-                          ? "bg-gradient-to-br from-blue-50 to-blue-100 text-blue-900 border-blue-200"
-                          : "bg-gradient-to-br from-green-50 to-green-100 text-green-900 border-green-200"
+                          ? "bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 text-slate-800 border-slate-200"
+                          : "bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-100 text-emerald-900 border-emerald-200"
                       }`}
                     >
-                      <div className="text-xs font-bold opacity-70 mb-3 uppercase tracking-wider">
-                        {message.speaker === "supplier"
-                          ? supplierNames[module]
-                          : copyPacks.brand.negotiatorTitle}
+                      <div className="text-xs font-bold opacity-70 mb-3 uppercase tracking-wider flex items-center gap-1">
+                        {message.speaker === "supplier" ? (
+                          <>
+                            <Building className="h-3 w-3" />
+                            {supplierNames[module]}
+                          </>
+                        ) : (
+                          <>
+                            <Star className="h-3 w-3 text-yellow-600" />
+                            {copyPacks.brand.negotiatorTitle}
+                          </>
+                        )}
                       </div>
                       <div className="text-sm leading-relaxed font-medium">
                         {message.message}
@@ -516,9 +570,12 @@ const ConversationalBargainModal: React.FC<Props> = ({
                         !isExpired && (
                           <div className="mt-6 pt-5 border-t border-green-300">
                             <div className="flex items-center justify-between mb-5">
-                              <span className="text-xs font-bold text-green-700 uppercase tracking-wider">
-                                Valid for:
-                              </span>
+                              <div className="flex items-center gap-1">
+                                <Clock className="h-3 w-3 text-green-700" />
+                                <span className="text-xs font-bold text-green-700 uppercase tracking-wider">
+                                  Valid for:
+                                </span>
+                              </div>
                               <div
                                 className={`px-4 py-2 rounded-2xl font-mono text-lg font-bold shadow-lg transition-all duration-300 ${
                                   timerSeconds <= 10
@@ -532,17 +589,24 @@ const ConversationalBargainModal: React.FC<Props> = ({
                             <div className="flex gap-3">
                               <Button
                                 onClick={handleHold}
-                                className="flex-1 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold py-4 rounded-2xl shadow-lg transition-all transform hover:scale-105 text-sm"
+                                className="flex-1 bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-700 hover:from-emerald-700 hover:via-teal-700 hover:to-cyan-800 text-white font-bold py-4 rounded-2xl shadow-xl transition-all transform hover:scale-105 text-sm border-2 border-white/20"
                               >
-                                🔒 Place 30s Hold
+                                <div className="flex items-center gap-2">
+                                  <Shield className="h-4 w-4" />
+                                  Place 30s Hold
+                                  <Gem className="h-3 w-3 animate-pulse" />
+                                </div>
                               </Button>
                               {round < MAX_ROUNDS && (
                                 <Button
                                   variant="outline"
                                   onClick={handleBargainAgain}
-                                  className="flex-1 border-3 border-green-600 text-green-700 hover:bg-green-50 font-bold py-4 rounded-2xl transition-all hover:scale-105 text-sm"
+                                  className="flex-1 border-3 border-purple-600 text-purple-700 hover:bg-purple-50 font-bold py-4 rounded-2xl transition-all hover:scale-105 text-sm shadow-lg"
                                 >
-                                  Bargain Again
+                                  <div className="flex items-center gap-2">
+                                    <ArrowUpCircle className="h-4 w-4" />
+                                    Bargain Again
+                                  </div>
                                 </Button>
                               )}
                             </div>
@@ -556,8 +620,9 @@ const ConversationalBargainModal: React.FC<Props> = ({
               {/* Max rounds reached message */}
               {phase === "max_rounds_reached" && (
                 <div className="text-center py-8">
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-gray-400 to-gray-500 flex items-center justify-center">
-                    <span className="text-2xl">⏰</span>
+                  <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-orange-400 via-red-500 to-pink-600 flex items-center justify-center shadow-2xl border-4 border-white/30 relative overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent animate-pulse"></div>
+                    <Clock className="h-8 w-8 text-white drop-shadow-lg relative z-10" />
                   </div>
                   <h3 className="text-lg font-bold text-gray-900 mb-2">
                     Bargain Window Expired
@@ -567,9 +632,13 @@ const ConversationalBargainModal: React.FC<Props> = ({
                   </p>
                   <Button
                     onClick={onClose}
-                    className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 rounded-xl font-semibold"
+                    className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-700 hover:from-indigo-700 hover:via-purple-700 hover:to-pink-800 text-white px-8 py-4 rounded-2xl font-bold shadow-xl transform hover:scale-105 transition-all duration-300 border-2 border-white/20"
                   >
-                    Search Again for Fresh Deals
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="h-5 w-5" />
+                      Search Again for Fresh Deals
+                      <Star className="h-4 w-4 animate-pulse" />
+                    </div>
                   </Button>
                 </div>
               )}
