@@ -607,7 +607,7 @@ const ConversationalBargainModal: React.FC<Props> = ({
                     onClick={startNegotiation}
                     disabled={!currentPrice || parseInt(currentPrice) <= 0 || isNegotiating}
                     size="sm"
-                    className="absolute right-1 top-1/2 -translate-y-1/2 h-10 w-10 sm:h-10 sm:w-10 p-0 bg-gradient-to-r from-[#003580] to-[#0071c2] hover:from-[#002a5c] hover:to-[#005a9c] active:scale-95 rounded-lg shadow-lg touch-manipulation"
+                    className="mobile-button mobile-touch-target mobile-smooth-animation absolute right-1 top-1/2 -translate-y-1/2 h-10 w-10 sm:h-10 sm:w-10 p-0 bg-gradient-to-r from-[#003580] to-[#0071c2] hover:from-[#002a5c] hover:to-[#005a9c] active:scale-95 rounded-lg shadow-lg touch-manipulation"
                   >
                     <Sparkles className="h-4 w-4" />
                   </Button>
