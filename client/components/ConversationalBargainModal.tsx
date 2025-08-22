@@ -453,17 +453,17 @@ const ConversationalBargainModal: React.FC<Props> = ({
 
           {/* Offer Actions */}
           {showOfferActions && timerActive && finalOffer && (
-            <div className="p-4 bg-gradient-to-r from-emerald-50 to-green-50 border-t border-emerald-200">
+            <div className="p-4 bg-gradient-to-r from-emerald-50 to-green-50 border-t border-emerald-200" onKeyDown={handleKeyPress}>
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-emerald-600" />
                   <span className="text-sm font-semibold text-emerald-800">
-                    Negotiated Price: {selectedCurrency.symbol}{finalOffer.toLocaleString()}
+                    Negotiated Price: {selectedCurrency.symbol}{formatNumberWithCommas(finalOffer)}
                   </span>
                 </div>
-                <div className={`px-2 py-1 rounded-lg text-xs font-mono font-bold ${
-                  timerSeconds <= 10 
-                    ? "bg-red-100 text-red-600 border border-red-200" 
+                <div className={`px-3 py-1 rounded-lg text-sm font-mono font-bold shadow-sm ${
+                  timerSeconds <= 10
+                    ? "bg-red-100 text-red-600 border border-red-200 animate-pulse"
                     : "bg-emerald-100 text-emerald-700 border border-emerald-200"
                 }`}>
                   {formatTime(timerSeconds)}
@@ -473,9 +473,10 @@ const ConversationalBargainModal: React.FC<Props> = ({
                 <Button
                   onClick={handleBookNow}
                   className="flex-1 bg-gradient-to-r from-[#003580] to-[#0071c2] hover:from-[#002a5c] hover:to-[#005a9c] text-white font-semibold py-3 rounded-full text-sm shadow-lg"
+                  autoFocus
                 >
                   <CheckCircle className="h-4 w-4 mr-1" />
-                  Book Now
+                  Book Now (Enter)
                 </Button>
                 {round < MAX_ROUNDS && (
                   <Button
@@ -487,6 +488,9 @@ const ConversationalBargainModal: React.FC<Props> = ({
                     Try Again
                   </Button>
                 )}
+              </div>
+              <div className="mt-2 text-xs text-gray-500 text-center">
+                Press Enter to book now or click Try Again for another round
               </div>
             </div>
           )}
