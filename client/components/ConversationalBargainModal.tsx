@@ -219,6 +219,11 @@ const ConversationalBargainModal: React.FC<Props> = ({
     const userPriceNum = parseInt(currentPrice);
     if (userPriceNum <= 0) return;
 
+    // Mobile haptic feedback for starting negotiation
+    if (isMobileDevice()) {
+      hapticFeedback('medium');
+    }
+
     setIsNegotiating(true);
     setIsTyping(true);
 
