@@ -7,6 +7,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import {
@@ -155,6 +156,7 @@ export function EnhancedHotelPopup({
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0">
+        <DialogTitle className="sr-only">Hotel Details</DialogTitle>
         <div className="relative">
           {/* Header with close button */}
           <DialogHeader className="p-6 pb-0">
