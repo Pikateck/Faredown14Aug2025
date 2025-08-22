@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { X, Plane, Building, MapPin, Car, Clock, Shield, Target, Zap, Star, TrendingUp, CheckCircle, Sparkles, Crown } from "lucide-react";
 import copyPacks from "../../api/data/copy_packs.json";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 interface ChatMessage {
   id: string;
