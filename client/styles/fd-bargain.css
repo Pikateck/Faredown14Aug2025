@@ -483,17 +483,19 @@
 }
 
 .fd-btn--outline {
-  background: #ffffff;
-  color: #003580;
-  border-color: #003580;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  color: #374151;
+  border-color: #d1d5db;
   font-weight: 600;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .fd-btn--outline:hover:not(:disabled) {
-  background: #003580;
-  color: #ffffff;
+  background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+  border-color: #9ca3af;
+  color: #1f2937;
   transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(0, 53, 128, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .fd-fomo {
