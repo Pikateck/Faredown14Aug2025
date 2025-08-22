@@ -341,6 +341,11 @@ const ConversationalBargainModal: React.FC<Props> = ({
       return;
     }
 
+    // Mobile haptic feedback for action
+    if (isMobileDevice()) {
+      hapticFeedback('light');
+    }
+
     setTimerActive(false);
     setShowOfferActions(false);
     setTimerExpired(false);
