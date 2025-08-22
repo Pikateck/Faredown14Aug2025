@@ -218,7 +218,7 @@ export default function EnhancedBargainModal({
 
               <div className="space-y-3">
                 <label className="block text-sm font-medium">
-                  Your target price (₹):
+                  Your target price ({selectedCurrency.symbol}):
                 </label>
                 <input
                   type="number"
