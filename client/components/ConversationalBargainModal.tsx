@@ -350,19 +350,19 @@ const ConversationalBargainModal: React.FC<Props> = ({
             variant="ghost"
             size="sm"
             onClick={onClose}
-            className="absolute top-3 right-3 h-8 w-8 p-0 rounded-lg hover:bg-white/10 transition-colors"
+            className="absolute top-3 right-3 h-8 w-8 p-0 rounded-lg hover:bg-white/10 transition-colors z-10"
           >
             <X className="h-4 w-4 text-white" />
           </Button>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 pr-12">
             <div className="w-12 h-12 rounded-xl bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/20 shadow-lg relative">
               {React.createElement(moduleIcons[module], {
                 className: "h-6 w-6 text-white"
               })}
               <Sparkles className="h-3 w-3 absolute -top-1 -right-1 text-yellow-300" />
             </div>
-            <div>
+            <div className="flex-1">
               <h2 className="text-lg font-bold text-white">
                 AI Price Negotiation
               </h2>
@@ -373,8 +373,8 @@ const ConversationalBargainModal: React.FC<Props> = ({
                 {module === "transfers" && "Transfer Booking"}
               </p>
             </div>
-            <div className="ml-auto text-right">
-              <div className="text-xs text-white/80">Round</div>
+            <div className="text-right">
+              <div className="text-xs text-white/80 font-bold">Round</div>
               <div className="text-lg font-bold text-white">{round}/{MAX_ROUNDS}</div>
             </div>
           </div>
