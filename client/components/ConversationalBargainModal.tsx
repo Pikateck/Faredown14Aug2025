@@ -495,7 +495,7 @@ const ConversationalBargainModal: React.FC<Props> = ({
                   <Button
                     variant="outline"
                     onClick={handleTryAgain}
-                    className="w-full sm:flex-1 border-2 border-[#003580] text-[#003580] hover:bg-blue-50 active:scale-95 font-semibold py-3 sm:py-3 rounded-full text-sm sm:text-sm shadow-lg min-h-[48px] touch-manipulation"
+                    className="mobile-button mobile-touch-target mobile-smooth-animation w-full sm:flex-1 border-2 border-[#003580] text-[#003580] hover:bg-blue-50 active:scale-95 font-semibold py-3 sm:py-3 rounded-full text-sm sm:text-sm shadow-lg min-h-[48px] touch-manipulation"
                   >
                     <TrendingUp className="h-4 w-4 mr-2" />
                     Try Again
