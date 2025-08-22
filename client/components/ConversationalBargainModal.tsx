@@ -2,9 +2,10 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { X, Plane, Building, MapPin, Car, Clock, Shield, Target, Zap, Star, TrendingUp, CheckCircle, Sparkles, Crown } from "lucide-react";
+import { X, Plane, Building, MapPin, Car, Clock, Shield, Target, Zap, Star, TrendingUp, CheckCircle, Sparkles, Crown, ArrowLeft } from "lucide-react";
 import copyPacks from "../../api/data/copy_packs.json";
 import { useCurrency } from "@/contexts/CurrencyContext";
+import { numberToWords, formatNumberWithCommas } from "@/lib/numberToWords";
 
 interface ChatMessage {
   id: string;
