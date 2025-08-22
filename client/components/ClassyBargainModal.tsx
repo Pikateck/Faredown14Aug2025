@@ -455,31 +455,41 @@ export function ClassyBargainModal({
         {/* Input Step */}
         {step === "input" && (
           <section className="fd-body">
-            <div className="fd-label">What's your target price?</div>
-            <div className="fd-sublabel">
-              Our AI will negotiate with the airline on your behalf
+            <div className="text-center mb-6">
+              <div className="fd-label flex items-center justify-center gap-2 mb-3">
+                <TrendingUp className="w-5 h-5 text-green-600" />
+                What's your target price?
+              </div>
+              <div className="fd-sublabel">
+                Our AI will negotiate with the airline on your behalf
+              </div>
+              <div className="flex items-center justify-center gap-2 mt-2 text-sm text-gray-600">
+                <Shield className="w-4 h-4 text-green-600" />
+                <span>Secure & Instant</span>
+                <div className="w-1 h-1 rounded-full bg-gray-400"></div>
+                <Clock className="w-4 h-4 text-blue-600" />
+                <span>30-Second Response</span>
+              </div>
             </div>
 
             <div className="fd-input">
-              <span className="fd-currency">{selectedCurrency.symbol}</span>
-              <input
-                type="number"
-                inputMode="numeric"
-                placeholder="Enter amount"
-                onChange={handleOfferChange}
-                value={offer === null ? "" : offer}
-              />
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white font-bold text-sm shadow-lg">
+                  {selectedCurrency.symbol}
+                </div>
+                <input
+                  type="number"
+                  inputMode="numeric"
+                  placeholder="Enter your target amount"
+                  onChange={handleOfferChange}
+                  value={offer === null ? "" : offer}
+                  className="flex-1"
+                />
+              </div>
             </div>
 
             {error && (
-              <div
-                style={{
-                  color: "#dc2626",
-                  textAlign: "center",
-                  marginBottom: "16px",
-                  fontSize: "0.9rem",
-                }}
-              >
+              <div className="text-red-600 text-center mb-4 text-sm bg-red-50 border border-red-200 rounded-lg p-3">
                 {error}
               </div>
             )}
@@ -493,11 +503,11 @@ export function ClassyBargainModal({
                 {isProcessing ? (
                   <>
                     <div className="fd-typing">•••</div>
-                    Starting...
+                    Negotiating...
                   </>
                 ) : (
                   <>
-                    <Sparkles className="w-4 h-4" />
+                    <Zap className="w-4 h-4" />
                     Start AI Negotiation
                   </>
                 )}
@@ -506,6 +516,7 @@ export function ClassyBargainModal({
                 className="fd-btn fd-btn--outline"
                 onClick={onBookOriginal}
               >
+                <Shield className="w-4 h-4" />
                 Book Original Price{" "}
                 {formatCurrency(fareType.price, selectedCurrency.symbol)}
               </button>
@@ -583,7 +594,7 @@ export function ClassyBargainModal({
               negotiatedMs={negotiatedMs}
               attempt={attempt as 1 | 2 | 3}
               onAccept={() => {
-                console.log("🎯 Decision card - Accept clicked");
+                console.log("�� Decision card - Accept clicked");
                 onAcceptOffer();
               }}
               onBargainAgain={() => {
