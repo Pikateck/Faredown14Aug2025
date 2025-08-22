@@ -65,6 +65,7 @@ export default function EnhancedBargainModal({
   onHold,
   userName = "Mr. Zubin",
 }: Props) {
+  const { selectedCurrency } = useCurrency();
   const [userPrice, setUserPrice] = useState("");
   const [bargainState, setBargainState] = useState<BargainState | null>(null);
 
