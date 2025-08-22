@@ -387,32 +387,32 @@ const ConversationalBargainModal: React.FC<Props> = ({
           </div>
         </div>
 
-        {/* Chat Area */}
+        {/* Mobile-Optimized Chat Area */}
         <div className="flex-1 flex flex-col min-h-0">
-          <div ref={chatRef} className="flex-1 overflow-y-auto p-4 space-y-3 max-h-[400px] scroll-smooth">
+          <div ref={chatRef} className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3 sm:space-y-3 max-h-[50vh] sm:max-h-[400px] scroll-smooth overscroll-contain">
             {messages.map((message) => (
-              <div key={message.id} className={`flex gap-3 ${message.speaker === "user" ? "justify-end" : "justify-start"}`}>
+              <div key={message.id} className={`flex gap-2 sm:gap-3 ${message.speaker === "user" ? "justify-end" : "justify-start"}`}>
                 {message.speaker !== "user" && (
-                  <div className={`flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center shadow-md ${
+                  <div className={`flex-shrink-0 w-8 h-8 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center shadow-md ${
                     message.speaker === "supplier"
                       ? "bg-gradient-to-br from-[#003580] to-[#0071c2] text-white border border-white/20"
                       : "bg-gradient-to-br from-emerald-500 to-emerald-600 text-white border border-white/20"
                   }`}>
                     {message.speaker === "supplier" ? (
                       <div className="relative">
-                        {React.createElement(moduleIcons[module], { className: "h-4 w-4" })}
-                        <Crown className="h-2 w-2 absolute -top-1 -right-1 text-yellow-300" />
+                        {React.createElement(moduleIcons[module], { className: "h-3 w-3 sm:h-4 sm:w-4" })}
+                        <Crown className="h-1.5 w-1.5 sm:h-2 sm:w-2 absolute -top-0.5 sm:-top-1 -right-0.5 sm:-right-1 text-yellow-300" />
                       </div>
                     ) : (
                       <div className="relative">
-                        <Sparkles className="h-4 w-4" />
-                        <Star className="h-2 w-2 absolute -top-1 -right-1 text-yellow-300" />
+                        <Sparkles className="h-3 w-3 sm:h-4 sm:w-4" />
+                        <Star className="h-1.5 w-1.5 sm:h-2 sm:w-2 absolute -top-0.5 sm:-top-1 -right-0.5 sm:-right-1 text-yellow-300" />
                       </div>
                     )}
                   </div>
                 )}
-                
-                <div className={`max-w-xs rounded-2xl px-4 py-3 shadow-sm ${
+
+                <div className={`max-w-[75%] sm:max-w-xs rounded-2xl px-3 py-2 sm:px-4 sm:py-3 shadow-sm ${
                   message.speaker === "user"
                     ? "bg-gradient-to-br from-[#003580] to-[#0071c2] text-white ml-auto"
                     : message.speaker === "supplier"
@@ -420,13 +420,13 @@ const ConversationalBargainModal: React.FC<Props> = ({
                     : "bg-gradient-to-br from-emerald-50 to-emerald-100 text-gray-800 border border-emerald-200"
                 }`}>
                   <div className="text-xs font-semibold opacity-70 mb-1 uppercase tracking-wide">
-                    {message.speaker === "supplier" ? supplierNames[module] : 
+                    {message.speaker === "supplier" ? supplierNames[module] :
                      message.speaker === "agent" ? "AI Agent" : "You"}
                   </div>
-                  <div className="text-sm leading-relaxed">
+                  <div className="text-sm sm:text-sm leading-relaxed">
                     {message.message}
                     {message.price && (
-                      <div className="mt-2 text-xs font-semibold">
+                      <div className="mt-2 text-xs sm:text-xs font-semibold">
                         {selectedCurrency.symbol}{formatNumberWithCommas(message.price)}
                       </div>
                     )}
@@ -434,20 +434,20 @@ const ConversationalBargainModal: React.FC<Props> = ({
                 </div>
 
                 {message.speaker === "user" && (
-                  <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-gradient-to-br from-[#003580] to-[#0071c2] flex items-center justify-center text-white shadow-md border border-white/20">
+                  <div className="flex-shrink-0 w-8 h-8 sm:w-8 sm:h-8 rounded-lg bg-gradient-to-br from-[#003580] to-[#0071c2] flex items-center justify-center text-white shadow-md border border-white/20">
                     <div className="text-xs font-bold">{userName.charAt(0)}</div>
                   </div>
                 )}
               </div>
             ))}
 
-            {/* Typing indicator */}
+            {/* Mobile-Optimized Typing indicator */}
             {isTyping && (
-              <div className="flex gap-3">
-                <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-gradient-to-br from-gray-300 to-gray-400 flex items-center justify-center shadow-md">
+              <div className="flex gap-2 sm:gap-3">
+                <div className="flex-shrink-0 w-8 h-8 sm:w-8 sm:h-8 rounded-lg bg-gradient-to-br from-gray-300 to-gray-400 flex items-center justify-center shadow-md">
                   <Sparkles className="w-3 h-3 text-white animate-pulse" />
                 </div>
-                <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl px-4 py-3 border border-gray-300 shadow-sm">
+                <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 shadow-sm">
                   <div className="flex items-center gap-1">
                     <div className="w-2 h-2 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
                     <div className="w-2 h-2 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
