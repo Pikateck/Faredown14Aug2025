@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { X, Plane, Building, MapPin, Car } from "lucide-react";
@@ -368,6 +368,7 @@ const ConversationalBargainModal: React.FC<Props> = ({
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-lg mx-auto bg-white rounded-3xl shadow-2xl border-0 p-0 gap-0 max-h-[90vh] overflow-hidden">
+        <DialogTitle className="sr-only">AI Price Negotiation</DialogTitle>
         {/* Premium Header */}
         <div className="relative bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-6 rounded-t-3xl border-b border-gray-100">
           <Button
