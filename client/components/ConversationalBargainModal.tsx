@@ -527,7 +527,7 @@ const ConversationalBargainModal: React.FC<Props> = ({
                   autoFocus
                 >
                   <CheckCircle className="h-4 w-4 mr-2" />
-                  Book Now {window.innerWidth >= 640 && "(Enter)"}
+                  Book Now <span className="hidden sm:inline">(Enter)</span>
                 </Button>
                 {round < MAX_ROUNDS && (
                   <Button
