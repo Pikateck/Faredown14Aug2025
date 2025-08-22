@@ -6597,6 +6597,11 @@ export default function FlightResults() {
         onHold={handleHoldBargain}
         userName={user?.firstName || "traveler"}
         module="flights"
+        onBackToResults={() => {
+          setShowConversationalBargain(false);
+          setSelectedBargainFlight(null);
+          setSelectedBargainFareType(null);
+        }}
       />
     </div>
   );
