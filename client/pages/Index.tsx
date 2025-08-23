@@ -1170,7 +1170,6 @@ export default function Index() {
                       ref={fromCityButtonRef}
                       onClick={handleFromCityClick}
                       onTouchStart={(e) => {
-                        console.log('📱 From city touch start');
                         e.currentTarget.style.backgroundColor = '#f3f4f6';
                       }}
                       onTouchEnd={(e) => {
@@ -1224,7 +1223,6 @@ export default function Index() {
                       ref={toCityButtonRef}
                       onClick={handleToCityClick}
                       onTouchStart={(e) => {
-                        console.log('📱 To city touch start');
                         e.currentTarget.style.backgroundColor = '#f3f4f6';
                       }}
                       onTouchEnd={(e) => {

@@ -143,12 +143,8 @@ export function BookingStyleDropdown({
     }
   }, [isOpen, onClose]);
 
-  // Debug logging
-  useEffect(() => {
-    if (isOpen) {
-      console.log('📱 BookingStyleDropdown opened:', { title, isOpen });
-    }
-  }, [isOpen, title]);
+  // Clean production experience
+  // Dropdown state is now managed cleanly
 
   // CONDITIONAL RETURN AFTER ALL HOOKS
   if (!isOpen) {
@@ -189,7 +185,6 @@ export function BookingStyleDropdown({
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' && filteredCities.length > 0) {
-                    console.log('⌨️ Enter pressed - selecting first match:', filteredCities[0][0]);
                     onSelectCity(filteredCities[0][0]);
                     onClose();
                   }
@@ -217,7 +212,6 @@ export function BookingStyleDropdown({
                   key={dest.id}
                   onPointerDown={(e) => e.preventDefault()} // Prevent blur race
                   onPointerUp={() => {
-                    console.log('📱 BookingStyleDropdown MOBILE: Selecting popular destination:', dest.name);
                     onSelectCity(dest.name);
                     // Use requestAnimationFrame to ensure state commits before close
                     requestAnimationFrame(() => onClose());
@@ -263,7 +257,6 @@ export function BookingStyleDropdown({
                 key={city}
                 onPointerDown={(e) => e.preventDefault()} // Prevent blur race
                 onPointerUp={() => {
-                  console.log('📱 BookingStyleDropdown MOBILE: Selecting regular city:', city);
                   onSelectCity(city);
                   // Use requestAnimationFrame to ensure state commits before close
                   requestAnimationFrame(() => onClose());
@@ -316,7 +309,6 @@ export function BookingStyleDropdown({
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' && filteredCities.length > 0) {
-                    console.log('⌨️ DESKTOP Enter pressed - selecting first match:', filteredCities[0][0]);
                     onSelectCity(filteredCities[0][0]);
                     onClose();
                   }
@@ -341,7 +333,6 @@ export function BookingStyleDropdown({
                       key={dest.id}
                       onPointerDown={(e) => e.preventDefault()}
                       onPointerUp={() => {
-                        console.log('🗺️ BookingStyleDropdown DESKTOP: Selecting popular destination:', dest.name);
                         onSelectCity(dest.name);
                         requestAnimationFrame(() => onClose());
                       }}
@@ -383,7 +374,6 @@ export function BookingStyleDropdown({
                       key={city}
                       onPointerDown={(e) => e.preventDefault()}
                       onPointerUp={() => {
-                        console.log('🗺️ BookingStyleDropdown DESKTOP: Selecting regular city:', city);
                         onSelectCity(city);
                         requestAnimationFrame(() => onClose());
                       }}
