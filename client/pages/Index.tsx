@@ -304,38 +304,14 @@ export default function Index() {
     [],
   );
 
-  // Debug mobile city selection state changes
+  // Production-ready logging (minimal)
+  // City selection state change tracking for development
   useEffect(() => {
-    if (showFromCities) {
-      console.log('📱 From cities dropdown state: OPEN');
-    } else {
-      console.log('📱 From cities dropdown state: CLOSED');
+    // Light logging for debugging if needed
+    if (process.env.NODE_ENV === 'development') {
+      console.log('City selection - FROM:', selectedFromCity, 'TO:', selectedToCity);
     }
-  }, [showFromCities]);
-
-  useEffect(() => {
-    if (showToCities) {
-      console.log('📱 To cities dropdown state: OPEN');
-    } else {
-      console.log('📱 To cities dropdown state: CLOSED');
-    }
-  }, [showToCities]);
-
-  // Debug selected city state changes
-  useEffect(() => {
-    console.log('🔄 selectedFromCity changed to:', selectedFromCity);
-    console.log('🔄 cityData[selectedFromCity]:', cityData[selectedFromCity]);
-  }, [selectedFromCity, cityData]);
-
-  useEffect(() => {
-    console.log('🔄 selectedToCity changed to:', selectedToCity);
-    console.log('🔄 cityData[selectedToCity]:', cityData[selectedToCity]);
-  }, [selectedToCity, cityData]);
-
-  // Debug force update changes
-  useEffect(() => {
-    console.log('🔄 Force update counter:', forceUpdate);
-  }, [forceUpdate]);
+  }, [selectedFromCity, selectedToCity]);
 
   // Remove debug logging for production performance
   // Airport state for CityAutocomplete
@@ -1300,17 +1276,11 @@ export default function Index() {
                                 <div className="text-xs text-gray-500">
                                   {cityData[selectedToCity]?.name || cityData[selectedToCity]?.airport || 'Selected city'}
                                 </div>
-                                {/* Debug info */}
-                                <div className="text-xs text-green-600" style={{ fontSize: '10px' }}>✓ TO: {selectedToCity}</div>
-                                <div className="text-xs text-blue-600" style={{ fontSize: '10px' }}>Data: {JSON.stringify(cityData[selectedToCity])}</div>
                               </>
                             ) : (
-                              <>
-                                <div className="text-sm text-gray-500">
-                                  Going to
-                                </div>
-                                <div className="text-xs text-red-600" style={{ fontSize: '10px' }}>No TO city selected</div>
-                              </>
+                              <div className="text-sm text-gray-500">
+                                Going to
+                              </div>
                             )}
                           </div>
                         </div>
@@ -3260,7 +3230,7 @@ export default function Index() {
                 variant="outline"
                 className="w-full py-3 flex items-center justify-center space-x-2"
               >
-                <span>🔍</span>
+                <span>��</span>
                 <span>Continue with Google</span>
               </Button>
 
