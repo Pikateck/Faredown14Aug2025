@@ -1163,6 +1163,17 @@ export default function Index() {
               </p>
             </div>
 
+            {/* Debug Panel (temporary) */}
+            <div className="mb-4 p-3 bg-yellow-100 border border-yellow-200 rounded-lg">
+              <div className="text-xs text-yellow-800 space-y-1">
+                <div><strong>State Debug:</strong></div>
+                <div>FROM: '{selectedFromCity}' | TO: '{selectedToCity}' | Update: {forceUpdate}</div>
+                <div>FROM Data: {selectedFromCity ? (cityData[selectedFromCity] ? '✓ Found' : '❌ Missing in cityData') : 'None'}</div>
+                <div>TO Data: {selectedToCity ? (cityData[selectedToCity] ? '✓ Found' : '❌ Missing in cityData') : 'None'}</div>
+                <div>Dropdowns: FROM={showFromCities ? 'OPEN' : 'CLOSED'} | TO={showToCities ? 'OPEN' : 'CLOSED'}</div>
+              </div>
+            </div>
+
             {/* Mobile Trip Type Selector */}
             <div className="flex space-x-1 mb-6 bg-gray-100 rounded-lg p-1">
               <button
