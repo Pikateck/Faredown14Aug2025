@@ -480,7 +480,7 @@ const SeatMap = ({
                       <div className="w-3 h-3 bg-white border border-gray-300 rounded mr-2"></div>
                       Economy (Rows 35+)
                     </span>
-                    <span className="font-medium">₹500</span>
+                    <span className="font-medium">���500</span>
                   </div>
                 </div>
               </div>
@@ -884,9 +884,14 @@ export default function BookingFlow() {
   const fromCode = searchParams.get("from") || "DXB";
   const toCode = searchParams.get("to") || "BOM";
 
-  // Airport data mapping
+  // Airport data mapping - Comprehensive international airports
   const airportData: Record<string, { city: string; name: string }> = {
+    // Middle East
     DXB: { city: "Dubai", name: "Dubai International Airport" },
+    AUH: { city: "Abu Dhabi", name: "Zayed International Airport" },
+    DOH: { city: "Doha", name: "Hamad International Airport" },
+
+    // India
     BOM: {
       city: "Mumbai",
       name: "Chhatrapati Shivaji Maharaj International Airport",
@@ -898,6 +903,34 @@ export default function BookingFlow() {
       city: "Kolkata",
       name: "Netaji Subhash Chandra Bose International Airport",
     },
+
+    // Europe
+    BCN: { city: "Barcelona", name: "Barcelona-El Prat Airport" },
+    MAD: { city: "Madrid", name: "Adolfo Suárez Madrid-Barajas Airport" },
+    LHR: { city: "London", name: "Heathrow Airport" },
+    CDG: { city: "Paris", name: "Charles de Gaulle Airport" },
+    FCO: { city: "Rome", name: "Leonardo da Vinci Airport" },
+    AMS: { city: "Amsterdam", name: "Amsterdam Airport Schiphol" },
+    FRA: { city: "Frankfurt", name: "Frankfurt Airport" },
+    MUC: { city: "Munich", name: "Munich Airport" },
+
+    // Asia Pacific
+    SIN: { city: "Singapore", name: "Changi Airport" },
+    HKG: { city: "Hong Kong", name: "Hong Kong International Airport" },
+    NRT: { city: "Tokyo", name: "Narita International Airport" },
+    ICN: { city: "Seoul", name: "Incheon International Airport" },
+    BKK: { city: "Bangkok", name: "Suvarnabhumi Airport" },
+    KUL: { city: "Kuala Lumpur", name: "Kuala Lumpur International Airport" },
+
+    // Americas
+    JFK: { city: "New York", name: "John F. Kennedy International Airport" },
+    LAX: { city: "Los Angeles", name: "Los Angeles International Airport" },
+    LAS: { city: "Las Vegas", name: "McCarran International Airport" },
+    YYZ: { city: "Toronto", name: "Lester B. Pearson International Airport" },
+
+    // Africa
+    CAI: { city: "Cairo", name: "Cairo International Airport" },
+    JNB: { city: "Johannesburg", name: "O.R. Tambo International Airport" },
   };
 
   // Create route display based on URL parameters
@@ -931,7 +964,7 @@ export default function BookingFlow() {
           name:
             airportData[fromCode]?.name ||
             rawSelectedFlight.departure?.name ||
-            "Unknown Airport",
+            `${fromCode} International Airport`,
         },
         arrival: {
           ...rawSelectedFlight.arrival,
@@ -940,7 +973,7 @@ export default function BookingFlow() {
           name:
             airportData[toCode]?.name ||
             rawSelectedFlight.arrival?.name ||
-            "Unknown Airport",
+            `${toCode} International Airport`,
         },
       }
     : null;
