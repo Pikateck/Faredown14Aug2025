@@ -187,6 +187,13 @@ export function BookingStyleDropdown({
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && filteredCities.length > 0) {
+                    console.log('⌨️ Enter pressed - selecting first match:', filteredCities[0][0]);
+                    onSelectCity(filteredCities[0][0]);
+                    onClose();
+                  }
+                }}
                 placeholder="Search airports, cities or countries"
                 className="w-full pl-10 pr-4 py-4 text-base border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
                 autoFocus
@@ -208,12 +215,14 @@ export function BookingStyleDropdown({
               {filteredPopularDestinations.map((dest) => (
                 <button
                   key={dest.id}
-                  onClick={() => {
+                  onPointerDown={(e) => e.preventDefault()} // Prevent blur race
+                  onPointerUp={() => {
                     console.log('📱 BookingStyleDropdown MOBILE: Selecting popular destination:', dest.name);
                     onSelectCity(dest.name);
-                    onClose();
+                    // Use requestAnimationFrame to ensure state commits before close
+                    requestAnimationFrame(() => onClose());
                   }}
-                  className="w-full text-left px-4 py-4 hover:bg-blue-50 rounded-lg border border-gray-100 touch-manipulation"
+                  className="w-full text-left px-4 py-4 hover:bg-blue-50 active:bg-blue-100 rounded-lg border border-gray-100 touch-manipulation"
                 >
                   <div className="flex items-center space-x-3">
                     <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center">
@@ -252,10 +261,12 @@ export function BookingStyleDropdown({
             {filteredCities.map(([city, data]) => (
               <button
                 key={city}
-                onClick={() => {
+                onPointerDown={(e) => e.preventDefault()} // Prevent blur race
+                onPointerUp={() => {
                   console.log('📱 BookingStyleDropdown MOBILE: Selecting regular city:', city);
                   onSelectCity(city);
-                  onClose();
+                  // Use requestAnimationFrame to ensure state commits before close
+                  requestAnimationFrame(() => onClose());
                 }}
                 className={cn(
                   "w-full text-left px-4 py-4 hover:bg-gray-50 rounded-lg border touch-manipulation",
