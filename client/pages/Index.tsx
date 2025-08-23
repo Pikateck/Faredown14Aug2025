@@ -265,7 +265,7 @@ export default function Index() {
     if (showToCities) {
       console.log('📱 To cities dropdown state: OPEN');
     } else {
-      console.log('📱 To cities dropdown state: CLOSED');
+      console.log('�� To cities dropdown state: CLOSED');
     }
   }, [showToCities]);
   const [selectedFromCity, setSelectedFromCity] = useState("");
@@ -538,18 +538,52 @@ export default function Index() {
   const handleSelectFromCity = useCallback((city: string) => {
     console.log('📱 Selected FROM city:', city);
     console.log('📱 CityData lookup result:', cityData[city]);
+    console.log('���� Previous selectedFromCity:', selectedFromCity);
+
+    // Set the city state immediately
     setSelectedFromCity(city);
-    setShowFromCities(false);
-    setForceUpdate(prev => prev + 1); // Force re-render
-  }, [cityData]);
+
+    // Log the state change
+    console.log('📱 New selectedFromCity will be:', city);
+
+    // Force re-render immediately
+    setForceUpdate(prev => {
+      const newVal = prev + 1;
+      console.log('📱 Force update triggered:', newVal);
+      return newVal;
+    });
+
+    // Close dropdown after state update
+    setTimeout(() => {
+      setShowFromCities(false);
+      console.log('📱 FROM cities dropdown closed');
+    }, 50);
+  }, [cityData, selectedFromCity]);
 
   const handleSelectToCity = useCallback((city: string) => {
     console.log('📱 Selected TO city:', city);
     console.log('📱 CityData lookup result:', cityData[city]);
+    console.log('📱 Previous selectedToCity:', selectedToCity);
+
+    // Set the city state immediately
     setSelectedToCity(city);
-    setShowToCities(false);
-    setForceUpdate(prev => prev + 1); // Force re-render
-  }, [cityData]);
+
+    // Log the state change
+    console.log('📱 New selectedToCity will be:', city);
+
+    // Force re-render immediately
+    setForceUpdate(prev => {
+      const newVal = prev + 1;
+      console.log('📱 Force update triggered:', newVal);
+      return newVal;
+    });
+
+    // Close dropdown after state update
+    setTimeout(() => {
+      setShowToCities(false);
+      console.log('📱 TO cities dropdown closed');
+    }, 50);
+  }, [cityData, selectedToCity]);
 
   return (
     <div className="min-h-screen bg-white">
