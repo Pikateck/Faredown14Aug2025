@@ -523,12 +523,18 @@ export default function Index() {
   }, []);
 
   const handleSelectFromCity = useCallback((city: string) => {
+    console.log('📱 Selected FROM city:', city);
+    console.log('📱 CityData lookup result:', cityData[city]);
     setSelectedFromCity(city);
-  }, []);
+    setShowFromCities(false);
+  }, [cityData]);
 
   const handleSelectToCity = useCallback((city: string) => {
+    console.log('📱 Selected TO city:', city);
+    console.log('📱 CityData lookup result:', cityData[city]);
     setSelectedToCity(city);
-  }, []);
+    setShowToCities(false);
+  }, [cityData]);
 
   return (
     <div className="min-h-screen bg-white">
@@ -1168,10 +1174,10 @@ export default function Index() {
                           {selectedFromCity ? (
                             <>
                               <div className="font-medium text-gray-900">
-                                {cityData[selectedFromCity]?.code}
+                                {cityData[selectedFromCity]?.code || selectedFromCity}
                               </div>
                               <div className="text-xs text-gray-500">
-                                {cityData[selectedFromCity]?.name}
+                                {cityData[selectedFromCity]?.name || cityData[selectedFromCity]?.airport || 'Selected city'}
                               </div>
                             </>
                           ) : (
@@ -1220,10 +1226,10 @@ export default function Index() {
                           {selectedToCity ? (
                             <>
                               <div className="font-medium text-gray-900">
-                                {cityData[selectedToCity]?.code}
+                                {cityData[selectedToCity]?.code || selectedToCity}
                               </div>
                               <div className="text-xs text-gray-500">
-                                {cityData[selectedToCity]?.name}
+                                {cityData[selectedToCity]?.name || cityData[selectedToCity]?.airport || 'Selected city'}
                               </div>
                             </>
                           ) : (
