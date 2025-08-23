@@ -78,12 +78,17 @@ export default function FlightDetails({
   const fromCode = searchParams.get("from") || "DXB";
   const toCode = searchParams.get("to") || "BOM";
 
-  // Airport data mapping
+  // Airport data mapping - Comprehensive international airports
   const airportData: Record<
     string,
     { city: string; name: string; terminal?: string }
   > = {
+    // Middle East
     DXB: { city: "Dubai", name: "Dubai International Airport", terminal: "3" },
+    AUH: { city: "Abu Dhabi", name: "Zayed International Airport", terminal: "1" },
+    DOH: { city: "Doha", name: "Hamad International Airport", terminal: "1" },
+
+    // India
     BOM: {
       city: "Mumbai",
       name: "Chhatrapati Shivaji Maharaj International Airport",
@@ -109,6 +114,34 @@ export default function FlightDetails({
       name: "Netaji Subhash Chandra Bose International Airport",
       terminal: "1",
     },
+
+    // Europe
+    BCN: { city: "Barcelona", name: "Barcelona-El Prat Airport", terminal: "1" },
+    MAD: { city: "Madrid", name: "Adolfo Suárez Madrid-Barajas Airport", terminal: "1" },
+    LHR: { city: "London", name: "Heathrow Airport", terminal: "2" },
+    CDG: { city: "Paris", name: "Charles de Gaulle Airport", terminal: "2A" },
+    FCO: { city: "Rome", name: "Leonardo da Vinci Airport", terminal: "3" },
+    AMS: { city: "Amsterdam", name: "Amsterdam Airport Schiphol", terminal: "1" },
+    FRA: { city: "Frankfurt", name: "Frankfurt Airport", terminal: "1" },
+    MUC: { city: "Munich", name: "Munich Airport", terminal: "2" },
+
+    // Asia Pacific
+    SIN: { city: "Singapore", name: "Changi Airport", terminal: "3" },
+    HKG: { city: "Hong Kong", name: "Hong Kong International Airport", terminal: "1" },
+    NRT: { city: "Tokyo", name: "Narita International Airport", terminal: "1" },
+    ICN: { city: "Seoul", name: "Incheon International Airport", terminal: "1" },
+    BKK: { city: "Bangkok", name: "Suvarnabhumi Airport", terminal: "1" },
+    KUL: { city: "Kuala Lumpur", name: "Kuala Lumpur International Airport", terminal: "1" },
+
+    // Americas
+    JFK: { city: "New York", name: "John F. Kennedy International Airport", terminal: "4" },
+    LAX: { city: "Los Angeles", name: "Los Angeles International Airport", terminal: "1" },
+    LAS: { city: "Las Vegas", name: "McCarran International Airport", terminal: "1" },
+    YYZ: { city: "Toronto", name: "Lester B. Pearson International Airport", terminal: "1" },
+
+    // Africa
+    CAI: { city: "Cairo", name: "Cairo International Airport", terminal: "3" },
+    JNB: { city: "Johannesburg", name: "O.R. Tambo International Airport", terminal: "A" },
   };
 
   // Dynamic fallback data based on search parameters
