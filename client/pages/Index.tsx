@@ -508,14 +508,12 @@ export default function Index() {
   const handleFromCityClick = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log('📱 From city button clicked - opening dropdown');
     setShowFromCities(true);
   }, []);
 
   const handleToCityClick = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log('📱 To city button clicked - opening dropdown');
     setShowToCities(true);
   }, []);
 
@@ -528,52 +526,28 @@ export default function Index() {
   }, []);
 
   const handleSelectFromCity = useCallback((city: string) => {
-    console.log('📱 Selected FROM city:', city);
-    console.log('📱 CityData lookup result:', cityData[city]);
-    console.log('📱 Previous selectedFromCity:', selectedFromCity);
-
     // Set the city state immediately
     setSelectedFromCity(city);
 
-    // Log the state change
-    console.log('📱 New selectedFromCity will be:', city);
-
     // Force re-render immediately
-    setForceUpdate(prev => {
-      const newVal = prev + 1;
-      console.log('📱 Force update triggered:', newVal);
-      return newVal;
-    });
+    setForceUpdate(prev => prev + 1);
 
     // Close dropdown after state update
     setTimeout(() => {
       setShowFromCities(false);
-      console.log('📱 FROM cities dropdown closed');
     }, 50);
   }, [cityData, selectedFromCity]);
 
   const handleSelectToCity = useCallback((city: string) => {
-    console.log('📱 Selected TO city:', city);
-    console.log('📱 CityData lookup result:', cityData[city]);
-    console.log('📱 Previous selectedToCity:', selectedToCity);
-
     // Set the city state immediately
     setSelectedToCity(city);
 
-    // Log the state change
-    console.log('📱 New selectedToCity will be:', city);
-
     // Force re-render immediately
-    setForceUpdate(prev => {
-      const newVal = prev + 1;
-      console.log('📱 Force update triggered:', newVal);
-      return newVal;
-    });
+    setForceUpdate(prev => prev + 1);
 
     // Close dropdown after state update
     setTimeout(() => {
       setShowToCities(false);
-      console.log('📱 TO cities dropdown closed');
     }, 50);
   }, [cityData, selectedToCity]);
 
