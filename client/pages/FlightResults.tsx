@@ -1747,7 +1747,7 @@ export default function FlightResults() {
                       INR: { symbol: "₹", name: "Indian Rupee" },
                       AED: { symbol: "د.إ", name: "UAE Dirham" },
                       SAR: { symbol: "ر.س", name: "Saudi Riyal" },
-                      JPY: { symbol: "��", name: "Japanese Yen" },
+                      JPY: { symbol: "¥", name: "Japanese Yen" },
                       CNY: { symbol: "¥", name: "Chinese Yuan" },
                       SGD: { symbol: "S$", name: "Singapore Dollar" },
                       AUD: { symbol: "A$", name: "Australian Dollar" },
@@ -2354,7 +2354,7 @@ export default function FlightResults() {
           `}
         </style>
 
-        {/* Desktop Sidebar Filters (���1024px) - Hotel Style Applied */}
+        {/* Desktop Sidebar Filters (≥1024px) - Hotel Style Applied */}
         <div className="hidden lg:block w-80 flex-shrink-0 desktop-filter">
           <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200 sticky top-24">
             {/* Filter Header */}
@@ -2775,7 +2775,7 @@ export default function FlightResults() {
               !searchError &&
               filteredFlights.map((flight, index) => (
                 <div key={flight.id}>
-                  {/* MOBILE CARD DESIGN (��768px) - App Style */}
+                  {/* MOBILE CARD DESIGN (<768px) - App Style */}
                   <div className="block md:hidden bg-white border border-gray-200 rounded-lg mb-4 shadow-sm relative">
                     <div className="p-4">
                       {/* Flight Header */}
@@ -3774,7 +3774,7 @@ export default function FlightResults() {
                                                     Airline fee:
                                                   </span>
                                                   <span className="text-gray-900 font-medium">
-                                                    ��0
+                                                    ₹0
                                                   </span>
                                                 </div>
                                                 <div className="flex justify-between">
@@ -3852,7 +3852,7 @@ export default function FlightResults() {
                                                   or change your flight.
                                                 </p>
                                                 <p>
-                                                  �� Cancellation/Flight change
+                                                  • Cancellation/Flight change
                                                   charges are indicated per
                                                   traveller. Clearing will stop
                                                   accepting cancellation/change
@@ -3884,7 +3884,7 @@ export default function FlightResults() {
                                                     Airline fee:
                                                   </span>
                                                   <span className="text-gray-900 font-medium">
-                                                    ���0
+                                                    ₹0
                                                   </span>
                                                 </div>
                                                 <div className="flex justify-between">
@@ -3892,7 +3892,7 @@ export default function FlightResults() {
                                                     Faredown Fee:
                                                   </span>
                                                   <span className="text-gray-900 font-medium">
-                                                    ��500
+                                                    ₹500
                                                   </span>
                                                 </div>
                                               </div>
@@ -4106,7 +4106,7 @@ export default function FlightResults() {
                                           Faredown Fee:
                                         </span>
                                         <span className="text-gray-900 font-medium">
-                                          ������500
+                                          ₹500
                                         </span>
                                       </div>
                                     </div>
@@ -4275,7 +4275,7 @@ export default function FlightResults() {
                                           Airline fee:
                                         </span>
                                         <span className="text-gray-900 font-medium">
-                                          ��0
+                                          ₹0
                                         </span>
                                       </div>
                                       <div className="flex justify-between">
@@ -4283,7 +4283,7 @@ export default function FlightResults() {
                                           Faredown Fee:
                                         </span>
                                         <span className="text-gray-900 font-medium">
-                                          ���500
+                                          ₹500
                                         </span>
                                       </div>
                                     </div>
@@ -4487,7 +4487,7 @@ export default function FlightResults() {
                                     • Group bookings may have different terms
                                   </li>
                                   <li>
-                                    �� Check-in required 2 hours before
+                                    • Check-in required 2 hours before
                                     departure
                                   </li>
                                 </ul>
@@ -4822,9 +4822,9 @@ export default function FlightResults() {
                 <div className="grid grid-cols-2 gap-2 mb-3">
                   {[
                     { label: "Morning", range: [6, 12], icon: "☀️" },
-                    { label: "Afternoon", range: [12, 18], icon: "���️" },
+                    { label: "Afternoon", range: [12, 18], icon: "☀️" },
                     { label: "Evening", range: [18, 24], icon: "🌙" },
-                    { label: "Night", range: [0, 6], icon: "��" },
+                    { label: "Night", range: [0, 6], icon: "🌙" },
                   ].map((timeSlot) => (
                     <button
                       key={timeSlot.label}
@@ -5833,11 +5833,11 @@ export default function FlightResults() {
           console.log("🎯 Closing bargain modal");
         }}
         onAccept={(finalPrice: number, orderRef: string) => {
-          console.log("�� Bargain accepted:", finalPrice, orderRef);
+          console.log("✅ Bargain accepted:", finalPrice, orderRef);
           // Removed old bargain logic
         }}
         onBookOriginal={() => {
-          console.log("��� Booking original price");
+          console.log("💰 Booking original price");
           // Removed old bargain logic
         }}
         onRetry={() => {
@@ -6290,7 +6290,7 @@ export default function FlightResults() {
                             Airline fee:
                           </span>
                           <p className="text-red-600">
-                            ����3,500 per passenger
+                            ₹3,500 per passenger
                           </p>
                         </div>
                         <div>
@@ -6318,7 +6318,7 @@ export default function FlightResults() {
                             Airline fee:
                           </span>
                           <p className="text-yellow-600">
-                            ���2,314 per passenger
+                            ₹2,314 per passenger
                           </p>
                         </div>
                         <div>
@@ -6373,10 +6373,10 @@ export default function FlightResults() {
                     </h5>
                     <ul className="text-sm text-gray-600 space-y-1">
                       <li>
-                        �� Passenger names cannot be changed after booking
+                        • Passenger names cannot be changed after booking
                       </li>
                       <li>
-                        �� Check-in must be completed 2 hours before departure
+                        • Check-in must be completed 2 hours before departure
                       </li>
                       <li>• Valid government-issued photo ID required</li>
                       <li>

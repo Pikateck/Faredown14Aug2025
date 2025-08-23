@@ -486,12 +486,14 @@ export default function Index() {
   const handleFromCityClick = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    console.log('📱 From city button clicked - opening dropdown');
     setShowFromCities(true);
   }, []);
 
   const handleToCityClick = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    console.log('📱 To city button clicked - opening dropdown');
     setShowToCities(true);
   }, []);
 
