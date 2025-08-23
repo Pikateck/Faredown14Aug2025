@@ -251,6 +251,9 @@ export default function Index() {
   const [selectedClass, setSelectedClass] = useState("Economy");
   const [showFromCities, setShowFromCities] = useState(false);
   const [showToCities, setShowToCities] = useState(false);
+  const [selectedFromCity, setSelectedFromCity] = useState("");
+  const [selectedToCity, setSelectedToCity] = useState("");
+  const [forceUpdate, setForceUpdate] = useState(0);
 
   // Debug mobile city selection state changes
   useEffect(() => {
@@ -284,9 +287,6 @@ export default function Index() {
   useEffect(() => {
     console.log('🔄 Force update counter:', forceUpdate);
   }, [forceUpdate]);
-  const [selectedFromCity, setSelectedFromCity] = useState("");
-  const [selectedToCity, setSelectedToCity] = useState("");
-  const [forceUpdate, setForceUpdate] = useState(0);
 
   // Remove debug logging for production performance
   // Airport state for CityAutocomplete
