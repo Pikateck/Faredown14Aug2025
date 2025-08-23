@@ -1130,7 +1130,10 @@ export default function Index() {
                     <button
                       ref={fromCityButtonRef}
                       onClick={handleFromCityClick}
-                      className="w-full text-left touch-manipulation active:bg-gray-50 transition-colors"
+                      onTouchStart={(e) => {
+                        console.log('📱 From city touch start');
+                      }}
+                      className="w-full text-left touch-manipulation active:bg-gray-50 transition-colors min-h-[44px] flex items-center"
                       style={{ WebkitTapHighlightColor: "transparent" }}
                     >
                       <div className="text-xs text-gray-500 mb-1">From</div>
@@ -1173,7 +1176,10 @@ export default function Index() {
                     <button
                       ref={toCityButtonRef}
                       onClick={handleToCityClick}
-                      className="w-full text-left touch-manipulation active:bg-gray-50 transition-colors"
+                      onTouchStart={(e) => {
+                        console.log('📱 To city touch start');
+                      }}
+                      className="w-full text-left touch-manipulation active:bg-gray-50 transition-colors min-h-[44px] flex items-center"
                       style={{ WebkitTapHighlightColor: "transparent" }}
                     >
                       <div className="text-xs text-gray-500 mb-1">To</div>
