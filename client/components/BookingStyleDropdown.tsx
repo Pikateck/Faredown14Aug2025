@@ -158,7 +158,18 @@ export function BookingStyleDropdown({
   return (
     <>
       {/* Mobile: Full-screen modal */}
-      <div className="sm:hidden fixed inset-0 bg-white z-[99999] overflow-y-auto" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}>
+      <div
+        className="sm:hidden fixed inset-0 bg-white overflow-y-auto"
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          zIndex: 999999,
+          transform: 'translateZ(0)' // Force hardware acceleration
+        }}
+      >
         <div className="sticky top-0 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
           <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
           <button
