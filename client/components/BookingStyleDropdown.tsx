@@ -209,6 +209,7 @@ export function BookingStyleDropdown({
                 <button
                   key={dest.id}
                   onClick={() => {
+                    console.log('📱 BookingStyleDropdown MOBILE: Selecting popular destination:', dest.name);
                     onSelectCity(dest.name);
                     onClose();
                   }}
@@ -252,6 +253,7 @@ export function BookingStyleDropdown({
               <button
                 key={city}
                 onClick={() => {
+                  console.log('📱 BookingStyleDropdown MOBILE: Selecting regular city:', city);
                   onSelectCity(city);
                   onClose();
                 }}
