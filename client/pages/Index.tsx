@@ -1168,26 +1168,30 @@ export default function Index() {
                       className={`w-full text-left touch-manipulation transition-colors min-h-[44px] flex items-center ${showFromCities ? 'bg-blue-50 border-blue-300' : 'hover:bg-gray-50'}`}
                       style={{ WebkitTapHighlightColor: "transparent" }}
                     >
-                      <div className="text-xs text-gray-500 mb-1">From</div>
-                      <div className="flex items-center space-x-2">
-                        <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
-                          <Building2 className="w-4 h-4 text-[#003580]" />
-                        </div>
-                        <div>
-                          {selectedFromCity ? (
-                            <>
-                              <div className="font-medium text-gray-900">
-                                {cityData[selectedFromCity]?.code || selectedFromCity}
+                      <div className="w-full">
+                        <div className="text-xs text-gray-500 mb-1">From</div>
+                        <div className="flex items-center space-x-2">
+                          <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+                            <Building2 className="w-4 h-4 text-[#003580]" />
+                          </div>
+                          <div className="flex-1">
+                            {selectedFromCity ? (
+                              <>
+                                <div className="font-medium text-gray-900">
+                                  {cityData[selectedFromCity]?.code || selectedFromCity}
+                                </div>
+                                <div className="text-xs text-gray-500">
+                                  {cityData[selectedFromCity]?.name || cityData[selectedFromCity]?.airport || 'Selected city'}
+                                </div>
+                                {/* Debug info */}
+                                <div className="text-xs text-green-600" style={{ fontSize: '10px' }}>✓ Selected: {selectedFromCity}</div>
+                              </>
+                            ) : (
+                              <div className="text-sm text-gray-500">
+                                Leaving from
                               </div>
-                              <div className="text-xs text-gray-500">
-                                {cityData[selectedFromCity]?.name || cityData[selectedFromCity]?.airport || 'Selected city'}
-                              </div>
-                            </>
-                          ) : (
-                            <div className="text-sm text-gray-500">
-                              Leaving from
-                            </div>
-                          )}
+                            )}
+                          </div>
                         </div>
                       </div>
                     </button>
@@ -1220,26 +1224,30 @@ export default function Index() {
                       className={`w-full text-left touch-manipulation transition-colors min-h-[44px] flex items-center ${showToCities ? 'bg-blue-50 border-blue-300' : 'hover:bg-gray-50'}`}
                       style={{ WebkitTapHighlightColor: "transparent" }}
                     >
-                      <div className="text-xs text-gray-500 mb-1">To</div>
-                      <div className="flex items-center space-x-2">
-                        <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
-                          <Plane className="w-4 h-4 text-[#003580]" />
-                        </div>
-                        <div>
-                          {selectedToCity ? (
-                            <>
-                              <div className="font-medium text-gray-900">
-                                {cityData[selectedToCity]?.code || selectedToCity}
+                      <div className="w-full">
+                        <div className="text-xs text-gray-500 mb-1">To</div>
+                        <div className="flex items-center space-x-2">
+                          <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+                            <Plane className="w-4 h-4 text-[#003580]" />
+                          </div>
+                          <div className="flex-1">
+                            {selectedToCity ? (
+                              <>
+                                <div className="font-medium text-gray-900">
+                                  {cityData[selectedToCity]?.code || selectedToCity}
+                                </div>
+                                <div className="text-xs text-gray-500">
+                                  {cityData[selectedToCity]?.name || cityData[selectedToCity]?.airport || 'Selected city'}
+                                </div>
+                                {/* Debug info */}
+                                <div className="text-xs text-green-600" style={{ fontSize: '10px' }}>✓ Selected: {selectedToCity}</div>
+                              </>
+                            ) : (
+                              <div className="text-sm text-gray-500">
+                                Going to
                               </div>
-                              <div className="text-xs text-gray-500">
-                                {cityData[selectedToCity]?.name || cityData[selectedToCity]?.airport || 'Selected city'}
-                              </div>
-                            </>
-                          ) : (
-                            <div className="text-sm text-gray-500">
-                              Going to
-                            </div>
-                          )}
+                            )}
+                          </div>
                         </div>
                       </div>
                     </button>
