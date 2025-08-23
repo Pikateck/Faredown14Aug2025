@@ -1221,7 +1221,7 @@ export default function Index() {
                           : "Select departure"}
                         {tripType === "round-trip" && (
                           <>
-                            <span className="mx-2 text-gray-400">��</span>
+                            <span className="mx-2 text-gray-400">→</span>
                             {returnDate
                               ? formatDisplayDate(returnDate, "dd MMM")
                               : "Select return"}
@@ -2504,7 +2504,7 @@ export default function Index() {
                     />
                   </svg>
                   <span className="font-medium text-lg">
-                    24��7 Customer Support | Live Chat & Call Available
+                    24/7 Customer Support | Live Chat & Call Available
                   </span>
                 </div>
 
@@ -2656,7 +2656,7 @@ export default function Index() {
                 {[
                   {
                     name: "Priya Sharma",
-                    location: "Mumbai �� Verified Traveler",
+                    location: "Mumbai • Verified Traveler",
                     review:
                       "Saved ₹15,000 on my Dubai trip! The bargaining feature is amazing. Got business class for economy price.",
                     rating: 5,
@@ -2674,7 +2674,7 @@ export default function Index() {
                   },
                   {
                     name: "Anjali Patel",
-                    location: "Bangalore �� Verified Traveler",
+                    location: "Bangalore • Verified Traveler",
                     review:
                       "Easy booking process and instant confirmations. Saved on both flights and hotels. Will use again!",
                     rating: 5,
