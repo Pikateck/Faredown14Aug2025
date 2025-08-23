@@ -1246,12 +1246,16 @@ export default function Index() {
                                   {cityData[selectedFromCity]?.name || cityData[selectedFromCity]?.airport || 'Selected city'}
                                 </div>
                                 {/* Debug info */}
-                                <div className="text-xs text-green-600" style={{ fontSize: '10px' }}>✓ Selected: {selectedFromCity}</div>
+                                <div className="text-xs text-green-600" style={{ fontSize: '10px' }}>✓ FROM: {selectedFromCity}</div>
+                                <div className="text-xs text-blue-600" style={{ fontSize: '10px' }}>Data: {JSON.stringify(cityData[selectedFromCity])}</div>
                               </>
                             ) : (
-                              <div className="text-sm text-gray-500">
-                                Leaving from
-                              </div>
+                              <>
+                                <div className="text-sm text-gray-500">
+                                  Leaving from
+                                </div>
+                                <div className="text-xs text-red-600" style={{ fontSize: '10px' }}>No FROM city selected</div>
+                              </>
                             )}
                           </div>
                         </div>
@@ -1302,12 +1306,16 @@ export default function Index() {
                                   {cityData[selectedToCity]?.name || cityData[selectedToCity]?.airport || 'Selected city'}
                                 </div>
                                 {/* Debug info */}
-                                <div className="text-xs text-green-600" style={{ fontSize: '10px' }}>✓ Selected: {selectedToCity}</div>
+                                <div className="text-xs text-green-600" style={{ fontSize: '10px' }}>✓ TO: {selectedToCity}</div>
+                                <div className="text-xs text-blue-600" style={{ fontSize: '10px' }}>Data: {JSON.stringify(cityData[selectedToCity])}</div>
                               </>
                             ) : (
-                              <div className="text-sm text-gray-500">
-                                Going to
-                              </div>
+                              <>
+                                <div className="text-sm text-gray-500">
+                                  Going to
+                                </div>
+                                <div className="text-xs text-red-600" style={{ fontSize: '10px' }}>No TO city selected</div>
+                              </>
                             )}
                           </div>
                         </div>
