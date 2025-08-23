@@ -253,7 +253,6 @@ export default function Index() {
   const [showToCities, setShowToCities] = useState(false);
   const [selectedFromCity, setSelectedFromCity] = useState("");
   const [selectedToCity, setSelectedToCity] = useState("");
-  const [forceUpdate, setForceUpdate] = useState(0);
 
   // City data mapping - memoized to prevent recreation on every render
   const cityData = useMemo(
@@ -529,9 +528,6 @@ export default function Index() {
     // Set the city state immediately
     setSelectedFromCity(city);
 
-    // Force re-render immediately
-    setForceUpdate(prev => prev + 1);
-
     // Close dropdown after state update
     setTimeout(() => {
       setShowFromCities(false);
@@ -541,9 +537,6 @@ export default function Index() {
   const handleSelectToCity = useCallback((city: string) => {
     // Set the city state immediately
     setSelectedToCity(city);
-
-    // Force re-render immediately
-    setForceUpdate(prev => prev + 1);
 
     // Close dropdown after state update
     setTimeout(() => {
