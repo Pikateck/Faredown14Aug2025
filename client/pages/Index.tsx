@@ -1156,7 +1156,7 @@ export default function Index() {
             {/* Mobile Search Form - Card Style */}
             <div className="space-y-3">
               {/* From/To Cities */}
-              <div className="bg-white rounded-xl p-4 shadow-sm">
+              <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200">
                 <div className="flex items-center space-x-3">
                   <div className="flex-1">
                     <button
@@ -1170,7 +1170,7 @@ export default function Index() {
                           e.currentTarget.style.backgroundColor = '';
                         }, 100);
                       }}
-                      className={`w-full text-left touch-manipulation transition-colors min-h-[44px] flex items-center ${showFromCities ? 'bg-blue-50 border-blue-300' : 'hover:bg-gray-50'}`}
+                      className="w-full text-left touch-manipulation transition-colors min-h-[50px] flex items-center hover:bg-gray-50 active:bg-gray-100 rounded-lg p-2"
                       style={{ WebkitTapHighlightColor: "transparent" }}
                     >
                       <div className="w-full">
@@ -1223,7 +1223,7 @@ export default function Index() {
                           e.currentTarget.style.backgroundColor = '';
                         }, 100);
                       }}
-                      className={`w-full text-left touch-manipulation transition-colors min-h-[44px] flex items-center ${showToCities ? 'bg-blue-50 border-blue-300' : 'hover:bg-gray-50'}`}
+                      className="w-full text-left touch-manipulation transition-colors min-h-[50px] flex items-center hover:bg-gray-50 active:bg-gray-100 rounded-lg p-2"
                       style={{ WebkitTapHighlightColor: "transparent" }}
                     >
                       <div className="w-full">
