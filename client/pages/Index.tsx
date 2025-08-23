@@ -251,6 +251,23 @@ export default function Index() {
   const [selectedClass, setSelectedClass] = useState("Economy");
   const [showFromCities, setShowFromCities] = useState(false);
   const [showToCities, setShowToCities] = useState(false);
+
+  // Debug mobile city selection state changes
+  useEffect(() => {
+    if (showFromCities) {
+      console.log('📱 From cities dropdown state: OPEN');
+    } else {
+      console.log('📱 From cities dropdown state: CLOSED');
+    }
+  }, [showFromCities]);
+
+  useEffect(() => {
+    if (showToCities) {
+      console.log('📱 To cities dropdown state: OPEN');
+    } else {
+      console.log('📱 To cities dropdown state: CLOSED');
+    }
+  }, [showToCities]);
   const [selectedFromCity, setSelectedFromCity] = useState("");
   const [selectedToCity, setSelectedToCity] = useState("");
 
