@@ -496,6 +496,18 @@ export default function Index() {
         airport: "Changi Airport",
         fullName: "Singapore, Singapore",
       },
+      London: {
+        code: "LON",
+        name: "London",
+        airport: "Heathrow Airport",
+        fullName: "London, United Kingdom",
+      },
+      Paris: {
+        code: "PAR",
+        name: "Paris",
+        airport: "Charles de Gaulle Airport",
+        fullName: "Paris, France",
+      },
     }),
     [],
   );
