@@ -265,9 +265,25 @@ export default function Index() {
     if (showToCities) {
       console.log('📱 To cities dropdown state: OPEN');
     } else {
-      console.log('�� To cities dropdown state: CLOSED');
+      console.log('📱 To cities dropdown state: CLOSED');
     }
   }, [showToCities]);
+
+  // Debug selected city state changes
+  useEffect(() => {
+    console.log('🔄 selectedFromCity changed to:', selectedFromCity);
+    console.log('🔄 cityData[selectedFromCity]:', cityData[selectedFromCity]);
+  }, [selectedFromCity, cityData]);
+
+  useEffect(() => {
+    console.log('🔄 selectedToCity changed to:', selectedToCity);
+    console.log('🔄 cityData[selectedToCity]:', cityData[selectedToCity]);
+  }, [selectedToCity, cityData]);
+
+  // Debug force update changes
+  useEffect(() => {
+    console.log('🔄 Force update counter:', forceUpdate);
+  }, [forceUpdate]);
   const [selectedFromCity, setSelectedFromCity] = useState("");
   const [selectedToCity, setSelectedToCity] = useState("");
   const [forceUpdate, setForceUpdate] = useState(0);
@@ -538,7 +554,7 @@ export default function Index() {
   const handleSelectFromCity = useCallback((city: string) => {
     console.log('📱 Selected FROM city:', city);
     console.log('📱 CityData lookup result:', cityData[city]);
-    console.log('���� Previous selectedFromCity:', selectedFromCity);
+    console.log('📱 Previous selectedFromCity:', selectedFromCity);
 
     // Set the city state immediately
     setSelectedFromCity(city);
