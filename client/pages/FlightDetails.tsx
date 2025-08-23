@@ -184,12 +184,12 @@ export default function FlightDetails({
         flightNumber: "1407",
         origin: {
           code: fromCode,
-          name: airportData[fromCode]?.name || "Unknown Airport",
+          name: airportData[fromCode]?.name || `${fromCode} International Airport`,
           time: "14:30",
         },
         destination: {
           code: toCode,
-          name: airportData[toCode]?.name || "Unknown Airport",
+          name: airportData[toCode]?.name || `${toCode} International Airport`,
           time: "16:00",
         },
         durationMinutes: 210,
