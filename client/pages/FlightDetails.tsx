@@ -255,11 +255,11 @@ export default function FlightDetails({
             name:
               orientedItinerary.segments[0]?.origin?.name ||
               airportData[fromCode]?.name ||
-              "Unknown Airport",
+              `${fromCode} International Airport`,
             city:
               airportData[
                 orientedItinerary.segments[0]?.origin?.code || fromCode
-              ]?.city || "Unknown",
+              ]?.city || (orientedItinerary.segments[0]?.origin?.code || fromCode),
           },
           arrival: {
             ...baseFlight.arrival,
@@ -270,13 +270,13 @@ export default function FlightDetails({
               orientedItinerary.segments[orientedItinerary.segments.length - 1]
                 ?.destination?.name ||
               airportData[toCode]?.name ||
-              "Unknown Airport",
+              `${toCode} International Airport`,
             city:
               airportData[
                 orientedItinerary.segments[
                   orientedItinerary.segments.length - 1
                 ]?.destination?.code || toCode
-              ]?.city || "Unknown",
+              ]?.city || (orientedItinerary.segments[orientedItinerary.segments.length - 1]?.destination?.code || toCode),
           },
         }
       : baseFlight;
