@@ -1,4 +1,12 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, {
+  useState,
+  useEffect,
+  Fragment,
+  useRef,
+  useMemo,
+  useCallback,
+} from "react";
+import { createPortal } from "react-dom";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useDateContext } from "@/contexts/DateContext";
@@ -11,6 +19,8 @@ import { Badge } from "@/components/ui/badge";
 
 import { MobileNavigation } from "@/components/mobile/MobileNavigation";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
+import { useToast } from "@/hooks/use-toast";
+import { Toaster } from "@/components/ui/toaster";
 import {
   formatDateToDDMMMYYYY,
   formatDateToDisplayString,
@@ -100,11 +110,12 @@ import {
 } from "lucide-react";
 import { downloadProjectInfo } from "@/lib/codeExport";
 import {
-  MobileCityDropdown,
   MobileDatePicker,
   MobileTravelers,
   MobileClassDropdown,
 } from "@/components/MobileDropdowns";
+import { BookingStyleDropdown } from "@/components/BookingStyleDropdown";
+import { Airport } from "@/shared/airportSearch";
 
 export default function Index() {
   useScrollToTop();
@@ -119,10 +130,44 @@ export default function Index() {
     setReturnDate,
     setTripType,
     formatDisplayDate,
+    getUrlDateString,
     getSearchParams,
   } = useDateContext();
   const userName = user?.name || "";
   const navigate = useNavigate();
+  const { toast } = useToast();
+
+  // Validation function to replace alert popups
+  const validateSearchForm = () => {
+    if (!selectedFromCity || !selectedToCity) {
+      toast({
+        title: "Missing cities",
+        description: "Please select departure and arrival cities",
+        variant: "destructive",
+      });
+      return false;
+    }
+
+    if (!departureDate) {
+      toast({
+        title: "Missing departure date",
+        description: "Please select departure date",
+        variant: "destructive",
+      });
+      return false;
+    }
+
+    if (tripType === "round-trip" && !returnDate) {
+      toast({
+        title: "Missing return date",
+        description: "Please select return date for round trip",
+        variant: "destructive",
+      });
+      return false;
+    }
+
+    return true;
+  };
 
   // Date state now managed by DateContext
   const [showSignIn, setShowSignIn] = useState(false);
@@ -208,6 +253,80 @@ export default function Index() {
   const [showToCities, setShowToCities] = useState(false);
   const [selectedFromCity, setSelectedFromCity] = useState("");
   const [selectedToCity, setSelectedToCity] = useState("");
+
+  // City data mapping - memoized to prevent recreation on every render
+  const cityData = useMemo(
+    () => ({
+      Mumbai: {
+        code: "BOM",
+        name: "Mumbai",
+        airport: "Rajiv Gandhi Shivaji International",
+        fullName: "Mumbai, Maharashtra, India",
+      },
+      Delhi: {
+        code: "DEL",
+        name: "Delhi",
+        airport: "Indira Gandhi International",
+        fullName: "New Delhi, Delhi, India",
+      },
+      Dubai: {
+        code: "DXB",
+        name: "Dubai",
+        airport: "Dubai International Airport",
+        fullName: "Dubai, United Arab Emirates",
+      },
+      "Abu Dhabi": {
+        code: "AUH",
+        name: "Abu Dhabi",
+        airport: "Zayed International",
+        fullName: "Abu Dhabi, United Arab Emirates",
+      },
+      Singapore: {
+        code: "SIN",
+        name: "Singapore",
+        airport: "Changi Airport",
+        fullName: "Singapore, Singapore",
+      },
+      London: {
+        code: "LON",
+        name: "London",
+        airport: "Heathrow Airport",
+        fullName: "London, United Kingdom",
+      },
+      Paris: {
+        code: "PAR",
+        name: "Paris",
+        airport: "Charles de Gaulle Airport",
+        fullName: "Paris, France",
+      },
+    }),
+    [],
+  );
+
+  // Production-ready logging (minimal)
+  // City selection state change tracking for development
+  useEffect(() => {
+    // Light logging for debugging if needed
+    if (process.env.NODE_ENV === "development") {
+      console.log(
+        "City selection - FROM:",
+        selectedFromCity,
+        "TO:",
+        selectedToCity,
+      );
+    }
+  }, [selectedFromCity, selectedToCity]);
+
+  // Remove debug logging for production performance
+  // Airport state for CityAutocomplete
+  const [fromAirport, setFromAirport] = useState<Airport | null>(null);
+  const [toAirport, setToAirport] = useState<Airport | null>(null);
+
+  // Refs for dropdown positioning
+  const fromCityButtonRef = useRef<HTMLButtonElement>(null);
+  const toCityButtonRef = useRef<HTMLButtonElement>(null);
+  const desktopFromButtonRef = useRef<HTMLButtonElement>(null);
+  const desktopToButtonRef = useRef<HTMLButtonElement>(null);
   const [showCalendar, setShowCalendar] = useState(false);
   const [showTravelers, setShowTravelers] = useState(false);
   const [travelers, setTravelers] = useState({ adults: 1, children: 0 });
@@ -389,39 +508,52 @@ export default function Index() {
     }
   };
 
-  // City data mapping
-  const cityData = {
-    Mumbai: {
-      code: "BOM",
-      name: "Mumbai",
-      airport: "Rajiv Gandhi Shivaji International",
-      fullName: "Mumbai, Maharashtra, India",
+  // Memoized event handlers to prevent recreation on every render
+  const handleFromCityClick = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setShowFromCities(true);
+  }, []);
+
+  const handleToCityClick = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setShowToCities(true);
+  }, []);
+
+  const handleCloseFromCities = useCallback(() => {
+    setShowFromCities(false);
+  }, []);
+
+  const handleCloseToCities = useCallback(() => {
+    setShowToCities(false);
+  }, []);
+
+  const handleSelectFromCity = useCallback(
+    (city: string) => {
+      // Set the city state immediately
+      setSelectedFromCity(city);
+
+      // Close dropdown after state update
+      setTimeout(() => {
+        setShowFromCities(false);
+      }, 50);
     },
-    Delhi: {
-      code: "DEL",
-      name: "Delhi",
-      airport: "Indira Gandhi International",
-      fullName: "New Delhi, Delhi, India",
+    [cityData, selectedFromCity],
+  );
+
+  const handleSelectToCity = useCallback(
+    (city: string) => {
+      // Set the city state immediately
+      setSelectedToCity(city);
+
+      // Close dropdown after state update
+      setTimeout(() => {
+        setShowToCities(false);
+      }, 50);
     },
-    Dubai: {
-      code: "DXB",
-      name: "Dubai",
-      airport: "Dubai International Airport",
-      fullName: "Dubai, United Arab Emirates",
-    },
-    "Abu Dhabi": {
-      code: "AUH",
-      name: "Abu Dhabi",
-      airport: "Zayed International",
-      fullName: "Abu Dhabi, United Arab Emirates",
-    },
-    Singapore: {
-      code: "SIN",
-      name: "Singapore",
-      airport: "Changi Airport",
-      fullName: "Singapore, Singapore",
-    },
-  };
+    [cityData, selectedToCity],
+  );
 
   return (
     <div className="min-h-screen bg-white">
@@ -594,7 +726,8 @@ export default function Index() {
                         {currencies.map((currency) => (
                           <button
                             key={currency.code}
-                            onClick={() => {
+                            onMouseDown={(e) => {
+                              e.preventDefault();
                               setCurrency(currency);
                             }}
                             className={`w-full text-left px-3 py-2 hover:bg-gray-100 rounded-lg flex items-center justify-between transition-colors duration-150 ${
@@ -925,7 +1058,8 @@ export default function Index() {
                     {currencies.map((currency) => (
                       <button
                         key={currency.code}
-                        onClick={() => {
+                        onMouseDown={(e) => {
+                          e.preventDefault();
                           setCurrency(currency);
                           setShowLanguageMenu(false);
                         }}
@@ -986,7 +1120,10 @@ export default function Index() {
             {/* Mobile Trip Type Selector */}
             <div className="flex space-x-1 mb-6 bg-gray-100 rounded-lg p-1">
               <button
-                onClick={() => setTripType("round-trip")}
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  setTripType("round-trip");
+                }}
                 className={cn(
                   "flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors",
                   tripType === "round-trip"
@@ -997,7 +1134,10 @@ export default function Index() {
                 Round trip
               </button>
               <button
-                onClick={() => setTripType("one-way")}
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  setTripType("one-way");
+                }}
                 className={cn(
                   "flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors",
                   tripType === "one-way"
@@ -1008,7 +1148,10 @@ export default function Index() {
                 One way
               </button>
               <button
-                onClick={() => setTripType("multi-city")}
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  setTripType("multi-city");
+                }}
                 className={cn(
                   "flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors",
                   tripType === "multi-city"
@@ -1023,33 +1166,48 @@ export default function Index() {
             {/* Mobile Search Form - Card Style */}
             <div className="space-y-3">
               {/* From/To Cities */}
-              <div className="bg-white rounded-xl p-4 shadow-sm">
+              <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200">
                 <div className="flex items-center space-x-3">
                   <div className="flex-1">
                     <button
-                      onClick={() => setShowFromCities(true)}
-                      className="w-full text-left"
+                      ref={fromCityButtonRef}
+                      onClick={handleFromCityClick}
+                      onTouchStart={(e) => {
+                        e.currentTarget.style.backgroundColor = "#f3f4f6";
+                      }}
+                      onTouchEnd={(e) => {
+                        setTimeout(() => {
+                          e.currentTarget.style.backgroundColor = "";
+                        }, 100);
+                      }}
+                      className="w-full text-left touch-manipulation transition-colors min-h-[50px] flex items-center hover:bg-gray-50 active:bg-gray-100 rounded-lg p-2"
+                      style={{ WebkitTapHighlightColor: "transparent" }}
                     >
-                      <div className="text-xs text-gray-500 mb-1">From</div>
-                      <div className="flex items-center space-x-2">
-                        <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
-                          <Building2 className="w-4 h-4 text-[#003580]" />
-                        </div>
-                        <div>
-                          {selectedFromCity ? (
-                            <>
-                              <div className="font-medium text-gray-900">
-                                {cityData[selectedFromCity]?.code}
+                      <div className="w-full">
+                        <div className="text-xs text-gray-500 mb-1">From</div>
+                        <div className="flex items-center space-x-2">
+                          <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+                            <Building2 className="w-4 h-4 text-[#003580]" />
+                          </div>
+                          <div className="flex-1">
+                            {selectedFromCity ? (
+                              <>
+                                <div className="font-medium text-gray-900">
+                                  {cityData[selectedFromCity]?.code ||
+                                    selectedFromCity}
+                                </div>
+                                <div className="text-xs text-gray-500">
+                                  {cityData[selectedFromCity]?.name ||
+                                    cityData[selectedFromCity]?.airport ||
+                                    "Selected city"}
+                                </div>
+                              </>
+                            ) : (
+                              <div className="text-sm text-gray-500">
+                                Leaving from
                               </div>
-                              <div className="text-xs text-gray-500">
-                                {cityData[selectedFromCity]?.name}
-                              </div>
-                            </>
-                          ) : (
-                            <div className="text-sm text-gray-500">
-                              Leaving from
-                            </div>
-                          )}
+                            )}
+                          </div>
                         </div>
                       </div>
                     </button>
@@ -1061,36 +1219,51 @@ export default function Index() {
                       setSelectedFromCity(selectedToCity);
                       setSelectedToCity(temp);
                     }}
-                    className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
+                    className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 active:bg-gray-300 transition-colors touch-manipulation"
                   >
                     <ArrowRight className="w-4 h-4 text-gray-500" />
                   </button>
 
                   <div className="flex-1">
                     <button
-                      onClick={() => setShowToCities(true)}
-                      className="w-full text-left"
+                      ref={toCityButtonRef}
+                      onClick={handleToCityClick}
+                      onTouchStart={(e) => {
+                        e.currentTarget.style.backgroundColor = "#f3f4f6";
+                      }}
+                      onTouchEnd={(e) => {
+                        setTimeout(() => {
+                          e.currentTarget.style.backgroundColor = "";
+                        }, 100);
+                      }}
+                      className="w-full text-left touch-manipulation transition-colors min-h-[50px] flex items-center hover:bg-gray-50 active:bg-gray-100 rounded-lg p-2"
+                      style={{ WebkitTapHighlightColor: "transparent" }}
                     >
-                      <div className="text-xs text-gray-500 mb-1">To</div>
-                      <div className="flex items-center space-x-2">
-                        <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
-                          <Plane className="w-4 h-4 text-[#003580]" />
-                        </div>
-                        <div>
-                          {selectedToCity ? (
-                            <>
-                              <div className="font-medium text-gray-900">
-                                {cityData[selectedToCity]?.code}
+                      <div className="w-full">
+                        <div className="text-xs text-gray-500 mb-1">To</div>
+                        <div className="flex items-center space-x-2">
+                          <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+                            <Plane className="w-4 h-4 text-[#003580]" />
+                          </div>
+                          <div className="flex-1">
+                            {selectedToCity ? (
+                              <>
+                                <div className="font-medium text-gray-900">
+                                  {cityData[selectedToCity]?.code ||
+                                    selectedToCity}
+                                </div>
+                                <div className="text-xs text-gray-500">
+                                  {cityData[selectedToCity]?.name ||
+                                    cityData[selectedToCity]?.airport ||
+                                    "Selected city"}
+                                </div>
+                              </>
+                            ) : (
+                              <div className="text-sm text-gray-500">
+                                Going to
                               </div>
-                              <div className="text-xs text-gray-500">
-                                {cityData[selectedToCity]?.name}
-                              </div>
-                            </>
-                          ) : (
-                            <div className="text-sm text-gray-500">
-                              Going to
-                            </div>
-                          )}
+                            )}
+                          </div>
                         </div>
                       </div>
                     </button>
@@ -1102,7 +1275,7 @@ export default function Index() {
               <div className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200">
                 <button
                   onClick={() => setShowCalendar(true)}
-                  className="w-full text-left p-5 hover:bg-gray-50 rounded-xl transition-colors duration-200"
+                  className="w-full text-left p-5 hover:bg-gray-50 active:bg-gray-100 rounded-xl transition-colors duration-200 touch-manipulation"
                 >
                   <div className="text-xs font-medium text-gray-600 mb-2 uppercase tracking-wide">
                     Dates
@@ -1118,7 +1291,7 @@ export default function Index() {
                           : "Select departure"}
                         {tripType === "round-trip" && (
                           <>
-                            <span className="mx-2 text-gray-400">—</span>
+                            <span className="mx-2 text-gray-400">→</span>
                             {returnDate
                               ? formatDisplayDate(returnDate, "dd MMM")
                               : "Select return"}
@@ -1140,7 +1313,7 @@ export default function Index() {
                 <div className="bg-white rounded-xl p-4 shadow-sm">
                   <button
                     onClick={() => setShowTravelers(true)}
-                    className="w-full text-left"
+                    className="w-full text-left active:bg-gray-50 transition-colors touch-manipulation"
                   >
                     <div className="text-xs text-gray-500 mb-1">Travelers</div>
                     <div className="flex items-center space-x-2">
@@ -1163,7 +1336,7 @@ export default function Index() {
                 <div className="bg-white rounded-xl p-4 shadow-sm">
                   <button
                     onClick={() => setShowClassDropdown(true)}
-                    className="w-full text-left"
+                    className="w-full text-left active:bg-gray-50 transition-colors touch-manipulation"
                   >
                     <div className="text-xs text-gray-500 mb-1">Class</div>
                     <div className="flex items-center space-x-2">
@@ -1184,16 +1357,34 @@ export default function Index() {
               {/* Search Button */}
               <Button
                 onClick={() => {
-                  const searchParams = getSearchParams();
-                  searchParams.set("adults", travelers.adults.toString());
-                  searchParams.set("children", travelers.children.toString());
-                  if (tripType === "multi-city") {
-                    searchParams.set(
-                      "segments",
-                      JSON.stringify(flightSegments),
-                    );
+                  // Validate required fields
+                  if (!validateSearchForm()) {
+                    return;
                   }
-                  navigate(`/flights/results?${searchParams.toString()}`);
+
+                  // Build search URL using DateContext methods to avoid timezone issues
+                  const params = new URLSearchParams({
+                    from: cityData[selectedFromCity]?.code || selectedFromCity,
+                    to: cityData[selectedToCity]?.code || selectedToCity,
+                    departureDate: getUrlDateString(departureDate),
+                    adults: travelers.adults.toString(),
+                    children: travelers.children.toString(),
+                    tripType: tripType.replace("-", "_"),
+                    cabinClass: selectedClass.toLowerCase().replace(" ", "_"),
+                  });
+
+                  if (returnDate && tripType === "round-trip") {
+                    params.set("returnDate", getUrlDateString(returnDate));
+                  }
+
+                  console.log("📅 Navigation URL params:", {
+                    departureDate: getUrlDateString(departureDate),
+                    returnDate: getUrlDateString(returnDate),
+                    selectedDeparture: departureDate?.toDateString(),
+                    selectedReturn: returnDate?.toDateString(),
+                  });
+
+                  navigate(`/flights/results?${params.toString()}`);
                 }}
                 className="w-full bg-[#febb02] hover:bg-[#d19900] text-[#003580] font-bold py-4 text-lg rounded-xl shadow-lg"
               >
@@ -1462,7 +1653,8 @@ export default function Index() {
               {/* Centered Navigation */}
               <nav className="flex items-center space-x-6 lg:space-x-8 text-sm font-medium absolute left-1/2 transform -translate-x-1/2">
                 <button
-                  onClick={() => {
+                  onMouseDown={(e) => {
+                    e.preventDefault();
                     setActiveTab("flights");
                     window.history.pushState({}, "", "/?tab=flights");
                   }}
@@ -1473,7 +1665,8 @@ export default function Index() {
                   <span>Flights</span>
                 </button>
                 <button
-                  onClick={() => {
+                  onMouseDown={(e) => {
+                    e.preventDefault();
                     setActiveTab("hotels");
                     window.history.pushState({}, "", "/?tab=hotels");
                   }}
@@ -1484,7 +1677,8 @@ export default function Index() {
                   <span>Hotels</span>
                 </button>
                 <button
-                  onClick={() => {
+                  onMouseDown={(e) => {
+                    e.preventDefault();
                     setActiveTab("sightseeing");
                     window.history.pushState({}, "", "/?tab=sightseeing");
                   }}
@@ -1495,7 +1689,8 @@ export default function Index() {
                   <span>Sightseeing</span>
                 </button>
                 <button
-                  onClick={() => {
+                  onMouseDown={(e) => {
+                    e.preventDefault();
                     setActiveTab("transfers");
                     window.history.pushState({}, "", "/?tab=transfers");
                   }}
@@ -1528,7 +1723,8 @@ export default function Index() {
                         {currencies.map((currency) => (
                           <button
                             key={currency.code}
-                            onClick={() => {
+                            onMouseDown={(e) => {
+                              e.preventDefault();
                               setCurrency(currency);
                               setShowCurrencyDropdown(false);
                             }}
@@ -1683,7 +1879,10 @@ export default function Index() {
                     <div className="flex items-center bg-white rounded-lg p-2 sm:p-3 flex-1 w-full border sm:border-0">
                       <div className="flex flex-wrap items-center gap-2 sm:gap-3 md:gap-6 w-full sm:w-auto">
                         <button
-                          onClick={() => setTripType("round-trip")}
+                          onMouseDown={(e) => {
+                            e.preventDefault();
+                            setTripType("round-trip");
+                          }}
                           className="flex items-center space-x-2"
                         >
                           <div
@@ -1706,7 +1905,10 @@ export default function Index() {
                           </span>
                         </button>
                         <button
-                          onClick={() => setTripType("one-way")}
+                          onMouseDown={(e) => {
+                            e.preventDefault();
+                            setTripType("one-way");
+                          }}
                           className="flex items-center space-x-2"
                         >
                           <div
@@ -1729,7 +1931,10 @@ export default function Index() {
                           </span>
                         </button>
                         <button
-                          onClick={() => setTripType("multi-city")}
+                          onMouseDown={(e) => {
+                            e.preventDefault();
+                            setTripType("multi-city");
+                          }}
                           className="flex items-center space-x-2"
                         >
                           <div
@@ -1753,9 +1958,10 @@ export default function Index() {
                         </button>
                         <div className="relative">
                           <button
-                            onClick={() =>
-                              setShowClassDropdown(!showClassDropdown)
-                            }
+                            onMouseDown={(e) => {
+                              e.preventDefault();
+                              setShowClassDropdown(!showClassDropdown);
+                            }}
                             className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 px-2 py-1 rounded transition-colors"
                           >
                             <div className="w-3 h-3 border-2 border-gray-300 rounded-full"></div>
@@ -1774,7 +1980,8 @@ export default function Index() {
                               ].map((classType) => (
                                 <button
                                   key={classType}
-                                  onClick={() => {
+                                  onMouseDown={(e) => {
+                                    e.preventDefault();
                                     setSelectedClass(classType);
                                     setShowClassDropdown(false);
                                   }}
@@ -1801,77 +2008,19 @@ export default function Index() {
                         Leaving from
                       </label>
                       <button
-                        onClick={() => setShowFromCities(!showFromCities)}
-                        className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-12 w-full hover:border-blue-600 touch-manipulation"
+                        ref={desktopFromButtonRef}
+                        onClick={handleFromCityClick}
+                        className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full hover:border-blue-500 active:bg-gray-50 touch-manipulation transition-colors"
                       >
-                        <Plane className="w-4 h-4 text-gray-500 mr-2" />
-                        <div className="flex items-center space-x-2">
-                          {selectedFromCity ? (
-                            <>
-                              <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
-                                {cityData[selectedFromCity]?.code}
-                              </div>
-                              <span className="text-sm text-gray-700 font-medium">
-                                {cityData[selectedFromCity]?.airport}...
-                              </span>
-                            </>
-                          ) : (
-                            <span className="text-sm text-gray-500 font-medium">
-                              Leaving from
-                            </span>
-                          )}
+                        <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
+                          <Building2 className="w-4 h-4 text-blue-600" />
                         </div>
+                        <span className="text-sm text-gray-900 font-semibold truncate">
+                          {selectedFromCity
+                            ? `${cityData[selectedFromCity]?.code} • ${selectedFromCity}`
+                            : "Select departure city"}
+                        </span>
                       </button>
-
-                      {showFromCities && (
-                        <div className="absolute top-14 left-0 right-0 sm:right-auto bg-white border border-gray-200 rounded-lg shadow-xl p-3 sm:p-4 z-50 w-full sm:w-96 max-h-80 overflow-y-auto">
-                          <div className="mb-3">
-                            <h3 className="text-sm font-semibold text-gray-900 mb-2">
-                              Airport, city or country
-                            </h3>
-                            <div className="relative">
-                              <input
-                                type="text"
-                                placeholder="Mumbai"
-                                className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 text-sm"
-                              />
-                            </div>
-                          </div>
-
-                          <div className="space-y-1">
-                            {Object.entries(cityData).map(([city, data]) => (
-                              <button
-                                key={city}
-                                onClick={() => {
-                                  setSelectedFromCity(city);
-                                  setShowFromCities(false);
-                                }}
-                                className="w-full text-left px-3 py-3 hover:bg-gray-100 rounded"
-                              >
-                                <div className="flex items-center space-x-3">
-                                  <div className="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center">
-                                    <Plane className="w-4 h-4 text-blue-600" />
-                                  </div>
-                                  <div>
-                                    <div className="text-sm font-medium text-gray-900">
-                                      <span className="font-semibold">
-                                        {data.code}
-                                      </span>{" "}
-                                      • {city}
-                                    </div>
-                                    <div className="text-xs text-gray-500">
-                                      {data.airport}
-                                    </div>
-                                    <div className="text-xs text-gray-400">
-                                      {data.fullName}
-                                    </div>
-                                  </div>
-                                </div>
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )}
                     </div>
 
                     <div className="relative flex-1 lg:max-w-xs w-full lg:w-auto">
@@ -1879,77 +2028,19 @@ export default function Index() {
                         Going to
                       </label>
                       <button
-                        onClick={() => setShowToCities(!showToCities)}
-                        className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full hover:border-blue-500 touch-manipulation"
+                        ref={desktopToButtonRef}
+                        onClick={handleToCityClick}
+                        className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full hover:border-blue-500 active:bg-gray-50 touch-manipulation transition-colors"
                       >
-                        <Plane className="w-4 h-4 text-gray-500 mr-2" />
-                        <div className="flex items-center space-x-2">
-                          {selectedToCity ? (
-                            <>
-                              <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
-                                {cityData[selectedToCity]?.code}
-                              </div>
-                              <span className="text-sm text-gray-700 font-medium">
-                                {cityData[selectedToCity]?.airport}
-                              </span>
-                            </>
-                          ) : (
-                            <span className="text-sm text-gray-500 font-medium">
-                              Going to
-                            </span>
-                          )}
+                        <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
+                          <Plane className="w-4 h-4 text-blue-600" />
                         </div>
+                        <span className="text-sm text-gray-900 font-semibold truncate">
+                          {selectedToCity
+                            ? `${cityData[selectedToCity]?.code} • ${selectedToCity}`
+                            : "Select destination city"}
+                        </span>
                       </button>
-
-                      {showToCities && (
-                        <div className="absolute top-14 left-0 right-0 sm:right-auto bg-white border border-gray-200 rounded-lg shadow-xl p-3 sm:p-4 z-50 w-full sm:w-96 max-h-80 overflow-y-auto">
-                          <div className="mb-3">
-                            <h3 className="text-sm font-semibold text-gray-900 mb-2">
-                              Airport, city or country
-                            </h3>
-                            <div className="relative">
-                              <input
-                                type="text"
-                                placeholder="Dubai"
-                                className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 text-sm"
-                              />
-                            </div>
-                          </div>
-
-                          <div className="space-y-1">
-                            {Object.entries(cityData).map(([city, data]) => (
-                              <button
-                                key={city}
-                                onClick={() => {
-                                  setSelectedToCity(city);
-                                  setShowToCities(false);
-                                }}
-                                className="w-full text-left px-3 py-3 hover:bg-gray-100 rounded"
-                              >
-                                <div className="flex items-center space-x-3">
-                                  <div className="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center">
-                                    <Plane className="w-4 h-4 text-blue-600" />
-                                  </div>
-                                  <div>
-                                    <div className="text-sm font-medium text-gray-900">
-                                      <span className="font-semibold">
-                                        {data.code}
-                                      </span>{" "}
-                                      ��� {city}
-                                    </div>
-                                    <div className="text-xs text-gray-500">
-                                      {data.airport}
-                                    </div>
-                                    <div className="text-xs text-gray-400">
-                                      {data.fullName}
-                                    </div>
-                                  </div>
-                                </div>
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )}
                     </div>
 
                     <div className="relative overflow-visible lg:max-w-[250px] w-full lg:w-auto">
@@ -1965,7 +2056,7 @@ export default function Index() {
                           }
                           setShowCalendar(!showCalendar);
                         }}
-                        className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full min-w-[220px] hover:border-blue-500 touch-manipulation"
+                        className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full min-w-[220px] hover:border-blue-500 active:bg-gray-50 touch-manipulation transition-colors"
                       >
                         <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
                           <svg
@@ -2044,7 +2135,10 @@ export default function Index() {
                         Travelers
                       </label>
                       <button
-                        onClick={() => setShowTravelers(!showTravelers)}
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          setShowTravelers(!showTravelers);
+                        }}
                         className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full min-w-[120px] hover:border-blue-500 touch-manipulation"
                       >
                         <svg
@@ -2083,12 +2177,13 @@ export default function Index() {
                               </div>
                               <div className="flex items-center space-x-4">
                                 <button
-                                  onClick={() =>
+                                  onMouseDown={(e) => {
+                                    e.preventDefault();
                                     setTravelers((prev) => ({
                                       ...prev,
                                       adults: Math.max(1, prev.adults - 1),
-                                    }))
-                                  }
+                                    }));
+                                  }}
                                   disabled={travelers.adults <= 1}
                                   className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-blue-600 font-bold"
                                 >
@@ -2098,12 +2193,13 @@ export default function Index() {
                                   {travelers.adults}
                                 </span>
                                 <button
-                                  onClick={() =>
+                                  onMouseDown={(e) => {
+                                    e.preventDefault();
                                     setTravelers((prev) => ({
                                       ...prev,
                                       adults: prev.adults + 1,
-                                    }))
-                                  }
+                                    }));
+                                  }}
                                   className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 text-blue-600 font-bold"
                                 >
                                   +
@@ -2122,12 +2218,13 @@ export default function Index() {
                               </div>
                               <div className="flex items-center space-x-4">
                                 <button
-                                  onClick={() =>
+                                  onMouseDown={(e) => {
+                                    e.preventDefault();
                                     setTravelers((prev) => ({
                                       ...prev,
                                       children: Math.max(0, prev.children - 1),
-                                    }))
-                                  }
+                                    }));
+                                  }}
                                   disabled={travelers.children <= 0}
                                   className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-blue-600 font-bold"
                                 >
@@ -2137,12 +2234,13 @@ export default function Index() {
                                   {travelers.children}
                                 </span>
                                 <button
-                                  onClick={() =>
+                                  onMouseDown={(e) => {
+                                    e.preventDefault();
                                     setTravelers((prev) => ({
                                       ...prev,
                                       children: prev.children + 1,
-                                    }))
-                                  }
+                                    }));
+                                  }}
                                   className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 text-blue-600 font-bold"
                                 >
                                   +
@@ -2166,24 +2264,35 @@ export default function Index() {
                     <div className="lg:max-w-[100px] w-full lg:w-auto">
                       <Button
                         onClick={() => {
-                          const searchParams = getSearchParams();
-                          searchParams.set(
-                            "adults",
-                            travelers.adults.toString(),
-                          );
-                          searchParams.set(
-                            "children",
-                            travelers.children.toString(),
-                          );
-                          if (tripType === "multi-city") {
-                            searchParams.set(
-                              "segments",
-                              JSON.stringify(flightSegments),
+                          // Validate required fields
+                          if (!validateSearchForm()) {
+                            return;
+                          }
+
+                          // Build search URL
+                          const params = new URLSearchParams({
+                            from:
+                              cityData[selectedFromCity]?.code ||
+                              selectedFromCity,
+                            to:
+                              cityData[selectedToCity]?.code || selectedToCity,
+                            departureDate: getUrlDateString(departureDate),
+                            adults: travelers.adults.toString(),
+                            children: travelers.children.toString(),
+                            tripType: tripType.replace("-", "_"),
+                            cabinClass: selectedClass
+                              .toLowerCase()
+                              .replace(" ", "_"),
+                          });
+
+                          if (returnDate && tripType === "round-trip") {
+                            params.set(
+                              "returnDate",
+                              getUrlDateString(returnDate),
                             );
                           }
-                          navigate(
-                            `/flights/results?${searchParams.toString()}`,
-                          );
+
+                          navigate(`/flights/results?${params.toString()}`);
                         }}
                         className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded h-12 font-medium text-sm w-full touch-manipulation"
                       >
@@ -2462,7 +2571,7 @@ export default function Index() {
                     />
                   </svg>
                   <span className="font-medium text-lg">
-                    24×7 Customer Support | Live Chat & Call Available
+                    24/7 Customer Support | Live Chat & Call Available
                   </span>
                 </div>
 
@@ -3099,7 +3208,7 @@ export default function Index() {
                 variant="outline"
                 className="w-full py-3 flex items-center justify-center space-x-2"
               >
-                <span>🔍</span>
+                <span>��</span>
                 <span>Continue with Google</span>
               </Button>
 
@@ -3107,7 +3216,7 @@ export default function Index() {
                 variant="outline"
                 className="w-full py-3 flex items-center justify-center space-x-2"
               >
-                <span>📧</span>
+                <span>🍎</span>
                 <span>Continue with Apple</span>
               </Button>
 
@@ -3334,25 +3443,6 @@ export default function Index() {
           </Fragment>
         ))}
 
-      {/* Mobile Dropdown Components */}
-      <MobileCityDropdown
-        isOpen={showFromCities}
-        onClose={() => setShowFromCities(false)}
-        title="Select departure city"
-        cities={cityData}
-        selectedCity={selectedFromCity}
-        onSelectCity={setSelectedFromCity}
-      />
-
-      <MobileCityDropdown
-        isOpen={showToCities}
-        onClose={() => setShowToCities(false)}
-        title="Select destination city"
-        cities={cityData}
-        selectedCity={selectedToCity}
-        onSelectCity={setSelectedToCity}
-      />
-
       <MobileDatePicker
         isOpen={showCalendar}
         onClose={() => setShowCalendar(false)}
@@ -3379,6 +3469,34 @@ export default function Index() {
         selectedClass={selectedClass}
         onSelectClass={setSelectedClass}
       />
+
+      {/* Booking.com Style City Dropdowns */}
+      <BookingStyleDropdown
+        isOpen={showFromCities}
+        onClose={handleCloseFromCities}
+        title="Select departure city"
+        cities={cityData}
+        selectedCity={selectedFromCity}
+        onSelectCity={handleSelectFromCity}
+        triggerRef={
+          desktopFromButtonRef.current
+            ? desktopFromButtonRef
+            : fromCityButtonRef
+        }
+      />
+
+      <BookingStyleDropdown
+        isOpen={showToCities}
+        onClose={handleCloseToCities}
+        title="Select destination city"
+        cities={cityData}
+        selectedCity={selectedToCity}
+        onSelectCity={handleSelectToCity}
+        triggerRef={
+          desktopToButtonRef.current ? desktopToButtonRef : toCityButtonRef
+        }
+      />
+      <Toaster />
     </div>
   );
 }

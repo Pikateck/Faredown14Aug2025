@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useDateContext } from "@/contexts/DateContext";
+import "../styles/filter-inputs.css";
+import "../styles/faredown-button.css";
 import { flightsService, Flight } from "@/services/flightsService";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -9,11 +11,9 @@ import { MobileFilters } from "@/components/MobileFilters";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { MobileNavigation } from "@/components/mobile/MobileNavigation";
-import BargainModalPhase1 from "@/components/BargainModalPhase1";
-import {
-  useBargainPhase1,
-  createFlightBargainItem,
-} from "@/hooks/useBargainPhase1";
+import EnhancedBargainModal from "@/components/EnhancedBargainModal";
+import ConversationalBargainModal from "@/components/ConversationalBargainModal";
+import { FaredownButton } from "@/components/ui/FaredownButton";
 import {
   Dialog,
   DialogContent,
@@ -49,6 +49,7 @@ import {
   BookOpen,
   Award,
   Heart,
+  TrendingDown,
   LogOut,
   Settings,
   CreditCard,
@@ -71,7 +72,6 @@ import {
   Headphones,
   Calendar,
   TrendingUp,
-  TrendingDown,
   Search,
   Camera,
   Navigation,
@@ -335,6 +335,20 @@ export default function FlightResults() {
   } = useDateContext();
   const userName = user?.name || "";
 
+  // Mobile detection (kept for legacy compatibility)
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   // Live flight data states - Initialize with basic demo flights
   const [flights, setFlights] = useState<Flight[]>([
     {
@@ -393,6 +407,16 @@ export default function FlightResults() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
+  // Enhanced bargain modal state
+  const [showEnhancedBargain, setShowEnhancedBargain] = useState(false);
+  const [selectedBargainFlight, setSelectedBargainFlight] = useState<
+    (typeof flightData)[0] | null
+  >(null);
+  const [selectedBargainFareType, setSelectedBargainFareType] =
+    useState<any>(null);
+  const [showConversationalBargain, setShowConversationalBargain] =
+    useState(false);
+
   // Load dates and city selections from URL parameters when component mounts
   useEffect(() => {
     loadDatesFromParams(searchParams);
@@ -408,6 +432,9 @@ export default function FlightResults() {
       )?.[0];
       if (fromCity) {
         setSelectedFromCity(fromCity);
+      } else {
+        // If no matching city found, set the code directly for display
+        setSelectedFromCity(fromParam);
       }
     }
 
@@ -417,6 +444,9 @@ export default function FlightResults() {
       )?.[0];
       if (toCity) {
         setSelectedToCity(toCity);
+      } else {
+        // If no matching city found, set the code directly for display
+        setSelectedToCity(toParam);
       }
     }
   }, [searchParams, loadDatesFromParams]);
@@ -453,37 +483,39 @@ export default function FlightResults() {
   const [showSortOptions, setShowSortOptions] = useState(false);
   const [showSearchEdit, setShowSearchEdit] = useState(false);
 
-  // Phase 1 Bargain Engine integration with live API
-  const bargainHook = useBargainPhase1({
-    useLiveAPI: true, // Enable live API integration
-    onBookingConfirmed: (item, finalPrice) => {
-      // Custom handling after bargain success
-      console.log("✅ Live bargain successful!", { item, finalPrice });
-
-      // Create flight object for booking flow
-      const flightForBooking = flightData.find(
-        (f) => f.id.toString() === item.itemId,
-      );
-      if (flightForBooking) {
-        handleBooking(flightForBooking, {
-          id: "bargained",
-          name: item.class || "Economy",
-          price: finalPrice,
-          refundability: "Non-Refundable",
-          features: ["AI Bargained Price"],
-          baggage: "23kg",
-        });
-      }
-    },
-    redirectToBooking: true,
-    deviceType: window.innerWidth <= 768 ? "mobile" : "desktop",
-  });
-
   // Search panel states
   const [showClassDropdown, setShowClassDropdown] = useState(false);
   const [selectedClass, setSelectedClass] = useState("Economy");
   // Trip type states
   const [editTripType, setEditTripType] = useState("round-trip");
+
+  // Initialize edit form states from URL parameters when edit modal opens
+  useEffect(() => {
+    if (showSearchEdit) {
+      // Set trip type from URL
+      const tripTypeParam = searchParams.get("tripType");
+      if (tripTypeParam) {
+        const normalizedTripType = tripTypeParam.replace("_", "-");
+        setEditTripType(normalizedTripType);
+      }
+
+      // Set class from URL
+      const classParam = searchParams.get("cabinClass");
+      if (classParam) {
+        const normalizedClass = classParam
+          .replace("_", " ")
+          .split(" ")
+          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(" ");
+        setSelectedClass(normalizedClass);
+      }
+
+      // Set travelers from URL
+      const adultsParam = parseInt(searchParams.get("adults") || "1");
+      const childrenParam = parseInt(searchParams.get("children") || "0");
+      setTravelers({ adults: adultsParam, children: childrenParam });
+    }
+  }, [showSearchEdit, searchParams]);
   const [showFromCities, setShowFromCities] = useState(false);
   const [showToCities, setShowToCities] = useState(false);
   const [selectedFromCity, setSelectedFromCity] = useState("");
@@ -517,23 +549,66 @@ export default function FlightResults() {
     [key: string]: "itinerary" | "fare-rules";
   }>({});
 
-  // Bargain states
-  const [showBargainModal, setShowBargainModal] = useState(false);
-  const [bargainFlight, setBargainFlight] = useState<
-    (typeof flightData)[0] | null
-  >(null);
-  const [bargainFareType, setBargainFareType] = useState<any>(null);
-  const [bargainStep, setBargainStep] = useState<
-    "input" | "progress" | "result"
-  >("input");
-  const [bargainPrice, setBargainPrice] = useState("");
-  const [bargainProgress, setBargainProgress] = useState(0);
-  const [bargainResult, setBargainResult] = useState<
-    "accepted" | "rejected" | "counter" | null
-  >(null);
-  const [finalPrice, setFinalPrice] = useState(0);
-  const [bargainTimer, setBargainTimer] = useState(0);
-  const [faredownBonus, setFaredownBonus] = useState(0);
+  // Enhanced bargain handler
+  const handleEnhancedBargain = (
+    flight: (typeof flightData)[0],
+    fareType?: any,
+  ) => {
+    setSelectedBargainFlight(flight);
+    setSelectedBargainFareType(fareType || flight.fareTypes[0]);
+    setShowEnhancedBargain(true);
+  };
+
+  // Conversational bargain handler
+  const handleConversationalBargain = (
+    flight: (typeof flightData)[0],
+    fareType?: any,
+  ) => {
+    setSelectedBargainFlight(flight);
+    setSelectedBargainFareType(fareType || flight.fareTypes[0]);
+    setShowConversationalBargain(true);
+  };
+
+  const handleCloseConversationalBargain = () => {
+    setShowConversationalBargain(false);
+    setSelectedBargainFlight(null);
+    setSelectedBargainFareType(null);
+  };
+
+  const handleAcceptBargain = (finalPrice: number, orderRef: string) => {
+    console.log("Bargain accepted:", finalPrice, orderRef);
+    if (selectedBargainFlight && selectedBargainFareType) {
+      navigate("/booking-flow", {
+        state: {
+          selectedFlight: selectedBargainFlight,
+          selectedFareType: {
+            ...selectedBargainFareType,
+            price: finalPrice, // Use the negotiated price
+          },
+          passengerCount: { adults, children },
+          orderRef: orderRef,
+          negotiatedPrice: finalPrice, // For BookingFlow compatibility
+          bargainedPrice: finalPrice, // Additional flag to indicate this was bargained
+        },
+      });
+    }
+    setShowConversationalBargain(false);
+  };
+
+  const handleHoldBargain = (orderRef: string) => {
+    console.log("Booking with hold:", orderRef);
+    if (selectedBargainFlight && selectedBargainFareType) {
+      navigate("/booking-flow", {
+        state: {
+          selectedFlight: selectedBargainFlight,
+          selectedFareType: selectedBargainFareType,
+          passengerCount: { adults, children },
+          holdRef: orderRef,
+        },
+      });
+    }
+    setShowConversationalBargain(false);
+  };
 
   const [sortBy, setSortBy] = useState<"cheapest" | "fastest">("cheapest");
   const [expandedTicketOptions, setExpandedTicketOptions] = useState<
@@ -545,11 +620,12 @@ export default function FlightResults() {
     symbol: "₹",
     name: "Indian Rupee",
   });
+  // Temporary variables for legacy UI (should be removed when old UI is cleaned up)
+  const [duplicatePriceError, setDuplicatePriceError] = useState(false);
   const [usedPrices, setUsedPrices] = useState<Set<string>>(new Set());
   const [aiOfferPrice, setAiOfferPrice] = useState<number | null>(null);
   const [isOfferValid, setIsOfferValid] = useState(false);
   const [offerExpiryTime, setOfferExpiryTime] = useState(0);
-  const [duplicatePriceError, setDuplicatePriceError] = useState(false);
 
   // Load flights from Amadeus API
   useEffect(() => {
@@ -1153,7 +1229,7 @@ export default function FlightResults() {
   // Add calendar year state
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
 
-  // City data mapping (from landing page)
+  // City data mapping (extended for better coverage)
   const cityData = {
     Mumbai: {
       code: "BOM",
@@ -1186,6 +1262,39 @@ export default function FlightResults() {
       fullName: "Singapore, Singapore",
     },
   };
+
+  // Helper function to get city name from code
+  const getCityNameFromCode = (code: string) => {
+    const cityEntry = Object.entries(cityData).find(
+      ([_, data]) => data.code === code,
+    );
+    return cityEntry ? cityEntry[1].name : code;
+  };
+
+  // Get current route information from URL params
+  const fromCode = searchParams.get("from") || "";
+  const toCode = searchParams.get("to") || "";
+  const fromCityName = getCityNameFromCode(fromCode);
+  const toCityName = getCityNameFromCode(toCode);
+
+  // Get the actual dates from URL params for display consistency
+  const departureDateParam = searchParams.get("departureDate");
+  const returnDateParam = searchParams.get("returnDate");
+
+  // Parse dates carefully to avoid timezone issues
+  const actualDepartureDate = departureDateParam
+    ? new Date(departureDateParam + "T00:00:00")
+    : departureDate;
+  const actualReturnDate = returnDateParam
+    ? new Date(returnDateParam + "T00:00:00")
+    : returnDate;
+
+  console.log("📅 FlightResults URL dates:", {
+    departureDateParam,
+    returnDateParam,
+    actualDepartureDate: actualDepartureDate?.toDateString(),
+    actualReturnDate: actualReturnDate?.toDateString(),
+  });
 
   const airlineCounts = availableAirlines.reduce(
     (acc, airline) => {
@@ -1336,20 +1445,6 @@ export default function FlightResults() {
     });
   };
 
-  // Bargain functions
-  const handleBargain = (flight: (typeof flightData)[0], fareType: any) => {
-    setBargainFlight(flight);
-    setBargainFareType(fareType);
-    setShowBargainModal(true);
-    setBargainStep("input");
-    setBargainPrice("");
-    setBargainProgress(0);
-    setBargainResult(null);
-    setFinalPrice(0);
-    setFaredownBonus(0);
-    setDuplicatePriceError(false);
-  };
-
   const generateAICounterOffer = (userPrice: number, originalPrice: number) => {
     const discountRequested = (originalPrice - userPrice) / originalPrice;
     if (discountRequested <= 0.3) {
@@ -1367,77 +1462,60 @@ export default function FlightResults() {
   };
 
   const startBargaining = () => {
-    if (!bargainFlight || !bargainFareType || !bargainPrice) return;
+    // This function is legacy and should be removed when old UI is cleaned up
+    // For now, redirect to the new ClassyBargainModal
+    if (bargainCtx?.product) {
+      console.log(
+        "Legacy startBargaining called - redirecting to ClassyBargainModal",
+      );
+      // The ClassyBargainModal handles all the negotiation logic now
+    }
+  };
 
-    const targetPriceInSelectedCurrency = parseInt(bargainPrice);
-    const targetPriceInINR = Math.round(
-      targetPriceInSelectedCurrency /
-        (exchangeRates[selectedCurrency.code as keyof typeof exchangeRates] ||
-          1),
-    );
-    const currentPriceInINR = bargainFareType.price;
-    const priceKey = `${bargainFlight.id}-${bargainFareType.name}-${targetPriceInSelectedCurrency}`;
-
-    // Check if this exact price has been tried before
-    if (usedPrices.has(priceKey)) {
-      setDuplicatePriceError(true);
-      setTimeout(() => setDuplicatePriceError(false), 5000); // Hide after 5 seconds
-      return;
+  // AI Negotiation Modal Functions
+  const handleStartBargain = (
+    flight: (typeof flightData)[0],
+    fareType: any,
+    userOffer: number,
+  ) => {
+    // Check if there's already an active session for a different product
+    if (bargainSession && bargainSession.productRef !== flight.id.toString()) {
+      // Show switch prompt
+      const confirmed = window.confirm(
+        `You have an active bargain session for another flight. Switch bargain to this offer?`,
+      );
+      if (!confirmed) return;
     }
 
-    if (targetPriceInINR >= currentPriceInINR) {
-      setDuplicatePriceError(true);
-      setTimeout(() => setDuplicatePriceError(false), 5000);
-      return;
-    }
+    // Create session with attempt tracking
+    const session = {
+      sessionId: `session_${Date.now()}_${flight.id}`,
+      module: "flights" as const,
+      productRef: flight.id.toString(),
+      userOffer,
+      attemptCount: (bargainSession?.attemptCount || 0) + 1,
+      productDetails: {
+        title: `${flight.airline} ${flight.flightNumber}`,
+        subtitle: `${flight.departureCode} → ${flight.arrivalCode}`,
+        basePrice: fareType.price,
+        airline: flight.airline,
+        flightNo: flight.flightNumber,
+        route: {
+          from: flight.departureCode,
+          to: flight.arrivalCode,
+        },
+      },
+    };
 
-    // Clear any existing error and add price to used prices
-    setDuplicatePriceError(false);
-    setUsedPrices((prev) => new Set([...prev, priceKey]));
-    setBargainStep("progress");
-    setBargainProgress(0);
-
-    const progressInterval = setInterval(() => {
-      setBargainProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(progressInterval);
-
-          const aiOfferInINR = generateAICounterOffer(
-            targetPriceInINR,
-            currentPriceInINR,
-          );
-          setAiOfferPrice(aiOfferInINR);
-
-          const isExactMatch = aiOfferInINR === targetPriceInINR;
-          setBargainResult(isExactMatch ? "accepted" : "counter");
-          setBargainStep("result");
-
-          setIsOfferValid(true);
-          setOfferExpiryTime(30);
-
-          const timerInterval = setInterval(() => {
-            setOfferExpiryTime((prev) => {
-              if (prev <= 1) {
-                clearInterval(timerInterval);
-                setIsOfferValid(false);
-                return 0;
-              }
-              return prev - 1;
-            });
-          }, 1000);
-
-          return 100;
-        }
-        return prev + 10;
-      });
-    }, 150);
+    setBargainSession(session);
+    setShowAINegotiationModal(true);
   };
 
   return (
     <div className="min-h-screen bg-gray-50 pb-16 md:pb-0">
       {/* MOBILE-FIRST DESIGN: App-style header for mobile, standard for desktop */}
       <header className="bg-white md:bg-[#003580] shadow-sm md:shadow-none sticky top-0 z-50">
-        {/* Mobile Header (≤768px) - App Style */}
+        {/* Mobile Header (��768px) - App Style */}
         <div className="block md:hidden">
           <div className="px-4 py-3 bg-[#003580]">
             <div className="flex items-center justify-between">
@@ -1446,11 +1524,11 @@ export default function FlightResults() {
               </button>
               <div className="flex-1 text-center">
                 <h1 className="text-white font-semibold text-lg">
-                  Flight Results
+                  {fromCityName} to {toCityName}
                 </h1>
                 <p className="text-blue-200 text-xs">
-                  {selectedFromCity && selectedToCity
-                    ? `${cityData[selectedFromCity]?.code || ""} → ${cityData[selectedToCity]?.code || ""} • `
+                  {fromCode && toCode
+                    ? `${fromCode} → ${toCode} • `
                     : "Search Results • "}
                   {tripType === "one-way"
                     ? "One way"
@@ -1480,8 +1558,8 @@ export default function FlightResults() {
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
                       <span className="text-base font-semibold text-gray-900">
-                        {selectedFromCity && selectedToCity
-                          ? `${cityData[selectedFromCity]?.code || ""} → ${cityData[selectedToCity]?.code || ""}`
+                        {fromCode && toCode
+                          ? `${fromCode} → ${toCode}`
                           : "Flight Search"}
                       </span>
                       <div className="flex items-center gap-1">
@@ -1625,12 +1703,12 @@ export default function FlightResults() {
                     {[
                       { code: "en", name: "English", flag: "🇬🇧" },
                       { code: "es", name: "Español", flag: "🇪🇸" },
-                      { code: "fr", name: "Français", flag: "🇫����" },
+                      { code: "fr", name: "Français", flag: "🇫🇷" },
                       { code: "de", name: "Deutsch", flag: "🇩🇪" },
                       { code: "it", name: "Italiano", flag: "🇮🇹" },
-                      { code: "pt", name: "Portugu��s", flag: "🇵🇹" },
+                      { code: "pt", name: "Português", flag: "🇵🇹" },
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
-                      { code: "hi", name: "हिन्दी", flag: "🇮����" },
+                      { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
                       { code: "ja", name: "日本語", flag: "🇯🇵" },
                       { code: "ko", name: "한국어", flag: "🇰🇷" },
                       { code: "zh", name: "中文", flag: "🇨🇳" },
@@ -1906,17 +1984,18 @@ export default function FlightResults() {
               <div className="relative">
                 <button
                   onClick={() => setShowFromCities(!showFromCities)}
-                  className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-10 w-full hover:border-blue-600 touch-manipulation pr-10"
+                  className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-12 w-full hover:border-blue-600 touch-manipulation pr-10"
                 >
                   <Plane className="w-4 h-4 text-gray-500 mr-2" />
                   <div className="flex items-center space-x-2 min-w-0">
                     {selectedFromCity ? (
                       <>
                         <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
-                          {cityData[selectedFromCity]?.code}
+                          {cityData[selectedFromCity]?.code || selectedFromCity}
                         </div>
                         <span className="text-sm text-gray-700 font-medium truncate">
-                          {cityData[selectedFromCity]?.airport}
+                          {cityData[selectedFromCity]?.airport ||
+                            getCityNameFromCode(selectedFromCity)}
                         </span>
                       </>
                     ) : (
@@ -1996,17 +2075,18 @@ export default function FlightResults() {
               <div className="relative">
                 <button
                   onClick={() => setShowToCities(!showToCities)}
-                  className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-10 w-full hover:border-blue-500 touch-manipulation pr-10"
+                  className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-12 w-full hover:border-blue-600 touch-manipulation pr-10"
                 >
                   <Plane className="w-4 h-4 text-gray-500 mr-2" />
                   <div className="flex items-center space-x-2 min-w-0">
                     {selectedToCity ? (
                       <>
                         <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
-                          {cityData[selectedToCity]?.code}
+                          {cityData[selectedToCity]?.code || selectedToCity}
                         </div>
                         <span className="text-sm text-gray-700 font-medium truncate">
-                          {cityData[selectedToCity]?.airport}
+                          {cityData[selectedToCity]?.airport ||
+                            getCityNameFromCode(selectedToCity)}
                         </span>
                       </>
                     ) : (
@@ -2085,16 +2165,16 @@ export default function FlightResults() {
               </label>
               <Popover open={showCalendar} onOpenChange={setShowCalendar}>
                 <PopoverTrigger asChild>
-                  <button className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-10 w-full hover:border-blue-500 touch-manipulation">
+                  <button className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-12 w-full hover:border-blue-600 touch-manipulation">
                     <Calendar className="w-4 h-4 text-gray-500 mr-2 flex-shrink-0" />
                     <div className="flex items-center space-x-2 min-w-0">
                       <span className="text-sm text-gray-700 font-medium truncate">
                         {tripType === "one-way"
-                          ? departureDate
-                            ? formatDisplayDate(departureDate)
+                          ? actualDepartureDate
+                            ? formatDisplayDate(actualDepartureDate)
                             : "Select date"
-                          : departureDate
-                            ? `${formatDisplayDate(departureDate)}${returnDate ? ` - ${formatDisplayDate(returnDate)}` : " - Return"}`
+                          : actualDepartureDate
+                            ? `${formatDisplayDate(actualDepartureDate)}${actualReturnDate ? ` - ${formatDisplayDate(actualReturnDate)}` : " - Return"}`
                             : "Select dates"}
                       </span>
                     </div>
@@ -2104,9 +2184,10 @@ export default function FlightResults() {
                   <BookingCalendar
                     bookingType="flight"
                     initialRange={{
-                      startDate: departureDate || new Date(),
+                      startDate: actualDepartureDate || new Date(),
                       endDate:
-                        returnDate || addDays(departureDate || new Date(), 7),
+                        actualReturnDate ||
+                        addDays(actualDepartureDate || new Date(), 7),
                     }}
                     onChange={(range) => {
                       console.log(
@@ -2129,7 +2210,7 @@ export default function FlightResults() {
               </label>
               <button
                 onClick={() => setShowTravelers(!showTravelers)}
-                className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-10 w-full hover:border-blue-500 touch-manipulation"
+                className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-12 w-full hover:border-blue-600 touch-manipulation"
               >
                 <svg
                   className="w-4 h-4 text-gray-500 mr-2 flex-shrink-0"
@@ -2323,14 +2404,18 @@ export default function FlightResults() {
                     className="flex items-center justify-between py-0.5 min-h-[24px] pr-1"
                   >
                     <label className="text-sm text-gray-700 cursor-pointer flex-1 leading-tight flex items-center">
-                      <div className="w-4 h-4 flex items-center justify-center mr-2">
+                      <div className="w-3 h-3 sm:w-4 sm:h-4 flex items-center justify-center mr-2">
                         <input
                           type="radio"
                           name="stops"
                           value={option.value}
                           checked={selectedStops === option.value}
                           onChange={() => handleStopsFilter(option.value)}
-                          className={`w-3 h-3 sm:w-4 sm:h-4 ${selectedStops === option.value ? "bg-blue-600" : "bg-white border border-gray-400"}`}
+                          style={{
+                            width: "16px",
+                            height: "16px",
+                            accentColor: "#2563eb",
+                          }}
                         />
                       </div>
                       {option.label}
@@ -2363,14 +2448,16 @@ export default function FlightResults() {
                     onMouseLeave={() => setHoveredAirline(null)}
                   >
                     <label className="text-sm text-gray-700 cursor-pointer flex-1 leading-tight flex items-center">
-                      <div className="w-4 h-4 flex items-center justify-center mr-2">
+                      <div className="w-3 h-3 sm:w-4 sm:h-4 flex items-center justify-center mr-2">
                         <input
                           type="checkbox"
                           checked={selectedAirlines.has(airline)}
-                          onChange={(e) =>
-                            handleAirlineFilter(airline, e.target.checked)
-                          }
-                          className={`w-3 h-3 sm:w-4 sm:h-4 ${selectedAirlines.has(airline) ? "bg-blue-600" : "bg-white border border-gray-400"}`}
+                          onChange={() => handleAirlineFilter(airline)}
+                          style={{
+                            width: "16px",
+                            height: "16px",
+                            accentColor: "#2563eb",
+                          }}
                         />
                       </div>
                       <span
@@ -2421,13 +2508,14 @@ export default function FlightResults() {
                         <input
                           type="checkbox"
                           checked={selectedAircraftTypes.has(aircraftType)}
-                          onChange={(e) =>
-                            handleAircraftTypeFilter(
-                              aircraftType,
-                              e.target.checked,
-                            )
+                          onChange={() =>
+                            handleAircraftTypeFilter(aircraftType)
                           }
-                          className={`w-4 h-4 ${selectedAircraftTypes.has(aircraftType) ? "bg-blue-600" : "bg-white border border-gray-400"}`}
+                          style={{
+                            width: "16px",
+                            height: "16px",
+                            accentColor: "#2563eb",
+                          }}
                         />
                       </div>
                       <span
@@ -2483,14 +2571,18 @@ export default function FlightResults() {
                     },
                   ].map((time, index) => (
                     <div
-                      key={index}
+                      key={`departure-${index}`}
                       className="flex items-center justify-between py-0.5 min-h-[24px] pr-1"
                     >
                       <label className="text-sm text-gray-700 cursor-pointer flex-1 leading-tight flex items-center">
                         <div className="w-4 h-4 flex items-center justify-center mr-2">
                           <input
                             type="checkbox"
-                            className="w-4 h-4 bg-white border border-gray-400"
+                            style={{
+                              width: "16px",
+                              height: "16px",
+                              accentColor: "#2563eb",
+                            }}
                           />
                         </div>
                         {time.label}
@@ -2522,14 +2614,18 @@ export default function FlightResults() {
                     },
                   ].map((time, index) => (
                     <div
-                      key={index}
+                      key={`return-${index}`}
                       className="flex items-center justify-between py-0.5 min-h-[24px] pr-1"
                     >
                       <label className="text-sm text-gray-700 cursor-pointer flex-1 leading-tight flex items-center">
                         <div className="w-4 h-4 flex items-center justify-center mr-2">
                           <input
                             type="checkbox"
-                            className="w-4 h-4 bg-white border border-gray-400"
+                            style={{
+                              width: "16px",
+                              height: "16px",
+                              accentColor: "#2563eb",
+                            }}
                           />
                         </div>
                         {time.label}
@@ -2679,7 +2775,7 @@ export default function FlightResults() {
               !searchError &&
               filteredFlights.map((flight, index) => (
                 <div key={flight.id}>
-                  {/* MOBILE CARD DESIGN (≤768px) - App Style */}
+                  {/* MOBILE CARD DESIGN (<768px) - App Style */}
                   <div className="block md:hidden bg-white border border-gray-200 rounded-lg mb-4 shadow-sm relative">
                     <div className="p-4">
                       {/* Flight Header */}
@@ -2717,9 +2813,9 @@ export default function FlightResults() {
                               <button className="text-gray-400 hover:text-gray-600 transition-colors cursor-help">
                                 <Info className="w-3 h-3" />
                               </button>
-                              {/* Mobile Fare Breakdown Tooltip - Shows on hover */}
-                              <div className="absolute right-0 bottom-full mb-2 z-50 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                                <div className="bg-white text-gray-800 text-sm rounded-xl p-4 shadow-xl border border-gray-100 min-w-[220px] backdrop-blur-sm">
+                              {/* Mobile Fare Breakdown Tooltip - Positioned to avoid cut-off */}
+                              <div className="absolute right-0 top-full mt-2 z-50 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                                <div className="bg-white text-gray-800 text-xs rounded-lg p-3 shadow-lg border border-gray-100 w-[200px] backdrop-blur-sm">
                                   <div className="text-center font-semibold mb-3 text-gray-900 border-b border-gray-100 pb-2">
                                     Fare Breakdown
                                   </div>
@@ -2764,8 +2860,8 @@ export default function FlightResults() {
                                   <p className="text-xs text-gray-500 text-center">
                                     All taxes and fees included
                                   </p>
-                                  {/* Tooltip arrow pointing upward */}
-                                  <div className="absolute top-full right-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-white"></div>
+                                  {/* Tooltip arrow pointing downward - right aligned */}
+                                  <div className="absolute bottom-full right-4 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-white"></div>
                                 </div>
                               </div>
                             </div>
@@ -2794,10 +2890,12 @@ export default function FlightResults() {
                                 {flight.departureTime}
                               </div>
                               <div className="text-sm text-gray-600 font-medium">
-                                {flight.departureCode || "BOM"}
+                                {fromCode || flight.departureCode || "BOM"}
                               </div>
                               <div className="text-xs text-gray-500">
-                                {flight.departure?.city || "Mumbai"}
+                                {fromCityName ||
+                                  flight.departure?.city ||
+                                  "Mumbai"}
                               </div>
                             </div>
                             <div className="flex-1 mx-4">
@@ -2827,10 +2925,10 @@ export default function FlightResults() {
                                 {flight.arrivalTime}
                               </div>
                               <div className="text-sm text-gray-600 font-medium">
-                                {flight.arrivalCode || "DXB"}
+                                {toCode || flight.arrivalCode || "DXB"}
                               </div>
                               <div className="text-xs text-gray-500">
-                                {flight.arrival?.city || "Dubai"}
+                                {toCityName || flight.arrival?.city || "Dubai"}
                               </div>
                             </div>
                           </div>
@@ -2879,10 +2977,12 @@ export default function FlightResults() {
                                   {flight.returnArrivalTime}
                                 </div>
                                 <div className="text-sm text-gray-600 font-medium">
-                                  {flight.departureCode || "BOM"}
+                                  {fromCode || flight.departureCode || "BOM"}
                                 </div>
                                 <div className="text-xs text-gray-500">
-                                  {flight.departure?.city || "Mumbai"}
+                                  {fromCityName ||
+                                    flight.departure?.city ||
+                                    "Mumbai"}
                                 </div>
                               </div>
                             </div>
@@ -2897,8 +2997,8 @@ export default function FlightResults() {
                           <Info className="w-3 h-3 text-gray-400 animate-pulse cursor-help" />
                           <span className="text-xs text-gray-700">Baggage</span>
                           {/* Mobile Baggage Tooltip */}
-                          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none">
-                            <div className="bg-white text-gray-800 text-xs rounded-lg p-3 shadow-lg border border-gray-200 min-w-[180px]">
+                          <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none">
+                            <div className="bg-white text-gray-800 text-xs rounded-lg p-3 shadow-lg border border-gray-200 w-[180px]">
                               <div className="font-semibold mb-2 text-gray-900">
                                 Baggage Allowance
                               </div>
@@ -2919,7 +3019,7 @@ export default function FlightResults() {
                                 </div>
                               </div>
                               {/* Tooltip arrow */}
-                              <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-white"></div>
+                              <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-white"></div>
                             </div>
                           </div>
                         </div>
@@ -2935,11 +3035,10 @@ export default function FlightResults() {
                         </div>
                       </div>
 
-                      {/* Action Buttons - Hotel Section Style Mobile */}
-                      <div className="grid grid-cols-2 gap-2 mt-3 relative z-50 pointer-events-auto">
+                      {/* Action Buttons - FlightDetails Style with right alignment */}
+                      <div className="flex justify-end gap-3 mt-4">
                         <Button
-                          variant="outline"
-                          className="min-h-[44px] px-6 py-3 font-semibold text-sm touch-manipulation flex items-center justify-center relative z-50"
+                          className="min-h-[52px] px-6 py-4 border-2 border-[#003580] bg-transparent hover:bg-[#003580] text-[#003580] hover:text-white font-semibold text-sm flex items-center justify-center gap-2 rounded-xl shadow-lg active:shadow-md transition-all touch-manipulation"
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
@@ -2947,28 +3046,22 @@ export default function FlightResults() {
                               "View Details clicked for flight:",
                               flight.id,
                             );
-                            navigate(`/flight-details/${flight.id}`, {
-                              state: { flight },
-                            });
-                          }}
-                          onTouchStart={(e) => {
-                            e.stopPropagation();
+                            navigate(
+                              `/flight-details/${flight.id}?${searchParams.toString()}`,
+                              {
+                                state: { flight },
+                              },
+                            );
                           }}
                         >
                           View Details
                         </Button>
                         <Button
-                          className="min-h-[44px] px-6 py-3 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold text-sm touch-manipulation flex items-center justify-center gap-2"
-                          onClick={() => {
-                            setBargainFlight(flight);
-                            setBargainFareType({
-                              id: "default",
-                              name: flight.fareClass || "Economy",
-                              price: flight.price.amount,
-                              refundability: "Non-Refundable",
-                            });
-                            setShowBargainModal(true);
-                            setBargainStep("input");
+                          className="min-h-[52px] px-6 py-4 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d4950b] text-black font-semibold text-sm flex items-center justify-center gap-2 rounded-xl shadow-lg active:shadow-md transition-all touch-manipulation"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleConversationalBargain(flight);
                           }}
                         >
                           <TrendingDown className="w-4 h-4" />
@@ -3028,16 +3121,18 @@ export default function FlightResults() {
                                     {flight.departureTime}
                                   </div>
                                   <div className="text-sm text-gray-600 font-medium">
-                                    {flight.departureCode} •{" "}
-                                    {departureDate
+                                    {fromCode || flight.departureCode} •{" "}
+                                    {actualDepartureDate
                                       ? formatDisplayDate(
-                                          departureDate,
+                                          actualDepartureDate,
                                           "MMM d",
                                         )
                                       : "Select date"}
                                   </div>
                                   <div className="text-xs text-gray-500">
-                                    {flight.departure?.city || "Mumbai"}
+                                    {fromCityName ||
+                                      flight.departure?.city ||
+                                      "Mumbai"}
                                   </div>
                                 </div>
                                 <div className="flex flex-col items-center">
@@ -3059,16 +3154,18 @@ export default function FlightResults() {
                                     {flight.arrivalTime}
                                   </div>
                                   <div className="text-sm text-gray-600">
-                                    {flight.arrivalCode} •{" "}
-                                    {departureDate
+                                    {toCode || flight.arrivalCode} •{" "}
+                                    {actualDepartureDate
                                       ? formatDisplayDate(
-                                          departureDate,
+                                          actualDepartureDate,
                                           "MMM d",
                                         )
                                       : "Select date"}
                                   </div>
                                   <div className="text-xs text-gray-500">
-                                    {flight.arrival?.city || "Dubai"}
+                                    {toCityName ||
+                                      flight.arrival?.city ||
+                                      "Dubai"}
                                   </div>
                                 </div>
                               </div>
@@ -3081,13 +3178,18 @@ export default function FlightResults() {
                                       {flight.returnDepartureTime}
                                     </div>
                                     <div className="text-sm text-gray-600 font-medium">
-                                      {flight.arrivalCode} •{" "}
-                                      {returnDate
-                                        ? formatDisplayDate(returnDate, "MMM d")
+                                      {toCode || flight.arrivalCode} •{" "}
+                                      {actualReturnDate
+                                        ? formatDisplayDate(
+                                            actualReturnDate,
+                                            "MMM d",
+                                          )
                                         : "Select return date"}
                                     </div>
                                     <div className="text-xs text-gray-500">
-                                      {flight.arrival?.city || "Dubai"}
+                                      {toCityName ||
+                                        flight.arrival?.city ||
+                                        "Dubai"}
                                     </div>
                                   </div>
                                   <div className="flex flex-col items-center">
@@ -3109,13 +3211,18 @@ export default function FlightResults() {
                                       {flight.returnArrivalTime}
                                     </div>
                                     <div className="text-sm text-gray-600 font-medium">
-                                      {flight.departureCode} •{" "}
-                                      {returnDate
-                                        ? formatDisplayDate(returnDate, "MMM d")
+                                      {fromCode || flight.departureCode} •{" "}
+                                      {actualReturnDate
+                                        ? formatDisplayDate(
+                                            actualReturnDate,
+                                            "MMM d",
+                                          )
                                         : "Select return date"}
                                     </div>
                                     <div className="text-xs text-gray-500">
-                                      {flight.departure?.city || "Mumbai"}
+                                      {fromCityName ||
+                                        flight.departure?.city ||
+                                        "Mumbai"}
                                     </div>
                                   </div>
                                 </div>
@@ -3147,9 +3254,9 @@ export default function FlightResults() {
                                   <Info className="w-4 h-4" />
                                 </button>
 
-                                {/* Fare Breakdown Tooltip - Shows on hover */}
-                                <div className="absolute left-full ml-2 top-1/2 transform -translate-y-1/2 z-50 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                                  <div className="bg-white text-gray-800 text-sm rounded-xl p-4 shadow-xl border border-gray-100 min-w-[220px] backdrop-blur-sm">
+                                {/* Fare Breakdown Tooltip - Smart positioning to avoid cut-off */}
+                                <div className="absolute bottom-full mb-2 right-0 z-50 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                                  <div className="bg-white text-gray-800 text-xs rounded-lg p-3 shadow-lg border border-gray-100 w-[200px] backdrop-blur-sm">
                                     <div className="text-center font-semibold mb-3 text-gray-900 border-b border-gray-100 pb-2">
                                       Fare Breakdown
                                     </div>
@@ -3196,8 +3303,8 @@ export default function FlightResults() {
                                         All taxes and fees included
                                       </p>
                                     </div>
-                                    {/* Tooltip arrow pointing to info icon */}
-                                    <div className="absolute right-full top-1/2 transform -translate-y-1/2 w-0 h-0 border-t-4 border-b-4 border-r-4 border-transparent border-r-white"></div>
+                                    {/* Tooltip arrow pointing upward */}
+                                    <div className="absolute top-full right-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-white"></div>
                                   </div>
                                 </div>
                               </div>
@@ -3210,8 +3317,8 @@ export default function FlightResults() {
                               <Luggage className="w-5 h-5 text-green-600 cursor-help" />
                               <Info className="w-3 h-3 text-gray-400 animate-pulse cursor-help" />
                               {/* Baggage Tooltip */}
-                              <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none">
-                                <div className="bg-white text-gray-800 text-xs rounded-lg p-3 shadow-lg border border-gray-200 min-w-[180px]">
+                              <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none">
+                                <div className="bg-white text-gray-800 text-xs rounded-lg p-3 shadow-lg border border-gray-200 w-[180px]">
                                   <div className="font-semibold mb-2 text-gray-900">
                                     Baggage Allowance
                                   </div>
@@ -3230,7 +3337,7 @@ export default function FlightResults() {
                                     </div>
                                   </div>
                                   {/* Tooltip arrow */}
-                                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-white"></div>
+                                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-white"></div>
                                 </div>
                               </div>
                             </div>
@@ -3249,40 +3356,41 @@ export default function FlightResults() {
                           >
                             {flight.fareTypes[0].refundability}
                           </div>
-
-                          {/* Side-by-side buttons - Hotel Section Style */}
-                          <div className="grid grid-cols-2 gap-2 mt-3 relative z-50 pointer-events-auto">
-                            <Button
-                              onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                console.log(
-                                  "Desktop View Details clicked for flight:",
-                                  flight.id,
-                                );
-                                navigate(`/flight-details/${flight.id}`, {
-                                  state: { flight },
-                                });
-                              }}
-                              variant="outline"
-                              className="min-h-[44px] px-6 py-3 font-semibold text-sm touch-manipulation flex items-center justify-center relative z-50"
-                              onTouchStart={(e) => {
-                                e.stopPropagation();
-                              }}
-                            >
-                              View Details
-                            </Button>
-                            <Button
-                              onClick={() =>
-                                handleBargain(flight, flight.fareTypes[0])
-                              }
-                              className="min-h-[44px] px-6 py-3 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold text-sm touch-manipulation flex items-center justify-center gap-2"
-                            >
-                              <TrendingDown className="w-4 h-4" />
-                              Bargain Now
-                            </Button>
-                          </div>
                         </div>
+                      </div>
+
+                      {/* Card Footer - Buttons at bottom-right */}
+                      <div className="mt-4 border-t pt-4 flex items-center justify-end gap-3">
+                        <Button
+                          className="min-h-[52px] px-6 py-4 border-2 border-[#003580] bg-transparent hover:bg-[#003580] text-[#003580] hover:text-white font-semibold text-sm flex items-center justify-center gap-2 rounded-xl shadow-lg active:shadow-md transition-all touch-manipulation"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            console.log(
+                              "View Details clicked for flight:",
+                              flight.id,
+                            );
+                            navigate(
+                              `/flight-details/${flight.id}?${searchParams.toString()}`,
+                              {
+                                state: { flight },
+                              },
+                            );
+                          }}
+                        >
+                          View Details
+                        </Button>
+                        <Button
+                          className="min-h-[52px] px-6 py-4 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d4950b] text-black font-semibold text-sm flex items-center justify-center gap-2 rounded-xl shadow-lg active:shadow-md transition-all touch-manipulation"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleConversationalBargain(flight);
+                          }}
+                        >
+                          <TrendingDown className="w-4 h-4" />
+                          Bargain Now
+                        </Button>
                       </div>
                     </div>
                   </div>
@@ -3614,50 +3722,6 @@ export default function FlightResults() {
 
                                       {/* Book Now & Start Bargain Buttons */}
                                       <div className="border-t border-gray-200 pt-4 mt-6 space-y-3">
-                                        {/* Start Bargain Button - Phase 1 */}
-                                        <Button
-                                          onClick={() => {
-                                            const [flightId, fareTypeId] =
-                                              detailKey.split("-");
-                                            const fareType =
-                                              flight.fareTypes.find(
-                                                (ft) => ft.id === fareTypeId,
-                                              ) || flight.fareTypes[0];
-
-                                            const bargainItem =
-                                              createFlightBargainItem({
-                                                id: flight.id.toString(),
-                                                airline: flight.airline,
-                                                route: {
-                                                  from:
-                                                    selectedFromCity ||
-                                                    flight.origin,
-                                                  to:
-                                                    selectedToCity ||
-                                                    flight.destination,
-                                                },
-                                                class: selectedClass,
-                                                price:
-                                                  fareType.price ||
-                                                  flight.price?.amount ||
-                                                  0,
-                                              });
-
-                                            console.log(
-                                              "🚀 Starting live API bargain (desktop):",
-                                              bargainItem,
-                                            );
-
-                                            bargainHook.startBargain(
-                                              bargainItem,
-                                            );
-                                          }}
-                                          className="w-full bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black py-3 text-lg font-semibold rounded-lg shadow-md transition-all duration-200 transform hover:scale-[1.01] flex items-center justify-center gap-2"
-                                        >
-                                          <TrendingDown className="w-4 h-4" />
-                                          Bargain Now
-                                        </Button>
-
                                         {/* Book Now Button */}
                                         <Button
                                           onClick={() => {
@@ -3710,7 +3774,7 @@ export default function FlightResults() {
                                                     Airline fee:
                                                   </span>
                                                   <span className="text-gray-900 font-medium">
-                                                    ��0
+                                                    ₹0
                                                   </span>
                                                 </div>
                                                 <div className="flex justify-between">
@@ -3788,7 +3852,7 @@ export default function FlightResults() {
                                                   or change your flight.
                                                 </p>
                                                 <p>
-                                                  �� Cancellation/Flight change
+                                                  • Cancellation/Flight change
                                                   charges are indicated per
                                                   traveller. Clearing will stop
                                                   accepting cancellation/change
@@ -3828,7 +3892,7 @@ export default function FlightResults() {
                                                     Faredown Fee:
                                                   </span>
                                                   <span className="text-gray-900 font-medium">
-                                                    ��500
+                                                    ₹500
                                                   </span>
                                                 </div>
                                               </div>
@@ -3914,50 +3978,6 @@ export default function FlightResults() {
 
                                       {/* Book Now & Start Bargain Buttons - Mobile */}
                                       <div className="border-t border-gray-200 pt-4 mt-4 space-y-3">
-                                        {/* Start Bargain Button - Phase 1 Mobile */}
-                                        <Button
-                                          onClick={() => {
-                                            const [flightId, fareTypeId] =
-                                              detailKey.split("-");
-                                            const fareType =
-                                              flight.fareTypes.find(
-                                                (ft) => ft.id === fareTypeId,
-                                              ) || flight.fareTypes[0];
-
-                                            const bargainItem =
-                                              createFlightBargainItem({
-                                                id: flight.id.toString(),
-                                                airline: flight.airline,
-                                                route: {
-                                                  from:
-                                                    selectedFromCity ||
-                                                    flight.origin,
-                                                  to:
-                                                    selectedToCity ||
-                                                    flight.destination,
-                                                },
-                                                class: selectedClass,
-                                                price:
-                                                  fareType.price ||
-                                                  flight.price?.amount ||
-                                                  0,
-                                              });
-
-                                            console.log(
-                                              "📱 Starting live API bargain (mobile):",
-                                              bargainItem,
-                                            );
-
-                                            bargainHook.startBargain(
-                                              bargainItem,
-                                            );
-                                          }}
-                                          className="w-full bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black py-3 text-base font-semibold rounded-lg shadow-md transition-all duration-200 flex items-center justify-center gap-2"
-                                        >
-                                          <TrendingDown className="w-4 h-4" />
-                                          Bargain Now
-                                        </Button>
-
                                         {/* Book Now Button Mobile */}
                                         <Button
                                           onClick={() => {
@@ -4255,7 +4275,7 @@ export default function FlightResults() {
                                           Airline fee:
                                         </span>
                                         <span className="text-gray-900 font-medium">
-                                          ��0
+                                          ₹0
                                         </span>
                                       </div>
                                       <div className="flex justify-between">
@@ -4425,7 +4445,7 @@ export default function FlightResults() {
                                       </p>
                                       <div className="text-xs text-gray-700 space-y-1">
                                         <p>
-                                          �� Direct flights are usually cheaper
+                                          • Direct flights are usually cheaper
                                           than refundable flights. However, you
                                           may have to pay a large fee to cancel
                                           or change your flight.
@@ -4467,8 +4487,7 @@ export default function FlightResults() {
                                     • Group bookings may have different terms
                                   </li>
                                   <li>
-                                    �� Check-in required 2 hours before
-                                    departure
+                                    • Check-in required 2 hours before departure
                                   </li>
                                 </ul>
                               </div>
@@ -4802,9 +4821,9 @@ export default function FlightResults() {
                 <div className="grid grid-cols-2 gap-2 mb-3">
                   {[
                     { label: "Morning", range: [6, 12], icon: "☀️" },
-                    { label: "Afternoon", range: [12, 18], icon: "���️" },
+                    { label: "Afternoon", range: [12, 18], icon: "☀️" },
                     { label: "Evening", range: [18, 24], icon: "🌙" },
-                    { label: "Night", range: [0, 6], icon: "🌅" },
+                    { label: "Night", range: [0, 6], icon: "🌙" },
                   ].map((timeSlot) => (
                     <button
                       key={timeSlot.label}
@@ -5181,9 +5200,19 @@ export default function FlightResults() {
                           </div>
                           <div>
                             <div className="font-semibold text-gray-900">
-                              BOM
+                              {selectedFromCity
+                                ? cityData[selectedFromCity]?.code ||
+                                  selectedFromCity
+                                : searchParams.get("from") || ""}
                             </div>
-                            <div className="text-xs text-gray-500">Mumbai</div>
+                            <div className="text-xs text-gray-500">
+                              {selectedFromCity
+                                ? selectedFromCity
+                                : Object.entries(cityData).find(
+                                    ([city, data]) =>
+                                      data.code === searchParams.get("from"),
+                                  )?.[0] || ""}
+                            </div>
                           </div>
                         </div>
                       </button>
@@ -5215,9 +5244,19 @@ export default function FlightResults() {
                           </div>
                           <div>
                             <div className="font-semibold text-gray-900">
-                              DXB
+                              {selectedToCity
+                                ? cityData[selectedToCity]?.code ||
+                                  selectedToCity
+                                : searchParams.get("to") || ""}
                             </div>
-                            <div className="text-xs text-gray-500">Dubai</div>
+                            <div className="text-xs text-gray-500">
+                              {selectedToCity
+                                ? selectedToCity
+                                : Object.entries(cityData).find(
+                                    ([city, data]) =>
+                                      data.code === searchParams.get("to"),
+                                  )?.[0] || ""}
+                            </div>
                           </div>
                         </div>
                       </button>
@@ -5273,8 +5312,15 @@ export default function FlightResults() {
                         {/* Blue users icon - 20x20px */}
                         <Users className="w-5 h-5 text-[#003580]" />
                         <div>
-                          <div className="font-semibold text-gray-900">1</div>
-                          <div className="text-xs text-gray-500">1 adult</div>
+                          <div className="font-semibold text-gray-900">
+                            {travelers.adults + travelers.children}
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            {travelers.adults} adult
+                            {travelers.adults !== 1 ? "s" : ""}
+                            {travelers.children > 0 &&
+                              `, ${travelers.children} child${travelers.children !== 1 ? "ren" : ""}`}
+                          </div>
                         </div>
                       </div>
                     </button>
@@ -5292,7 +5338,7 @@ export default function FlightResults() {
                         <Settings className="w-5 h-5 text-[#003580]" />
                         <div>
                           <div className="font-semibold text-gray-900">
-                            Economy
+                            {selectedClass}
                           </div>
                           <div className="text-xs text-gray-500">
                             Travel class
@@ -5306,60 +5352,55 @@ export default function FlightResults() {
                 {/* SEARCH BUTTON - Full width, blue background, 12px border-radius */}
                 <Button
                   className="w-full bg-[#003580] hover:bg-[#0071c2] text-white py-4 text-lg font-semibold rounded-xl shadow-lg mt-4"
-                  onClick={() => setShowSearchEdit(false)}
+                  onClick={() => {
+                    // Build new search URL with updated parameters
+                    const newParams = new URLSearchParams();
+                    newParams.set(
+                      "from",
+                      selectedFromCity
+                        ? cityData[selectedFromCity]?.code || selectedFromCity
+                        : searchParams.get("from") || "",
+                    );
+                    newParams.set(
+                      "to",
+                      selectedToCity
+                        ? cityData[selectedToCity]?.code || selectedToCity
+                        : searchParams.get("to") || "",
+                    );
+                    if (departureDate)
+                      newParams.set(
+                        "departureDate",
+                        departureDate.toISOString().split("T")[0],
+                      );
+                    if (returnDate && editTripType === "round-trip")
+                      newParams.set(
+                        "returnDate",
+                        returnDate.toISOString().split("T")[0],
+                      );
+                    newParams.set("adults", travelers.adults.toString());
+                    newParams.set("children", travelers.children.toString());
+                    newParams.set("tripType", editTripType.replace("-", "_"));
+                    newParams.set(
+                      "cabinClass",
+                      selectedClass.toLowerCase().replace(" ", "_"),
+                    );
+
+                    // Navigate to new search
+                    navigate(`/flights/results?${newParams.toString()}`);
+                    setShowSearchEdit(false);
+                  }}
                 >
                   <Search className="w-5 h-5 mr-2" />
                   Search Flights
                 </Button>
-              </div>
-
-              {/* SAMPLE PRICES SECTION - Blue background, 24px horizontal padding */}
-              <div className="bg-[#003580] text-white p-6">
-                <h3 className="text-lg font-semibold mb-3 text-center">
-                  Sample Flight Prices in Indian Rupee
-                </h3>
-                <div className="space-y-2">
-                  {/* Price Card 1 */}
-                  <div className="bg-white/10 rounded-xl p-4 flex justify-between items-center">
-                    <div>
-                      <div className="text-sm font-medium">Mumbai → Dubai</div>
-                      <div className="text-xs text-blue-200">
-                        Emirates • Non-stop • 3h 30m
-                      </div>
-                    </div>
-                    <div className="text-lg font-bold">₹15500</div>
-                  </div>
-                  {/* Price Card 2 */}
-                  <div className="bg-white/10 rounded-xl p-4 flex justify-between items-center">
-                    <div>
-                      <div className="text-sm font-medium">
-                        Delhi → Singapore
-                      </div>
-                      <div className="text-xs text-blue-200">
-                        Air India • 1 stop • 8h 45m
-                      </div>
-                    </div>
-                    <div className="text-lg font-bold">₹22800</div>
-                  </div>
-                  {/* Price Card 3 */}
-                  <div className="bg-white/10 rounded-xl p-4 flex justify-between items-center">
-                    <div>
-                      <div className="text-sm font-medium">Mumbai → London</div>
-                      <div className="text-xs text-blue-200">
-                        British Airways • Non-stop • 9h 25m
-                      </div>
-                    </div>
-                    <div className="text-lg font-bold">₹45200</div>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
         </>
       )}
 
-      {/* Enhanced AI Bargain Modal */}
-      <Dialog open={showBargainModal} onOpenChange={setShowBargainModal}>
+      {/* Unified Bargain Modal */}
+      <Dialog open={false} onOpenChange={() => {}}>
         <DialogContent className="w-full h-full max-w-none m-0 rounded-none md:max-w-2xl md:h-auto md:rounded-lg bg-gradient-to-br from-blue-50 to-white overflow-y-auto">
           <DialogHeader className="border-b border-[#003580]/20 pb-4 bg-gradient-to-r from-[#003580] to-[#0071c2] text-white rounded-t-lg -m-6 mb-0 p-6">
             <DialogTitle className="flex items-center space-x-3">
@@ -5370,7 +5411,7 @@ export default function FlightResults() {
             </DialogTitle>
           </DialogHeader>
 
-          {bargainFlight && bargainFareType && (
+          {false && (
             <div className="space-y-4 md:space-y-6 p-3 md:p-6">
               {bargainStep === "input" && (
                 <>
@@ -5505,28 +5546,134 @@ export default function FlightResults() {
               )}
 
               {bargainStep === "progress" && (
-                <div className="text-center space-y-6 py-8">
-                  <div className="relative">
-                    <div className="w-24 h-24 mx-auto bg-gradient-to-r from-[#003580] to-[#0071c2] rounded-full flex items-center justify-center animate-pulse shadow-lg">
-                      <RefreshCw className="w-12 h-12 text-white animate-spin" />
+                <div className="space-y-4">
+                  {/* AI Negotiation Header */}
+                  <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-4 border border-blue-200">
+                    <div className="flex items-center justify-between mb-3">
+                      <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                        <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                          <span className="text-white text-sm font-bold">
+                            AI
+                          </span>
+                        </div>
+                        AI Price Negotiator
+                      </h3>
+                      <div className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded">
+                        {bargainProgress < 100
+                          ? "Negotiating..."
+                          : "Negotiated in 8.2s"}
+                      </div>
+                    </div>
+
+                    <div className="text-sm text-gray-600">
+                      {bargainFlight?.airline} {bargainFlight?.flightNumber} •{" "}
+                      {bargainFareType?.name}
                     </div>
                   </div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                      AI Negotiating with {bargainFlight.airline}
-                    </h3>
-                    <p className="text-sm text-gray-600 mb-4">
-                      Analyzing market rates and finding the best deal for
-                      you...
-                    </p>
-                    <Progress
-                      value={bargainProgress}
-                      className="w-full h-4 bg-gray-200"
-                    />
-                    <p className="text-sm text-[#003580] font-semibold mt-2">
-                      {bargainProgress}% Complete
-                    </p>
+
+                  {/* Live Chat Messages */}
+                  <div className="space-y-3 bg-gray-50 rounded-xl p-4 max-h-60 overflow-y-auto">
+                    {/* Beat 1: AI Agent */}
+                    <div className="flex items-start space-x-3 animate-in fade-in-50 slide-in-from-left-2">
+                      <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span className="text-white text-xs font-bold">AI</span>
+                      </div>
+                      <div className="flex-1">
+                        <div className="bg-blue-500 text-white p-3 rounded-lg max-w-[280px]">
+                          <p className="text-sm">
+                            We have {selectedCurrency.symbol}
+                            {parseInt(
+                              bargainPrice || "0",
+                            ).toLocaleString()} for {bargainFlight?.airline}{" "}
+                            {bargainFlight?.flightNumber}. Can you approve?
+                          </p>
+                        </div>
+                        <p className="text-xs text-gray-500 mt-1">
+                          Faredown AI
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Beat 2: Airline - appears after 25% progress */}
+                    {bargainProgress > 25 && (
+                      <div className="flex items-start space-x-3 animate-in fade-in-50 slide-in-from-left-2">
+                        <div className="w-8 h-8 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                          <Plane className="w-4 h-4" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="bg-white border shadow-sm p-3 rounded-lg max-w-[280px]">
+                            <p className="text-sm">
+                              Listed at{" "}
+                              {formatPrice(bargainFareType?.price || 0)}.
+                              Checking now…
+                            </p>
+                          </div>
+                          <p className="text-xs text-gray-500 mt-1">
+                            {bargainFlight?.airline}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Beat 3: Airline Response - appears after 60% progress */}
+                    {bargainProgress > 60 && (
+                      <div className="flex items-start space-x-3 animate-in fade-in-50 slide-in-from-left-2">
+                        <div className="w-8 h-8 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                          <Plane className="w-4 h-4" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="bg-white border shadow-sm p-3 rounded-lg max-w-[280px]">
+                            <p className="text-sm">
+                              I can do {selectedCurrency.symbol}
+                              {Math.round(
+                                (bargainFareType?.price || 0) * 0.85,
+                              ).toLocaleString()}
+                              .
+                            </p>
+                          </div>
+                          <p className="text-xs text-gray-500 mt-1">
+                            {bargainFlight?.airline}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Beat 4: AI to Customer - appears after 90% progress */}
+                    {bargainProgress > 90 && (
+                      <div className="flex items-start space-x-3 animate-in fade-in-50 slide-in-from-left-2">
+                        <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
+                          <span className="text-white text-xs font-bold">
+                            AI
+                          </span>
+                        </div>
+                        <div className="flex-1">
+                          <div className="bg-blue-500 text-white p-3 rounded-lg max-w-[280px]">
+                            <p className="text-sm">
+                              Let me check with you if you want it.
+                            </p>
+                          </div>
+                          <p className="text-xs text-gray-500 mt-1">
+                            Faredown AI
+                          </p>
+                        </div>
+                      </div>
+                    )}
                   </div>
+
+                  {/* Progress indicator (only visible during active negotiation) */}
+                  {bargainProgress < 100 && (
+                    <div className="bg-white rounded-lg p-3 border">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-gray-700">
+                          Negotiation Progress
+                        </span>
+                        <span className="text-sm font-medium text-gray-700">
+                          {bargainProgress}%
+                        </span>
+                      </div>
+                      <Progress value={bargainProgress} className="h-2" />
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -5535,9 +5682,14 @@ export default function FlightResults() {
                   {bargainResult === "accepted" ? (
                     <>
                       <div className="text-center">
-                        <h3 className="text-2xl font-bold text-[#003580] mb-2">
-                          Perfect Match!
-                        </h3>
+                        <div className="flex items-center justify-center gap-3 mb-3">
+                          <h3 className="text-2xl font-bold text-[#003580]">
+                            Perfect Match!
+                          </h3>
+                          <div className="px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-full">
+                            Negotiated in 8.2s
+                          </div>
+                        </div>
                         <p className="text-gray-600 mb-1 text-lg">
                           The airline accepted your exact price!
                         </p>
@@ -5556,9 +5708,14 @@ export default function FlightResults() {
                   ) : bargainResult === "counter" ? (
                     <>
                       <div className="text-center">
-                        <h3 className="text-2xl font-bold text-[#003580] mb-2">
-                          AI Counter Offer!
-                        </h3>
+                        <div className="flex items-center justify-center gap-3 mb-3">
+                          <h3 className="text-2xl font-bold text-[#003580]">
+                            AI Counter Offer!
+                          </h3>
+                          <div className="px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-full">
+                            Negotiated in 8.2s
+                          </div>
+                        </div>
                         <p className="text-gray-600 mb-1 text-lg">
                           The airline couldn't match your price, but here's
                           their best offer!
@@ -5610,21 +5767,18 @@ export default function FlightResults() {
                       <div className="space-y-4">
                         <Button
                           onClick={() => {
-                            setShowBargainModal(false);
-                            handleBooking(bargainFlight, {
-                              ...bargainFareType,
-                              price: aiOfferPrice || parseInt(bargainPrice),
-                            });
+                            // Removed old bargain logic
                           }}
                           disabled={!isOfferValid}
-                          className="w-full bg-gradient-to-r from-[#003580] to-[#0071c2] hover:from-[#002d6b] hover:to-[#005a9f] text-white py-5 text-xl font-bold rounded-xl shadow-lg"
+                          className="w-full bg-green-600 hover:bg-green-700 text-white py-5 text-lg font-bold rounded-xl shadow-lg"
                         >
-                          Book This Deal - {selectedCurrency.symbol}
+                          Accept {selectedCurrency.symbol}
                           {bargainResult === "accepted"
                             ? parseInt(bargainPrice).toLocaleString()
                             : aiOfferPrice
                               ? convertPrice(aiOfferPrice).toLocaleString()
-                              : parseInt(bargainPrice).toLocaleString()}
+                              : parseInt(bargainPrice).toLocaleString()}{" "}
+                          — 30s to book
                         </Button>
 
                         <Button
@@ -5632,8 +5786,13 @@ export default function FlightResults() {
                           variant="outline"
                           className="w-full border-2 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white py-4 text-lg font-semibold rounded-xl"
                         >
-                          Try Different Price
+                          Bargain Again
                         </Button>
+
+                        <p className="text-xs text-gray-500 text-center mt-3">
+                          Most customers get the best deal early — demand is
+                          rising fast.
+                        </p>
                       </div>
                     </>
                   ) : (
@@ -5663,6 +5822,30 @@ export default function FlightResults() {
           )}
         </DialogContent>
       </Dialog>
+
+      {/* ClassyBargainModal removed - using EnhancedBargainModal instead */}
+      {/* <ClassyBargainModal
+        isOpen={false}
+        flight={null}
+        fareType={null}
+        onClose={() => {
+          console.log("🎯 Closing bargain modal");
+        }}
+        onAccept={(finalPrice: number, orderRef: string) => {
+          console.log("✅ Bargain accepted:", finalPrice, orderRef);
+          // Removed old bargain logic
+        }}
+        onBookOriginal={() => {
+          console.log("💰 Booking original price");
+          // Removed old bargain logic
+        }}
+        onRetry={() => {
+          console.log("🔄 Retry requested - incrementing attempt");
+          // Removed old bargain logic
+        }}
+        attempt={1}
+        moduleType="flights"
+      /> */}
 
       {/* Sign In Modal */}
       <Dialog open={showSignIn} onOpenChange={setShowSignIn}>
@@ -6105,7 +6288,7 @@ export default function FlightResults() {
                           <span className="text-red-700 font-medium">
                             Airline fee:
                           </span>
-                          <p className="text-red-600">��3,500 per passenger</p>
+                          <p className="text-red-600">₹3,500 per passenger</p>
                         </div>
                         <div>
                           <span className="text-red-700 font-medium">
@@ -6186,11 +6369,9 @@ export default function FlightResults() {
                       Important Terms & Conditions
                     </h5>
                     <ul className="text-sm text-gray-600 space-y-1">
+                      <li>• Passenger names cannot be changed after booking</li>
                       <li>
-                        �� Passenger names cannot be changed after booking
-                      </li>
-                      <li>
-                        �� Check-in must be completed 2 hours before departure
+                        • Check-in must be completed 2 hours before departure
                       </li>
                       <li>• Valid government-issued photo ID required</li>
                       <li>
@@ -6330,8 +6511,118 @@ export default function FlightResults() {
 
       <MobileNavigation />
 
-      {/* Phase 1 Bargain Modal */}
-      <BargainModalPhase1 {...bargainHook.getBargainModalProps()} />
+      {/* Enhanced Bargain Modal with Timer System */}
+      <EnhancedBargainModal
+        isOpen={showEnhancedBargain}
+        flight={
+          selectedBargainFlight
+            ? {
+                id: selectedBargainFlight.id.toString(),
+                airline: selectedBargainFlight.airline,
+                flightNumber:
+                  selectedBargainFlight.flightNumber ||
+                  `FL${selectedBargainFlight.id}`,
+                departureCode:
+                  selectedBargainFlight.origin ||
+                  searchParams.get("from") ||
+                  "BOM",
+                arrivalCode:
+                  selectedBargainFlight.destination ||
+                  searchParams.get("to") ||
+                  "DXB",
+                departureTime: selectedBargainFlight.departureTime,
+                arrivalTime: selectedBargainFlight.arrivalTime,
+                duration: selectedBargainFlight.duration,
+                aircraft: selectedBargainFlight.aircraft || "Boeing 777",
+                price:
+                  selectedBargainFlight.price?.amount ||
+                  selectedBargainFlight.fareTypes[0]?.price ||
+                  0,
+              }
+            : null
+        }
+        selectedFareType={selectedBargainFareType}
+        onClose={() => {
+          setShowEnhancedBargain(false);
+          setSelectedBargainFlight(null);
+          setSelectedBargainFareType(null);
+        }}
+        onAccept={(finalPrice, orderRef) => {
+          console.log("Bargain accepted:", finalPrice, orderRef);
+          if (selectedBargainFlight && selectedBargainFareType) {
+            navigate("/booking-flow", {
+              state: {
+                selectedFlight: selectedBargainFlight,
+                selectedFareType: {
+                  ...selectedBargainFareType,
+                  price: finalPrice,
+                },
+                passengerCount: { adults, children },
+                orderRef: orderRef,
+                negotiatedPrice: finalPrice, // For BookingFlow compatibility
+              },
+            });
+          }
+          setShowEnhancedBargain(false);
+        }}
+        onHold={(orderRef) => {
+          console.log("Booking with hold:", orderRef);
+          if (selectedBargainFlight && selectedBargainFareType) {
+            navigate("/booking-flow", {
+              state: {
+                selectedFlight: selectedBargainFlight,
+                selectedFareType: selectedBargainFareType,
+                passengerCount: { adults, children },
+                holdRef: orderRef,
+              },
+            });
+          }
+          setShowEnhancedBargain(false);
+        }}
+      />
+
+      {/* Conversational Bargain Modal */}
+      <ConversationalBargainModal
+        isOpen={showConversationalBargain}
+        flight={
+          selectedBargainFlight
+            ? {
+                id: selectedBargainFlight.id.toString(),
+                airline: selectedBargainFlight.airline,
+                flightNumber:
+                  selectedBargainFlight.flightNumber ||
+                  `FL${selectedBargainFlight.id}`,
+                departureCode:
+                  selectedBargainFlight.origin ||
+                  searchParams.get("from") ||
+                  "BOM",
+                arrivalCode:
+                  selectedBargainFlight.destination ||
+                  searchParams.get("to") ||
+                  "DXB",
+                departureTime: selectedBargainFlight.departureTime,
+                arrivalTime: selectedBargainFlight.arrivalTime,
+                duration: selectedBargainFlight.duration,
+                aircraft: selectedBargainFlight.aircraft || "Boeing 777",
+                price:
+                  selectedBargainFlight.price?.amount ||
+                  selectedBargainFlight.fareTypes[0]?.price ||
+                  0,
+              }
+            : null
+        }
+        selectedFareType={selectedBargainFareType}
+        onClose={handleCloseConversationalBargain}
+        onAccept={handleAcceptBargain}
+        onHold={handleHoldBargain}
+        userName={user?.firstName || "traveler"}
+        module="flights"
+        onBackToResults={() => {
+          setShowConversationalBargain(false);
+          setSelectedBargainFlight(null);
+          setSelectedBargainFareType(null);
+        }}
+      />
     </div>
   );
 }

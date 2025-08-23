@@ -93,7 +93,11 @@ const SeatMap = ({
   const setSelectedSeats = setSeatSelections;
   const [selectedTraveller, setSelectedTraveller] = useState(null);
   const [expandedFlight, setExpandedFlight] = useState(null);
-  const [currentFlight, setCurrentFlight] = useState("Mumbai-Dubai");
+  const [currentFlight, setCurrentFlight] = useState(
+    selectedFlight
+      ? `${selectedFlight.from || selectedFlight.departure?.code || "DEP"}-${selectedFlight.to || selectedFlight.arrival?.code || "ARR"}`
+      : "DEP-ARR",
+  );
 
   // Generate seat layout for aircraft (Economy classes only)
   const generateSeatLayout = () => {
@@ -272,7 +276,7 @@ const SeatMap = ({
               {flightTitle}
             </h3>
             <p className="text-sm text-[#666]">
-              {flightData?.duration || "3h 15m"} ��{" "}
+              {flightData?.duration || "3h 15m"} •{" "}
               {flightData?.airline || "Airlines"} •{" "}
               {fareData?.name || "Economy"}
             </p>
@@ -476,7 +480,7 @@ const SeatMap = ({
                       <div className="w-3 h-3 bg-white border border-gray-300 rounded mr-2"></div>
                       Economy (Rows 35+)
                     </span>
-                    <span className="font-medium">₹500</span>
+                    <span className="font-medium">���500</span>
                   </div>
                 </div>
               </div>
@@ -867,6 +871,7 @@ export default function BookingFlow() {
   `;
   const location = useLocation();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const {
     departureDate,
     returnDate,
@@ -875,6 +880,64 @@ export default function BookingFlow() {
     loadDatesFromParams,
   } = useDateContext();
 
+  // Get route information from URL parameters
+  const fromCode = searchParams.get("from") || "DXB";
+  const toCode = searchParams.get("to") || "BOM";
+
+  // Airport data mapping - Comprehensive international airports
+  const airportData: Record<string, { city: string; name: string }> = {
+    // Middle East
+    DXB: { city: "Dubai", name: "Dubai International Airport" },
+    AUH: { city: "Abu Dhabi", name: "Zayed International Airport" },
+    DOH: { city: "Doha", name: "Hamad International Airport" },
+
+    // India
+    BOM: {
+      city: "Mumbai",
+      name: "Chhatrapati Shivaji Maharaj International Airport",
+    },
+    DEL: { city: "Delhi", name: "Indira Gandhi International Airport" },
+    BLR: { city: "Bangalore", name: "Kempegowda International Airport" },
+    MAA: { city: "Chennai", name: "Chennai International Airport" },
+    CCU: {
+      city: "Kolkata",
+      name: "Netaji Subhash Chandra Bose International Airport",
+    },
+
+    // Europe
+    BCN: { city: "Barcelona", name: "Barcelona-El Prat Airport" },
+    MAD: { city: "Madrid", name: "Adolfo Suárez Madrid-Barajas Airport" },
+    LHR: { city: "London", name: "Heathrow Airport" },
+    CDG: { city: "Paris", name: "Charles de Gaulle Airport" },
+    FCO: { city: "Rome", name: "Leonardo da Vinci Airport" },
+    AMS: { city: "Amsterdam", name: "Amsterdam Airport Schiphol" },
+    FRA: { city: "Frankfurt", name: "Frankfurt Airport" },
+    MUC: { city: "Munich", name: "Munich Airport" },
+
+    // Asia Pacific
+    SIN: { city: "Singapore", name: "Changi Airport" },
+    HKG: { city: "Hong Kong", name: "Hong Kong International Airport" },
+    NRT: { city: "Tokyo", name: "Narita International Airport" },
+    ICN: { city: "Seoul", name: "Incheon International Airport" },
+    BKK: { city: "Bangkok", name: "Suvarnabhumi Airport" },
+    KUL: { city: "Kuala Lumpur", name: "Kuala Lumpur International Airport" },
+
+    // Americas
+    JFK: { city: "New York", name: "John F. Kennedy International Airport" },
+    LAX: { city: "Los Angeles", name: "Los Angeles International Airport" },
+    LAS: { city: "Las Vegas", name: "McCarran International Airport" },
+    YYZ: { city: "Toronto", name: "Lester B. Pearson International Airport" },
+
+    // Africa
+    CAI: { city: "Cairo", name: "Cairo International Airport" },
+    JNB: { city: "Johannesburg", name: "O.R. Tambo International Airport" },
+  };
+
+  // Create route display based on URL parameters
+  const fromCity = airportData[fromCode]?.city || fromCode;
+  const toCity = airportData[toCode]?.city || toCode;
+  const routeDisplay = `${fromCity} to ${toCity}`;
+
   // Get passenger data and flight data from navigation state
   const passengersFromState = location.state?.passengers || {
     adults: 1,
@@ -882,10 +945,44 @@ export default function BookingFlow() {
   };
 
   // Get flight booking data from navigation state
-  const selectedFlight = location.state?.selectedFlight;
+  const rawSelectedFlight = location.state?.selectedFlight;
   const selectedFareType = location.state?.selectedFareType;
   const negotiatedPrice =
     location.state?.negotiatedPrice || selectedFareType?.price || 32168; // fallback price
+
+  // Ensure flight data uses correct route orientation
+  const selectedFlight = rawSelectedFlight
+    ? {
+        ...rawSelectedFlight,
+        from: fromCity,
+        to: toCity,
+        // Ensure departure and arrival match URL route
+        departure: {
+          ...rawSelectedFlight.departure,
+          code: fromCode,
+          city: fromCity,
+          name:
+            airportData[fromCode]?.name ||
+            rawSelectedFlight.departure?.name ||
+            `${fromCode} International Airport`,
+        },
+        arrival: {
+          ...rawSelectedFlight.arrival,
+          code: toCode,
+          city: toCity,
+          name:
+            airportData[toCode]?.name ||
+            rawSelectedFlight.arrival?.name ||
+            `${toCode} International Airport`,
+        },
+      }
+    : null;
+
+  console.log("🛫 BookingFlow Route Debug:", {
+    urlParams: { fromCode, toCode, fromCity, toCity },
+    rawFlight: rawSelectedFlight,
+    correctedFlight: selectedFlight,
+  });
 
   // Define renderFlightSegment function after selectedFlight is available
 
@@ -1076,7 +1173,7 @@ export default function BookingFlow() {
     { name: "Guernsey", code: "+44", flag: "🇬🇬" },
     { name: "Guinea", code: "+224", flag: "🇬🇳" },
     { name: "Guinea-Bissau", code: "+245", flag: "🇬🇼" },
-    { name: "Guyana", code: "+592", flag: "���🇾" },
+    { name: "Guyana", code: "+592", flag: "🇬🇾" },
     { name: "Haiti", code: "+509", flag: "🇭🇹" },
     { name: "Honduras", code: "+504", flag: "🇭🇳" },
     { name: "Hong Kong", code: "+852", flag: "🇭🇰" },
@@ -1640,7 +1737,12 @@ export default function BookingFlow() {
                           name: "US Dollar",
                           flag: "🇺🇸",
                         },
-                        { code: "EUR", symbol: "€", name: "Euro", flag: "🇪🇺" },
+                        {
+                          code: "EUR",
+                          symbol: "€",
+                          name: "Euro",
+                          flag: "🇪🇺",
+                        },
                         {
                           code: "GBP",
                           symbol: "£",
@@ -1893,7 +1995,7 @@ export default function BookingFlow() {
                   : "Select dates"}
               </div>
               <h1 className="text-xl md:text-2xl font-bold text-gray-900 mb-4 md:mb-6">
-                Mumbai to Dubai
+                {routeDisplay}
               </h1>
             </div>
 
@@ -1979,7 +2081,7 @@ export default function BookingFlow() {
                                 1 carry-on bag
                               </p>
                               <p className="text-xs text-[#666]">
-                                22 x 55 x 40 cm ��� 7 kg
+                                22 x 55 x 40 cm • 7 kg
                               </p>
                             </div>
                           </div>
@@ -2131,7 +2233,7 @@ export default function BookingFlow() {
                               </SelectTrigger>
                               <SelectContent>
                                 <SelectItem value="5kg">
-                                  5kg - ��� 1,500
+                                  5kg - ₹ 1,500
                                 </SelectItem>
                                 <SelectItem value="10kg">
                                   10kg - ₹ 2,800
@@ -2792,8 +2894,8 @@ export default function BookingFlow() {
                                 <div>
                                   <p className="text-sm text-[#666]">Route</p>
                                   <p className="font-medium">
-                                    {selectedFlight?.from || "Mumbai"} →{" "}
-                                    {selectedFlight?.to || "Dubai"}
+                                    {selectedFlight?.from || fromCity} →{" "}
+                                    {selectedFlight?.to || toCity}
                                   </p>
                                 </div>
                               </div>
@@ -2883,8 +2985,8 @@ export default function BookingFlow() {
                                   <div>
                                     <p className="text-sm text-[#666]">Route</p>
                                     <p className="font-medium">
-                                      {selectedFlight?.to || "Dubai"} →{" "}
-                                      {selectedFlight?.from || "Mumbai"}
+                                      {selectedFlight?.to || toCity} →{" "}
+                                      {selectedFlight?.from || fromCity}
                                     </p>
                                   </div>
                                 </div>
@@ -3010,8 +3112,8 @@ export default function BookingFlow() {
                         {/* Outbound Flight Fare Rules */}
                         <div className="bg-[#f8fafc] rounded-lg p-4 border border-[#e2e8f0]">
                           <h4 className="font-medium text-gray-900 mb-3">
-                            Outbound: {selectedFlight?.from || "Mumbai"} →{" "}
-                            {selectedFlight?.to || "Dubai"}
+                            Outbound: {selectedFlight?.from || fromCity} →{" "}
+                            {selectedFlight?.to || toCity}
                           </h4>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                             <div>
@@ -3065,8 +3167,8 @@ export default function BookingFlow() {
                         {tripType === "round-trip" && returnDate && (
                           <div className="bg-[#f8fafc] rounded-lg p-4 border border-[#e2e8f0]">
                             <h4 className="font-medium text-gray-900 mb-3">
-                              Return: {selectedFlight?.to || "Dubai"} →{" "}
-                              {selectedFlight?.from || "Mumbai"}
+                              Return: {selectedFlight?.to || toCity} →{" "}
+                              {selectedFlight?.from || fromCity}
                             </h4>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                               <div>

@@ -1,0 +1,427 @@
+/* Professional Print Styles for Faredown Vouchers and Invoices */
+
+@media print {
+  /* Global Print Settings */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: "Inter", Arial, sans-serif;
+    background: white !important;
+    color: black !important;
+  }
+
+  /* Hide non-printable elements */
+  .no-print,
+  .no-print *,
+  button:not(.print-button),
+  .print-hidden,
+  .sticky,
+  .fixed,
+  .absolute:not(.print-absolute),
+  nav,
+  header:not(.print-header),
+  footer:not(.print-footer) {
+    display: none !important;
+  }
+
+  /* Page settings */
+  @page {
+    size: A4;
+    margin: 0.5in;
+    background: white;
+  }
+
+  /* Typography */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: black !important;
+    page-break-after: avoid;
+  }
+
+  p,
+  div,
+  span {
+    color: black !important;
+  }
+
+  /* Faredown Brand Colors - Force print */
+  .bg-\\[\\#003580\\],
+  .print-header {
+    background-color: #003580 !important;
+    background: #003580 !important;
+    color: white !important;
+  }
+
+  .text-\\[\\#003580\\] {
+    color: #003580 !important;
+  }
+
+  .border-\\[\\#003580\\] {
+    border-color: #003580 !important;
+  }
+
+  /* Gradients - Convert to solid color for print */
+  .bg-gradient-to-r {
+    background: #003580 !important;
+    background-color: #003580 !important;
+  }
+
+  /* Ensure text colors are visible */
+  .text-white {
+    color: white !important;
+  }
+
+  .text-blue-100 {
+    color: #dbeafe !important;
+  }
+
+  .text-gray-900 {
+    color: #111827 !important;
+  }
+
+  .text-gray-600 {
+    color: #4b5563 !important;
+  }
+
+  .text-gray-500 {
+    color: #6b7280 !important;
+  }
+
+  .text-green-600 {
+    color: #059669 !important;
+  }
+
+  .text-green-700 {
+    color: #047857 !important;
+  }
+
+  .text-amber-800 {
+    color: #92400e !important;
+  }
+
+  .text-amber-700 {
+    color: #b45309 !important;
+  }
+
+  .text-red-800 {
+    color: #991b1b !important;
+  }
+
+  .text-red-700 {
+    color: #b91c1c !important;
+  }
+
+  /* Background colors */
+  .bg-white {
+    background-color: white !important;
+  }
+
+  .bg-gray-50 {
+    background-color: #f9fafb !important;
+  }
+
+  .bg-blue-50 {
+    background-color: #eff6ff !important;
+  }
+
+  .bg-green-50 {
+    background-color: #ecfdf5 !important;
+  }
+
+  .bg-amber-50 {
+    background-color: #fffbeb !important;
+  }
+
+  .bg-red-50 {
+    background-color: #fef2f2 !important;
+  }
+
+  /* Borders */
+  .border {
+    border: 1px solid #d1d5db !important;
+  }
+
+  .border-gray-200 {
+    border-color: #e5e7eb !important;
+  }
+
+  .border-gray-300 {
+    border-color: #d1d5db !important;
+  }
+
+  .border-blue-200 {
+    border-color: #bfdbfe !important;
+  }
+
+  .border-green-200 {
+    border-color: #bbf7d0 !important;
+  }
+
+  .border-amber-200 {
+    border-color: #fde68a !important;
+  }
+
+  .border-amber-400 {
+    border-color: #fbbf24 !important;
+  }
+
+  .border-red-200 {
+    border-color: #fecaca !important;
+  }
+
+  .border-red-400 {
+    border-color: #f87171 !important;
+  }
+
+  /* Dashed borders for vouchers */
+  .border-dashed {
+    border-style: dashed !important;
+  }
+
+  /* QR Code and Icons */
+  svg {
+    color: inherit !important;
+  }
+
+  /* Tables */
+  table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+  }
+
+  th,
+  td {
+    border: 1px solid #d1d5db !important;
+    padding: 8px !important;
+    text-align: left !important;
+  }
+
+  th {
+    background-color: #003580 !important;
+    color: white !important;
+    font-weight: bold !important;
+  }
+
+  /* Page breaks */
+  .print-break {
+    page-break-before: always !important;
+  }
+
+  .print-break-after {
+    page-break-after: always !important;
+  }
+
+  .page-break-inside-avoid {
+    page-break-inside: avoid !important;
+  }
+
+  /* Voucher specific styles */
+  .voucher-header {
+    background-color: #003580 !important;
+    color: white !important;
+    padding: 20px !important;
+  }
+
+  .voucher-section {
+    page-break-inside: avoid !important;
+    margin-bottom: 15px !important;
+  }
+
+  /* Invoice specific styles */
+  .invoice-header {
+    background-color: #003580 !important;
+    color: white !important;
+    padding: 25px !important;
+  }
+
+  .invoice-table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    margin: 15px 0 !important;
+  }
+
+  .invoice-table th {
+    background-color: #003580 !important;
+    color: white !important;
+    padding: 10px !important;
+    text-align: left !important;
+  }
+
+  .invoice-table td {
+    padding: 8px 10px !important;
+    border-bottom: 1px solid #e5e7eb !important;
+  }
+
+  /* Grid layouts for print */
+  .print-grid-2 {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 20px !important;
+  }
+
+  .print-grid-3 {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr 1fr !important;
+    gap: 15px !important;
+  }
+
+  .print-grid-4 {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr 1fr 1fr !important;
+    gap: 10px !important;
+  }
+
+  /* Spacing adjustments for print */
+  .print-p-4 {
+    padding: 15px !important;
+  }
+
+  .print-mb-6 {
+    margin-bottom: 20px !important;
+  }
+
+  .print-text-center {
+    text-align: center !important;
+  }
+
+  /* Footer for vouchers/invoices */
+  .print-footer {
+    page-break-inside: avoid !important;
+    margin-top: 30px !important;
+    border-top: 1px solid #d1d5db !important;
+    padding-top: 15px !important;
+    text-align: center !important;
+    font-size: 12px !important;
+    color: #6b7280 !important;
+  }
+
+  /* Logo and branding */
+  .faredown-logo {
+    font-size: 28px !important;
+    font-weight: bold !important;
+    color: white !important;
+    margin-bottom: 5px !important;
+  }
+
+  /* Contact information */
+  .contact-info {
+    font-size: 11px !important;
+    line-height: 1.4 !important;
+  }
+
+  /* Important notices */
+  .important-notice {
+    background-color: #fffbeb !important;
+    border-left: 4px solid #fbbf24 !important;
+    padding: 15px !important;
+    margin: 15px 0 !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* Emergency contact */
+  .emergency-contact {
+    background-color: #fef2f2 !important;
+    border-left: 4px solid #f87171 !important;
+    padding: 15px !important;
+    margin: 15px 0 !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* Ensure minimum readability */
+  .text-xs {
+    font-size: 10px !important;
+  }
+
+  .text-sm {
+    font-size: 12px !important;
+  }
+
+  .text-base {
+    font-size: 14px !important;
+  }
+
+  .text-lg {
+    font-size: 16px !important;
+  }
+
+  .text-xl {
+    font-size: 18px !important;
+  }
+
+  .text-2xl {
+    font-size: 20px !important;
+  }
+
+  .text-3xl {
+    font-size: 24px !important;
+  }
+
+  .text-4xl {
+    font-size: 28px !important;
+  }
+
+  /* Shadow removal for print */
+  .shadow-sm,
+  .shadow,
+  .shadow-lg,
+  .shadow-xl {
+    box-shadow: none !important;
+  }
+
+  /* Ensure proper spacing */
+  .space-y-2 > * + * {
+    margin-top: 8px !important;
+  }
+
+  .space-y-3 > * + * {
+    margin-top: 12px !important;
+  }
+
+  .space-y-4 > * + * {
+    margin-top: 16px !important;
+  }
+
+  .space-y-6 > * + * {
+    margin-top: 24px !important;
+  }
+
+  /* Round corners removal for print */
+  .rounded,
+  .rounded-lg,
+  .rounded-xl,
+  .rounded-full {
+    border-radius: 0 !important;
+  }
+
+  /* Keep some essential rounded corners */
+  .print-rounded {
+    border-radius: 4px !important;
+  }
+}
+
+/* Print button styles (visible only on screen) */
+@media screen {
+  .print-only {
+    display: none;
+  }
+}
+
+@media print {
+  .print-only {
+    display: block !important;
+  }
+
+  .screen-only {
+    display: none !important;
+  }
+}

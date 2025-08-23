@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import {
+  useParams,
+  useNavigate,
+  Link,
+  useSearchParams,
+} from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
@@ -27,9 +32,14 @@ import {
 } from "lucide-react";
 import { flightsService, Flight } from "@/services/flightsService";
 import { useCurrency } from "@/contexts/CurrencyContext";
-import { FlightBargainModal } from "@/components/FlightBargainModal";
+import { ClassyBargainModal } from "@/components/ClassyBargainModal";
 
 import { useScrollToTop } from "@/hooks/useScrollToTop";
+import {
+  orientSegmentsToRoute,
+  getRouteEnds,
+  normalizeIata,
+} from "@/utils/flight";
 
 // Airline Logo Mapping - Professional Logos
 const airlineLogos = {
@@ -60,23 +70,145 @@ export default function FlightDetails({
   const params = useParams();
   const navigate = useNavigate();
   const { selectedCurrency } = useCurrency();
-  // Immediately use fallback data to prevent loading delays
+  const [searchParams] = useSearchParams();
+
+  // Extract search parameters for dynamic content
+  const departureDate = searchParams.get("departure") || "2024-08-22";
+  const returnDate = searchParams.get("return") || "2024-08-25";
+  const fromCode = searchParams.get("from") || "DXB";
+  const toCode = searchParams.get("to") || "BOM";
+
+  // Airport data mapping - Comprehensive international airports
+  const airportData: Record<
+    string,
+    { city: string; name: string; terminal?: string }
+  > = {
+    // Middle East
+    DXB: { city: "Dubai", name: "Dubai International Airport", terminal: "3" },
+    AUH: {
+      city: "Abu Dhabi",
+      name: "Zayed International Airport",
+      terminal: "1",
+    },
+    DOH: { city: "Doha", name: "Hamad International Airport", terminal: "1" },
+
+    // India
+    BOM: {
+      city: "Mumbai",
+      name: "Chhatrapati Shivaji Maharaj International Airport",
+      terminal: "2",
+    },
+    DEL: {
+      city: "Delhi",
+      name: "Indira Gandhi International Airport",
+      terminal: "3",
+    },
+    BLR: {
+      city: "Bangalore",
+      name: "Kempegowda International Airport",
+      terminal: "1",
+    },
+    MAA: {
+      city: "Chennai",
+      name: "Chennai International Airport",
+      terminal: "1",
+    },
+    CCU: {
+      city: "Kolkata",
+      name: "Netaji Subhash Chandra Bose International Airport",
+      terminal: "1",
+    },
+
+    // Europe
+    BCN: {
+      city: "Barcelona",
+      name: "Barcelona-El Prat Airport",
+      terminal: "1",
+    },
+    MAD: {
+      city: "Madrid",
+      name: "Adolfo Suárez Madrid-Barajas Airport",
+      terminal: "1",
+    },
+    LHR: { city: "London", name: "Heathrow Airport", terminal: "2" },
+    CDG: { city: "Paris", name: "Charles de Gaulle Airport", terminal: "2A" },
+    FCO: { city: "Rome", name: "Leonardo da Vinci Airport", terminal: "3" },
+    AMS: {
+      city: "Amsterdam",
+      name: "Amsterdam Airport Schiphol",
+      terminal: "1",
+    },
+    FRA: { city: "Frankfurt", name: "Frankfurt Airport", terminal: "1" },
+    MUC: { city: "Munich", name: "Munich Airport", terminal: "2" },
+
+    // Asia Pacific
+    SIN: { city: "Singapore", name: "Changi Airport", terminal: "3" },
+    HKG: {
+      city: "Hong Kong",
+      name: "Hong Kong International Airport",
+      terminal: "1",
+    },
+    NRT: { city: "Tokyo", name: "Narita International Airport", terminal: "1" },
+    ICN: {
+      city: "Seoul",
+      name: "Incheon International Airport",
+      terminal: "1",
+    },
+    BKK: { city: "Bangkok", name: "Suvarnabhumi Airport", terminal: "1" },
+    KUL: {
+      city: "Kuala Lumpur",
+      name: "Kuala Lumpur International Airport",
+      terminal: "1",
+    },
+
+    // Americas
+    JFK: {
+      city: "New York",
+      name: "John F. Kennedy International Airport",
+      terminal: "4",
+    },
+    LAX: {
+      city: "Los Angeles",
+      name: "Los Angeles International Airport",
+      terminal: "1",
+    },
+    LAS: {
+      city: "Las Vegas",
+      name: "McCarran International Airport",
+      terminal: "1",
+    },
+    YYZ: {
+      city: "Toronto",
+      name: "Lester B. Pearson International Airport",
+      terminal: "1",
+    },
+
+    // Africa
+    CAI: { city: "Cairo", name: "Cairo International Airport", terminal: "3" },
+    JNB: {
+      city: "Johannesburg",
+      name: "O.R. Tambo International Airport",
+      terminal: "A",
+    },
+  };
+
+  // Dynamic fallback data based on search parameters
   const fallbackFlight = {
     id: "fallback",
     flightNumber: "6E 1407",
     airline: "IndiGo",
     airlineCode: "6E",
     departure: {
-      code: "BOM",
-      city: "Mumbai",
-      name: "Chhatrapati Shivaji Maharaj International Airport",
-      terminal: "2",
+      code: fromCode,
+      city: airportData[fromCode]?.city || fromCode,
+      name: airportData[fromCode]?.name || `${fromCode} International Airport`,
+      terminal: airportData[fromCode]?.terminal || "1",
     },
     arrival: {
-      code: "DXB",
-      city: "Dubai",
-      name: "Dubai International Airport",
-      terminal: "2",
+      code: toCode,
+      city: airportData[toCode]?.city || toCode,
+      name: airportData[toCode]?.name || `${toCode} International Airport`,
+      terminal: airportData[toCode]?.terminal || "2",
     },
     departureTime: "14:30",
     arrivalTime: "16:00",
@@ -93,11 +225,120 @@ export default function FlightDetails({
         total: 22650,
       },
     },
+    // Add segments for route orientation
+    segments: [
+      {
+        carrierCode: "6E",
+        flightNumber: "1407",
+        origin: {
+          code: fromCode,
+          name:
+            airportData[fromCode]?.name || `${fromCode} International Airport`,
+          time: "14:30",
+        },
+        destination: {
+          code: toCode,
+          name: airportData[toCode]?.name || `${toCode} International Airport`,
+          time: "16:00",
+        },
+        durationMinutes: 210,
+      },
+    ],
   };
 
-  const [flight, setFlight] = useState<Flight | null>(
+  const [baseFlight, setBaseFlight] = useState<Flight | null>(
     providedFlight || fallbackFlight,
   );
+
+  // Create segments from flight data if not present
+  const createSegments = (flight: any) => {
+    if (flight.segments?.length) return flight.segments;
+
+    return [
+      {
+        carrierCode: flight.airlineCode || "6E",
+        flightNumber: flight.flightNumber || "1407",
+        origin: {
+          code: flight.departure?.code || fromCode,
+          name:
+            flight.departure?.name ||
+            airportData[fromCode]?.name ||
+            `${fromCode} International Airport`,
+          time: flight.departureTime || "14:30",
+        },
+        destination: {
+          code: flight.arrival?.code || toCode,
+          name:
+            flight.arrival?.name ||
+            airportData[toCode]?.name ||
+            `${toCode} International Airport`,
+          time: flight.arrivalTime || "16:00",
+        },
+        durationMinutes: 210,
+      },
+    ];
+  };
+
+  // Orient flight segments to match URL route
+  const orientedItinerary = baseFlight
+    ? orientSegmentsToRoute(
+        {
+          id: baseFlight.id,
+          segments: createSegments(baseFlight),
+        },
+        fromCode,
+        toCode,
+      )
+    : null;
+
+  // Create properly oriented flight object
+  const flight =
+    baseFlight && orientedItinerary
+      ? {
+          ...baseFlight,
+          segments: orientedItinerary.segments,
+          // Update departure/arrival to match oriented segments
+          departure: {
+            ...baseFlight.departure,
+            code: orientedItinerary.segments[0]?.origin?.code || fromCode,
+            name:
+              orientedItinerary.segments[0]?.origin?.name ||
+              airportData[fromCode]?.name ||
+              `${fromCode} International Airport`,
+            city:
+              airportData[
+                orientedItinerary.segments[0]?.origin?.code || fromCode
+              ]?.city ||
+              orientedItinerary.segments[0]?.origin?.code ||
+              fromCode,
+          },
+          arrival: {
+            ...baseFlight.arrival,
+            code:
+              orientedItinerary.segments[orientedItinerary.segments.length - 1]
+                ?.destination?.code || toCode,
+            name:
+              orientedItinerary.segments[orientedItinerary.segments.length - 1]
+                ?.destination?.name ||
+              airportData[toCode]?.name ||
+              `${toCode} International Airport`,
+            city:
+              airportData[
+                orientedItinerary.segments[
+                  orientedItinerary.segments.length - 1
+                ]?.destination?.code || toCode
+              ]?.city ||
+              orientedItinerary.segments[orientedItinerary.segments.length - 1]
+                ?.destination?.code ||
+              toCode,
+          },
+        }
+      : baseFlight;
+
+  // Get oriented route ends
+  const { from: orientedFrom, to: orientedTo } = flight?.segments
+    ? getRouteEnds(flight.segments)
+    : { from: fromCode, to: toCode };
   const [isLoading, setIsLoading] = useState(false); // Start with false for immediate render
   const [error, setError] = useState<string | null>(null);
   const [showBargainModal, setShowBargainModal] = useState(false);
@@ -122,7 +363,7 @@ export default function FlightDetails({
       setError(null);
       const flightDetails =
         await flightsService.getFlightDetails(finalFlightId);
-      setFlight(flightDetails);
+      setBaseFlight(flightDetails);
     } catch (err) {
       console.error("Failed to load flight details:", err);
       // Keep fallback data instead of showing error
@@ -165,6 +406,40 @@ export default function FlightDetails({
   // Flight should always be available now due to immediate fallback
   const displayFlight = flight;
 
+  // Use oriented segments for correct route display
+  const firstSegment = displayFlight?.segments?.[0];
+  const lastSegment =
+    displayFlight?.segments?.[displayFlight.segments.length - 1];
+
+  // Create explicit return flight routing (reverse of oriented route)
+  const returnDeparture = {
+    code: lastSegment?.destination?.code || orientedTo || toCode,
+    name:
+      lastSegment?.destination?.name ||
+      airportData[orientedTo || toCode]?.name ||
+      `${orientedTo || toCode} International Airport`,
+    city:
+      airportData[lastSegment?.destination?.code || orientedTo || toCode]
+        ?.city ||
+      lastSegment?.destination?.code ||
+      orientedTo ||
+      toCode,
+  };
+
+  const returnArrival = {
+    code: firstSegment?.origin?.code || orientedFrom || fromCode,
+    name:
+      firstSegment?.origin?.name ||
+      airportData[orientedFrom || fromCode]?.name ||
+      `${orientedFrom || fromCode} International Airport`,
+    city:
+      airportData[firstSegment?.origin?.code || orientedFrom || fromCode]
+        ?.city ||
+      firstSegment?.origin?.code ||
+      orientedFrom ||
+      fromCode,
+  };
+
   // We now always have flight data, so no need for error state
   if (!displayFlight) {
     return (
@@ -190,12 +465,16 @@ export default function FlightDetails({
             <Button
               variant="ghost"
               className="text-white hover:bg-white/10 active:bg-white/20 p-3 min-w-[44px] min-h-[44px] rounded-full transition-colors"
-              onClick={() => navigate("/flights")}
+              onClick={() =>
+                navigate(`/flights/results?${searchParams.toString()}`)
+              }
             >
               <ArrowLeft className="w-5 h-5" />
             </Button>
             <div>
-              <h1 className="text-lg font-semibold">Your flight to Dubai</h1>
+              <h1 className="text-lg font-semibold">
+                Your flight to {airportData[toCode]?.city || toCode}
+              </h1>
             </div>
           </div>
           <div className="flex items-center space-x-3">
@@ -226,10 +505,10 @@ export default function FlightDetails({
 
       <div className="bg-gray-50 min-h-screen pb-32">
         <div className="max-w-md mx-auto bg-white">
-          {/* Flight to Dubai */}
+          {/* Outbound Flight */}
           <div className="p-3">
             <h2 className="text-lg font-bold text-gray-900 mb-1">
-              Flight to Dubai
+              Your flight {orientedFrom || fromCode} → {orientedTo || toCode}
             </h2>
             <p className="text-gray-600 text-sm mb-3">Direct • 3h • Economy</p>
 
@@ -240,11 +519,17 @@ export default function FlightDetails({
                 <div className="w-3 h-3 border-2 border-gray-900 rounded-full bg-white mt-2"></div>
                 <div className="flex-1">
                   <div className="text-lg font-semibold text-gray-900 mb-1">
-                    Sat, Sep 6 • {displayFlight.departureTime}
+                    {new Date(departureDate).toLocaleDateString("en-US", {
+                      weekday: "short",
+                      month: "short",
+                      day: "numeric",
+                    })}{" "}
+                    • {displayFlight.departureTime}
                   </div>
                   <div className="font-bold text-gray-900 text-lg mb-1">
-                    {displayFlight.departure.code} •{" "}
-                    {displayFlight.departure.name}
+                    {firstSegment?.origin?.code || displayFlight.departure.code}{" "}
+                    •{" "}
+                    {firstSegment?.origin?.name || displayFlight.departure.name}
                   </div>
 
                   {/* Airline Info */}
@@ -280,18 +565,27 @@ export default function FlightDetails({
                 <div className="w-3 h-3 border-2 border-gray-900 rounded-full bg-white mt-2"></div>
                 <div className="flex-1">
                   <div className="text-lg font-semibold text-gray-900 mb-1">
-                    Sat, Sep 6 • {displayFlight.arrivalTime}
+                    {new Date(departureDate).toLocaleDateString("en-US", {
+                      weekday: "short",
+                      month: "short",
+                      day: "numeric",
+                    })}{" "}
+                    • {displayFlight.arrivalTime}
                   </div>
                   <div className="font-bold text-gray-900 text-lg">
-                    {displayFlight.arrival.code} • {displayFlight.arrival.name}
+                    {lastSegment?.destination?.code ||
+                      displayFlight.arrival.code}{" "}
+                    •{" "}
+                    {lastSegment?.destination?.name ||
+                      displayFlight.arrival.name}
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Flight to Mumbai */}
+            {/* Return Flight */}
             <h2 className="text-lg font-bold text-gray-900 mb-1 mt-4">
-              Flight to Mumbai
+              Return flight {orientedTo || toCode} → {orientedFrom || fromCode}
             </h2>
             <p className="text-gray-600 text-sm mb-3">
               Direct • 3h 15m • Economy
@@ -304,10 +598,15 @@ export default function FlightDetails({
                 <div className="w-3 h-3 border-2 border-gray-900 rounded-full bg-white mt-2"></div>
                 <div className="flex-1">
                   <div className="text-lg font-semibold text-gray-900 mb-1">
-                    Sat, Sep 13 • 20:50
+                    {new Date(returnDate).toLocaleDateString("en-US", {
+                      weekday: "short",
+                      month: "short",
+                      day: "numeric",
+                    })}{" "}
+                    • 20:50
                   </div>
                   <div className="font-bold text-gray-900 text-lg mb-1">
-                    {displayFlight.arrival.code} • {displayFlight.arrival.name}
+                    {returnDeparture.code} • {returnDeparture.name}
                   </div>
 
                   {/* Airline Info */}
@@ -324,7 +623,9 @@ export default function FlightDetails({
                       <div className="font-medium text-gray-900">
                         {displayFlight.airline}
                       </div>
-                      <div className="text-sm text-gray-600">Flight 6E1456</div>
+                      <div className="text-sm text-gray-600">
+                        Flight 6E 1456
+                      </div>
                       <div className="text-sm text-gray-600">
                         Flight time 3h 15m
                       </div>
@@ -342,7 +643,14 @@ export default function FlightDetails({
                 <div className="flex-1">
                   <div className="flex items-center space-x-2 mb-1">
                     <span className="text-lg font-semibold text-gray-900">
-                      Sun, Sep 14 • 01:35
+                      {new Date(
+                        new Date(returnDate).getTime() + 24 * 60 * 60 * 1000,
+                      ).toLocaleDateString("en-US", {
+                        weekday: "short",
+                        month: "short",
+                        day: "numeric",
+                      })}{" "}
+                      • 01:35
                     </span>
                     <div className="flex items-center space-x-1 bg-gray-100 px-2 py-1 rounded">
                       <Info className="w-3 h-3 text-gray-600" />
@@ -352,8 +660,7 @@ export default function FlightDetails({
                     </div>
                   </div>
                   <div className="font-bold text-gray-900 text-lg">
-                    {displayFlight.departure.code} •{" "}
-                    {displayFlight.departure.name}
+                    {returnArrival.code} • {returnArrival.name}
                   </div>
                 </div>
               </div>
@@ -559,14 +866,81 @@ export default function FlightDetails({
       </div>
 
       {/* Flight Bargain Modal */}
-      <FlightBargainModal
-        flight={displayFlight}
+      <ClassyBargainModal
         isOpen={showBargainModal}
+        flight={
+          displayFlight
+            ? {
+                id: displayFlight.id,
+                airline: displayFlight.airline,
+                flightNumber: displayFlight.flightNumber || displayFlight.id,
+                departureCode: displayFlight.origin || "BOM",
+                arrivalCode: displayFlight.destination || "DXB",
+                departureTime: displayFlight.departureTime,
+                arrivalTime: displayFlight.arrivalTime,
+                duration: displayFlight.duration,
+                aircraft: displayFlight.aircraft,
+                price: displayFlight.price?.amount || 0,
+              }
+            : null
+        }
+        fareType={
+          displayFlight
+            ? {
+                type: displayFlight.fareClass || "Economy",
+                price: displayFlight.price?.amount || 0,
+                currency: "INR",
+                features: ["Seat Selection", "Meal", "Baggage"],
+              }
+            : null
+        }
         onClose={() => setShowBargainModal(false)}
-        onBookingSuccess={(finalPrice) => {
-          console.log("Bargain booking success with price:", finalPrice);
+        onAccept={(finalPrice, orderRef) => {
+          console.log(
+            "Bargain accepted with price:",
+            finalPrice,
+            "Order:",
+            orderRef,
+          );
           setShowBargainModal(false);
+          if (displayFlight) {
+            navigate("/booking-flow", {
+              state: {
+                selectedFlight: displayFlight,
+                selectedFareType: {
+                  type: displayFlight.fareClass || "Economy",
+                  price: finalPrice,
+                  currency: "INR",
+                  features: [],
+                },
+                passengerCount: { adults: 1, children: 0 },
+                isBargainAccepted: true,
+                finalBargainPrice: finalPrice,
+                orderRef,
+              },
+            });
+          }
         }}
+        onBookOriginal={() => {
+          console.log("Booking original price:", displayFlight?.price?.amount);
+          setShowBargainModal(false);
+          if (displayFlight) {
+            navigate("/booking-flow", {
+              state: {
+                selectedFlight: displayFlight,
+                selectedFareType: {
+                  type: displayFlight.fareClass || "Economy",
+                  price: displayFlight.price?.amount || 0,
+                  currency: "INR",
+                  features: [],
+                },
+                passengerCount: { adults: 1, children: 0 },
+              },
+            });
+          }
+        }}
+        attempt={1}
+        moduleType="flights"
       />
     </div>
   );

@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Bargain Modal Test</title>
+  </head>
+  <body>
+    <h1>Test Instructions</h1>
+    <ol>
+      <li>Go to the Flight Results page (search for flights)</li>
+      <li>Click on any "Bargain Now" button</li>
+      <li>
+        Verify that the UnifiedBargainModal opens with:
+        <ul>
+          <li>Price input field</li>
+          <li>Flight details (airline, flight number)</li>
+          <li>No "[object Object]" errors in the display</li>
+        </ul>
+      </li>
+      <li>Enter a price lower than the displayed price</li>
+      <li>Click "Start AI Negotiation"</li>
+      <li>Verify that the chat flow starts with typing animations</li>
+      <li>
+        Verify that messages are displayed progressively (not all at once)
+      </li>
+      <li>Verify that the decision panel appears after the chat</li>
+    </ol>
+
+    <h2>Expected Flow</h2>
+    <p>
+      Input → Chat (progressive AI ↔ supplier beats) → Decision (accept/retry
+      with timer) → Hold state (price locked)
+    </p>
+
+    <h2>Things to Check</h2>
+    <ul>
+      <li>No "[object Object]" text appears anywhere</li>
+      <li>All prices are properly formatted with currency symbols</li>
+      <li>Modal opens centered (not as side panel)</li>
+      <li>Chat messages use dynamic copy from copy_packs.json</li>
+      <li>Progressive typing animation works</li>
+      <li>Transitions between steps are smooth</li>
+    </ul>
+  </body>
+</html>

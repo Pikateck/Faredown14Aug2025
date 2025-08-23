@@ -1,0 +1,283 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "AI Bargaining Platform - Production SLA",
+    "tags": ["bargain", "ai", "sla", "production"],
+    "timezone": "UTC",
+    "refresh": "5s",
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "panels": [
+      {
+        "id": 1,
+        "title": "p95 Latency by Route",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, sum by (le,route) (rate(bargain_response_seconds_bucket{route=~\"/session/.+\"}[5m])))",
+            "legendFormat": "{{route}} p95"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Seconds",
+            "max": 0.5,
+            "min": 0
+          }
+        ],
+        "thresholds": [
+          {
+            "value": 0.3,
+            "colorMode": "critical",
+            "op": "gt"
+          }
+        ],
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 }
+      },
+      {
+        "id": 2,
+        "title": "Redis Hit Rate",
+        "type": "singlestat",
+        "targets": [
+          {
+            "expr": "bargain_redis_hit_rate",
+            "legendFormat": "Hit Rate"
+          }
+        ],
+        "valueMaps": [
+          {
+            "value": "null",
+            "text": "N/A"
+          }
+        ],
+        "thresholds": "0.85,0.90",
+        "colorBackground": true,
+        "format": "percentunit",
+        "gridPos": { "h": 8, "w": 6, "x": 12, "y": 0 }
+      },
+      {
+        "id": 3,
+        "title": "Inventory Flip Rate",
+        "type": "singlestat",
+        "targets": [
+          {
+            "expr": "bargain_inventory_flip_rate",
+            "legendFormat": "Flip Rate"
+          }
+        ],
+        "thresholds": "0.015,0.020",
+        "colorBackground": true,
+        "format": "percentunit",
+        "gridPos": { "h": 8, "w": 6, "x": 18, "y": 0 }
+      },
+      {
+        "id": 4,
+        "title": "Error Rate by Route (5m)",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "sum by (route) (rate(bargain_requests_total{code=~\"5..\",route=~\"/session/.+\"}[5m]))",
+            "legendFormat": "{{route}} errors/sec"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Errors/sec",
+            "min": 0
+          }
+        ],
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 }
+      },
+      {
+        "id": 5,
+        "title": "Fallback Reasons (Stacked)",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "sum by (reason) (rate(bargain_fallback_total[5m]))",
+            "legendFormat": "{{reason}}"
+          }
+        ],
+        "stack": true,
+        "yAxes": [
+          {
+            "label": "Fallbacks/sec",
+            "min": 0
+          }
+        ],
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 }
+      },
+      {
+        "id": 6,
+        "title": "Model Inference Time p95",
+        "type": "singlestat",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, sum by (le) (rate(bargain_model_infer_ms_bucket[5m])))",
+            "legendFormat": "Model p95"
+          }
+        ],
+        "format": "ms",
+        "thresholds": "100,200",
+        "colorBackground": true,
+        "gridPos": { "h": 4, "w": 6, "x": 0, "y": 16 }
+      },
+      {
+        "id": 7,
+        "title": "Offerability Engine Time p95",
+        "type": "singlestat",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, sum by (le) (rate(bargain_offerability_ms_bucket[5m])))",
+            "legendFormat": "Offerability p95"
+          }
+        ],
+        "format": "ms",
+        "thresholds": "50,100",
+        "colorBackground": true,
+        "gridPos": { "h": 4, "w": 6, "x": 6, "y": 16 }
+      },
+      {
+        "id": 8,
+        "title": "Async Queue Lag",
+        "type": "singlestat",
+        "targets": [
+          {
+            "expr": "bargain_async_queue_lag",
+            "legendFormat": "Queue Lag"
+          }
+        ],
+        "format": "s",
+        "thresholds": "30,60",
+        "colorBackground": true,
+        "gridPos": { "h": 4, "w": 6, "x": 12, "y": 16 }
+      },
+      {
+        "id": 9,
+        "title": "Contribution Margin %",
+        "type": "singlestat",
+        "targets": [
+          {
+            "expr": "bargain_contribution_margin_pct",
+            "legendFormat": "Margin %"
+          }
+        ],
+        "format": "percentunit",
+        "thresholds": "0.12,0.15",
+        "colorBackground": true,
+        "gridPos": { "h": 4, "w": 6, "x": 18, "y": 16 }
+      },
+      {
+        "id": 10,
+        "title": "Sessions per Minute",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(bargain_requests_total{route=\"/session/start\"}[1m]) * 60",
+            "legendFormat": "Sessions/min"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Sessions/min",
+            "min": 0
+          }
+        ],
+        "gridPos": { "h": 6, "w": 8, "x": 0, "y": 20 }
+      },
+      {
+        "id": 11,
+        "title": "Acceptance Rate %",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(bargain_requests_total{route=\"/session/accept\",code=\"200\"}[5m]) / rate(bargain_requests_total{route=\"/session/offer\",code=\"200\"}[5m]) * 100",
+            "legendFormat": "Accept Rate %"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Percent",
+            "min": 0,
+            "max": 100
+          }
+        ],
+        "gridPos": { "h": 6, "w": 8, "x": 8, "y": 20 }
+      },
+      {
+        "id": 12,
+        "title": "Never-Loss Violations",
+        "type": "singlestat",
+        "targets": [
+          {
+            "expr": "increase(bargain_requests_total{route=\"/session/accept\",code=\"409\"}[1h])",
+            "legendFormat": "Violations/hr"
+          }
+        ],
+        "colorBackground": true,
+        "thresholds": "0,1",
+        "colors": ["green", "red", "red"],
+        "gridPos": { "h": 6, "w": 8, "x": 16, "y": 20 }
+      },
+      {
+        "id": 13,
+        "title": "System Version Info",
+        "type": "table",
+        "targets": [
+          {
+            "expr": "bargain_policy_version",
+            "format": "table",
+            "instant": true
+          },
+          {
+            "expr": "bargain_model_version",
+            "format": "table",
+            "instant": true
+          }
+        ],
+        "gridPos": { "h": 4, "w": 12, "x": 0, "y": 26 }
+      },
+      {
+        "id": 14,
+        "title": "Traffic Split Ratio",
+        "type": "pie",
+        "targets": [
+          {
+            "expr": "sum by (variant) (rate(bargain_requests_total{route=\"/session/start\"}[5m]))",
+            "legendFormat": "{{variant}}"
+          }
+        ],
+        "gridPos": { "h": 4, "w": 12, "x": 12, "y": 26 }
+      }
+    ],
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": "-- Grafana --",
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "gnetId": null,
+    "graphTooltip": 0,
+    "hideControls": false,
+    "links": [],
+    "liveNow": false,
+    "panels": [],
+    "schemaVersion": 27,
+    "style": "dark",
+    "templating": {
+      "list": []
+    },
+    "timepicker": {},
+    "version": 0
+  }
+}
