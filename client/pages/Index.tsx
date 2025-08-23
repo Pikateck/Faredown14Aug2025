@@ -270,6 +270,7 @@ export default function Index() {
   }, [showToCities]);
   const [selectedFromCity, setSelectedFromCity] = useState("");
   const [selectedToCity, setSelectedToCity] = useState("");
+  const [forceUpdate, setForceUpdate] = useState(0);
 
   // Remove debug logging for production performance
   // Airport state for CityAutocomplete
@@ -527,6 +528,7 @@ export default function Index() {
     console.log('📱 CityData lookup result:', cityData[city]);
     setSelectedFromCity(city);
     setShowFromCities(false);
+    setForceUpdate(prev => prev + 1); // Force re-render
   }, [cityData]);
 
   const handleSelectToCity = useCallback((city: string) => {
@@ -534,6 +536,7 @@ export default function Index() {
     console.log('📱 CityData lookup result:', cityData[city]);
     setSelectedToCity(city);
     setShowToCities(false);
+    setForceUpdate(prev => prev + 1); // Force re-render
   }, [cityData]);
 
   return (
