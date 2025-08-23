@@ -363,10 +363,10 @@ export default function FlightDetails({
     name:
       lastSegment?.destination?.name ||
       airportData[orientedTo || toCode]?.name ||
-      "Unknown Airport",
+      `${orientedTo || toCode} International Airport`,
     city:
       airportData[lastSegment?.destination?.code || orientedTo || toCode]
-        ?.city || "Unknown",
+        ?.city || (lastSegment?.destination?.code || orientedTo || toCode),
   };
 
   const returnArrival = {
@@ -374,10 +374,10 @@ export default function FlightDetails({
     name:
       firstSegment?.origin?.name ||
       airportData[orientedFrom || fromCode]?.name ||
-      "Unknown Airport",
+      `${orientedFrom || fromCode} International Airport`,
     city:
       airportData[firstSegment?.origin?.code || orientedFrom || fromCode]
-        ?.city || "Unknown",
+        ?.city || (firstSegment?.origin?.code || orientedFrom || fromCode),
   };
 
   // We now always have flight data, so no need for error state
