@@ -332,11 +332,13 @@ export function BookingStyleDropdown({
                   {popularDestinations.slice(0, 4).map((dest) => (
                     <button
                       key={dest.id}
-                      onClick={() => {
+                      onPointerDown={(e) => e.preventDefault()}
+                      onPointerUp={() => {
+                        console.log('🗺️ BookingStyleDropdown DESKTOP: Selecting popular destination:', dest.name);
                         onSelectCity(dest.name);
-                        onClose();
+                        requestAnimationFrame(() => onClose());
                       }}
-                      className="w-full text-left px-2 py-2 hover:bg-blue-50 rounded-md flex items-center space-x-3"
+                      className="w-full text-left px-2 py-2 hover:bg-blue-50 active:bg-blue-100 rounded-md flex items-center space-x-3"
                     >
                       <div className="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center flex-shrink-0">
                         <Plane className="w-4 h-4 text-blue-600" />
@@ -372,9 +374,11 @@ export function BookingStyleDropdown({
                   .map(([city, data]) => (
                     <button
                       key={city}
-                      onClick={() => {
+                      onPointerDown={(e) => e.preventDefault()}
+                      onPointerUp={() => {
+                        console.log('🗺️ BookingStyleDropdown DESKTOP: Selecting regular city:', city);
                         onSelectCity(city);
-                        onClose();
+                        requestAnimationFrame(() => onClose());
                       }}
                       className={cn(
                         "w-full text-left px-2 py-2 hover:bg-gray-50 rounded-md flex items-center space-x-3",
