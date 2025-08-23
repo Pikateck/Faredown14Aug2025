@@ -255,6 +255,55 @@ export default function Index() {
   const [selectedToCity, setSelectedToCity] = useState("");
   const [forceUpdate, setForceUpdate] = useState(0);
 
+  // City data mapping - memoized to prevent recreation on every render
+  const cityData = useMemo(
+    () => ({
+      Mumbai: {
+        code: "BOM",
+        name: "Mumbai",
+        airport: "Rajiv Gandhi Shivaji International",
+        fullName: "Mumbai, Maharashtra, India",
+      },
+      Delhi: {
+        code: "DEL",
+        name: "Delhi",
+        airport: "Indira Gandhi International",
+        fullName: "New Delhi, Delhi, India",
+      },
+      Dubai: {
+        code: "DXB",
+        name: "Dubai",
+        airport: "Dubai International Airport",
+        fullName: "Dubai, United Arab Emirates",
+      },
+      "Abu Dhabi": {
+        code: "AUH",
+        name: "Abu Dhabi",
+        airport: "Zayed International",
+        fullName: "Abu Dhabi, United Arab Emirates",
+      },
+      Singapore: {
+        code: "SIN",
+        name: "Singapore",
+        airport: "Changi Airport",
+        fullName: "Singapore, Singapore",
+      },
+      London: {
+        code: "LON",
+        name: "London",
+        airport: "Heathrow Airport",
+        fullName: "London, United Kingdom",
+      },
+      Paris: {
+        code: "PAR",
+        name: "Paris",
+        airport: "Charles de Gaulle Airport",
+        fullName: "Paris, France",
+      },
+    }),
+    [],
+  );
+
   // Debug mobile city selection state changes
   useEffect(() => {
     if (showFromCities) {
