@@ -314,6 +314,13 @@ export function BookingStyleDropdown({
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && filteredCities.length > 0) {
+                    console.log('⌨️ DESKTOP Enter pressed - selecting first match:', filteredCities[0][0]);
+                    onSelectCity(filteredCities[0][0]);
+                    onClose();
+                  }
+                }}
                 placeholder="Airport, city or country"
                 className="w-full pl-9 pr-4 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                 autoFocus
