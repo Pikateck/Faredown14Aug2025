@@ -307,8 +307,13 @@ export default function Index() {
   // City selection state change tracking for development
   useEffect(() => {
     // Light logging for debugging if needed
-    if (process.env.NODE_ENV === 'development') {
-      console.log('City selection - FROM:', selectedFromCity, 'TO:', selectedToCity);
+    if (process.env.NODE_ENV === "development") {
+      console.log(
+        "City selection - FROM:",
+        selectedFromCity,
+        "TO:",
+        selectedToCity,
+      );
     }
   }, [selectedFromCity, selectedToCity]);
 
@@ -524,25 +529,31 @@ export default function Index() {
     setShowToCities(false);
   }, []);
 
-  const handleSelectFromCity = useCallback((city: string) => {
-    // Set the city state immediately
-    setSelectedFromCity(city);
+  const handleSelectFromCity = useCallback(
+    (city: string) => {
+      // Set the city state immediately
+      setSelectedFromCity(city);
 
-    // Close dropdown after state update
-    setTimeout(() => {
-      setShowFromCities(false);
-    }, 50);
-  }, [cityData, selectedFromCity]);
+      // Close dropdown after state update
+      setTimeout(() => {
+        setShowFromCities(false);
+      }, 50);
+    },
+    [cityData, selectedFromCity],
+  );
 
-  const handleSelectToCity = useCallback((city: string) => {
-    // Set the city state immediately
-    setSelectedToCity(city);
+  const handleSelectToCity = useCallback(
+    (city: string) => {
+      // Set the city state immediately
+      setSelectedToCity(city);
 
-    // Close dropdown after state update
-    setTimeout(() => {
-      setShowToCities(false);
-    }, 50);
-  }, [cityData, selectedToCity]);
+      // Close dropdown after state update
+      setTimeout(() => {
+        setShowToCities(false);
+      }, 50);
+    },
+    [cityData, selectedToCity],
+  );
 
   return (
     <div className="min-h-screen bg-white">
@@ -1106,7 +1117,6 @@ export default function Index() {
               </p>
             </div>
 
-
             {/* Mobile Trip Type Selector */}
             <div className="flex space-x-1 mb-6 bg-gray-100 rounded-lg p-1">
               <button
@@ -1163,11 +1173,11 @@ export default function Index() {
                       ref={fromCityButtonRef}
                       onClick={handleFromCityClick}
                       onTouchStart={(e) => {
-                        e.currentTarget.style.backgroundColor = '#f3f4f6';
+                        e.currentTarget.style.backgroundColor = "#f3f4f6";
                       }}
                       onTouchEnd={(e) => {
                         setTimeout(() => {
-                          e.currentTarget.style.backgroundColor = '';
+                          e.currentTarget.style.backgroundColor = "";
                         }, 100);
                       }}
                       className="w-full text-left touch-manipulation transition-colors min-h-[50px] flex items-center hover:bg-gray-50 active:bg-gray-100 rounded-lg p-2"
@@ -1183,10 +1193,13 @@ export default function Index() {
                             {selectedFromCity ? (
                               <>
                                 <div className="font-medium text-gray-900">
-                                  {cityData[selectedFromCity]?.code || selectedFromCity}
+                                  {cityData[selectedFromCity]?.code ||
+                                    selectedFromCity}
                                 </div>
                                 <div className="text-xs text-gray-500">
-                                  {cityData[selectedFromCity]?.name || cityData[selectedFromCity]?.airport || 'Selected city'}
+                                  {cityData[selectedFromCity]?.name ||
+                                    cityData[selectedFromCity]?.airport ||
+                                    "Selected city"}
                                 </div>
                               </>
                             ) : (
@@ -1216,11 +1229,11 @@ export default function Index() {
                       ref={toCityButtonRef}
                       onClick={handleToCityClick}
                       onTouchStart={(e) => {
-                        e.currentTarget.style.backgroundColor = '#f3f4f6';
+                        e.currentTarget.style.backgroundColor = "#f3f4f6";
                       }}
                       onTouchEnd={(e) => {
                         setTimeout(() => {
-                          e.currentTarget.style.backgroundColor = '';
+                          e.currentTarget.style.backgroundColor = "";
                         }, 100);
                       }}
                       className="w-full text-left touch-manipulation transition-colors min-h-[50px] flex items-center hover:bg-gray-50 active:bg-gray-100 rounded-lg p-2"
@@ -1236,10 +1249,13 @@ export default function Index() {
                             {selectedToCity ? (
                               <>
                                 <div className="font-medium text-gray-900">
-                                  {cityData[selectedToCity]?.code || selectedToCity}
+                                  {cityData[selectedToCity]?.code ||
+                                    selectedToCity}
                                 </div>
                                 <div className="text-xs text-gray-500">
-                                  {cityData[selectedToCity]?.name || cityData[selectedToCity]?.airport || 'Selected city'}
+                                  {cityData[selectedToCity]?.name ||
+                                    cityData[selectedToCity]?.airport ||
+                                    "Selected city"}
                                 </div>
                               </>
                             ) : (
@@ -1358,17 +1374,14 @@ export default function Index() {
                   });
 
                   if (returnDate && tripType === "round-trip") {
-                    params.set(
-                      "returnDate",
-                      getUrlDateString(returnDate),
-                    );
+                    params.set("returnDate", getUrlDateString(returnDate));
                   }
 
-                  console.log('📅 Navigation URL params:', {
+                  console.log("📅 Navigation URL params:", {
                     departureDate: getUrlDateString(departureDate),
                     returnDate: getUrlDateString(returnDate),
                     selectedDeparture: departureDate?.toDateString(),
-                    selectedReturn: returnDate?.toDateString()
+                    selectedReturn: returnDate?.toDateString(),
                   });
 
                   navigate(`/flights/results?${params.toString()}`);

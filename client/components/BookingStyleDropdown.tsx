@@ -157,13 +157,13 @@ export function BookingStyleDropdown({
       <div
         className="sm:hidden fixed inset-0 bg-white overflow-y-auto"
         style={{
-          position: 'fixed',
+          position: "fixed",
           top: 0,
           left: 0,
           right: 0,
           bottom: 0,
           zIndex: 999999,
-          transform: 'translateZ(0)' // Force hardware acceleration
+          transform: "translateZ(0)", // Force hardware acceleration
         }}
       >
         <div className="sticky top-0 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
@@ -184,7 +184,7 @@ export function BookingStyleDropdown({
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter' && filteredCities.length > 0) {
+                  if (e.key === "Enter" && filteredCities.length > 0) {
                     onSelectCity(filteredCities[0][0]);
                     onClose();
                   }
@@ -308,7 +308,7 @@ export function BookingStyleDropdown({
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter' && filteredCities.length > 0) {
+                  if (e.key === "Enter" && filteredCities.length > 0) {
                     onSelectCity(filteredCities[0][0]);
                     onClose();
                   }

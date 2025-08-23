@@ -4487,8 +4487,7 @@ export default function FlightResults() {
                                     • Group bookings may have different terms
                                   </li>
                                   <li>
-                                    • Check-in required 2 hours before
-                                    departure
+                                    • Check-in required 2 hours before departure
                                   </li>
                                 </ul>
                               </div>
@@ -6289,9 +6288,7 @@ export default function FlightResults() {
                           <span className="text-red-700 font-medium">
                             Airline fee:
                           </span>
-                          <p className="text-red-600">
-                            ₹3,500 per passenger
-                          </p>
+                          <p className="text-red-600">₹3,500 per passenger</p>
                         </div>
                         <div>
                           <span className="text-red-700 font-medium">
@@ -6372,9 +6369,7 @@ export default function FlightResults() {
                       Important Terms & Conditions
                     </h5>
                     <ul className="text-sm text-gray-600 space-y-1">
-                      <li>
-                        • Passenger names cannot be changed after booking
-                      </li>
+                      <li>• Passenger names cannot be changed after booking</li>
                       <li>
                         • Check-in must be completed 2 hours before departure
                       </li>

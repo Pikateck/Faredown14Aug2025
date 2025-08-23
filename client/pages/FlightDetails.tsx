@@ -85,7 +85,11 @@ export default function FlightDetails({
   > = {
     // Middle East
     DXB: { city: "Dubai", name: "Dubai International Airport", terminal: "3" },
-    AUH: { city: "Abu Dhabi", name: "Zayed International Airport", terminal: "1" },
+    AUH: {
+      city: "Abu Dhabi",
+      name: "Zayed International Airport",
+      terminal: "1",
+    },
     DOH: { city: "Doha", name: "Hamad International Airport", terminal: "1" },
 
     // India
@@ -116,32 +120,76 @@ export default function FlightDetails({
     },
 
     // Europe
-    BCN: { city: "Barcelona", name: "Barcelona-El Prat Airport", terminal: "1" },
-    MAD: { city: "Madrid", name: "Adolfo Suárez Madrid-Barajas Airport", terminal: "1" },
+    BCN: {
+      city: "Barcelona",
+      name: "Barcelona-El Prat Airport",
+      terminal: "1",
+    },
+    MAD: {
+      city: "Madrid",
+      name: "Adolfo Suárez Madrid-Barajas Airport",
+      terminal: "1",
+    },
     LHR: { city: "London", name: "Heathrow Airport", terminal: "2" },
     CDG: { city: "Paris", name: "Charles de Gaulle Airport", terminal: "2A" },
     FCO: { city: "Rome", name: "Leonardo da Vinci Airport", terminal: "3" },
-    AMS: { city: "Amsterdam", name: "Amsterdam Airport Schiphol", terminal: "1" },
+    AMS: {
+      city: "Amsterdam",
+      name: "Amsterdam Airport Schiphol",
+      terminal: "1",
+    },
     FRA: { city: "Frankfurt", name: "Frankfurt Airport", terminal: "1" },
     MUC: { city: "Munich", name: "Munich Airport", terminal: "2" },
 
     // Asia Pacific
     SIN: { city: "Singapore", name: "Changi Airport", terminal: "3" },
-    HKG: { city: "Hong Kong", name: "Hong Kong International Airport", terminal: "1" },
+    HKG: {
+      city: "Hong Kong",
+      name: "Hong Kong International Airport",
+      terminal: "1",
+    },
     NRT: { city: "Tokyo", name: "Narita International Airport", terminal: "1" },
-    ICN: { city: "Seoul", name: "Incheon International Airport", terminal: "1" },
+    ICN: {
+      city: "Seoul",
+      name: "Incheon International Airport",
+      terminal: "1",
+    },
     BKK: { city: "Bangkok", name: "Suvarnabhumi Airport", terminal: "1" },
-    KUL: { city: "Kuala Lumpur", name: "Kuala Lumpur International Airport", terminal: "1" },
+    KUL: {
+      city: "Kuala Lumpur",
+      name: "Kuala Lumpur International Airport",
+      terminal: "1",
+    },
 
     // Americas
-    JFK: { city: "New York", name: "John F. Kennedy International Airport", terminal: "4" },
-    LAX: { city: "Los Angeles", name: "Los Angeles International Airport", terminal: "1" },
-    LAS: { city: "Las Vegas", name: "McCarran International Airport", terminal: "1" },
-    YYZ: { city: "Toronto", name: "Lester B. Pearson International Airport", terminal: "1" },
+    JFK: {
+      city: "New York",
+      name: "John F. Kennedy International Airport",
+      terminal: "4",
+    },
+    LAX: {
+      city: "Los Angeles",
+      name: "Los Angeles International Airport",
+      terminal: "1",
+    },
+    LAS: {
+      city: "Las Vegas",
+      name: "McCarran International Airport",
+      terminal: "1",
+    },
+    YYZ: {
+      city: "Toronto",
+      name: "Lester B. Pearson International Airport",
+      terminal: "1",
+    },
 
     // Africa
     CAI: { city: "Cairo", name: "Cairo International Airport", terminal: "3" },
-    JNB: { city: "Johannesburg", name: "O.R. Tambo International Airport", terminal: "A" },
+    JNB: {
+      city: "Johannesburg",
+      name: "O.R. Tambo International Airport",
+      terminal: "A",
+    },
   };
 
   // Dynamic fallback data based on search parameters
@@ -184,7 +232,8 @@ export default function FlightDetails({
         flightNumber: "1407",
         origin: {
           code: fromCode,
-          name: airportData[fromCode]?.name || `${fromCode} International Airport`,
+          name:
+            airportData[fromCode]?.name || `${fromCode} International Airport`,
           time: "14:30",
         },
         destination: {
@@ -259,7 +308,9 @@ export default function FlightDetails({
             city:
               airportData[
                 orientedItinerary.segments[0]?.origin?.code || fromCode
-              ]?.city || (orientedItinerary.segments[0]?.origin?.code || fromCode),
+              ]?.city ||
+              orientedItinerary.segments[0]?.origin?.code ||
+              fromCode,
           },
           arrival: {
             ...baseFlight.arrival,
@@ -276,7 +327,10 @@ export default function FlightDetails({
                 orientedItinerary.segments[
                   orientedItinerary.segments.length - 1
                 ]?.destination?.code || toCode
-              ]?.city || (orientedItinerary.segments[orientedItinerary.segments.length - 1]?.destination?.code || toCode),
+              ]?.city ||
+              orientedItinerary.segments[orientedItinerary.segments.length - 1]
+                ?.destination?.code ||
+              toCode,
           },
         }
       : baseFlight;
@@ -366,7 +420,10 @@ export default function FlightDetails({
       `${orientedTo || toCode} International Airport`,
     city:
       airportData[lastSegment?.destination?.code || orientedTo || toCode]
-        ?.city || (lastSegment?.destination?.code || orientedTo || toCode),
+        ?.city ||
+      lastSegment?.destination?.code ||
+      orientedTo ||
+      toCode,
   };
 
   const returnArrival = {
@@ -377,7 +434,10 @@ export default function FlightDetails({
       `${orientedFrom || fromCode} International Airport`,
     city:
       airportData[firstSegment?.origin?.code || orientedFrom || fromCode]
-        ?.city || (firstSegment?.origin?.code || orientedFrom || fromCode),
+        ?.city ||
+      firstSegment?.origin?.code ||
+      orientedFrom ||
+      fromCode,
   };
 
   // We now always have flight data, so no need for error state
