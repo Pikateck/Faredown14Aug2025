@@ -152,14 +152,14 @@ export default function FlightDetails({
     airlineCode: "6E",
     departure: {
       code: fromCode,
-      city: airportData[fromCode]?.city || "Unknown",
-      name: airportData[fromCode]?.name || "Unknown Airport",
+      city: airportData[fromCode]?.city || fromCode,
+      name: airportData[fromCode]?.name || `${fromCode} International Airport`,
       terminal: airportData[fromCode]?.terminal || "1",
     },
     arrival: {
       code: toCode,
-      city: airportData[toCode]?.city || "Unknown",
-      name: airportData[toCode]?.name || "Unknown Airport",
+      city: airportData[toCode]?.city || toCode,
+      name: airportData[toCode]?.name || `${toCode} International Airport`,
       terminal: airportData[toCode]?.terminal || "2",
     },
     departureTime: "14:30",
@@ -214,7 +214,7 @@ export default function FlightDetails({
           name:
             flight.departure?.name ||
             airportData[fromCode]?.name ||
-            "Unknown Airport",
+            `${fromCode} International Airport`,
           time: flight.departureTime || "14:30",
         },
         destination: {
@@ -222,7 +222,7 @@ export default function FlightDetails({
           name:
             flight.arrival?.name ||
             airportData[toCode]?.name ||
-            "Unknown Airport",
+            `${toCode} International Airport`,
           time: flight.arrivalTime || "16:00",
         },
         durationMinutes: 210,
@@ -413,7 +413,7 @@ export default function FlightDetails({
             </Button>
             <div>
               <h1 className="text-lg font-semibold">
-                Your flight to {airportData[toCode]?.city || "Unknown"}
+                Your flight to {airportData[toCode]?.city || toCode}
               </h1>
             </div>
           </div>
