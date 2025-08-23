@@ -1137,10 +1137,10 @@ export default function BookingFlow() {
   };
 
   const countries = [
-    { name: "Guernsey", code: "+44", flag: "🇬��" },
+    { name: "Guernsey", code: "+44", flag: "🇬🇬" },
     { name: "Guinea", code: "+224", flag: "🇬🇳" },
     { name: "Guinea-Bissau", code: "+245", flag: "🇬🇼" },
-    { name: "Guyana", code: "+592", flag: "���🇾" },
+    { name: "Guyana", code: "+592", flag: "🇬🇾" },
     { name: "Haiti", code: "+509", flag: "🇭🇹" },
     { name: "Honduras", code: "+504", flag: "🇭🇳" },
     { name: "Hong Kong", code: "+852", flag: "🇭🇰" },
@@ -1156,7 +1156,7 @@ export default function BookingFlow() {
     { name: "Italy", code: "+39", flag: "🇮🇹" },
     { name: "Ivory Coast", code: "+225", flag: "🇨🇮" },
     { name: "Jamaica", code: "+1", flag: "🇯🇲" },
-    { name: "Japan", code: "+81", flag: "��🇵" },
+    { name: "Japan", code: "+81", flag: "🇯🇵" },
   ];
 
   const [showAdultFare, setShowAdultFare] = useState(true);
@@ -1708,7 +1708,7 @@ export default function BookingFlow() {
                           code: "EUR",
                           symbol: "€",
                           name: "Euro",
-                          flag: "🇪���",
+                          flag: "🇪🇺",
                         },
                         {
                           code: "GBP",
@@ -1750,7 +1750,7 @@ export default function BookingFlow() {
                           code: "KRW",
                           symbol: "₩",
                           name: "South Korean Won",
-                          flag: "🇰����",
+                          flag: "🇰🇷",
                         },
                         {
                           code: "SGD",
@@ -2048,7 +2048,7 @@ export default function BookingFlow() {
                                 1 carry-on bag
                               </p>
                               <p className="text-xs text-[#666]">
-                                22 x 55 x 40 cm ��� 7 kg
+                                22 x 55 x 40 cm • 7 kg
                               </p>
                             </div>
                           </div>
@@ -2200,7 +2200,7 @@ export default function BookingFlow() {
                               </SelectTrigger>
                               <SelectContent>
                                 <SelectItem value="5kg">
-                                  5kg - ��� 1,500
+                                  5kg - ₹ 1,500
                                 </SelectItem>
                                 <SelectItem value="10kg">
                                   10kg - ₹ 2,800
@@ -3793,7 +3793,7 @@ export default function BookingFlow() {
                       )}
                       {calculateSeatTotal("Dubai-Mumbai") > 0 && (
                         <div className="flex justify-between">
-                          <span>Dubai �� Mumbai</span>
+                          <span>Dubai → Mumbai</span>
                           <span>
                             {formatCurrency(calculateSeatTotal("Dubai-Mumbai"))}
                           </span>
