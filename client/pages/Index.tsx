@@ -1149,8 +1149,14 @@ export default function Index() {
                       onClick={handleFromCityClick}
                       onTouchStart={(e) => {
                         console.log('📱 From city touch start');
+                        e.currentTarget.style.backgroundColor = '#f3f4f6';
                       }}
-                      className="w-full text-left touch-manipulation active:bg-gray-50 transition-colors min-h-[44px] flex items-center"
+                      onTouchEnd={(e) => {
+                        setTimeout(() => {
+                          e.currentTarget.style.backgroundColor = '';
+                        }, 100);
+                      }}
+                      className={`w-full text-left touch-manipulation transition-colors min-h-[44px] flex items-center ${showFromCities ? 'bg-blue-50 border-blue-300' : 'hover:bg-gray-50'}`}
                       style={{ WebkitTapHighlightColor: "transparent" }}
                     >
                       <div className="text-xs text-gray-500 mb-1">From</div>
@@ -1195,8 +1201,14 @@ export default function Index() {
                       onClick={handleToCityClick}
                       onTouchStart={(e) => {
                         console.log('📱 To city touch start');
+                        e.currentTarget.style.backgroundColor = '#f3f4f6';
                       }}
-                      className="w-full text-left touch-manipulation active:bg-gray-50 transition-colors min-h-[44px] flex items-center"
+                      onTouchEnd={(e) => {
+                        setTimeout(() => {
+                          e.currentTarget.style.backgroundColor = '';
+                        }, 100);
+                      }}
+                      className={`w-full text-left touch-manipulation transition-colors min-h-[44px] flex items-center ${showToCities ? 'bg-blue-50 border-blue-300' : 'hover:bg-gray-50'}`}
                       style={{ WebkitTapHighlightColor: "transparent" }}
                     >
                       <div className="text-xs text-gray-500 mb-1">To</div>
